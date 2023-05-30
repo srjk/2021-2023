@@ -1,0 +1,77 @@
+{
+	"serviceType": "Bundle RFS",
+	"serviceName": "{{ serviceName }}",
+	"id": "{{ extOrderId }}",
+	"imsi": "{{ SUPI }}"
+	{% if "DATA" in  listrequestedServices  %}
+	    ,
+		"dataRFS": {
+			"hlr": [{
+					"path": "{{ hlr_path1 }}",
+					"operation": "{{ operation2 }}",
+					"valueObject": {
+						"odbgprs": "{{ hlr_odbgprs }}"
+					}
+				},
+				{
+					"path": "{{ hlr_path2 }}",
+					"operation": "{{ operation2 }}",
+					"valueObject": {
+						"defaultPdnContextId": "{{ hlr_defaultPdnContextId }}"
+					}
+				},
+				{
+					"path": "{{ hlr_path3 }}",
+					"operation": "{{ operation1 }}",
+					"valueObject": {
+						"flagAPNBlockedOverS6A": "{{ hlr_flagAPNBlockedOverS6A }}",
+						"flagAPNBlockedOverSWx": "{{ hlr_flagAPNBlockedOverSWx }}"
+					}
+				}
+			],
+			"udm": [{
+					"path": "udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo[@dnnId='{{ dnn5 }}']",
+					"operation": "{{ operation2 }}",
+					"valueObject": {
+						"defaultIndication": "{{ dnn5_defaultIndication1 }}"
+					}
+				},
+				{
+					"path": "udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo[@dnnId='{{ dnn4 }}']",
+					"operation": "{{ operation2 }}",
+					"valueObject": {
+						"defaultIndication": "{{ dnn4_defaultIndication1 }}"
+					}
+				},
+				{
+					"path": "udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo[@dnnId='{{ dnn4 }}']/dnnBarred='true'",
+					"operation": "{{ operation3 }}",
+					"valueObject": {
+						"dnnBarred": "{{ dnn4_dnnBarred }}"
+					}
+				}
+			]
+		}
+	{% endif %}
+	{% if "HOTSPOT" in  listrequestedServices  %}
+	  ,
+		"hotspotRFS": {
+			"hlr": [{
+				"path": "{{ hlr_path4 }}",
+				"operation": "{{ operation1 }}",
+				"valueObject": {
+					"flagAPNBlockedOverS6A": "{{ hlr_flagAPNBlockedOverS6A }}",
+					"flagAPNBlockedOverSWx": "{{ hlr_flagAPNBlockedOverSWx }}"
+				}
+			}],
+			"udm": [{
+				"path": "udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo[@dnnId='{{ dnn6 }}']/dnnBarred='true'",
+				"operation": "{{ operation3 }}",
+				"valueObject": {
+					"dnnBarred": "{{ dnn6_dnnBarred }}"
+				}
+
+			}]
+		}
+	{% endif %}
+}

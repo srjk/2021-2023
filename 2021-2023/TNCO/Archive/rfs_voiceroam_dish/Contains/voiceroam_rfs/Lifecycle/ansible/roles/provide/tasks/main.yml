@@ -1,0 +1,18 @@
+# convert ALM properties to json provide request for South Bound endpoint - Nokia Provisioning GW
+    
+- name: Call RestAPI of SPML Adapter
+  uri:
+    url:  "{{ ansible_env.TAS_ENUM_ADA_HOST }}/dish/Prov/tas/addRequest"
+    method: POST
+    body: "{{lookup('template', 'nokia_provisioning_gw_tas_provide_request.json.j2')}}"
+    status_code: 200
+    body_format: json
+    headers:
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+  register: result
+
+- name: fail instance if there is a failure from SBI
+  fail:
+    msg: Instance creation failed with error code {{ result.json.errorCode }} and error message {{ result.json.msg }}
+  when: result.json.result == "Failure"

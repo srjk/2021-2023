@@ -1,0 +1,26 @@
+{
+  "name": "test",
+  "projectId": "$lmctl:/descriptor_name",
+  "description": null,
+  "descriptorName": "$lmctl:/descriptor_name",
+  "properties": {
+    "vnfdId": "oracle-nrf-1.11.0-v1",
+    "flavourId": "small",
+    "vimType": "ndc",
+    "vim_id": "orchestratortest",
+    "envType": "dev",
+    "nfType": "CNF",
+    "vendor": "or",
+    "function": "nrf",
+    "nfAppearance": "001",
+    "nfunType": "c",
+    "region": "use1",
+    "azId": "az1",
+    "dataCenterType": "n",
+    "logicalDCNo": "01",
+    "env": "p",
+    "envId": "1"
+  },
+  "createdAt": "2022-05-11T11:35:53.629Z",
+  "lastModifiedAt": "2022-05-11T11:35:53.629Z"
+}

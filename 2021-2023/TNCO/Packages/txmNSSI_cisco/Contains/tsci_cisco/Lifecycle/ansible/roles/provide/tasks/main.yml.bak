@@ -1,0 +1,108 @@
+
+- name: Get Ticket.
+  uri:
+    url: "{{ deployment_location.properties.cnc_host1 }}/crosswork/sso/v1/tickets"
+    method: POST
+    headers:
+      content-type: "application/x-www-form-urlencoded"
+      ReturnResultType: "FULL"
+      return_content: yes
+      Accept: text/plain
+    validate_certs: no
+    status_code: 201
+    return_content: yes
+    body:
+      username: slicing-testing
+      password: AWSdevtesting1!
+    body_format: form-urlencoded
+  register: ticket
+  # ignore_errors: yes
+
+- name: ticket print.
+  debug:
+    msg: "{{ ticket.location }}"
+
+- name: Get Token.
+  uri:
+    url: "{{ deployment_location.properties.cnc_host1 }}/crosswork/sso/v1/tickets/{{ ticket.location | regex_search('tickets/.*') | replace('tickets/','') }}"
+    method: POST
+    headers:
+      content-type: "application/x-www-form-urlencoded"
+      ReturnResultType: "FULL"
+    return_content: yes
+    validate_certs: no
+    status_code: 200
+    body:
+      service: "https://10.194.132.78:30603/app-dashboard"
+    body_format: form-urlencoded
+  register: token
+  # ignore_errors: yes
+  
+  
+- name: token print.
+  debug:
+    msg: "{{ token.content }}"
+
+- name: Insert a line at the start of a file.
+  copy:
+    dest: "/tmp/CNCSlice.json.j2"
+    content: |
+              <{{ cnc_slice_type }}>
+                <nssi>{{ slice_snssai }}</nssi>
+                    <l3>
+                        <auto-rt/>
+                        <as-number>{{ cnc_as_number }}</as-number>
+- name: Payload in loop.
+  lineinfile:
+    path: "/tmp/CNCSlice.json.j2"
+    line: |
+        <endpoint>
+          <pe>{{ item.0 }}</pe>
+          <interface>
+            <if-type>{{ item.1 }}</if-type>
+            <if-id>{{ item.2 }}</if-id>
+            <pe-ip-addr>{{ item.3 }}</pe-ip-addr>
+            <ce-pe-prot>
+              <{{ item.4 }}>
+                <neighbor-ipv4>{{ item.5 }}</neighbor-ipv4>
+                <remote-as-ipv4>{{ item.6 }}</remote-as-ipv4>
+              </{{ item.7 }}>
+            </ce-pe-prot>
+          </interface>
+        </endpoint>
+  loop: "{{ data[0]|zip(*data[1:])|list }}"
+  vars:
+    data:
+        -  "{{ pe_name }}"
+        -  "{{ if_type }}"
+        -  "{{ if_id }}"
+        -  "{{ pe_ip_addr }}"
+        -  "{{ ce_pe_prot }}"
+        -  "{{ ce_pe_remoteAs }}"
+        -  "{{ ce_pe_remoteAsIp }}"
+        -  "{{ ce_pe_prot }}"
+
+
+- name: Insert a line at the end of a file.
+  lineinfile:
+    path: "/tmp/CNCSlice.json.j2"
+    line: |
+            </l3>
+                <nsst>{{  cnc_nsst  }}</nsst>
+                </{{ cnc_slice_type }}>
+
+- name: Create Slice.
+  uri:
+    url: "{{ deployment_location.properties.cnc_host1 }}/crosswork/proxy/nso/restconf/data/cisco-5g-transport-cfp:transport-slice"
+    method: POST
+    body: "{{lookup('template', '/tmp/CNCSlice.json.j2')}}"
+    # body_format: json
+    status_code: 201
+    headers:
+      content-type: "application/yang-data+xml"
+      Authorization: "Bearer {{ token.content }}"
+      ReturnResultType: "FULL"
+    return_content: yes
+    validate_certs: no
+  register: result
+  # ignore_errors: yes

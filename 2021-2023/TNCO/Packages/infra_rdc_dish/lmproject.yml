@@ -1,0 +1,23 @@
+schema: '2.0'
+name: infra_rdc_dish
+version: '1.0'
+type: Assembly
+resource-manager: Brent
+contains:
+- name: eks
+  type: Resource
+  resource-manager: Brent
+  directory: eks
+- name: smf
+  type: Resource
+  resource-manager: Brent
+  directory: smf
+- name: amf
+  type: Resource
+  resource-manager: Brent
+  directory: amf
+- name: upfv
+  type: Resource
+  resource-manager: Brent
+  directory: upfv
+

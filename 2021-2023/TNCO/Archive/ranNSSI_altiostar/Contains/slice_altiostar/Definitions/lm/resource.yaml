@@ -1,0 +1,184 @@
+name: resource::slice_altiostar-ranNSSI_altiostar::1.0
+description: Descriptor for Altiostar RAN slicing
+properties:
+  operation:
+    description: DU_RAN
+    volatile: true
+    default: Configure
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: SUBPROV
+  resourceManager:
+    type: string
+    default: brent
+  gnb_id:
+    type: string
+    # default: 88
+  cucp_sst:
+    type: string
+  cucp_sd:
+    type: string
+  cell_local_id:
+    type: string
+    default: 15
+  du_snssai:
+    type: string
+    # default: DU_3GPP
+  du_version:
+    type: string
+    default: 5.0.407.36
+  cucp_id:
+    type: string
+    # entry-schema:
+      # type: string    
+  cuup_id:
+    type: string
+    # default: DU_VENDOR
+  du_id:
+    type: string
+    # default: 1
+  du_bwp:
+    type: string
+    # default: NS_RES_ISOLATED
+  # numUlUePerTti:
+    # type: string
+    # default: 1
+  # nsResId:
+    # type: string
+    # default: 2
+  # numDlPrb:
+    # type: string
+    # default: 75
+  # numUlPrb:
+    # type: string
+    # default: 11
+  # nsiId:
+    # type: string
+    # default: 2
+  # dlSlaTargetRate:
+    # type: string
+    # default: 50000000
+  # ulSlaTargetRate:
+    # type: string
+    # default: 5000000
+  # mcms_host:
+    # type: string
+    # default: https://dish-mcms-stub-svc:18080
+
+lifecycle:
+  # provide_DU_3GPP: 
+  #   drivers:
+  #     ansible:
+  #       selector:
+  #         infrastructure-type:
+  #         - '*'
+  # cease_DU_3GPP: 
+  #   drivers:
+  #     ansible:
+  #       selector:
+  #         infrastructure-type:
+  #         - '*'
+  # provide_DU_VENDOR: 
+  #   drivers:
+  #     ansible:
+  #       selector:
+  #         infrastructure-type:
+  #         - '*'
+  # cease_DU_VENDOR: 
+  #   drivers:
+  #     ansible:
+  #       selector:
+  #         infrastructure-type:
+  #         - '*'
+  Install: {}
+  # Configure: {}
+  # reconfigure: {}
+  Uninstall: {}        
+default-driver:
+  ansible:
+    selector:
+      infrastructure-type:
+      - '*'
+# default-driver:
+  # sol003:
+    # selector:
+      # infrastructure-type:
+      # - '*'
+# operations:
+  # provide_DU_3GPP:
+    # description: activate new slice parameters
+    # properties:
+      # gnb_id:
+        # type: string
+      # du_sst:
+        # type: string
+      # du_sd:
+        # type: string
+      # du_snssai:
+        # type: string
+      # du_3gpp_config:
+        # type: string
+      # du_version:
+        # type: string
+      # du_id:
+        # type: list
+        # entry-schema:
+          # type: string        
+  # cease_DU_3GPP:
+    # description: activate new slice parameters
+    # properties:
+      # gnb_id:
+        # type: string
+      # du_sst:
+        # type: string
+      # du_sd:
+        # type: string
+      # du_snssai:
+        # type: string
+      # du_3gpp_config:
+        # type: string
+      # du_version:
+        # type: string
+      # du_id:
+        # type: list
+        # entry-schema:
+          # type: string        
+  # provide_DU_VENDOR:
+    # description: activate new slice parameters
+    # properties:
+      # gnb_id:
+        # type: string
+      # du_sst:
+        # type: string
+      # du_sd:
+        # type: string
+      # du_snssai:
+        # type: string
+      # du_vendor_config:
+        # type: string
+      # du_version:
+        # type: string
+      # du_id:
+        # type: list
+        # entry-schema:
+          # type: string        
+  # cease_DU_VENDOR:
+    # description: activate new slice parameters
+    # properties:
+      # gnb_id:
+        # type: string
+      # du_sst:
+        # type: string
+      # du_sd:
+        # type: string
+      # du_snssai:
+        # type: string
+      # du_vendor_config:
+        # type: string
+      # du_version:
+        # type: string
+      # du_id:
+        # type: list
+        # entry-schema:
+          # type: string        

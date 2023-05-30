@@ -1,0 +1,16 @@
+---
+- hosts: localhost
+  tasks:
+        - name: Pause play until a URL is reachable from this host
+          uri:
+            url: "http://192.0.2.1/some/test"
+            follow_redirects: none
+            method: GET
+            timeout: 2
+          register: _result
+          until: _result.status == 200
+          retries: 2
+          delay: 5
+          ignore_errors: yes
+
+        - debug: var=_result

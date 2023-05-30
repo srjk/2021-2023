@@ -1,0 +1,227 @@
+name: assembly::ranNSSI::1.0
+description: descriptor for RAN slicing
+properties:
+#SolSpecific
+  operation:
+    description: RAN_Slicing
+    volatile: true
+    default: Configure
+  # instance_name:
+    # description: name of assembly instance
+    # type: string
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: SUBPROV
+  resourceManager:
+    type: string
+    default: brent
+  # gnb_id:
+    # type: string
+    # default: 88
+  slice_sst:
+    type: string
+  slice_sd:
+    type: string
+  slice_snssai:
+    type: string
+    default: 11001122
+  slice_mcc:
+    type: string
+    default: 313
+  slice_mnc:
+    type: string
+    default: 340
+  # cucp_id:
+    # type: list
+    # entry-schema:
+      # type: string
+  # du_id:
+    # type: list
+    # entry-schema:
+      # type: string
+  # mcms_host:
+    # type: string
+    # default: https://ib-orc-220-mcms-001:18080
+  extOrderId:
+    volatile: true
+  gnb_info:
+    type: list
+    entry-schema: nftype
+  bpi_eMBBNetworkSlice_name:
+    type: string
+    default: RRR
+  bpi_eMBBNetworkSlice_id:
+    type: string
+    default: RRR
+  bpi_ServiceProfile_name:
+    type: string
+    default: RRR
+  bpi_ServiceProfile_id:
+    type: string
+    default: RRR
+  bpi_ranNetworkSliceSubnet_name:
+    type: string
+    default: RRR
+  bpi_ranNetworkSliceSubnet_id:
+    type: string
+    default: RRR
+  bpi_SliceProfile_name:
+    type: string
+    default: RRR
+  bpi_SliceProfile_id:
+    type: string
+    default: RRR
+  # ran_vendor:
+    # type: string
+    # volatile: true
+    # default: mavenir
+  gnb_mavenir_assembly_name:
+    type: string
+    default: DADAL551993000
+composition:
+  ran_slice:
+    type: resource::ran_slice-ranNSSI::1.0
+    quantity: 1
+    properties:
+#SolSpecific
+      operation:
+        value: ${operation}
+      instance_name:
+        value: ${instance.name}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      resourceManager:
+        value: ${resourceManager}
+      gnb_mavenir_assembly_name:
+        value: ${gnb_mavenir_assembly_name}
+      # gnb_id:
+        # value: ${gnb_id}
+      # cucp_sst:
+        # value: ${slice_sst}
+      # cucp_sd:
+        # value: ${slice_sd}
+      # cucp_snssai:
+        # value: ${slice_snssai}
+      # cucp_mcc:
+        # value: ${slice_mcc}
+      # cucp_mnc:
+        # value: ${slice_mnc}
+      # cucp_id:
+        # value: ${cucp_id}
+      # extOrderId:
+        # value: ${extOrderId}
+      # slice_sst:
+        # value: ${slice_sst}
+      # slice_sd:
+        # value: ${slice_sd}
+      # slice_mcc:
+        # value: ${slice_mcc}
+      # slice_mnc:
+        # value: ${slice_mnc}
+      # slice_snssai:
+        # value: ${slice_snssai}
+      # du_sst:
+        # value: ${slice_sst}
+      # du_sd:
+        # value: ${slice_sd}
+      # du_snssai:
+        # value: ${slice_snssai}
+      # du_id:
+        # value: ${du_id}
+      # du_mcc:
+        # value: ${slice_mcc}
+      # du_mnc:
+        # value: ${slice_mnc}
+      # bpi_eMBBNetworkSlice_name:
+        # value: ${bpi_eMBBNetworkSlice_name}
+      # bpi_eMBBNetworkSlice_id:
+        # value: ${bpi_eMBBNetworkSlice_id}
+      # bpi_ServiceProfile_name:
+        # value: ${bpi_ServiceProfile_name}
+      # bpi_ServiceProfile_id:
+        # value: ${bpi_ServiceProfile_id}
+      # bpi_ranNetworkSliceSubnet_name:
+        # value: ${bpi_ranNetworkSliceSubnet_name}
+      # bpi_ranNetworkSliceSubnet_id:
+        # value: ${bpi_ranNetworkSliceSubnet_id}
+      # bpi_SliceProfile_name:
+        # value: ${bpi_SliceProfile_name}
+      # bpi_SliceProfile_id:
+        # value: ${bpi_SliceProfile_id}
+      # ran_vendor:
+        # value: ${ran_vendor}
+references:
+  sol_operation_ran:
+    properties:
+      name:
+        value: ${gnb_mavenir_assembly_name}
+    type: assembly::gnb_mavenir::1.0
+relationships:
+  sol_operation_relationship_gnb_mavenir:
+    properties:
+      gnb_id:
+        value: ${gnb_info[0].gnb_id}
+      cucp_sst:
+        value: ${slice_sst}
+      cucp_sd:
+        value: ${slice_sd}
+      cucp_snssai:
+        value: ${slice_snssai}
+      cucp_mcc:
+        value: ${slice_mcc}
+      cucp_mnc:
+        value: ${slice_mnc}
+      cucp_id:
+        value: ${gnb_info[0].cucp_id}
+      slice_sst:
+        value: ${slice_sst}
+      slice_sd:
+        value: ${slice_sd}
+      slice_mcc:
+        value: ${slice_mcc}
+      slice_mnc:
+        value: ${slice_mnc}
+      slice_snssai:
+        value: ${slice_snssai}
+      du_sst:
+        value: ${slice_sst}
+      du_sd:
+        value: ${slice_sd}
+      du_snssai:
+        value: ${slice_snssai}
+      du_mcc:
+        value: ${slice_mcc}
+      du_mnc:
+        value: ${slice_mnc}
+      du_id:
+        value: ${gnb_info[0].du_id[0]}
+      extOrderId:
+        value: ${extOrderId}
+      instance_name:
+        value: ${instance.name}
+
+    lifecycle:
+      Create:
+      - source.addSliceConfig
+      - source.addSliceConfigDu
+      Cease:
+      - source.removeSliceDu
+      - source.removeSlice
+    source-state: Active
+    source-state-modifier: post
+    target-state: Active
+    target-state-modifier: post
+    source-capabilities:
+    - sol_operation_ran.capability
+    target-requirements:
+    - ran_slice.requirement
+data-types:
+  nftype:
+    properties:
+      cucp_id:
+        type: string
+      du_id:
+        type: list
+      gnb_id:
+        type: string

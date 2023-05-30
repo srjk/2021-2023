@@ -1,0 +1,222 @@
+name: resource::amf-cnf_amf_nokia::1.0
+description: descriptor for amf
+properties:
+  operation:
+    description: addSliceConfig
+    volatile: true
+    default: Configure
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: SOL003
+  resourceManager:
+    type: string
+    default: brent
+  instance_name:
+    description: name of assembly instance
+    type: string
+  nameSpace:
+    type: string
+  amfSlice_timeZone:
+    type: string
+    default: Default
+  amfSlice_supportedInAllTacFlag:
+    type: string
+    default: true
+  amfSlice_defaultSnssaiSelection:
+    type: string
+    default: LOCAL
+  AMF_ENV:
+    type: string
+    volatile: true
+  amf_ip:
+    type: string
+    default: 10.223.128.209
+    volatile: true
+  amf_user:
+    type: string
+    default: cmm
+    volatile: true
+  cnfPackageVersionFile:
+    type: string
+    volatile: true
+  eventlogger_url:
+    type: string  
+    default: http://ib-orc-230-event-logger-001:8100/evntLogger/log/event
+  # amf_password:
+    # type: string
+    # default: Dish_123456
+    # volatile: true
+  vnfdId:
+#    default: Nokia-amf-1.11.0-v1
+    volatile: true
+  vnfInstanceDescription:
+    type: string
+    default: Deploy Nokia AMF
+  vnfInstanceId:
+    type: string
+    volatile: true   
+  ipAddress:
+    type: string
+    volatile: true
+  flavourId:
+    type: string
+#    default: small
+  vimType:
+    type: string
+#    default: ndc
+  vim_id:
+    type: string
+#    default: orchestratortest
+  envType:
+    type: string
+#    default: dev    
+  nfType:
+    type: string
+#    default: CNF
+  vendor:
+    type: string
+#    default: nk
+  function: 
+    type: string
+#    default: amf
+  nfAppearance:
+    type: string
+#    default: 001
+  nfunType:
+    type: string
+#    default: c
+  region:
+    type: string
+#    default: use1
+  azId:
+    type: string
+#    default: az1
+  dataCenterType:
+    type: string
+#    default: n
+  logicalDCNo: 
+    type: string
+#    default: 01
+  env:
+    type: string
+#    default: p 
+  envId:
+    type: string
+  vnfInstanceName:
+    type: string
+  customValues:
+    type: map
+#    default: 1 
+  # vnfInstanceId:
+  #   type: string
+  # vnfInstanceName:
+  #   description: cnf_instance_name
+  #   default: cnf_instance_name
+  # vnfdId:
+  #   description: cnf_package_identifier
+  #   default: cnf_package_identifier
+  # vnfPkgId:
+  #   description: cnf_package_identifier
+  #   default: VnfPackage-vMRF
+lifecycle:
+  addSliceConfig: 
+    drivers:
+      ansible:
+        selector:
+          infrastructure-type:
+          - '*'
+  removeSlice: 
+    drivers:
+      ansible:
+        selector:
+          infrastructure-type:
+          - '*'  
+  Install: {}
+  Create: {}
+  # Configure: {}
+  reconfigure: {}
+  Uninstall: {}
+  Delete: {}
+# default-driver:
+#   ansible:
+#     selector:
+#       infrastructure-type:
+#       - '*'
+default-driver:
+  sol003:
+    selector:
+      infrastructure-type:
+      - '*'
+operations:
+  addSliceConfig:
+    description: activate new slice parameters
+    properties:
+      amfSlice_plmnName:
+        type: string
+      amfSlice_tai:
+        type: string
+      amfSlice_timeZone:
+        type: string
+      amfSlice_snssaiListName:
+        type: string
+      amfSlice_sliceName:
+        type: string
+      amfSlice_sst:
+        type: string
+      amfSlice_sd:
+        type: string
+      amfSlice_supportedInAllTacFlag:
+        type: string
+      amfSlice_amfRegionId:
+        type: string
+      amfSlice_amfSetId:
+        type: string
+      amfSlice_snssaiToDnnListName:
+        type: string
+      amfSlice_dnnName:
+        type: string
+      amfSlice_defaultSnssaiSelection:
+        type: string
+      instance_name:
+        type: string
+      snssaiListName:
+        type: string
+      extOrderId:
+        type: string
+  removeSlice:
+    description: activate new slice parameters
+    properties:
+      extOrderId:
+        type: string
+      amfSlice_plmnName:
+        type: string
+      amfSlice_tai:
+        type: string
+      amfSlice_timeZone:
+        type: string
+      amfSlice_snssaiListName:
+        type: string
+      amfSlice_sliceName:
+        type: string
+      amfSlice_sst:
+        type: string
+      amfSlice_sd:
+        type: string
+      amfSlice_supportedInAllTacFlag:
+        type: string
+      amfSlice_amfRegionId:
+        type: string
+      amfSlice_amfSetId:
+        type: string
+      amfSlice_snssaiToDnnListName:
+        type: string
+      amfSlice_dnnName:
+        type: string
+      amfSlice_defaultSnssaiSelection:
+        type: string
+      instance_name:
+        type: string
+      snssaiListName:
+        type: string
+      

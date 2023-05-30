@@ -1,0 +1,75 @@
+{
+   "serviceType":"Bundle RFS",
+   "serviceName":"{{ serviceName }}",
+   "id":"{{ extOrderId }}",
+   "imsi":"{{ SUPI }}"
+   {% if "DATA" in  listrequestedServices  %}
+      ,
+      "dataRFS":{  
+         "hlr":[
+            {
+               "path":"{{ hlr_path1 }}",
+               "operation":"{{ operation2 }}",
+               "valueObject":{
+                  "odbgprs":"{{ hlr_odbgprs1 }}"
+               }
+            },
+            {
+               "path":"{{ hlr_path3 }}",
+               "operation":"{{ operation1 }}",
+               "valueObject":{
+                  "flagAPNBlockedOverS6A":"{{ hlr1_flagAPNBlockedOverS6A }}",
+                  "flagAPNBlockedOverSWx":"{{ hlr1_flagAPNBlockedOverSWx }}"
+               }
+            },
+            {
+               "path":"{{ hlr_path2 }}",
+               "operation":"{{ operation2 }}",
+               "valueObject":{
+                  "defaultPdnContextId":"{{ hlr1_defaultPdnContextId }}"
+               }
+            }
+         ],
+         "udm":[
+            {
+               "path":"udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo[@dnnId='{{ dnn4 }}']/dnnBarred",
+               "operation":"{{ operation4 }}"
+            },
+            {
+               "path":"udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo[@dnnId='{{ dnn4 }}']",
+               "operation":"{{ operation2 }}",
+               "valueObject":{
+                  "defaultIndication":"{{ dnn4_defaultIndication }}"
+               }
+            },
+            {
+               "path":"udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo[@dnnId='{{ dnn5 }}']",
+               "operation":"{{ operation2 }}",
+               "valueObject":{
+                  "defaultIndication":"{{ dnn5_defaultIndication }}"
+               }
+            }
+         ]
+      }
+   {% endif %}
+   {% if "HOTSPOT" in  listrequestedServices  %}
+      ,
+      "hotspotRFS":{
+         "hlr":[
+            {
+               "path":"{{ hlr_path4 }}",
+               "operation":"{{ operation1 }}",
+               "valueObject":{
+                  "flagAPNBlockedOverS6A":"{{ hlr1_flagAPNBlockedOverS6A }}",
+                  "flagAPNBlockedOverSWx":"{{ hlr1_flagAPNBlockedOverSWx }}"
+               }
+            }
+         ],
+         "udm":[
+            {
+               "path":"udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo[@dnnId='{{ dnn6 }}']/dnnBarred",
+               "operation":"{{ operation4 }}",
+            }]
+         }
+   {% endif %}
+}

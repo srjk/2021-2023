@@ -1,0 +1,88 @@
+name: assembly::infra_rdc_dish::1.0
+description: descriptor for LCM infra
+properties:
+  clusterInstance:
+    description: data for configs
+    type: map 
+    entry-schema: cnfInstancedata
+  deploymentLocation:
+    description: site specific
+    type: string
+    default: LCM
+composition:
+  eks:
+    type: $lmctl:/contains:/eks:/descriptor_name
+    quantity: 1
+    properties:
+      instance_name:
+        value: ${instance.name}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      cnfInstance:
+        value: ${clusterInstance}
+  smf:
+    type: $lmctl:/contains:/smf:/descriptor_name
+    quantity: 1
+    properties:
+      instance_name:
+        value: ${eks.instance_name}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      cnfInstance:
+        value: ${clusterInstance}
+  amf:
+    type: $lmctl:/contains:/amf:/descriptor_name
+    quantity: 1
+    properties:
+      instance_name:
+        value: ${smf.instance_name}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      cnfInstance:
+        value: ${clusterInstance}
+  upfv:
+    type: $lmctl:/contains:/upfv:/descriptor_name
+    quantity: 1
+    properties:
+      instance_name:
+        value: ${amf.instance_name}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      cnfInstance:
+        value: ${clusterInstance}
+data_types:
+  cnfInstancedata: 
+    properties:
+      name:
+        type: string
+      cluster:
+        type: map
+        entry-schema: clusterdata
+      config_context:
+        type: map
+        entry-schema: config_contextdata
+  clusterdata:
+    properties:
+      name:
+        type: string
+      site:
+        type: map
+        entry-schema: sitedata
+  sitedata:
+    properties:
+      name: 
+        type: string
+      region:
+        type: string
+  config_contextdata:
+    properties:
+      codeCommitRepo:
+        type: string
+      deploymentType:
+        type: string
+      site_bucket_tar:
+        type: string
+      application_json:
+        type: map
+      config_json:
+        type: map

@@ -1,0 +1,9 @@
+schema: '2.0'
+name: rfs_sim_dish_spml
+version: '1.0'
+type: Assembly
+contains:
+- name: sim_rfs_spml
+  type: Resource
+  resource-manager: lm
+  directory: sim_rfs_spml

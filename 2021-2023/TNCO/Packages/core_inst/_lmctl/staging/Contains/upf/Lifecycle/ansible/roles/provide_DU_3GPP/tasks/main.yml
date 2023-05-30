@@ -1,0 +1,253 @@
+- name: Creates directory
+  file:
+    path: /tmp/ansible_log
+    state: directory
+    mode: 0775
+
+# - name: Validate the client certificate and verify onboarding is successful or no and get apiInvokerId
+  # uri:
+    # # url:  "{{ ansible_env.PGW_ADA_HOST }}/dish/ProvSpml/api/v1/spmlAdapter/modifyAddRequest"
+    # url: "{{ mcms_host }}/cms-service/webapi/apicore/apiinvokermanagement/v1/onboardedinvokers"
+    # method: POST
+    # body: "{{lookup('template', 'clientCertificate.json.j2')}}"
+    # body_format: json
+    # headers:
+      # content-type: "application/json"
+      # ReturnResultType: "FULL"
+      # return_content: yes
+    # validate_certs: no
+  # register: clientCertificate
+  # # ignore_errors: yes
+
+# - name: clientCertificate print
+  # copy:
+    # dest: "/tmp/proDU3gppclientCertificate.json.j2"
+    # content: "{{ clientCertificate }}"
+
+# - name: Initiate Authentication with apiInvokerId
+  # uri:
+    # url: "{{ mcms_host }}/cms-service/webapi/apicore/aef-security/v1/check-authentication"
+    # method: POST
+    # body: "{{lookup('template', 'CheckAuthentication.json.j2')}}"
+    # body_format: json
+    # status_code: 200
+    # headers:
+      # content-type: "application/json"
+      # ReturnResultType: "FULL"
+      # return_content: yes
+    # validate_certs: no
+  # register: authentication
+  # # ignore_errors: yes
+
+# - name: authentication print
+  # copy:
+    # dest: "/tmp/proDU3gppauthentication.json.j2"
+    # content: "{{ authentication }}"
+
+
+#-----------------------> DU_3GPP NRCellDU Info pLMNInfoList <----------------------------
+- name: Call RestAPI to Retrieve NRCellDU info
+  uri:
+    url:  "{{ deployment_location.properties.mcms_host }}/cms-service/webapi/apiservice/ProvMnS/v1/data=1,ManagedElement=1/GNBDUFunction={{ du_id }}?attributes=rRMPolicyMemberList,NRCellDU"
+    method: GET
+    body: "{{lookup('template', 'getInfoDU3GPP.json.j2')}}"
+    # body: 
+      # "gnbId": {{ gnb_id  | int }}
+      # "cnfId": {{ du_id | int }}
+      # "version": "{{ du_version }}"
+      # "configType": "{{ du_3gpp_config }}"
+    body_format: json
+    headers:
+      apiInvokerId: "{{ deployment_location.properties.apiInvokerId }}"
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: retrieveAll_NRCellDUInfo
+  ignore_errors: yes
+  failed_when: "retrieveAll_NRCellDUInfo.status not in [200]"
+
+- name: retrieveAllInfo NRCellDU info print
+  copy:
+    dest: "/tmp/ansible_log/resp_proDU3gppretrieveAllNRCellDUInfo.json.j2"
+    content: "{{ retrieveAll_NRCellDUInfo }}"
+
+- name: retrieveAllInfo content result print all
+  set_fact:
+    target: "{{ retrieveAll_NRCellDUInfo.content }}"
+
+#----------> Print error message when apiInvokerId is Invalid/incorrect/expired <------------
+- name: creating variable and setting value for message error when apiInvokerId is Invalid/incorrect/expired
+  set_fact:
+    target_e: "{{ retrieveAll_NRCellDUInfo.content | regex_search('message') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ retrieveAll_NRCellDUInfo.content | replace('\"','') | replace('{','') | replace('}','') }}. Either apiInvokerId is Invalid/incorrect/expired, please verify the apiInvokerId."
+  when: "target_e=='message'"
+
+#----> Print error message when Invalid location or input data for: <gnbId> or <cnfId> or <version> <-------
+- name: creating variable and setting value for errorInfo when wrong input data of gnbId> or <cnfId> or <version>  or any other errors
+  set_fact:
+    target_e1: "{{ retrieveAll_NRCellDUInfo.content | regex_search('error') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ retrieveAll_NRCellDUInfo.content | replace('\"','') | replace('{','') | replace('}','') | replace('error:','') }}"
+  when: "target_e1=='error'"
+
+- name: retrieveAllInfo NRCellDU length print
+  copy:
+    dest: "/tmp/ansible_log/retrieveNRCellDULen.json.j2"
+    content: "{{ retrieveAll_NRCellDUInfo.json.data[1].NRCellDU|length|int -1 }}"
+
+- name: print NRCellDU length
+  set_fact:
+    NRCellDUlen: "{{ retrieveAll_NRCellDUInfo.json.data[1].NRCellDU|length|int -1 }}"
+
+- name: Generate sequence for NRCellDU id's
+  set_fact:
+    mysequenceNRCellDU: "{{ mysequenceNRCellDU | default([]) + [retrieveAll_NRCellDUInfo.json.data[1].NRCellDU[item|int].id|int] }}"
+  with_sequence: start=0 end={{ NRCellDUlen }}
+
+- name: print number of NRCellDU IDs
+  debug:
+    msg: "{{ mysequenceNRCellDU }}"
+
+
+- name: Call to include update pLMNInfoList for EACH NRCellDU with new S-NSSAI  (add new slice)
+  include: updatepLMNInfoList.yaml
+  vars:
+    data:
+        -  "{{ mysequenceNRCellDU }}"
+    NRCellDUid: "{{ item }}"
+  loop: "{{ mysequenceNRCellDU }}"
+
+
+
+#-----------------------> DU_3GPP rRMPolicyMemberList <----------------------------
+- name: Call RestAPI to Retrieve rRMPolicyMemberList info
+  uri:
+    url:  "{{ deployment_location.properties.mcms_host }}/cms-service/webapi/apiservice/ProvMnS/v1/data=1,ManagedElement=1/GNBDUFunction={{ du_id }}?attributes=rRMPolicyMemberList,NRCellDU"
+    method: GET
+    body: "{{lookup('template', 'getInfoDU3GPP.json.j2')}}"
+    # body: 
+      # "gnbId": {{ gnb_id  | int }}
+      # "cnfId": {{ du_id | int }}
+      # "version": "{{ du_version }}"
+      # "configType": "{{ du_3gpp_config }}"
+    body_format: json
+    headers:
+      apiInvokerId: "{{ deployment_location.properties.apiInvokerId }}"
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: retrieveAll_rRMPolicyMemberList
+  ignore_errors: yes
+  failed_when: "retrieveAll_rRMPolicyMemberList.status not in [200]"
+
+- name: retrieveAllInfo NRCellDU info print
+  copy:
+    dest: "/tmp/ansible_log/resp_proDU3gppretrieveAllrRMPolicyMemberList.json.j2"
+    content: "{{ retrieveAll_rRMPolicyMemberList }}"
+
+#-----------------> Print error message when apiInvokerId is Invalid/incorrect/expired <------------
+- name: creating variable and setting value for message error when apiInvokerId is Invalid/incorrect/expired
+  set_fact:
+    target_e: "{{ retrieveAll_rRMPolicyMemberList.content | regex_search('message') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ retrieveAll_rRMPolicyMemberList.content | replace('\"','') | replace('{','') | replace('}','') }}. Either apiInvokerId is Invalid/incorrect/expired, please verify the apiInvokerId."
+  when: "target_e=='message'"
+
+#----> Print error message when Invalid location or input data for: <gnbId> or <cnfId> or <version> <-------
+- name: creating variable and setting value for errorInfo when wrong input data of gnbId> or <cnfId> or <version>  or any other errors
+  set_fact:
+    target_e1: "{{ retrieveAll_rRMPolicyMemberList.content | regex_search('error') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ retrieveAll_rRMPolicyMemberList.content | replace('\"','') | replace('{','') | replace('}','') | replace('error:','') }}"
+  when: "target_e1=='error'"
+
+#------------------> Count number of each NRCellDU id's for rRMPolicyMemberList <---------------
+- name: retrieveAllInfo NRCellDU print for RRMPolicy
+  copy:
+    dest: "/tmp/ansible_log/retrieveRRMNRCellDULen.json.j2"
+    content: "{{ retrieveAll_rRMPolicyMemberList.json.data[1].NRCellDU|length|int -1 }}"
+
+- name: print NRCellDU length for RRMPolicy
+  set_fact:
+    NRCellDUlen: "{{ retrieveAll_rRMPolicyMemberList.json.data[1].NRCellDU|length|int -1 }}"
+
+- name: Generate sequence for NRCellDU idx's for RRMPolicy
+  set_fact:
+    mysequenceNRCellDURRM: "{{ mysequenceNRCellDURRM | default([]) + [retrieveAll_rRMPolicyMemberList.json.data[1].NRCellDU[item|int].id|int] }}"
+  with_sequence: start=0 end={{ NRCellDUlen }}
+
+- name: print number of NRCellDU IDs
+  debug:
+    msg: "{{ mysequenceNRCellDURRM }}"
+
+#-------------> Get maximum idx and increment to one for rRMPolicyMemberList <------------------
+- name: print rRMPolicyMemberList length
+  set_fact:
+    RRMPolicylen: "{{ retrieveAll_rRMPolicyMemberList.json.data[0].rRMPolicyMemberList|length|int -1 }}"
+
+- name: print number of rRMPolicyMemberList
+  debug:
+    msg: "{{ RRMPolicylen }}"
+
+- name: Generate sequence for rRMPolicyMemberList idx's
+  set_fact:
+    mysequenceRRM: "{{ mysequenceRRM | default([]) + [retrieveAll_rRMPolicyMemberList.json.data[0].rRMPolicyMemberList[item|int].idx|int] }}"
+  with_sequence: start=0 end={{ RRMPolicylen }}
+
+- name: print number of rRMPolicyMemberList idx's
+  debug:
+    msg: "{{ mysequenceRRM }}"
+
+- name: Assign the idx value of DU_3GPP rRMPolicyMemberList idx's and same idx is used for cease
+  set_fact:
+    idxRRMDU3gpp: "{{ mysequenceRRM|max +1 }}"
+
+# - name: Set the idx value of DU_3GPP rRMPolicyMemberList idx's and same idx is used for cease
+  # set_fact:
+    # output__idxRRMDU3gpp: "{{ idxRRMDU3gpp }}"
+
+# - name: Increment to 1 from the maximum number of rRMPolicyMemberList idx's
+  # debug:
+    # msg: "{{ mysequenceRRM|max +1 }}"
+
+- name: Call to include update rRMPolicyMemberList for EACH NRCellDU with new S-NSSAI  (add new slice)
+  include: updaterRMPolicyMemberList.yaml
+  vars:
+    data:
+        -  "{{ mysequenceNRCellDURRM }}"
+    NRCellDURRMid: "{{ item }}"
+  loop: "{{ mysequenceNRCellDURRM }}"
+
+
+#-----------------------> DU_3GPP rRMPolicyMemberList at DU Level  <--------------------------
+#Currently skipped this step as the above step updates slice at both level. Need confirmation from Mavenir 
+# - name: update DU Level rRMPolicyMemberList (add new slice)
+  # uri:
+    # url: "{{ deployment_location.properties.mcms_host }}/cms-service/webapi/apiservice/ProvMnS/v1/data=1,ManagedElement=1,GNBCUCPFunction={{ du_id }},attributes/rRMPolicyMemberList"
+    # method: PUT
+    # body: "{{lookup('template', 'modifyrRMPolicyMemberListDU3GPP.json.j2')}}"
+    # body_format: json
+    # headers:
+      # apiInvokerId: "{{ deployment_location.properties.apiInvokerId }}"
+      # content-type: "application/json"
+      # ReturnResultType: "FULL"
+      # return_content: yes
+    # validate_certs: no
+  # register: updaterDURMPolicyMemberList
+  # ignore_errors: yes  
+
+# - name: updaterDURMPolicyMemberList print
+  # copy:
+    # dest: "/tmp/proDU3gppupdaterDURMPolicyMemberList.json.j2"
+    # content: "{{ updaterDURMPolicyMemberList }}"

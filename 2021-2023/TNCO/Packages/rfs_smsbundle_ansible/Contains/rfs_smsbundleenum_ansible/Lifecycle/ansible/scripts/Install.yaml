@@ -1,0 +1,10 @@
+---
+- name: Install
+  hosts: localhost
+  # connection: local
+  gather_facts: False
+  tasks:
+    - name: Conditional role
+      include_role:
+        name: ../roles/provide
+      when: "loop_back == 'OFF' or loop_back == 'false'"

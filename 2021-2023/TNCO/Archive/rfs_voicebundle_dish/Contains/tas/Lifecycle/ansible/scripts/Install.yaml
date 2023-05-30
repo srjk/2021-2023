@@ -1,0 +1,7 @@
+---
+- name: Install
+  hosts: localhost
+  connection: local
+  gather_facts: True
+  roles:
+    - { role: ../roles/provide, when: "loop_back == 'OFF' or loop_back == 'false'" }

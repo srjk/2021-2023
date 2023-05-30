@@ -1,0 +1,65 @@
+{
+        "category": "RFS",
+        "state": "active",
+        "@baseType": "service",
+        "@type": "ServiceProfile",
+        "serviceCharacteristic": [
+            {
+                "name": "serviceProfileId",
+                "value": "eMBB ServiceProfile - Test21"
+            },
+            {
+                "name": "sNSSAIList",
+                "valueType": "Object",
+                "value": {
+                    "@type": "JSONSpecification",
+                    "sNSSAIId": [
+                        "01-ABTEST21"
+                    ]
+                }
+            },
+            {
+                "name": "pLMNIdList",
+                "valueType": "Object",
+                "value": {
+                    "@type": "JSONSpecification",
+                    "pLMNId": [
+                        "mcc 313",
+                        "mnc 340"
+                    ]
+                }
+            },
+            {
+                "name": "perfReq",
+                "valueType": "Object",
+                "value": {
+                    "@type": "JSONSpecification",
+                    "eMBBPerfReq": [
+                        "testReq"
+                    ]
+                }
+            },
+            {
+                "name": "dLThptPerSlice",
+                "valueType": "string",
+                "value": "100 Mbps"
+            },
+            {
+                "name": "uLThptPerSlice",
+                "valueType": "string",
+                "value": "100 Mbps"
+            }
+        ],
+        "serviceRelationship": [
+       {
+           "relationshipType": "dependsOn",
+           "service": {
+               "id": "{{ NetworkSlice.json.id }}"
+           }
+       }
+     ],
+        "serviceSpecification": {
+            "id": "349f4b6a-a4e1-4013-be79-a0efd4ea8xxx",
+            "version": "1.0.0"
+        }
+    }

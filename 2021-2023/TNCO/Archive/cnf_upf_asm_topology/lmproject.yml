@@ -1,0 +1,10 @@
+schema: '2.0'
+name: cnf_upf_asm_topology
+version: '1.0'
+type: Assembly
+resource-manager: Brent
+contains:
+- name: upf
+  type: Resource
+  resource-manager: Brent
+  directory: upf

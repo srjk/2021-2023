@@ -1,0 +1,161 @@
+{
+	"RequestId": "{{ extOrderId }}",
+	"imsi": "{{ SUPI }}",
+	"serviceType": "Bundle RFS",
+	"serviceName": "{{ serviceName }}",
+	"SubParty": {
+				"PartyId": "{{ GPSI }}",
+				"DisplayName": "{{ GPSI }}",
+				"Category": "{{ tas_SubParty_Category }}",
+				"PrimaryPUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+				"PrimaryPUIDCPEProfileNumber": "{{ tas_SubParty_PrimaryPUIDCPEProfileNumber }}",
+				"CsdFlavor": "{{ tas_SubParty_CsdFlavor }}",
+				"CsdDynamic": "{{ tas_SubParty_CsdDynamic }}",
+				"CallLimit": "{{ tas_SubParty_CallLimit }}"
+			 }
+	{% if "VOICE" in  listrequestedServices  %}
+	        ,
+			"DialingPlan": {
+				"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+				"Assigned": "{{ tas_DialingPlan_assigned }}",
+				"PrefixandFeatureCode": "{{ tas_DialingPlan_PrefixandFeatureCode }}",
+				"E164NormAndCodeConv": "{{ tas_DialingPlan_E164NormAndCodeConv }}"
+			},
+			"CallingLineId": {
+				"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+				"Assigned": "{{ tas_CallingLineId_assigned }}",
+				"CallingLineIdRestriction": "PUBLIC",
+				"CLIREditAllowed": "{{ tas_callinglineid_CLIREditAllowed }}",
+				"CallingLineIdPresentation": "{{ tas_CallingLineId_CallingLineIdPresentation }}",
+				"CallingNamePresentation": "{{ tas_CallingLineId_CallingNamePresentation }}"
+			},
+			"CallForwardDefault": {
+				"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+				"Assigned": "{{ tas_CallForwardDefault_Assigned }}",
+				"ForwardToType": "{{ tas_CallForwardDefault_ForwardToType }}",
+				"CfdMode": "{{ tas_CallForwardDefault_CfdMode }}",
+				"EditPermission": "{{ tas_CallForwardDefault_EditPermission }}",
+				"EditPermissionsNoAnswer": "{{ tas_CallForwardDefault_EditPermissionsNoAnswer }}",
+				"NoAnswerTimeout": "{{ tas_CallForwardDefault_NoAnswerTimeout }}",
+				"Activated": "{{ tas_CallForwardDefault_Activated }}",
+				"BusyActive": "{{ tas_CallForwardDefault_BusyActive }}",
+				"NoAnsActive": "{{ tas_CallForwardDefault_NoAnsActive }}"
+			}
+			{% if "VOICE_CF" not in  listrequestedServices  %}
+				,
+				"CallForwardingVari": {
+					"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+					"Assigned": "{{ tas_CallForwardingVari_assigned }}",
+					"ReceiveNotify": "{{ tas_CallForwardingVari_ReceiveNotify }}"
+				},
+				"CallForwardingBusy": {
+					"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+					"Assigned": "{{ tas_CallForwardingBusy_assigned }}",
+					"ReceiveNotify": "{{ tas_CallForwardingBusy_ReceiveNotify }}"
+				},
+				"CallForwardingNoAns": {
+					"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+					"Assigned": "{{ tas_CallForwardingNoAns_assigned }}",
+					"NoAnswerTimeout": "{{ tas_CallForwardingNoAns_NoAnswerTimeout }}"
+				},
+				"CallForwardNotReach": {
+					"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+					"Assigned": "{{ tas_CallForwardNotReach_assigned }}"
+				
+				}
+			{% endif %}
+            {% if "VOICE_SPAM" not in  listrequestedServices  %}
+			    ,
+				"SelectiveCallRejct": {
+					"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+					"Assigned": "{{ tas_SelectiveCallRejct_assigned }}"
+				}
+			{% endif %}
+			,
+			"AnonymousCallRej": {
+				"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+					"Assigned": "{{ tas_AnonymousCallRej_assigned }}"
+				}
+			{% if "VOICE_ROAM" not  in  listrequestedServices  %}
+				,
+				"CallBlocking": {																  				   
+					"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+					"Assigned": "{{ tas_callBlocking_assigned }}",
+					"BlockRoamNtwk": "{{ tas_callBlocking_blockroamntwk }}"						 
+				},
+				"CallBarring": {
+					"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+					"Assigned": "{{ tas_callBarring_assigned }}",
+					"RoamNtwk": "{{ tas_callBarring_roamntwk }}"
+				}
+			{% endif %}	
+			, 		
+			"MsgWaitingInd": {
+				"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",			
+				"Assigned": "{{ tas_MsgWaitingInd_assigned }}",
+				"MWINotify": "{{ tas_MsgWaitingInd_MWINotify }}",
+				"Activated": "{{ tas_MsgWaitingInd_Activated }}"						 
+			},
+			"VoiceMail": {
+				"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+				"Assigned": "{{ tas_VoiceMail_assigned }}",
+				"ForwardToDN": "{{ tas_VoiceMail_ForwardToDN }}"						  
+			},
+			"AdvancedConference": { 
+				"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+				"Assigned": "{{ tas_AdvancedConference_assigned }}",
+				"MaxConfLegs": "{{ tas_AdvancedConference_MaxConfLegs }}",
+				"SendNotify": "{{ tas_AdvancedConference_SendNotify }}"						 
+			},
+			"AutomaticCallBack": {						 
+				"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+				"Assigned": "{{ tas_AutomaticCallBack_assigned }}" 
+			},
+			"OnlineCharging": {
+				"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+				"Assigned": "{{ tas_OnlineCharging_assigned }}",
+				"SessionBasedOption": "{{ tas_OnlineCharging_SessionBasedOption }}"	   
+			}
+	{% endif %}
+	{% if "VOICE_ROAM" in  listrequestedServices  %}
+		,
+				"CallBlocking": {
+				"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+				"Assigned": "{{ tas_callBlocking_assigned1 }}"
+			},
+				"CallBarring": {
+				"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+				"Assigned": "{{ tas_callBarring_assigned1 }}"
+			}
+	{% endif %}
+	{% if "VOICE_CF" in  listrequestedServices  %}
+		,
+				"CallForwardingVari": {
+				"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+				"Assigned": "{{ tas_CallForwardingVari_assigned }}",
+				"ReceiveNotify": "{{ tas_CallForwardingVari_ReceiveNotify }}"
+			},
+				"CallForwardingBusy": {
+				"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+				"Assigned": "{{ tas_CallForwardingBusy_assigned }}",
+				"ReceiveNotify": "{{ tas_CallForwardingBusy_ReceiveNotify }}"
+			},
+				"CallForwardingNoAns": {
+				"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+				"Assigned": "{{ tas_CallForwardingNoAns_assigned }}",
+				"NoAnswerTimeout": "{{ tas_CallForwardingNoAns_NoAnswerTimeout }}"
+			},
+				"CallForwardNotReach": {
+				"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+				"Assigned": "{{ tas_CallForwardNotReach_assigned }}"
+			}
+	{% endif %}
+	{% if "VOICE_SPAM" in  listrequestedServices  %}
+		,
+				"SelectiveCallRejct": {
+				"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+				"Assigned": "{{ tas_SelectiveCallRejct_assigned }}"
+			}
+			
+	{% endif %}
+}

@@ -1,0 +1,74 @@
+# Send Command to South Bound endpoint - Nokia SMF
+- name: Create the list
+  set_fact:   
+    list_smf_dnnName: "{{ smf_dnnName.split(',') | map('trim') | list }}"
+    list_smfSlice_sliceListName: "{{ smfSlice_sliceListName.split(',') | map('trim')| list }}"
+    # list_amfSlice_dnnName: "{{ amfSlice_dnnName.split(',') | list }}" 
+
+- name: generate SB json and copy it to utility server
+  copy:
+    dest: "smf_delete.sh"
+    content: |
+      #!/usr/bin/expect
+      spawn ssh -o HostKeyAlgorithms=+ssh-dss-o StrictHostKeyChecking=no {{ SMF_USER }}@{{ SMF_IP }} -p {{ SMF_PORT }}
+      expect "password: "
+      send "{{ SMF_PASS }}\r"
+      expect eof 
+
+
+- name: Insert a line at the end of a file.
+  lineinfile:
+    path: "smf_delete.sh"
+    line: send "configure mobile-gateway pdn 5 apn {{ item }} slices no slice-list \r"
+  loop: "{{ list_smf_dnnName }}"
+
+
+- name: Insert a line at the end of a file.
+  lineinfile:
+    path: "smf_delete.sh"
+    line: |
+            "{{ SMF_terminal }}" { send "configure mobile-gateway profile list slice-list {{ item }} slice {{ smfSlice_sliceName }} suspend \r" }
+            "{{ SMF_terminal }}" { send "configure mobile-gateway profile list slice-list {{ item }} no slice {{ smfSlice_sliceName }} \r" }
+  loop: "{{ list_smfSlice_sliceListName }}"
+
+
+
+
+
+
+
+# - name: Insert a line at the end of a file.
+  # lineinfile:
+    # path: "smf_delete.sh"
+    # line: |
+            # send "configure mobile-gateway pdn 5 slices no slice-instance-list \r"
+            # send "configure mobile-gateway pdn 5 slices no slice-list \r"
+            # send "configure mobile-gateway pdn 5 no instance-type \r"
+            # send "configure mobile-gateway profile list slice-list {{ smfSlice_sliceListName }} slice {{ smfSlice_sliceName }} suspend \r"
+            # send "configure mobile-gateway profile list slice-list {{ smfSlice_sliceListName }} no slice {{ smfSlice_sliceName }} \r"
+            # send "configure mobile-gateway profile list no slice-list {{ smfSlice_sliceListName }} \r"
+            # send "configure mobile-gateway profile list slice-instance-list {{ smfSlice_sliceInstanceListName }} slice-instance {{ smfSlice_slice_instance }} suspend enable \r"
+            # send "configure mobile-gateway profile list slice-instance-list {{ smfSlice_sliceInstanceListName }}  no slice-instance {{ smfSlice_slice_instance }} \r"
+            # send "configure mobile-gateway profile list no slice-instance-list {{ smfSlice_sliceInstanceListName }} \r"
+
+- name: Insert a line at the end of a file.
+  lineinfile:
+    path: "smf_delete.sh"
+    line: |
+       "{{ SMF_terminal }}" { send "exit all\r" }
+       }
+       send "logout\r"
+       expect eof
+
+- name: running script
+  command: chmod 775 smf_delete.sh
+- name: running script
+  shell: ./smf_delete.sh
+  register: result
+
+# - debug: var=result
+
+- name: generate SB json and copy it to utility server
+  copy:
+    dest: "/tmp/smf_delete.sh"
+    src: "smf_delete.sh"

@@ -1,0 +1,24 @@
+#-----------------------> Set enum url  <----------------------------
+- name: "##ALM##setting filename"
+  set_fact:
+    enum_provide_url: "{{ deployment_location.properties.enum_provide_url2 }}"  
+
+#-----------------------> Call for ENUM provide operation for Secondary URL <----------------------------
+- name: "##ENUM##Call Soap of SPML Adapter"
+  environment:
+    SSL_CERT_FILE: "pgwcertificate.cert"
+  uri:
+    url: "{{ enum_provide_url }}"
+    method: POST
+    body: "{{lookup('template', 'nokia_provisioning_gw_enum_provide_request.xml.j2')}}"
+    #status_code: [200,201]
+    return_content: yes    
+    headers:
+      content-type: "text/xml"
+      ReturnResultType: "FULL"
+      return_content: yes
+      SOAPAction: ""
+  register: result
+  until: result.status == 200
+  retries: "{{ RETRY_COUNT }}"
+  delay: "{{ RETRY_INTERVAL }}"

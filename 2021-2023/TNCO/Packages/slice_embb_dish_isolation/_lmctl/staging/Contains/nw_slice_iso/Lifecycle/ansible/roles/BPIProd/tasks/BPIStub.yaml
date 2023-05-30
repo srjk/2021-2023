@@ -1,0 +1,20 @@
+- name: TMF Authentication token
+  uri:
+    method: GET
+    url: "http://{{ ansible_env.BPI_HOST }}/bpi/blueplanet-inventory-tmf-notif-eng/oauth/token?grant_type=password&client_id=tmf-api&username=tmf-api&password=tmf-api-secret-phrase&scopes=read%20write&client_secret=value"
+    headers:
+      validate_certs: no
+  register: auth_response
+- name: Create Slice Resource
+  uri:
+    method: POST
+    url: http://{{ ansible_env.BPI_HOST }}/bpi/blueplanet-inventory-tmf-api/v1/service
+    body: "{{lookup('template', 'Inventory_nw_slice.json.j2')}}"
+    status_code: 200
+    body_format: json
+    headers:
+      Authorization: Bearer {{ auth_response.json.access_token }}
+      content-type: "application/json"
+      #ReturnResultType: "FULL"
+  register: result
+- debug:  var=result["json"]["id"]

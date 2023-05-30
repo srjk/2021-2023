@@ -1,0 +1,88 @@
+{
+    "serviceType": "{{ serviceType }}",
+	"serviceName": "Subscriber - Messaging SMS RFSS",
+    "id": "{{ extOrderId }}",
+    "imsi": "{{ SUPI }}",
+    "hlr": {
+        "multipleValueObjects": [
+            {
+                "path": "hlr/ts21",
+                "operation": "add",
+                "valueObject": {
+                    "msisdn": "{{ GPSI }}"
+                }
+            },
+            {
+                "path": "hlr/ts22",
+                "operation": "add",
+                "valueObject": {
+                    "msisdn": "{{ GPSI }}"
+                }
+            },
+            {
+                "path": "hlr/bicroam",
+                "operation": "add",
+                "valueObject": {
+                    "basicServiceGroup": "TS20-shortMessage",
+                    "status": "5"
+                }
+            },
+            {
+                "path": "hlr/osb1='true'",
+                "operation": "setoradd",
+                "valueObject": {
+                    "osb1": "true"
+                }
+            },
+            {
+                "path": "hlr/smsSubData",
+                "operation": "setoradd",
+				"scope": "uniqueTypeMapping",
+                "valueObject": {
+                    "refPriorityListName": "SMSTEST"
+                }
+            }
+        ]
+    },
+    "hss": {
+        "multipleValueObjects": [
+            {
+                "path": "hss/serviceProfile[@profileName='SP1']/globalFilterId",
+                "operation": "add",
+                "valueObject": {
+                    "globalFilterId": "REG-IPSMGW"
+                }
+            },
+            {
+                "path": "hss/serviceProfile[@profileName='SP1']/globalFilterId",
+                "operation": "add",
+                "valueObject": {
+                    "globalFilterId": "MSG-ORIG-IPSMGW"
+                }
+            }
+        ]
+    },
+    "udm": {
+        "multipleValueObjects": [
+            {
+                "path": "udm5gData/servingPlmnId/provisionedData/smsManagementSubscriptionData",
+                "operation": "add",
+                "valueObject": {
+                    "smsSubscribed": "true"
+                }
+            },
+            {
+                "path": "udm5gData/servingPlmnId/provisionedData/smsManagementSubscriptionData",
+                "operation": "add",
+                "valueObject": {
+                    "mtSmsSubscribed": "true",
+                    "mtSmsBarringAll": "false",
+                    "mtSmsBarringRoaming": "true",
+                    "moSmsSubscribed": "true",
+                    "moSmsBarringAll": "false",
+                    "moSmsbarringRoaming": "true"
+                }
+            }
+        ]
+    }
+}

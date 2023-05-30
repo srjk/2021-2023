@@ -1,0 +1,304 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<soapenv:Body>
+		<spml:modifyRequest timestamp="true" requestID="{{ extOrderId }}" xmlns:spml="urn:siemens:names:prov:gw:SPML:2:0" xmlns:sub="urn:siemens:names:prov:gw:SDL_MULTIAPPSUBSCRIBER:1:0">
+			<version>SDL_MULTIAPPSUBSCRIBER_v10</version>
+			<objectclass>Subscriber</objectclass>
+			<identifier alias="imsi">{{ SUPI }}</identifier>
+			<modification name="hlr" operation="set">
+				<valueObject xsi:type="sub:HLR">
+					<odbgprs>2</odbgprs>
+				</valueObject>
+			</modification>
+			<modification name="hlr/eps" operation="set">
+				<valueObject xsi:type="sub:EPS">
+					<defaultPdnContextId>2</defaultPdnContextId>
+				</valueObject>
+			</modification>
+			<modification name="hlr/epsPdnContext[@contextId='1']/pdnContextBlocking" operation="addorset">
+				<valueObject xsi:type="sub:PdnContextBlocking">
+					<flagAPNBlockedOverS6a>true</flagAPNBlockedOverS6a>
+					<flagAPNBlockedOverSWx>true</flagAPNBlockedOverSWx>
+				</valueObject>
+			</modification>
+			<modification name="udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo[@dnnId='ota']" operation="set">
+				<valueObject xsi:type="sub:UdmDnnInfo">
+					<defaultIndication>true</defaultIndication>
+				</valueObject>
+			</modification>
+			<modification name="udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo[@dnnId='internet']" operation="set">
+				<valueObject xsi:type="sub:UdmDnnInfo">
+					<defaultIndication>false</defaultIndication>
+				</valueObject>
+			</modification>
+			<modification name="udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo[@dnnId='internet']/dnnBarred='true'" operation="setoradd">
+				<valueObject xsi:type="sub:UdmDnnInfo">
+					<dnnBarred>true</dnnBarred>
+				</valueObject>
+			</modification>		
+			<modification name="hlr/epsPdnContext" operation="add">
+				<valueObject xsi:type="sub:EPSPdnContext">
+					<apn>{{ dnn1 }}</apn>
+					<contextId>{{ dnn1_contextId }}</contextId>
+					<type>{{ dnn1_type }}</type>
+					<pdnGwDynamicAllocation>{{ dnn1_pdnGwDynamicAllocation }}</pdnGwDynamicAllocation>
+					<vplmnAddressAllowed>{{ dnn1_vplmnAddressAllowed }}</vplmnAddressAllowed>
+					<maxBandwidthUp>{{ dnn1_sessionAmbr.split("|")[0].split(" ")[0]  }}</maxBandwidthUp>
+					<maxBandwidthDown>{{ dnn1_sessionAmbr.split("|")[1].split(" ")[0] }}</maxBandwidthDown>
+					<qos>{{ dnn1_qos }}</qos>
+					<pdnChargingCharacteristics>
+						<chargingCharacteristicsProfile>{{ dnn1_pdnChargingCharacteristics_chargingCharacteristicsProfile }}</chargingCharacteristicsProfile>
+						<chargingCharacteristicsBehavior>{{ dnn1_pdnChargingCharacteristics_chargingCharacteristicsBehavior }}</chargingCharacteristicsBehavior>
+					</pdnChargingCharacteristics>
+					<eps5gInterworkIndicator>{{ eps5gInterworkIndicator }}</eps5gInterworkIndicator>
+				</valueObject>
+			</modification>
+			<modification name="{{ hlr_path }}" operation="{{ operation1 }}">
+				<valueObject xsi:type="sub:EPSPdnContext">
+					<apn>{{ dnn2_apn }}</apn>
+					<contextId>{{ dnn2_contextId }}</contextId>
+					<type>{{ dnn2_type }}</type>
+					<pdnGwDynamicAllocation>{{ dnn2_pdnGwDynamicAllocation }}</pdnGwDynamicAllocation>
+					<vplmnAddressAllowed>{{ dnn2_vplmnAddressAllowed }}</vplmnAddressAllowed>
+					<maxBandwidthUp>{{ dnn2_sessionAmbr.split("|")[0].split(" ")[0]  }}</maxBandwidthUp>
+					<maxBandwidthDown>{{ dnn2_sessionAmbr.split("|")[1].split(" ")[0] }}</maxBandwidthDown>
+					<qos>{{ dnn2_qos }}</qos>
+					<pdnChargingCharacteristics>
+						<chargingCharacteristicsProfile>{{ dnn2_pdnChargingCharacteristics_chargingCharacteristicsProfile }}</chargingCharacteristicsProfile>
+						<chargingCharacteristicsBehavior>{{ dnn2_pdnChargingCharacteristics_chargingCharacteristicsProfile_chargingCharacteristicsBehavior }}</chargingCharacteristicsBehavior>
+					</pdnChargingCharacteristics>
+					<eps5gInterworkIndicator>{{ eps5gInterworkIndicator }}</eps5gInterworkIndicator>
+				</valueObject>
+			</modification>
+			<modification name="{{ hlr_path }}" operation="{{ operation1 }}">
+				<valueObject xsi:type="sub:EPSPdnContext">
+					<apn>{{ dnn3_apn }}</apn>
+					<contextId>{{ dnn3_contextId }}</contextId>
+					<type>{{ dnn3_type }}</type>
+					<pdnGwDynamicAllocation>{{ dnn3_pdnGwDynamicAllocation }}</pdnGwDynamicAllocation>
+					<vplmnAddressAllowed>{{ dnn3_vplmnAddressAllowed }}</vplmnAddressAllowed>
+					<maxBandwidthUp>{{ dnn3_sessionAmbr.split("|")[0].split(" ")[0]  }}</maxBandwidthUp>
+					<maxBandwidthDown>{{ dnn3_sessionAmbr.split("|")[1].split(" ")[0] }}</maxBandwidthDown>
+					<qos>{{ dnn3_qos }}</qos>
+					<pdnChargingCharacteristics>
+						<chargingCharacteristicsProfile>{{ dnn3_pdnChargingCharacteristics_chargingCharacteristicsProfile }}</chargingCharacteristicsProfile>
+						<chargingCharacteristicsBehavior>{{ dnn3_pdnChargingCharacteristics_chargingCharacteristicsBehavio }}</chargingCharacteristicsBehavior>
+					</pdnChargingCharacteristics>
+					<eps5gInterworkIndicator>{{ eps5gInterworkIndicator }}</eps5gInterworkIndicator>
+				</valueObject>
+			</modification>
+			<modification operation="{{ operation1 }}">
+				<valueObject xsi:type="sub:HSS">
+					<subscriptionId>{{ hss_subscriptionId }}</subscriptionId>
+					<profileType>{{ hss_profileType }}</profileType>
+					<adminBlocked>{{ hss_adminBlocked }}</adminBlocked>
+					<defaultScscfRequired>{{ hss_defaultScscfRequired }}</defaultScscfRequired>
+					<maximumPublicIds>{{ hss_maximumPublicIds }}</maximumPublicIds>
+					<privateUserId>
+						<privateUserId>{{ SUPI }}@ims.mnc340.mcc313.3gppnetwork.org</privateUserId>
+						<provisionedImsi>
+							<provisionedImsi>{{ SUPI }}</provisionedImsi>
+						</provisionedImsi>
+						<msisdn>{{ GPSI }}</msisdn>
+						<preferredAuthenticationScheme>{{ preferredAuthenticationScheme }}</preferredAuthenticationScheme>
+						<preferredDomain>{{ dnn1 }}</preferredDomain>
+						<refGussDataId>{{ refGussDataId }}</refGussDataId>
+						<looseRoutingIndicationRequired>{{ looseRoutingIndicationRequired }}</looseRoutingIndicationRequired>
+						<digestRealm>{{ digestRealm }}</digestRealm>
+					</privateUserId>
+					<privateUserId>
+						<privateUserId>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</privateUserId>
+						<provisionedImsi>
+							<provisionedImsi>{{ SUPI }}</provisionedImsi>
+						</provisionedImsi>						
+						<msisdn>{{ GPSI }}</msisdn>
+						<preferredAuthenticationScheme>{{ preferredAuthenticationScheme }}</preferredAuthenticationScheme>
+						<preferredDomain>{{ dnn1 }}</preferredDomain>
+						<refGussDataId>{{ refGussDataId }}</refGussDataId>
+						<looseRoutingIndicationRequired>{{ looseRoutingIndicationRequired }}</looseRoutingIndicationRequired>
+						<digestRealm>{{ digestRealm }}</digestRealm>
+					</privateUserId>
+					<implicitRegisteredSet>
+						<irsId>{{ irsId }}</irsId>
+					</implicitRegisteredSet>
+					<publicUserId>
+						<originalPublicUserId>sip:+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</originalPublicUserId>
+						<barringIndication>{{ barringIndication }}</barringIndication>
+						<defaultIndication>{{ defaultIndication }}</defaultIndication>
+						<serviceProfileName>{{ serviceProfileName }}</serviceProfileName>
+						<irsId>{{ irsId }}</irsId>
+					</publicUserId>
+					<publicUserId>
+						<originalPublicUserId>sip:{{ SUPI }}@ims.mnc340.mcc313.3gppnetwork.org</originalPublicUserId>
+						<barringIndication>{{ barringIndication1 }}</barringIndication>
+						<defaultIndication>{{ defaultIndication1 }}</defaultIndication>
+						<serviceProfileName>{{ serviceProfileName }}</serviceProfileName>
+						<irsId>{{ irsId }}</irsId>
+					</publicUserId>
+					<publicUserId>
+						<originalPublicUserId>tel:+{{ GPSI }}</originalPublicUserId>
+						<barringIndication>{{ barringIndication }}</barringIndication>
+						<defaultIndication>{{ defaultIndication1 }}</defaultIndication>
+						<serviceProfileName>{{ serviceProfileName }}</serviceProfileName>
+						<irsId>{{ irsId }}</irsId>
+					</publicUserId>
+					<serviceProfile>
+						<profileName>{{ profileName }}</profileName>
+						<mandatoryCapability>
+							<mandatoryCapability>{{ mandatoryCapability }}</mandatoryCapability>
+						</mandatoryCapability>
+						<globalFilterId>
+							<globalFilterId>{{ globalFilterId }}</globalFilterId>
+						</globalFilterId>
+						<globalFilterId>
+							<globalFilterId>{{ globalFilterId1 }}</globalFilterId>
+						</globalFilterId>
+						<globalFilterId>
+							<globalFilterId>{{ globalFilterId2 }}</globalFilterId>
+						</globalFilterId>
+						<globalFilterId>
+							<globalFilterId>{{ globalFilterId3 }}</globalFilterId>
+						</globalFilterId>
+						<globalFilterId>
+							<globalFilterId>{{ globalFilterId4 }}</globalFilterId>
+						</globalFilterId>
+						<globalFilterId>
+							<globalFilterId>{{ globalFilterId5 }}</globalFilterId>
+						</globalFilterId>
+						<subscribedMediaProfileID>
+							<sessionReleasePolicy>{{ sessionReleasePolicy }}</sessionReleasePolicy>
+							<forkingPolicy>{{ forkingPolicy }}</forkingPolicy>
+						</subscribedMediaProfileID>
+					</serviceProfile>
+					<gussData>
+						<gussDataId>{{ gussDataId }}</gussDataId>
+						<uiccSecurityType>{{ uiccSecurityType }}</uiccSecurityType>
+						<keyLifetime>{{ keyLifetime }}</keyLifetime>
+						<ussData>
+							<ussDataId>{{ ussDataId }}</ussDataId>
+							<gsId>{{ gsld }}</gsId>
+							<activeIndication>{{ activeIndication }}</activeIndication>
+							<ussType>{{ ussType }}</ussType>
+							<refNafGroupId>{{ refNafGroupId }}</refNafGroupId>
+							<keySelectionId>{{ keySelectionId }}</keySelectionId>
+							<upiListItem>
+								<upi>sip:+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</upi>
+							</upiListItem>
+						</ussData>
+					</gussData>
+				</valueObject>
+			</modification>
+			<modification name="{{ udm_path }}" operation="{{ operation1 }}">
+				<valueObject xsi:type="sub:UdmDnnInfo">
+						<dnnId>{{ dnn1 }}</dnnId>
+						<defaultIndication>{{ defaultIndication1 }}</defaultIndication>
+						<interworkingEPSIndication>{{ interworkingEPSIndication }}</interworkingEPSIndication>
+						<localBrkOutRoamingAllowed>{{ localBrkOutRoamingAllowed }}</localBrkOutRoamingAllowed>
+					</valueObject>
+			</modification>
+			<modification name="{{ udm_path }}" operation="{{ operation1 }}">
+				<valueObject xsi:type="sub:UdmDnnInfo">
+						<dnnId>{{ dnn2 }}</dnnId>
+						<defaultIndication>{{ defaultIndication1 }}</defaultIndication>
+						<interworkingEPSIndication>{{ interworkingEPSIndication }}</interworkingEPSIndication>
+						<localBrkOutRoamingAllowed>{{ localBrkOutRoamingAllowed }}</localBrkOutRoamingAllowed>
+					</valueObject>
+			</modification>
+			<modification name="{{ udm_path }}" operation="{{ operation1 }}">
+				<valueObject xsi:type="sub:UdmDnnInfo">
+						<dnnId>{{ dnn3 }}</dnnId>
+						<defaultIndication>{{ defaultIndication1 }}</defaultIndication>
+						<interworkingEPSIndication>{{ interworkingEPSIndication }}</interworkingEPSIndication>
+						<localBrkOutRoamingAllowed>{{ localBrkOutRoamingAllowed }}</localBrkOutRoamingAllowed>
+				</valueObject>
+			</modification>
+			<modification name="{{ udm_path1 }}" operation="{{ operation1 }}">
+				<valueObject xsi:type="sub:UdmDnnConfiguration">
+						<dnnId>{{ dnn1 }}</dnnId>
+						<interworkingEPSIndication>{{ interworkingEPSIndication }}</interworkingEPSIndication>
+						<sessionAmbr>{{ dnn1_sessionAmbr }}</sessionAmbr>
+						<udm5gQosProfile>
+							<udm5Qi>{{ udm5Qi }}</udm5Qi>
+							<arp>{{ dnn1_arp }}</arp>
+							<priorityLevel>{{ dnn1_priorityLevel }}</priorityLevel>
+						</udm5gQosProfile>
+						<pduSessionTypes>
+							<defaultSessionType>{{ defaultSessionType }}</defaultSessionType>
+							<allowedSessionType>{{ allowedSessionType }}</allowedSessionType>
+						</pduSessionTypes>
+						<sscModes>
+							<defaultSscMode>{{ sscModes_defaultSscMode }}</defaultSscMode>
+							<allowedSscMode>{{ allowedSscMode }}</allowedSscMode>
+						</sscModes>
+					</valueObject>
+			</modification>
+			<modification name="{{ udm_path1 }}" operation="{{ operation1 }}">
+				<valueObject xsi:type="sub:UdmDnnConfiguration">
+						<dnnId>{{ dnn2 }}</dnnId>
+						<interworkingEPSIndication>{{ interworkingEPSIndication }}</interworkingEPSIndication>
+						<sessionAmbr>{{ dnn2_sessionAmbr }}</sessionAmbr>
+						<udm5gQosProfile>
+							<udm5Qi>{{ udm5Qi }}</udm5Qi>
+							<arp>{{ dnn2_arp }}</arp>
+							<priorityLevel>{{ dnn2_priorityLevel }}</priorityLevel>
+						</udm5gQosProfile>
+						<pduSessionTypes>
+							<defaultSessionType>{{ defaultSessionType }}</defaultSessionType>
+							<allowedSessionType>{{ allowedSessionType }}</allowedSessionType>
+						</pduSessionTypes>
+						<sscModes>
+							<defaultSscMode>{{ sscModes_defaultSscMode }}</defaultSscMode>
+							<allowedSscMode>{{ allowedSscMode }}</allowedSscMode>
+						</sscModes>
+					</valueObject>
+			</modification>
+			<modification name="{{ udm_path1 }}" operation="{{ operation1 }}">
+				<valueObject xsi:type="sub:UdmDnnConfiguration">
+						<dnnId>{{ dnn3 }}</dnnId>
+						<interworkingEPSIndication>{{ interworkingEPSIndication }}</interworkingEPSIndication>
+						<sessionAmbr>{{ dnn3_sessionAmbr }}</sessionAmbr>
+						<udm5gQosProfile>
+							<udm5Qi>{{ udm5gQosProfile_udm5Qi }}</udm5Qi>
+							<arp>{{ dnn3_arp }}</arp>
+							<priorityLevel>{{ dnn3_priorityLevel }}</priorityLevel>
+						</udm5gQosProfile>
+						<pduSessionTypes>
+							<defaultSessionType>{{ defaultSessionType }}</defaultSessionType>
+							<allowedSessionType>{{ allowedSessionType }}</allowedSessionType>
+						</pduSessionTypes>
+						<sscModes>
+							<defaultSscMode>{{ sscModes_defaultSscMode }}</defaultSscMode>
+							<allowedSscMode>{{ allowedSscMode }}</allowedSscMode>
+						</sscModes>
+				</valueObject>
+			</modification>
+			<modification name="{{ pcf_path }}" operation="{{ operation1 }}">
+				<valueObject xsi:type="sub:SmPolicyDnnData">
+						<dnn>{{ dnn1 }}</dnn>
+						<allowedServices>{{ allowedServices }}</allowedServices>
+						<subscCats>{{ subscCats1 }}</subscCats>
+						<subscCats>{{ subscCats2 }}</subscCats>
+						<subscSpendingLimits>{{ subscSpendingLimits }}</subscSpendingLimits>
+						<online>{{ online }}</online>
+					</valueObject>
+			</modification>
+					<modification name="{{ pcf_path }}" operation="{{ operation1 }}">
+				<valueObject xsi:type="sub:SmPolicyDnnData">
+						<dnn>{{ dnn2 }}</dnn>
+						<subscCats>{{ subscCats1 }}</subscCats>
+						<subscCats>{{ subscCats2 }}</subscCats>
+						<subscSpendingLimits>{{ subscSpendingLimits }}</subscSpendingLimits>
+						<online>{{ online }}</online>
+					</valueObject>
+			</modification>
+					<modification name="{{ pcf_path }}" operation="{{ operation1 }}">
+				<valueObject xsi:type="sub:SmPolicyDnnData">
+						<dnn>{{ dnn3 }}</dnn>
+						<subscCats>{{ subscCats1 }}</subscCats>
+						<subscCats>{{ subscCats2 }}</subscCats>
+						<subscSpendingLimits>{{ subscSpendingLimits }}</subscSpendingLimits>
+						<online>{{ online }}</online>
+				</valueObject>
+			</modification>
+		</spml:modifyRequest>
+	</soapenv:Body>
+</soapenv:Envelope>

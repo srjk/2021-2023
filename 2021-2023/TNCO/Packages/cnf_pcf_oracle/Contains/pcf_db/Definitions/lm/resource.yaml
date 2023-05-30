@@ -1,0 +1,340 @@
+name: resource::pcf_db-cnf_pcf_oracle::1.0
+description: descriptor for sol_pcf
+properties:
+  operation:
+    description: addSliceConfig
+    volatile: true
+    default: Configure
+  instance_name:
+    description: name of assembly instance
+    type: string
+  deploymentLocation:
+    description: site specific
+    type: string
+    default: SOL003
+  # nameSpace:
+    # type: string
+  resourceManager:
+    type: string
+    read-only: true
+    default: brent 
+  pcf_chgData_meteringMethod:
+    type: string
+    default: DURATION
+  pcf_chgData_offline:
+    type: string
+    default: true
+  pcf_chgData_online:
+    type: string
+    default: true
+  pcf_chgData_ratingGroup:
+    type: string
+    default: 0
+  pcf_chgData_reportingLevel:
+    type: string
+    default: RAT_GR_LEVEL
+  pcf_chgData_sdfHand:
+    type: string
+    default: true
+  pcf_chgData_serviceId:
+    type: string
+    default: 0
+  pcf_chgData_sponsorId:
+    type: string
+    default: DISH
+  vnfdId:
+    type: string
+    volatile: true
+  vnfInstanceName:
+    type: string
+  cnfPackageVersionFile:
+    type: string
+    volatile: true
+  vnfInstanceId:
+    type: string
+    volatile: true
+  vnfInstanceDescription:
+    type: string    
+  flavourId:
+    type: string
+#    default: small
+  vimType:
+    type: string
+#    default: ndc
+  vim_id:
+    type: string
+#    default: orchestratortest
+  envType:
+    type: string
+#    default: dev    
+  nfType:
+    type: string
+#    default: CNF
+  vendor:
+    type: string
+#    default: or
+  function: 
+    type: string
+#    default: pcf
+  nfAppearance:
+    type: string
+#    default: 001
+  nfunType:
+    type: string
+#    default: c
+  region:
+    type: string
+#    default: use1
+  azId:
+    type: string
+#    default: az1
+  dataCenterType:
+    type: string
+#    default: n
+  logicalDCNo: 
+    type: string
+#    default: 01
+  env:
+    type: string
+#    default: p
+  envId:
+    type: string
+#    default: 1
+  PCF_HOST:
+    type: string
+    volatile: true
+  PCF_ENV:
+    type: string
+    volatile: true
+lifecycle:
+  addSliceConfig: 
+    drivers:
+      ansible:
+        selector:
+          infrastructure-type:
+          - '*'
+  removeSlice: 
+    drivers:
+      ansible:
+        selector:
+          infrastructure-type:
+          - '*'
+  Create: {}        
+  Install: {}
+  reconfigure: {}
+  # Configure: {}
+  # Uninstall: {}
+  Delete: {}
+# default-driver:
+#   ansible:
+#     selector:
+#       infrastructure-type:
+#       - '*'
+default-driver:
+  sol003:
+    selector:
+      infrastructure-type:
+      - '*'
+# operations:
+  # addSliceConfig:
+    # description: activate new slice parameters
+    # properties:
+      # pcf_chgData_afChargingIdentifier:
+        # type: string
+      # slice_planType:
+        # type: string
+      # pcf_chgData_appSvcProvId:
+        # type: string
+      # pcf_chgData_chgId:
+        # type: string
+      # pcf_policyTable_throttledBw:
+        # type: string
+      # pcf_chgData_profileName:
+        # type: string
+      # pcf_qosData_Id:
+        # type: string
+      # pcf_qosData_Name:
+        # type: string
+      # pcf_qosData_5Qi:
+        # type: string
+      # pcf_qosData_MaxBrUl:
+        # type: string
+      # pcf_qosData_MaxBrDl:
+        # type: string
+      # pcf_qosData_GbrUl:
+        # type: string
+      # pcf_qosData_GbrDl:
+        # type: string
+      # pcf_qosData_Qnc:
+        # type: string
+      # pcf_qosData_ReflectiveQoS:
+        # type: string
+      # pcf_qosData_PriorityLevel:
+        # type: string
+      # pcf_qosData_DefQoSFlowInd:
+        # type: string
+      # pcf_qosData_ArpPriority:
+        # type: string
+      # pcf_qosData_ArpPreemptCap:
+        # type: string
+      # pcf_qosData_ArpPreemptVuln:
+        # type: string
+      # pcf_pccRule_Id:
+        # type: string
+      # pcf_pccRule_Name:
+        # type: string
+      # pcf_pccRule_Type:
+        # type: string
+      # pcf_pccRule_DLFlowName:
+        # type: string
+      # pcf_pccRule_DLFlowDirection:
+        # type: string
+      # pcf_pccRule_DLFlowDesc:
+        # type: string
+      # pcf_pccRule_ULFlowName:
+        # type: string
+      # pcf_pccRule_ULFlowDirection:
+        # type: string
+      # pcf_pccRule_ULFlowDesc:
+        # type: string
+      # pcf_pccRule_precedence:
+        # type: string
+      # pcf_pccRule_refQoSData:
+        # type: string
+      # pcf_qosInfo_Id:
+        # type: string
+      # pcf_qosInfo_name:
+        # type: string
+      # pcf_qosInfo_desc:
+        # type: string
+      # pcf_qosInfo_5Qi:
+        # type: string
+      # pcf_qosInfo_priorityLevel:
+        # type: string
+      # pcf_qosInfo_preemptCap:
+        # type: string
+      # pcf_qosInfo_preemptVuln:
+        # type: string
+      # pcf_sessionRule_Id:
+        # type: string
+      # pcf_sessionRule_Name:
+        # type: string
+      # pcf_sessionRule_Ambr_Ul:
+        # type: string
+      # pcf_sessionRule_Ambr_Dl:
+        # type: string
+      # pcf_sessionRule_QosId:
+        # type: string
+      # pcf_policyTable_sst:
+        # type: string
+      # pcf_policyTable_sd:
+        # type: string
+      # pcf_policyTable_ratePlan:
+        # type: string
+      # pcf_policyTable_sessionRule:
+        # type: string
+      # pcf_policyTable_dnn:
+        # type: string
+      # pcf_policyTable_pccRuleList:
+        # type: string
+  # removeSlice:
+    # description: removeSlice parameters
+    # properties:
+      # pcf_chgData_afChargingIdentifier:
+        # type: string
+      # pcf_chgData_appSvcProvId:
+        # type: string
+      # pcf_chgData_chgId:
+        # type: string
+      # pcf_chgData_profileName:
+        # type: string
+      # pcf_qosData_Id:
+        # type: string
+      # pcf_qosData_Name:
+        # type: string
+      # pcf_qosData_5Qi:
+        # type: string
+      # pcf_qosData_MaxBrUl:
+        # type: string
+      # slice_planType:
+        # type: string
+      # pcf_policyTable_throttledBw:
+        # type: string
+      # pcf_qosData_MaxBrDl:
+        # type: string
+      # pcf_qosData_GbrUl:
+        # type: string
+      # pcf_qosData_GbrDl:
+        # type: string
+      # pcf_qosData_Qnc:
+        # type: string
+      # pcf_qosData_ReflectiveQoS:
+        # type: string
+      # pcf_qosData_PriorityLevel:
+        # type: string
+      # pcf_qosData_DefQoSFlowInd:
+        # type: string
+      # pcf_qosData_ArpPriority:
+        # type: string
+      # pcf_qosData_ArpPreemptCap:
+        # type: string
+      # pcf_qosData_ArpPreemptVuln:
+        # type: string
+      # pcf_pccRule_Id:
+        # type: string
+      # pcf_pccRule_Name:
+        # type: string
+      # pcf_pccRule_Type:
+        # type: string
+      # pcf_pccRule_DLFlowName:
+        # type: string
+      # pcf_pccRule_DLFlowDirection:
+        # type: string
+      # pcf_pccRule_DLFlowDesc:
+        # type: string
+      # pcf_pccRule_ULFlowName:
+        # type: string
+      # pcf_pccRule_ULFlowDirection:
+        # type: string
+      # pcf_pccRule_ULFlowDesc:
+        # type: string
+      # pcf_pccRule_precedence:
+        # type: string
+      # pcf_pccRule_refQoSData:
+        # type: string
+      # pcf_qosInfo_Id:
+        # type: string
+      # pcf_qosInfo_name:
+        # type: string
+      # pcf_qosInfo_desc:
+        # type: string
+      # pcf_qosInfo_5Qi:
+        # type: string
+      # pcf_qosInfo_priorityLevel:
+        # type: string
+      # pcf_qosInfo_preemptCap:
+        # type: string
+      # pcf_qosInfo_preemptVuln:
+        # type: string
+      # pcf_sessionRule_Id:
+        # type: string
+      # pcf_sessionRule_Name:
+        # type: string
+      # pcf_sessionRule_Ambr_Ul:
+        # type: string
+      # pcf_sessionRule_Ambr_Dl:
+        # type: string
+      # pcf_sessionRule_QosId:
+        # type: string
+      # pcf_policyTable_sst:
+        # type: string
+      # pcf_policyTable_sd:
+        # type: string
+      # pcf_policyTable_ratePlan:
+        # type: string
+      # pcf_policyTable_sessionRule:
+        # type: string
+      # pcf_policyTable_dnn:
+        # type: string
+      # pcf_policyTable_pccRuleList:
+        # type: string

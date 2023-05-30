@@ -1,0 +1,9 @@
+schema: '2.0'
+name: cnf_upf_nokia_contain
+version: '1.0'
+type: Assembly
+contains:
+- name: con_upf
+  type: Resource
+  resource-manager: Brent
+  directory: con_upf

@@ -1,0 +1,9 @@
+schema: '2.0'
+name: cnf_amf_nokia
+version: '1.0'
+type: Assembly
+contains:
+- name: amf
+  type: Resource
+  resource-manager: Brent
+  directory: amf

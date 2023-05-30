@@ -1,0 +1,9 @@
+schema: '2.0'
+name: cnf_nrf_oracle_sol003
+version: '1.0'
+type: Assembly
+contains:
+- name: cnf_nrf_oracle_sol003
+  type: Resource
+  resource-manager: Brent
+  directory: cnf_nrf_oracle_sol003

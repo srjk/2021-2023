@@ -1,0 +1,162 @@
+name: resource::cucp_mavenir-gnb_mavenir::1.0
+description: descriptor for CUCP RAN slicing
+properties:
+  operation:
+    description: CUCP_RAN
+    volatile: true
+    default: Configure
+  instance_name:
+    description: name of assembly instance
+    type: string
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: SUBPROV
+  resourceManager:
+    type: string
+    default: brent
+  # gnb_id:
+    # type: string
+    # default: 88
+  # cucp_sst:
+    # type: string
+  # cucp_sd:
+    # type: string
+  # cucp_snssai:
+    # type: string
+  # cucp_mcc:
+    # type: string
+  # cucp_mnc:
+    # type: string
+  cucp_3gpp_config:
+    type: string
+    default: CUCP_3GPP
+  cucp_version:
+    type: string
+    volatile: true
+    default: 5.0.383.191
+  # cucp_id:
+    # type: string
+  cucp_vendor_config:
+    type: string
+    default: CUCP_VENDOR
+  # mcms_host:
+    # type: string
+    # default: https://ib-orc-220-mcms-001:18080
+  # extOrderId:
+    # volatile: true
+  # idxRRMCUCP3gpp:
+    # type: integer
+  # idplmnSpecificConfigCUCPVendor:
+    # type: integer
+  vnfInstanceId:
+    type: string
+    volatile: true
+  vnfdId:
+    type: string
+    volatile: true
+  vnfInstanceName:
+    type: string
+  cnfPackageVersionFile:
+    type: string
+    volatile: true
+  vnfInstanceDescription:
+    type: string
+  flavourId:
+    type: string
+  vimType:
+    type: string
+  vim_id:
+    type: string
+  envType:
+    type: string
+    default: dev    
+  nfType:
+    type: string
+    default: CNF
+  cucp_cnfname:
+    type: string
+    volatile: true
+  cucp_chartkey:
+    type: string
+    volatile: true
+lifecycle:
+  addSliceConfig:
+    drivers:
+      ansible:
+        selector:
+          infrastructure-type:
+          - '*'
+  removeSlice:
+    drivers:
+      ansible:
+        selector:
+          infrastructure-type:
+          - '*'
+  Install: {}
+  Create: {}
+  reconfigure: {}
+  Uninstall: {}
+  Delete: {}
+# default-driver:
+  # ansible:
+    # selector:
+      # infrastructure-type:
+      # - '*'
+default-driver:
+  sol003:
+    selector:
+      infrastructure-type:
+      - '*'
+operations:
+  addSliceConfig:
+    description: activate new slice parameters
+    properties:
+      gnb_id:
+        type: string
+      cucp_sst:
+        type: string
+      cucp_sd:
+        type: string
+      cucp_snssai:
+        type: string
+      cucp_mcc:
+        type: string
+      cucp_mnc:
+        type: string
+      cucp_id:
+        type: string        
+      # cucp_3gpp_config:
+        # type: string
+      # cucp_version:
+        # type: string
+      extOrderId:
+        type: string
+      instance_name:
+        type: string
+        
+  removeSlice:
+    description: activate new slice parameters
+    properties:
+      gnb_id:
+        type: string
+      cucp_sst:
+        type: string
+      cucp_sd:
+        type: string
+      cucp_snssai:
+        type: string
+      cucp_mcc:
+        type: string
+      cucp_mnc:
+        type: string
+      # cucp_3gpp_config:
+      #   type: string
+      # cucp_version:
+      #   type: string
+      cucp_id:
+        type: string
+      extOrderId:
+        type: string
+      instance_name:
+        type: string        

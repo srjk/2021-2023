@@ -1,0 +1,301 @@
+######--->  DUcell configuration- Create (DUCell_createslice,Lock,slicegroup,cac-use,slicegroupportion,Unlock)
+######--->  DUcell configuration- Cease (Lock,slicegroupportion,cac-not-use,slicegroup,DUCell_deleteslice)
+######--->  DU Slice-ID - Cease
+
+#----------------> DUCell Slice ID Configuration <--------------
+- name: Call RestAPI to Create DU_CELL Slice ID
+  uri:
+    url: "{{ deployment_location.properties.samsung_usm_host }}/oss/netconf/{{ du_id }}"
+    # user: ossuser
+    # password: osspasswd
+    method: POST
+    body: "{{lookup('template', 'create_slice_ducell.xml')}}"
+    # body_format: json
+    headers:
+      Authorization: Basic b3NzdXNlcjpvc3NwYXNzd2Q=
+      content-type: "application/xml"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: DUCell_createSlice
+  # ignore_errors: yes
+
+- name: Display response DUCell_createSlice
+  debug:
+    var: DUCell_createSlice
+
+- name: DUCell_createSlice info print
+  lineinfile:
+    path: "{{ logsfile }}"
+    line: |
+           __________________________________________________________________________
+
+           #####  Create DU_CELL Slice ID DUCell_createSlice
+
+           URL:
+           {{ DUCell_createSlice.url }}
+
+           order_send:
+           {{lookup('template', 'create_slice_ducell.xml')}}
+
+           result_return:
+           {{ DUCell_createSlice.content }}
+           __________________________________________________________________________
+
+- fail:
+    msg: "Slice creation failed with error {{ DUCell_createSlice.content }}"
+  when: '"<rpc-error>" in DUCell_createSlice.content'
+
+#----------------> DUCell DUCell_cellLock  <--------------
+- name: Call RestAPI to DUCELL_CELL_LOCK FOR PARTICULAR CELL-IDENTITY
+  uri:
+    url: "{{ deployment_location.properties.samsung_usm_host }}/oss/netconf/{{ du_id }}"
+    # user: ossuser
+    # password: osspasswd
+    method: POST
+    body: "{{lookup('template', 'lock_ducell_cellstatus.xml')}}"
+    # body_format: json
+    headers:
+      Authorization: Basic b3NzdXNlcjpvc3NwYXNzd2Q=
+      content-type: "application/xml"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: DUCell_cellLock
+  # ignore_errors: yes
+
+- name: Display response DUCell_cellLock
+  debug:
+    var: DUCell_cellLock
+
+- name: info print DUCell_cellLock
+  lineinfile:
+    path: "{{ logsfile }}"
+    line: |
+           __________________________________________________________________________
+
+           ##### DUCELL_CELL_LOCK FOR PARTICULAR CELL-IDENTITY
+
+           URL:
+           {{ DUCell_cellLock.url }}
+
+           order_send:
+           {{lookup('template', 'lock_ducell_cellstatus.xml')}}
+
+           result_return:
+           {{ DUCell_cellLock.content }}
+           __________________________________________________________________________
+
+- fail:
+    msg: "Slice creation failed with error {{ DUCell_cellLock.content }}"
+  when: '"<rpc-error>" in DUCell_cellLock.content'
+
+#----------------> DUCell create_ducell_slicegroup  <--------------
+- name: Call RestAPI to create_ducell_slicegroup
+  uri:
+    url: "{{ deployment_location.properties.samsung_usm_host }}/oss/netconf/{{ du_id }}"
+    # user: ossuser
+    # password: osspasswd
+    method: POST
+    body: "{{lookup('template', 'create_ducell_slice_group.xml')}}"
+    # body_format: json
+    headers:
+      Authorization: Basic b3NzdXNlcjpvc3NwYXNzd2Q=
+      content-type: "application/xml"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: create_ducell_slicegroup
+  # ignore_errors: yes
+
+- name: Display response
+  debug:
+    var: create_ducell_slicegroup
+
+- name: create_ducell_slicegroup info print
+  lineinfile:
+    path: "{{ logsfile }}"
+    line: |
+           __________________________________________________________________________
+
+           ##### Create for create_ducell_slicegroup
+
+           URL:
+           {{ create_ducell_slicegroup.url }}
+
+           order_send:
+           {{lookup('template', 'create_ducell_slice_group.xml')}}
+
+           result_return:
+           {{ create_ducell_slicegroup.content }}
+           __________________________________________________________________________
+
+- fail:
+    msg: "Slice creation failed with error {{ create_ducell_slicegroup.content }}"
+  when: '"<rpc-error>" in create_ducell_slicegroup.content'
+
+#----------------> DUCell edit_ducell_cac_usage  <--------------
+- name: Call RestAPI to Create edit_ducell_cac_usage
+  uri:
+    url: "{{ deployment_location.properties.samsung_usm_host }}/oss/netconf/{{ du_id }}"
+    # user: ossuser
+    # password: osspasswd
+    method: POST
+    body: "{{lookup('template', 'create_ducell_cac_use.xml')}}"
+    # body_format: json
+    headers:
+      Authorization: Basic b3NzdXNlcjpvc3NwYXNzd2Q=
+      content-type: "application/xml"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: edit_ducell_cac_usage
+  # ignore_errors: yes
+
+- name: Display response
+  debug:
+    var: edit_ducell_cac_usage
+
+- name: edit_ducell_cac_usage info print
+  lineinfile:
+    path: "{{ logsfile }}"
+    line: |
+           __________________________________________________________________________
+
+           ##### Create for edit_ducell_cac_usage
+
+           URL:
+           {{ edit_ducell_cac_usage.url }}
+
+           order_send:
+           {{lookup('template', 'create_ducell_cac_use.xml')}}
+
+           result_return:
+           {{ edit_ducell_cac_usage.content }}
+           __________________________________________________________________________
+
+- fail:
+    msg: "Slice creation failed with error {{ edit_ducell_cac_usage.content }}"
+  when: '"<rpc-error>" in edit_ducell_cac_usage.content'
+
+#----------------> DUCell create_slicegroupportion_ducell  <--------------
+- name: Call RestAPI to Create create_slicegroupportion_ducell
+  uri:
+    url: "{{ deployment_location.properties.samsung_usm_host }}/oss/netconf/{{ du_id }}"
+    # user: ossuser
+    # password: osspasswd
+    method: POST
+    body: "{{lookup('template', 'create_slicegroupportion_ducell.xml')}}"
+    # body_format: json
+    headers:
+      Authorization: Basic b3NzdXNlcjpvc3NwYXNzd2Q=
+      content-type: "application/xml"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: create_slicegroupportion_ducell
+  # ignore_errors: yes
+
+- name: Display response
+  debug:
+    var: create_slicegroupportion_ducell
+
+- name: create_slicegroupportion_ducell info print
+  lineinfile:
+    path: "{{ logsfile }}"
+    line: |
+           __________________________________________________________________________
+
+           ##### Create for create_slicegroupportion_ducell
+
+           URL:
+           {{ create_slicegroupportion_ducell.url }}
+
+           order_send:
+           {{lookup('template', 'create_slicegroupportion_ducell.xml')}}
+
+           result_return:
+           {{ create_slicegroupportion_ducell.content }}
+           __________________________________________________________________________
+
+- fail:
+    msg: "Slice creation failed with error {{ create_slicegroupportion_ducell.content }}"
+  when: '"<rpc-error>" in create_slicegroupportion_ducell.content'
+
+#----------------> DUCell DUCell_cellUnlock  <--------------
+- name: Call RestAPI to DUCell_cellUnlock FOR PARTICULAR CELL-IDENTITY
+  uri:
+    url: "{{ deployment_location.properties.samsung_usm_host }}/oss/netconf/{{ du_id }}"
+    # user: ossuser
+    # password: osspasswd
+    method: POST
+    body: "{{lookup('template', 'unlock_ducell_cellstatus.xml')}}"
+    # body_format: json
+    headers:
+      Authorization: Basic b3NzdXNlcjpvc3NwYXNzd2Q=
+      content-type: "application/xml"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: DUCell_cellUnlock
+  # ignore_errors: yes
+
+- name: Display response DUCell_cellUnlock
+  debug:
+    var: DUCell_cellUnlock
+
+- name: info print DUCell_cellUnlock
+  lineinfile:
+    path: "{{ logsfile }}"
+    line: |
+           __________________________________________________________________________
+
+           ##### Create Slice for create_du_cell_unlock
+
+           URL:
+           {{ DUCell_cellUnlock.url }}
+
+           order_send:
+           {{lookup('template', 'unlock_ducell_cellstatus.xml')}}
+
+           result_return:
+           {{ DUCell_cellUnlock.content }}
+           __________________________________________________________________________
+
+
+- name: Log API request through Log module
+  ibm_cp4na_log_message:
+    message_direction: sent
+    external_request_id: "{{ extOrderId }}"
+    content_type: application/json
+    message_data: |
+     ***********************************
+     #####  Create Slice for create_du_cell_unlock
+     
+     URL:  
+     {{ DUCell_cellUnlock.url }}
+     
+     order_send:
+     {{lookup('template', 'unlock_ducell_cellstatus.xml')}}
+     ____________________________________________________
+
+     result_return:
+      {{ DUCell_cellUnlock.content }}
+    message_type: sample
+    protocol: http
+    
+- fail:
+    msg: "Slice creation failed with error {{ DUCell_cellUnlock.content }}"
+  when: '"<rpc-error>" in DUCell_cellUnlock.content'    

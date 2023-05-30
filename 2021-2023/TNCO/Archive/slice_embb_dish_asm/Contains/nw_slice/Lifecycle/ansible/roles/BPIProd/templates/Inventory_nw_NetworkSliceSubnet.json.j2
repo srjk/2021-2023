@@ -1,0 +1,37 @@
+{
+         "category": "RFS",
+         "state": "active",
+         "@baseType": "service",
+         "@type": "NetworkSliceSubnet",
+         "serviceCharacteristic": [
+             {
+                 "name": "networkSliceSubnetId",
+                 "value": "eMBB NetworkSliceSubnet - Test21"
+             }
+         ],
+         "serviceRelationship": [
+           {
+              "relationshipType":"dependsOn",
+              "service":{
+              "id":"{{ NetworkSlice.json.id }}"
+           }
+        }
+     ],
+     "supportingResource": [
+       {
+         "id": "255153259683807684",
+         "name": "amf333",
+         "role": "AMF"
+       },
+       {
+         "id": "255153259683807666",
+         "name": "pcf111",
+         "role": "PCF"
+
+       }
+     ],
+         "serviceSpecification": {
+             "id": "349f4b6a-a4e1-4013-be79-a0efd4ea8ppp",
+             "version": "1.0.0"
+         }
+     }

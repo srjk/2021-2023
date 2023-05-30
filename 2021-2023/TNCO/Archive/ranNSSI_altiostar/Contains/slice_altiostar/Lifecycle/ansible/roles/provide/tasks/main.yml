@@ -1,0 +1,16 @@
+
+- name: Create Altiostar RAN Slice
+  uri:
+    # url:  "{{ ansible_env.PGW_ADA_HOST }}/dish/ProvSpml/api/v1/spmlAdapter/modifyAddRequest"
+    url: "{{ deployment_location.properties.AltRAN_url }}/iRMAS/ProvMnS/v1.0640/SliceObject={{ du_snssai }}"
+    method: PUT
+    body: "{{lookup('template', 'CreateSlice.json.j2')}}"
+    body_format: json
+    status_code: 201
+    headers:
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    return_content: yes
+  register: CreateSlice

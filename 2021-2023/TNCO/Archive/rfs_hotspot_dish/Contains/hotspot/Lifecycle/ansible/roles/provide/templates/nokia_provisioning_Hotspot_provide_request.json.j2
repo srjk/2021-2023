@@ -1,0 +1,80 @@
+{
+    "id": "{{ extOrderId }}",
+    "imsi": "{{ SUPI }}",
+    "serviceType": "{{ serviceType }}",
+	"serviceName": "Subscriber - Data Hotspot Tethering RFSS",
+    "hlr": {
+        "multipleValueObjects": [
+            {
+                "operation": "add",
+                "path": "hlr/epsPdnContext",
+                "valueObject": {
+                    "apn": "hotspot",
+                    "contextId": "7",
+                    "type": "both",
+                    "pdnGwDynamicAllocation": "true",
+                    "vplmnAddressAllowed": "false",
+                    "maxBandwidthUp": "2000000000",
+                    "maxBandwidthDown": "2000000000",
+                    "qos": "internetQosEps",
+                    "pdnChargingCharacteristics": {
+                        "chargingCharacteristicsProfile": "8",
+                        "chargingCharacteristicsBehavior": "0"
+                    },
+                    "eps5gInterworkIndicator": "1"
+                }
+            }
+        ]
+    },
+    "udm": {
+        "multipleValueObjects": [
+            {
+                "operation": "add",
+                "path": "udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo",
+                "valueObject": {
+                    "dnnId": "hotspot",
+                    "defaultIndication": "false",
+                    "interworkingEPSIndication": "true",
+                    "localBrkOutRoamingAllowed": "false"
+                }
+            },
+            {
+                "operation": "add",
+                "path": "udm5gData/servingPlmnId/provisionedData/sessionManagementSubscriptionData/dnnConfiguration",
+                "valueObject": {
+                    "dnnId": "hotspot",
+                    "interworkingEPSIndication": "true",
+                    "sessionAmbr": "2000000000 bps|2000000000 bps",
+                    "udm5gQosProfile": {
+                        "udm5Qi": "9",
+                        "arp": "12|NOT_PREEMPT|PREEMPTABLE",
+                        "priorityLevel": "12"
+                    },
+                    "pduSessionTypes": {
+                        "defaultSessionType": "IPV4V6",
+                        "allowedSessionType": ["IPV4V6"]
+                    },
+                    "sscModes": {
+                        "defaultSscMode": "SSC_MODE_1",
+                        "allowedSscMode": ["SSC_MODE_1"]
+                    }
+                }
+            }
+        ]
+    },
+    "pcf": [
+        {
+            "operation": "add",
+            "path": "pcf/smPolicyData/smPolicySnssaiData/smPolicyDnnData",
+            "valueObject": {
+                "dnn": "hotspot",
+                "subscCats": [
+                    "Platinum",
+                    "Plan1"
+                ],
+                "subscSpendingLimits": "true",
+                "online": "true"
+            }
+        }
+    ]
+}

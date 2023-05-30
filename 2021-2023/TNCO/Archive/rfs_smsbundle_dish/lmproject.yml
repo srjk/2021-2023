@@ -1,0 +1,14 @@
+schema: '2.0'
+name: rfs_smsbundle_dish
+version: '1.0'
+type: Assembly
+resource-manager: Brent
+contains:
+- name: rfs_smsbundle_dish
+  type: Resource
+  resource-manager: Brent
+  directory: rfs_smsbundle_dish
+- name: rfs_smsbundleenum_dish
+  type: Resource
+  resource-manager: Brent
+  directory: rfs_smsbundleenum_dish

@@ -1,0 +1,24 @@
+#----------------------->Set Tas url    <----------------------------
+- name: "##ALM## setting TAS url"
+  set_fact:
+    tas_delete_url: "{{ deployment_location.properties.tas_delete_url2 }}"
+
+#-----------------------> SOAP call for TAS Cease_addon operation for Secondary URL <---------------------
+- name: "##TAS##Call Soap of SPML Adapter"
+  environment:
+    SSL_CERT_FILE: "tascertfile.cert"
+  uri:
+    url: "{{ tas_delete_url }}"
+    method: POST
+    user: somuser
+    return_content: yes
+    password: Passw0rd12345!
+    body: "{{lookup('template', 'Bundle_Voice_Cease_TAS.xml.j2')}}"
+    #status_code: [200,201]
+    headers:
+      content-type: "text/xml"
+      ReturnResultType: "FULL"
+  register: result
+  until: result.status == 200
+  retries: "{{ RETRY_COUNT }}"
+  delay: "{{ RETRY_INTERVAL }}"

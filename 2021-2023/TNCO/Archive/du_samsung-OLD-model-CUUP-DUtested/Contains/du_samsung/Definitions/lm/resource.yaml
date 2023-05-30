@@ -1,0 +1,40 @@
+name: resource::du_samsung-du_samsung::1.0
+description: descriptor for DU RAN slicing
+properties:
+  operation:
+    description: DU
+    volatile: true
+    default: Configure
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: DFW
+  resourceManager:
+    type: string
+    default: brent
+  du_sst:
+    type: string
+  du_sd:
+    type: string
+  du_id:
+    type: string
+  plmn_index:
+    type: string
+  du_samsung_usm_host:
+    type: string
+  DUsliceIndexvalueIncrement:
+    type: integer
+
+lifecycle:
+  Install: {}
+  Uninstall: {}
+default-driver:
+  ansible:
+    selector:
+      infrastructure-type:
+      - '*'
+# default-driver:
+  # sol003:
+    # selector:
+      # infrastructure-type:
+      # - '*'

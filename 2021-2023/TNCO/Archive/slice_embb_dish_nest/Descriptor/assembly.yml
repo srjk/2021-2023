@@ -1,0 +1,494 @@
+description: descriptor for free5g shared core
+properties:
+  corenssi:
+    type: corenssidata
+composition:
+  nw_slice:
+    type: $lmctl:/contains:/nw_slice:/descriptor_name
+    quantity: 1
+    properties:
+      instance_name:
+        value: ${instance.name}
+  amf:
+    type: assembly::cnf_amf_nokia_contain::1.0
+    dynamicType: "{% if alm_assembly_name =='nk-amf001c-usw2az1n001d' %}{{ 'assembly::cnf_amf_nokia_ref::1.0' }}{% else %}{{ 'assembly::cnf_amf_nokia_contain::1.0' }}{% endif %}"
+    quantity: 1
+    properties:
+      instance_name:
+        value: ${instance.name}
+      extOrderId:
+        value: ${corenssi.id}
+      amfSlice_plmnName:
+        value: ${corenssi.cnSlice_properties.amfSlice_plmnName}
+      slice_tai:
+        value: ${corenssi.cnSlice_properties.slice_tai}
+      amfSlice_sliceName:
+        value: ${corenssi.cnSlice_properties.amfSlice_sliceName}
+      slice_sst:
+        value: ${corenssi.cnSlice_properties.slice_sst}
+      slice_sd:
+        value: ${corenssi.cnSlice_properties.slice_sd}
+      amfSlice_snssaiListName:
+        value: ${corenssi.cnSlice_properties.amfSlice_snssaiListName}
+      slice_amfRegionId:
+        value: ${corenssi.cnSlice_properties.slice_amfRegionId}
+      slice_amfSetId:
+        value: ${corenssi.cnSlice_properties.slice_amfSetId}
+      amfSlice_snssaiToDnnListName:
+        value: ${corenssi.cnSlice_properties.amfSlice_snssaiToDnnListName}
+      slice_dnnList:
+        value: ${corenssi.cnSlice_properties.slice_dnnList}
+      snssaiListName:
+        value: ${corenssi.cnSlice_properties.snssaiListName}
+      alm_assembly_name:
+        value: ${corenssi.network_service_instances[0].amf[0].custom_fields.alm_assembly_name}        
+
+  smf:
+    type: assembly::cnf_smf_nokia_contain::1.0
+    dynamicType: "{% if alm_assembly_name =='nk-smf001c-usw2az1n001d' %}{{ 'assembly::cnf_smf_nokia_ref::1.0' }}{% else %}{{ 'assembly::cnf_smf_nokia_contain::1.0' }}{% endif %}"
+    quantity: 1
+    properties:
+      smfSlice_sliceInstanceListName:
+        value: ${corenssi.cnSlice_properties.smfSlice_sliceInstanceListName}
+      smfSlice_sliceListName:
+        value: ${corenssi.cnSlice_properties.smfSlice_sliceListName}
+      smfSlice_sliceName:
+        value: ${corenssi.cnSlice_properties.smfSlice_sliceName}
+      smfSlice_sst:
+        value: ${corenssi.cnSlice_properties.slice_sst}
+      smfSlice_sd:
+        value: ${corenssi.cnSlice_properties.slice_sd}
+      smf_dnnName:
+        value: ${corenssi.cnSlice_properties.slice_dnnList}
+      instance_name:
+        value: ${instance.name}
+      extOrderId:
+        value: ${corenssi.id}
+      alm_assembly_name:
+        value: ${corenssi.network_service_instances[0].smf[0].custom_fields.alm_assembly_name}
+  upf:
+    type: assembly::cnf_upf_nokia_contain::1.0
+    dynamicType: "{% if alm_assembly_name =='nk-upf001c-usw2az1n001d' %}{{ 'assembly::cnf_upf_nokia_ref::1.0' }}{% else %}{{ 'assembly::cnf_upf_nokia_contain::1.0' }}{% endif %}"
+    quantity: 1
+    properties:
+      alm_assembly_name:
+        value: ${corenssi.cnSlice_properties.alm_assembly_name}       
+references:
+  sol_operation_nssf:
+    properties:
+      resourceManager:
+        value: ${resourceManager}
+      name:
+        value: ${corenssi.network_service_instances[0].nssf[0].custom_fields.alm_assembly_name}
+    type: assembly::cnf_nssf_oracle::1.0
+
+  sol_operation_pcf:
+    properties:
+      resourceManager:
+        value: ${resourceManager}
+      name:
+        value: ${corenssi.network_service_instances[0].pcf[0].custom_fields.alm_assembly_name}
+    type: assembly::cnf_pcf_oracle::1.0    
+    # items: ${corenssi.network_service_instances[0].pcf}
+relationships:
+  sol_operation_relationship_nssf:
+    properties:
+      nssf_nsiProfileName:
+        value: ${corenssi.cnSlice_properties.nssf_nsiProfileName}
+      nssf_nrfUri:
+        value: ${corenssi.cnSlice_properties.slice_nrfUri}
+      nssf_nsiId:
+        value: ${corenssi.cnSlice_properties.slice_nsiId}
+      nssf_nrfMgtUri:
+        value: ${corenssi.cnSlice_properties.slice_nrfMgtUri}
+      nssf_nrfAccessTokenUri:
+        value: ${corenssi.cnSlice_properties.slice_nrfAccessTokenUri}
+      nssf_amfRegionId:
+        value: ${corenssi.cnSlice_properties.slice_amfRegionId}
+      nssf_amfSetId:
+        value: ${corenssi.cnSlice_properties.slice_amfSetId}
+      nssf_amfFqdn:
+        value: ${corenssi.cnSlice_properties.slice_amfSetFqdn}
+      nssf_defaultGrantName:
+        value: ${corenssi.cnSlice_properties.nssf_grantName}
+      nssf_mcc:
+        value: ${corenssi.cnSlice_properties.slice_mcc}
+      nssf_mnc:
+        value: ${corenssi.cnSlice_properties.slice_mnc}
+      nssf_tai:
+        value: ${corenssi.cnSlice_properties.slice_tai}
+      nssf_sst:
+        value: ${corenssi.cnSlice_properties.slice_sst}
+      nssf_sd:
+        value: ${corenssi.cnSlice_properties.slice_sd}
+      nssf_nssAmfId:
+        value: ${corenssi.cnSlice_properties.nssf_nssAmfId}
+      nssf_nssRuleName:
+        value: ${corenssi.cnSlice_properties.nssf_nssRuleName}
+      extOrderId:
+        value: ${corenssi.id}
+      instance_name:
+        value: ${instance.name}
+    lifecycle:
+      Create:
+      - source.addSliceConfig
+      Cease: 
+      - source.removeSlice
+    source-state: Active
+    source-state-modifier: post
+    target-state: Active
+    target-state-modifier: post
+    source-capabilities:
+    - sol_operation_nssf.capability
+    target-requirements:
+    - nw_slice.requirement
+
+  sol_operation_relationship_pcf:
+    properties:
+      pcf_policyTable_throttledBw:
+        value: ${corenssi.cnSlice_properties.slice_pcfQosDataThrottledBw}
+      slice_planType:
+        value: ${corenssi.cnSlice_properties.slice_planType}
+      pcf_chgData_afChargingIdentifier:
+        value: ${corenssi.cnSlice_properties.slice_chgProfileName}
+      pcf_chgData_appSvcProvId:
+        value: ${corenssi.cnSlice_properties.slice_chgProfileName}
+      pcf_chgData_chgId:
+        value: ${corenssi.cnSlice_properties.slice_chgProfileName}
+      pcf_chgData_profileName:
+        value: ${corenssi.cnSlice_properties.slice_chgProfileName}
+      pcf_qosData_Id:
+        value: ${corenssi.cnSlice_properties.slice_pcfQoSDataName}
+      pcf_qosData_Name:
+        value: ${corenssi.cnSlice_properties.slice_pcfQoSDataName}
+      pcf_qosData_5Qi:
+        value: ${corenssi.cnSlice_properties.slice_pcfQoSData5QI}
+      pcf_qosData_MaxBrUl:
+        value: ${corenssi.cnSlice_properties.slice_pcfQoSDataMaxBrUl}
+      pcf_qosData_MaxBrDl:
+        value: ${corenssi.cnSlice_properties.slice_pcfQoSDataMaxBrDl}
+      pcf_qosData_GbrUl:
+        value: ${corenssi.cnSlice_properties.slice_pcfQoSDataGbrUl}
+      pcf_qosData_GbrDl:
+        value: ${corenssi.cnSlice_properties.slice_pcfQoSDataGbrDl}
+      pcf_qosData_Qnc:
+        value: ${corenssi.cnSlice_properties.slice_pcfQosDataQnc}
+      pcf_qosData_ReflectiveQoS:
+        value: ${corenssi.cnSlice_properties.slice_pcfQosDataReflectiveQos}
+      pcf_qosData_PriorityLevel:
+        value: ${corenssi.cnSlice_properties.slice_pcfQosDataPriorityLevel}
+      pcf_qosData_DefQoSFlowInd:
+        value: ${corenssi.cnSlice_properties.slice_pcfQosDataDefQoSFlowInd}
+      pcf_qosData_ArpPriority:
+        value: ${corenssi.cnSlice_properties.slice_pcfQosDataArpPriority}
+      pcf_qosData_ArpPreemptCap:
+        value: ${corenssi.cnSlice_properties.slice_pcfQosDataArpPreemptCap}
+      pcf_qosData_ArpPreemptVuln:
+        value: ${corenssi.cnSlice_properties.slice_pcfQosDataArpPreemptVuln}
+      pcf_pccRule_Id:
+        value: ${corenssi.cnSlice_properties.slice_pcfPccRuleName}
+      pcf_pccRule_Name:
+        value: ${corenssi.cnSlice_properties.slice_pcfPccRuleName}
+      pcf_pccRule_Type:
+        value: ${corenssi.cnSlice_properties.slice_pcfPccRuleType}
+      pcf_pccRule_DLFlowName:
+        value: ${corenssi.cnSlice_properties.slice_pcfPccRuleDlFlowName}
+      pcf_pccRule_DLFlowDirection:
+        value: ${corenssi.cnSlice_properties.slice_pcfPccRuleDlFlowDirection}
+      pcf_pccRule_DLFlowDesc:
+        value: ${corenssi.cnSlice_properties.slice_pcfPccRuleDlFlowDesc}
+      pcf_pccRule_ULFlowName:
+        value: ${corenssi.cnSlice_properties.slice_pcfPccRuleUlFlowName}
+      pcf_pccRule_ULFlowDirection:
+        value: ${corenssi.cnSlice_properties.slice_pcfPccRuleUlFlowDirection}
+      pcf_pccRule_ULFlowDesc:
+        value: ${corenssi.cnSlice_properties.slice_pcfPccRuleUlFlowDesc}
+      pcf_pccRule_precedence:
+        value: ${corenssi.cnSlice_properties.slice_pcfPccRulePrecedence}
+      pcf_pccRule_refQoSData:
+        value: ${corenssi.cnSlice_properties.slice_pcfQoSDataName}
+      pcf_qosInfo_Id:
+        value: ${corenssi.cnSlice_properties.slice_pcfQoSInfoId}
+      pcf_qosInfo_name:
+        value: ${corenssi.cnSlice_properties.slice_pcfQoSInfoName}
+      pcf_qosInfo_desc:
+        value: ${corenssi.cnSlice_properties.slice_pcfQoSDataName}
+      pcf_qosInfo_5Qi:
+        value: ${corenssi.cnSlice_properties.slice_pcfQoSData5QI}
+      pcf_qosInfo_priorityLevel:
+        value: ${corenssi.cnSlice_properties.slice_pcfQosDataArpPriority}
+      pcf_qosInfo_preemptCap:
+        value: ${corenssi.cnSlice_properties.slice_pcfQosDataArpPreemptCap}
+      pcf_qosInfo_preemptVuln:
+        value: ${corenssi.cnSlice_properties.slice_pcfQosDataArpPreemptVuln}
+      pcf_sessionRule_Id:
+        value: ${corenssi.cnSlice_properties.slice_pcfSessionRuleId}
+      pcf_sessionRule_Name:
+        value: ${corenssi.cnSlice_properties.slice_pcfSessionRuleName}
+      pcf_sessionRule_Ambr_Ul:
+        value: ${corenssi.cnSlice_properties.slice_pcfQoSDataMaxBrUl}
+      pcf_sessionRule_Ambr_Dl:
+        value: ${corenssi.cnSlice_properties.slice_pcfQoSDataMaxBrDl}
+      pcf_sessionRule_QosId:
+        value: ${corenssi.cnSlice_properties.slice_pcfQoSInfoId}
+      pcf_policyTable_sst:
+        value: ${corenssi.cnSlice_properties.slice_sst}
+      pcf_policyTable_sd:
+        value: ${corenssi.cnSlice_properties.slice_sd}
+      pcf_policyTable_ratePlan:
+        value: ${corenssi.cnSlice_properties.slice_ratePlan}
+      pcf_policyTable_sessionRule:
+        value: ${corenssi.cnSlice_properties.slice_pcfSessionRuleName}
+      pcf_policyTable_dnn:
+        value: ${corenssi.cnSlice_properties.slice_dnnList}
+      pcf_policyTable_pccRuleList:
+        value: ${corenssi.cnSlice_properties.slice_pcfPccRuleName}
+      extOrderId:
+        value: ${corenssi.id}
+      instance_name:
+        value: ${instance.name}
+    lifecycle:
+      Create:
+      - source.addSliceConfig
+      Cease: 
+      - source.removeSlice
+    source-state: Active
+    source-state-modifier: post
+    target-state: Active
+    target-state-modifier: post
+    source-capabilities:
+    - sol_operation_pcf.capability
+    target-requirements:
+    - nw_slice.requirement
+data-types:
+  nftype:
+    properties:
+      fqdn:
+        type: string
+      SetId: 
+        type: string
+      cndId: 
+        type: string
+      bpi_id:
+        type: string 
+      RegionId:
+        type: string 
+      bpi_name:
+        type: string 
+      managementUri:
+        type: string 
+      AccessTokenUri:
+        type: string  
+      alm_assembly_name:
+        type: string 
+  NetworkFunction:
+    properties:
+      name:
+        type: string
+      custom_fields:
+        type: map
+        entry-schema: nftype
+  NetworkServiceInstance:
+    properties:
+      name:
+        type: string
+      nssf:
+        type: list
+        entry-schema: NetworkFunction
+      pcf:
+        type: list
+        entry-schema: NetworkFunction
+      upf:
+        type: list
+        entry-schema: string
+      amf:
+        type: list
+        entry-schema: NetworkFunction
+      smf:
+        type: list
+        entry-schema: NetworkFunction
+  corenssidata:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      slice_profiles:
+        type: map
+        entry-schema: slice_profile_type
+      sliceInfo:
+        type: map
+        entry-schema: sliceInfotype        
+      cnSlice_properties:
+        type: cnslicetype
+      network_service_instances:
+        type: list
+        entry-schema: NetworkServiceInstance
+  cnslicetype:
+    properties:
+        core_slice_location:
+          type: string
+        bpi_id:
+          type: string
+        bpi_name:
+          type: string
+        smfSlice_sliceListName:
+          type: string
+        smfSlice_sliceInstanceListName:
+          type: string
+        slice_tai:
+          type: string
+        slice_sst:
+          type: string
+        slice_sd:
+          type: string
+        slice_ratePlan:
+          type: string
+        slice_pcfSessionRuleName:
+          type: string
+        slice_pcfSessionRuleId:
+          type: string
+        slice_pcfQoSInfoName:
+          type: string
+        slice_pcfQoSInfoId:
+          type: string
+        slice_pcfQosDataReflectiveQos:
+          type: string
+        slice_pcfQosDataQnc:
+          type: string
+        slice_pcfQosDataPriorityLevel:
+          type: string
+        slice_pcfQoSDataName:
+          type: string
+        slice_pcfQoSDataMaxBrUl:
+          type: string
+        slice_pcfQoSDataMaxBrDl:
+          type: string
+        slice_pcfQoSDataGbrUl:
+          type: string
+        slice_pcfQoSDataGbrDl:
+          type: string
+        slice_pcfQosDataDefQoSFlowInd:
+          type: string
+        slice_pcfQosDataArpPriority:
+          type: string
+        slice_pcfQosDataArpPreemptVuln:
+          type: string
+        slice_pcfQosDataArpPreemptCap:
+          type: string
+        slice_pcfQoSData5QI:
+          type: string
+        slice_pcfPccRuleUlFlowName:
+          type: string
+        slice_pcfPccRuleUlFlowDirection:
+          type: string
+        slice_pcfPccRuleUlFlowDesc:
+          type: string
+        slice_pcfPccRuleType:
+          type: string
+        slice_pcfPccRulePrecedence:
+          type: string
+        slice_pcfPccRuleName:
+          type: string
+        slice_pcfPccRuleDlFlowName:
+          type: string
+        slice_pcfPccRuleDlFlowDirection:
+          type: string
+        slice_nsiId:
+          type: string
+        slice_nrfMgtUri:
+          type: string
+        slice_nrfAccessTokenUri:
+          type: string
+        slice_mnc:
+          type: string
+          default: 340
+        slice_mcc:
+          type: string
+          default: 313
+        slice_dnnList:
+          type: string
+        slice_chgProfileName:
+          type: string
+          default: 1
+        slice_amfSetId:
+          type: string
+        slice_amfSet:
+          type: string
+        slice_amfRegionId:
+          type: string
+        slice_amfRegion:
+          type: string
+        slice_pcfPccRuleDlFlowDesc:
+          type: string
+        nssf_nssRuleName:
+          type: string
+        nssf_nssAmfId:
+          type: string
+        slice_planType:
+          type: string
+        nssf_nsiProfileName:
+          type: string
+        nssf_grantName:
+          type: string
+        amfSlice_snssaiToDnnListName:
+          type: string
+        amfSlice_snssaiListName:
+          type: string
+        amfSlice_sliceName:
+          type: string
+        amfSlice_plmnName:
+          type: string
+        slice_amfSetFqdn:
+          type: string
+        slice_snssai:
+          type: string
+        slice_ndc:
+          type: string
+        slice_rdc:
+          type: string
+        smfSlice_sliceName:
+          type: string
+        snssaiListName:
+          type: string
+          default: Snssai1
+        slice_pcfQosDataThrottledBw:
+          type: string
+        slice_nrfUri:
+          type: string
+  data:
+    properties:
+      corenssi:
+        type: map
+        entry-schema: corenssidata
+  sliceInfotype:
+    properties:
+      name:
+        type: string
+      topnssi_nsi:
+        type: map
+        entry-schema: topnssi_nsitype
+  slice_profile_type:
+    properties:
+      custom_fields:
+        type: map
+        entry-schema: custom_fieldstype
+  topnssi_nsitype:
+    properties:
+      name:
+        type: string
+      custom_fields:
+        type: map
+        entry-schema: custom_fieldstype
+  custom_fieldstype:
+    properties:
+      sNSSAI:
+        type: string
+      bpi_id:
+        type: string
+      bpi_name:
+        type: string
+      MMTelSupport:
+        type: string
+      IsolatedSlice:
+        type: string

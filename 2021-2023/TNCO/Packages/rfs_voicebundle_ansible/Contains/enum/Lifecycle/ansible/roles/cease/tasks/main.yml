@@ -1,0 +1,141 @@
+# - name: Get token from kami
+#   uri:
+#     method: POST
+#     url: "{{ ansible_env.KAMI_ADA_HOST }}/KamiCore/oauth/token?grant_type=client_credentials"
+#     headers: 
+#        content-type: "application/json"
+#        Authorization: Basic ZGlzaDpkaXNoMTIzNA==
+#     validate_certs: no
+#   register: token  
+           
+# - name: Get order id
+#   uri:
+#     method: GET
+#     url: "{{ ansible_env.KAMI_ADA_HOST }}/KamiCore/getExtOrderId"  
+#     return_content: yes
+#     body_format: json
+#     status_code: 201
+#     body: "{ \"almInstanceName\": \"{{ instance_name }}\" }"
+#     headers:
+#        Returnresult_VoiceEnumCeaseType: "FULL"
+#        Authorization: Bearer {{ token.json.access_token }}
+#     validate_certs: no
+#     follow_redirects: yes
+#   register: kami_response
+
+#-----------------------> Start time from system  <----------------------------
+- name: "##ALM##Get timestamp from the system"
+  shell: "date +%Y-%m-%d%H:%M:%S.%5N"
+  register: stime
+
+#-----------------------> Generate Token from Kami  <----------------------------
+- name: "##ALM##Get token from kami"
+  uri:
+    method: POST
+    url: "{{ deployment_location.properties.kami_url }}/KamiCore/oauth/token?grant_type=client_credentials"
+    headers: 
+       content-type: "application/json"
+       Authorization: Basic ZGlzaDpkaXNoMTIzNA==
+    validate_certs: no
+  register: token  
+
+#-----------------------> Generate Order ID from Kami  <----------------------------
+- name: "##ALM##Get order id"
+  uri:
+    method: GET
+    url: "{{ deployment_location.properties.kami_url }}/KamiCore/getExtOrderId"  
+    return_content: yes
+    body_format: json
+    status_code: 201
+    body: "{ \"almInstanceName\": \"{{ instance_name }}\" }"
+    headers:
+       Returnresult_VoicePGWCeaseType: "FULL"
+       Authorization: Bearer {{ token.json.access_token }}
+    validate_certs: no
+    follow_redirects: yes
+  register: kami_response
+
+#-----------------------> Print Start time  <----------------------------
+- name: "##ALM##Start time"
+  debug: msg="{{ stime }}"    
+
+#-----------------------> List requested services  <----------------------------
+- name: "##ALM##setting filename"
+  set_fact:
+    # filename: /tmp/ansible_log/ansible_{{ kami_response.json.extOrderId }}.log
+    listrequestedServices: "{{ kami_response.json.requestedServices.split(',') | map('trim') |  list }}"
+    enum_cease_url: "{{ deployment_location.properties.enum_cease_url }}"
+
+#-----------------------> SOAP call for ENUM Cease operation for Primary URL <----------------------------
+- name: "##ENUM##Call Soap of SPML Adapter for ENUM Cease"
+  # environment:
+    # SSL_CERT_FILE: "pgwcertificate.cert"
+  uri:
+    url: "{{ enum_cease_url }}"
+    method: POST
+    body: "{{lookup('template', 'nokia_enum_cease.xml.j2')}}"
+    return_content: yes
+    #status_code: [200,201]
+    headers:
+      content-type: "text/xml"
+      ReturnResultType: "FULL"
+      SOAPAction: ""
+  register: result
+  until: result.status == 200
+  retries: "{{ RETRY_COUNT }}"
+  delay: "{{ RETRY_INTERVAL }}"
+  failed_when: "result.status not in [-1,200]"
+
+#-----------------------> Call for ENUM Cease operation for Secondary URL <----------------------------
+- name: "##ALM## Call for ENUM Cease operation for Secondary URL"
+  include_tasks: second.yaml
+  when: result.status == -1
+
+#-----------------------> End time from system  <----------------------------  
+- name: "##ALM##Get timestamp from the system"
+  shell: "date +%Y-%m-%d%H:%M:%S.%5N"
+  register: etime
+
+#-----------------------> Print End time  <----------------------------
+- name: "##ALM##end time"
+  debug: msg="{{ etime }}"
+
+# - name: setting filename
+  # set_fact:
+    # filename: /tmp/ansible_log/ansible_{{ kami_response.json.extOrderId }}_enum_cease.log 
+
+# - name: generate SB json and copy       
+  # copy:
+    # dest: "{{ filename }}"
+    # content: |
+       # ***********************************
+       # start_time:  {{ stime.start }}
+       # end_time:  {{ etime.end }}
+       # ***********************************
+       # order_send:  {{lookup('template', 'nokia_enum_cease.xml.j2')}}
+       # ____________________________________________________
+       # result_return: {{ result }}
+
+- set_fact:
+    target: "{{ result.content | regex_search('error') }}"
+
+#-----------------------> Store request/response Logs in Eventlogger  <----------------------------
+- name: "##ALM##Store request and response in DB"
+  uri:
+    url: "{{ deployment_location.properties.eventlogger_url }}"
+    method: POST
+    body: "{{lookup('template', 'Store.json.j2')}}"
+    return_content: yes
+    body_format: json
+    status_code: 200
+    validate_certs: no
+    headers:
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+  register: resultStore
+
+#-----------------------> Print error message for Failure case  <----------------------------
+
+- fail:
+    msg: "Instance creation failed with error code {{ result.content | regex_search('errorCode=[^ ]+') | replace('\"','') |replace('errorCode=','') }} and error message {{ result.content | regex_search('<errorMessage>.*</errorMessage>') | replace('<errorMessage>','') |replace('</errorMessage>','') }}"
+  when: "target=='error'" 

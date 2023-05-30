@@ -1,0 +1,10 @@
+schema: '2.0'
+name: txmNSSI_cisco
+version: '1.0'
+type: Assembly
+resource-manager: Brent
+contains:
+- name: tsci_cisco
+  type: Resource
+  resource-manager: Brent
+  directory: tsci_cisco

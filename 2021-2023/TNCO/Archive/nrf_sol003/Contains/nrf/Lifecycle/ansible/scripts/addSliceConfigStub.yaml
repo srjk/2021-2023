@@ -1,0 +1,7 @@
+---
+- name: addSliceConfigStub
+  hosts: localhost
+  connection: local
+  gather_facts: True
+  roles:
+    - role: ../roles/addSliceConfigStub

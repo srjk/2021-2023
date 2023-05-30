@@ -1,0 +1,12 @@
+{
+  "serviceType":"{{ serviceType }}",
+  "serviceName": "Subscriber - Voicemail RFSS",
+  "RequestId":"{{ kami_response.json.extOrderId }}",
+  "msisdn":"{{ GPSI }}",
+  "hostreference": "Vision21",
+  "command": "Delete",
+  "EntityName": "Subscriber",
+  "Version":"1",
+  "service": "delete",
+  "Token": "{{ Token | b64encode }}"
+}

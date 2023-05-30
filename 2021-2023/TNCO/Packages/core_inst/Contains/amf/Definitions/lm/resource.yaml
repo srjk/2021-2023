@@ -1,0 +1,150 @@
+name: resource::amf-core_inst::1.0
+description: descriptor for amf RAN slicing
+properties:
+  operation:
+    description: amf_RAN
+    volatile: true
+    default: Configure
+  instance_name:
+    description: name of assembly instance
+    type: string
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: SUBPROV
+  resourceManager:
+    type: string
+    default: brent
+  # gnb_id:
+    # type: string
+    # default: 88
+  # amf_sst:
+    # type: string
+  # amf_sd:
+    # type: string
+  # amf_snssai:
+    # type: string
+  # amf_mcc:
+    # type: string
+  # amf_mnc:
+    # type: string
+  amf_3gpp_config:
+    type: string
+    default: amf_3GPP
+  amf_version:
+    type: string
+    volatile: true
+    default: 5.0.383.191
+  # amf_id:
+    # type: string
+  amf_vendor_config:
+    type: string
+    default: amf_VENDOR
+  # mcms_host:
+    # type: string
+    # default: https://ib-orc-220-mcms-001:18080
+  # extOrderId:
+    # volatile: true
+  # idxRRMamf3gpp:
+    # type: integer
+  # idplmnSpecificConfigamfVendor:
+    # type: integer
+  vnfInstanceId:
+    type: string
+    volatile: true
+  vnfdId:
+    type: string
+    volatile: true
+  vnfInstanceName:
+    type: string
+  cnfPackageVersionFile:
+    type: string
+    volatile: true
+  vnfInstanceDescription:
+    type: string
+  flavourId:
+    type: string
+  vimType:
+    type: string
+  vim_id:
+    type: string
+  envType:
+    type: string
+    default: dev    
+  nfType:
+    type: string
+    default: CNF
+  amf_cnfname:
+    type: string
+    volatile: true
+  amf_chartkey:
+    type: string
+    volatile: true
+lifecycle:
+  Install: {}
+  Create: {}
+  Configure: {}
+  reconfigure: {}
+  Uninstall: {}
+default-driver:
+  ansible:
+    selector:
+      infrastructure-type:
+      - '*'
+# default-driver:
+#   sol003:
+#     selector:
+#       infrastructure-type:
+#       - '*'
+operations:
+  addSliceConfig:
+    description: activate new slice parameters
+    properties:
+      gnb_id:
+        type: string
+      amf_sst:
+        type: string
+      amf_sd:
+        type: string
+      amf_snssai:
+        type: string
+      amf_mcc:
+        type: string
+      amf_mnc:
+        type: string
+      amf_id:
+        type: string        
+      # amf_3gpp_config:
+        # type: string
+      # amf_version:
+        # type: string
+      extOrderId:
+        type: string
+      instance_name:
+        type: string
+        
+  removeSlice:
+    description: activate new slice parameters
+    properties:
+      gnb_id:
+        type: string
+      amf_sst:
+        type: string
+      amf_sd:
+        type: string
+      amf_snssai:
+        type: string
+      amf_mcc:
+        type: string
+      amf_mnc:
+        type: string
+      # amf_3gpp_config:
+      #   type: string
+      # amf_version:
+      #   type: string
+      amf_id:
+        type: string
+      extOrderId:
+        type: string
+      instance_name:
+        type: string        

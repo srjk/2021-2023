@@ -1,0 +1,106 @@
+<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/">
+	<soap-env:Header/>
+	<soap-env:Body>
+		<PlexViewRequest Command="ent-ngfs-subscriber-v2" SwitchName="host-name" RequestId="{{ extOrderId }}" SessionId="username*password">
+			<SubParty>
+				<PartyId>{{ GPSI }}</PartyId>
+				<DisplayName>{{ GPSI }}</DisplayName>
+				<Category>RESIDENTIALSUBSCRIBER_R2</Category>
+				<PrimaryPUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PrimaryPUID>
+				<PrimaryPUIDCPEProfileNumber>200</PrimaryPUIDCPEProfileNumber>
+				<CsdFlavor>TAS_CSD_ALU_P2</CsdFlavor>
+				<CsdDynamic>true</CsdDynamic>
+				<CallLimit>6</CallLimit>
+			</SubParty>
+			<DialingPlan>
+				<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+				<Assigned>true</Assigned>
+				<PrefixandFeatureCode>1000</PrefixandFeatureCode>
+				<E164NormAndCodeConv>1001</E164NormAndCodeConv>
+			</DialingPlan>
+			<CallingLineId>
+				<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+				<Assigned>true</Assigned>
+				<CallingLineIdRestriction>{{ tas_callinglineid_restriction }}</CallingLineIdRestriction>
+				<CLIREditAllowed>true</CLIREditAllowed>
+				<CallingLineIdPresentation>true</CallingLineIdPresentation>
+				<CallingNamePresentation>true</CallingNamePresentation>
+			</CallingLineId>
+			<CallForwardDefault>
+				<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+				<Assigned>true</Assigned>
+				<ForwardToType>FORWARD_TO_VM</ForwardToType>
+				<CfdMode>BUSY_NOANSWER</CfdMode>
+				<EditPermission>EDIT_NONE</EditPermission>
+				<EditPermissionsNoAnswer>EDIT_NONE</EditPermissionsNoAnswer>
+				<NoAnswerTimeout>20</NoAnswerTimeout>
+				<Activated>true</Activated>
+				<BusyActive>true</BusyActive>
+				<NoAnsActive>true</NoAnsActive>
+			</CallForwardDefault>
+            <CallForwardingVari>
+                <PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+                <Assigned>true</Assigned>
+                <ReceiveNotify>true</ReceiveNotify>
+            </CallForwardingVari>
+            <CallForwardingBusy>
+                <PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+                <Assigned>true</Assigned>
+                <ReceiveNotify>true</ReceiveNotify>
+            </CallForwardingBusy>
+            <CallForwardingNoAns>
+                <PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+                <Assigned>true</Assigned>
+                <NoAnswerTimeout>20</NoAnswerTimeout>
+            </CallForwardingNoAns>
+            <CallForwardNotReach>
+                <PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+                <Assigned>true</Assigned>
+            </CallForwardNotReach>
+			<SelectiveCallRejct>
+				<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+				<Assigned>true</Assigned>
+			</SelectiveCallRejct>
+			<AnonymousCallRej>
+				<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+				<Assigned>true</Assigned>
+			</AnonymousCallRej>
+			<CallBlocking>
+				<PublicUID>+19252223331@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+				<Assigned>true</Assigned>
+				<BlockRoamNtwk>true</BlockRoamNtwk>				
+			</CallBlocking>
+			<CallBarring>
+				<PublicUID>+19252223331@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+				<Assigned>true</Assigned>
+				<RoamNtwk>true</RoamNtwk>
+			</CallBarring>
+			<MsgWaitingInd>
+				<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+				<Assigned>true</Assigned>  
+				<MWINotify>true</MWINotify>
+				<Activated>true</Activated>
+			</MsgWaitingInd>
+			<VoiceMail>
+				<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+				<Assigned>true</Assigned>
+				<ForwardToDN>+18883778734@vmas.dish5g.net</ForwardToDN>
+			</VoiceMail>
+			<AdvancedConference>
+				<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+				<Assigned>true</Assigned>
+				<MaxConfLegs>6</MaxConfLegs>
+				<SendNotify>true</SendNotify>
+			</AdvancedConference>
+			<AutomaticCallBack>
+				<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+				<Assigned>true</Assigned>
+			</AutomaticCallBack>
+			<OnlineCharging>
+        			<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+              			<Assigned>true</Assigned>
+              			<SessionBasedOption>ORIG_TERM</SessionBasedOption>
+			</OnlineCharging>
+			</PlexViewRequest>
+	</soap-env:Body>
+</soap-env:Envelope>

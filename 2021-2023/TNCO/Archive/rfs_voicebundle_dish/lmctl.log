@@ -1,0 +1,4 @@
+2022-04-11 12:04:52,270 - lmctl.client.api.auth - INFO - Failed to access login API at ui/api/login, responded with 404 status code...may be an older LM environment, trying api/login
+2022-04-11 12:04:52,270 - lmctl.client.api.auth - INFO - Failed to access login API at ui/api/login, responded with 404 status code...may be an older LM environment, trying api/login
+2022-04-11 12:05:15,698 - lmctl.client.api.auth - INFO - Failed to access login API at ui/api/login, responded with 404 status code...may be an older LM environment, trying api/login
+2022-04-11 12:05:15,698 - lmctl.client.api.auth - INFO - Failed to access login API at ui/api/login, responded with 404 status code...may be an older LM environment, trying api/login

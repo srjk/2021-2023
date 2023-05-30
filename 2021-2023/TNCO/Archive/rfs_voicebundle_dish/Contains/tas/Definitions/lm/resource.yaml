@@ -1,0 +1,285 @@
+description: descriptor for Nokia TAS resource
+name: resource::tas-rfs_voicebundle_dish::1.0
+properties:
+  instance_name:
+    description: name of assembly instance
+  operation:
+    volatile: true
+  deploymentLocation:
+    description: site specific
+    type: string
+    default: DFW     
+  resourceManager:
+    type: string
+    read-only: true
+    default: brent
+  requestedServices:
+    type: string
+    volatile: true     
+  extOrderId:
+    volatile: true
+  serviceType:
+    type: string
+  loop_back:
+    type: string
+    volatile: true
+#    default: OFF
+  SUPI:
+    volatile: true
+  GPSI:
+    volatile: true
+  Old_GPSI:
+    volatile: true    
+  href:
+    type: string
+  priority:
+    type: string
+  SubOrderType:
+    type: string
+  description:
+    type: string
+  category:
+    type: string
+  state:
+    type: string
+  orderDate: 
+    type: string
+  completionDate: 
+    type: string
+  requestedStartDate: 
+    type: string
+  requestedCompletionDate: 
+    type: string
+  expectedCompletionDate:
+    type: string
+  startDate:
+    type: string
+  serviceOrderItemId:
+    type: string  
+  action:
+    type: string
+    default : add
+  serviceName:
+    type: string
+    default: "Subscriber - Voice Bundle RFSS"
+  tas_SubParty_Category:
+    type: string
+    default: "RESIDENTIALSUBSCRIBER_R2"
+  tas_SubParty_PrimaryPUIDCPEProfileNumber:
+    type: string
+    default: "200"
+  tas_SubParty_CsdFlavor:
+    type: string
+    default: "TAS_CSD_ALU_P2"
+  tas_SubParty_CsdDynamic:
+    type: string
+    default: "true"
+  tas_SubParty_CallLimit:
+    type: string
+    default: "6"
+  tas_SubParty_ServiceSuspension:
+    type: string
+    default: "false"
+  tas_SubParty_ServiceSuspension1:
+    type: string
+    default: "true"    
+  tas_DialingPlan:
+    type: string
+    default: "true"
+  tas_DialingPlan_PrefixandFeatureCode:
+    type: string
+    default: "1000"
+  tas_DialingPlan_E164NormAndCodeConv:
+    type: string
+    default: "1001"
+  tas_CallingLineId:
+    type: string
+    default: "true"
+  tas_callinglineid_CLIREditAllowed:
+    type: string
+    default: "true"
+  tas_CallingLineId_CallingLineIdPresentation:
+    type: string
+    default: "true"
+  tas_CallingLineId_CallingNamePresentation:
+    type: string
+    default: "true"
+  tas_CallForwardDefault:
+    type: string
+    default: "true"
+  tas_CallForwardDefault_ForwardToType:
+    type: string
+    default: "FORWARD_TO_VM"
+  tas_CallForwardDefault_CfdMode:
+    type: string
+    default: "BUSY_NOANSWER"
+  tas_CallForwardDefault_EditPermission:
+    type: string
+    default: "EDIT_NONE"
+  tas_CallForwardDefault_EditPermissionsNoAnswer:
+    type: string
+    default: "EDIT_NONE"
+  tas_CallForwardDefault_NoAnswerTimeout:
+    type: string
+    default: "20"
+  tas_CallForwardDefault_Activated:
+    type: string
+    default: "true"
+  tas_CallForwardDefault_BusyActive:
+    type: string
+    default: "true"
+  tas_CallForwardDefault_NoAnsActive:
+    type: string
+    default: "true"
+  tas_CallForwardingVari:
+    type: string
+    default: "true"
+  tas_CallForwardingVari_ReceiveNotify:
+    type: string
+    default: "true"
+  tas_CallForwardingBusy:
+    type: string
+    default: "true"
+  tas_CallForwardingBusy_ReceiveNotify:
+    type: string
+    default: "true"
+  tas_CallForwardingNoAns:
+    type: string
+    default: "true"
+  tas_CallForwardingNoAns_NoAnswerTimeout:
+    type: string
+    default: "20"
+  tas_CallForwardNotReach:
+    type: string
+    default: "true"
+  tas_SelectiveCallRejct:
+    type: string
+    default: "true"
+  tas_AnonymousCallRej:
+    type: string
+    default: "true"
+  tas_MsgWaitingInd:
+    type: string
+    default: "true"
+  tas_MsgWaitingInd_MWINotify:
+    type: string
+    default: "true"
+  tas_MsgWaitingInd_Activated:
+    type: string
+    default: "true"
+  tas_VoiceMail:
+    type: string
+    default: "true"
+  tas_VoiceMail_ForwardToDN:
+    type: string
+    default: "+18883778734@vmas.dish5g.net"
+  tas_AdvancedConference:
+    type: string
+    default: "true"
+  tas_AdvancedConference_MaxConfLegs:
+    type: string
+    default: "6"
+  tas_AdvancedConference_SendNotify:
+    type: string
+    default: "true"
+  tas_AutomaticCallBack:
+    type: string
+    default: "true"
+  tas_OnlineCharging:
+    type: string
+    default: "true"
+  tas_OnlineCharging_SessionBasedOption:
+    type: string
+    default: "ORIG_TERM"
+  tas_callinglineid_restriction:
+    type: string
+  reference_assembly:
+    type: string
+  tas_DialingPlan_assigned:
+    type: string
+    default: "true"
+  tas_CallingLineId_assigned:
+    type: string
+    default: "true"
+  tas_CallForwardDefault_Assigned:
+    type: string
+    default: "true"
+  tas_CallForwardingVari_assigned:
+    type: string
+    default: "true"
+  tas_CallForwardingBusy_assigned:
+    type: string
+    default: "true"
+  tas_CallForwardingNoAns_assigned:
+    type: string
+    default: "true"
+  tas_CallForwardNotReach_assigned:
+    type: string
+    default: "true"
+  tas_SelectiveCallRejct_assigned:
+    type: string
+    default: "true"
+  tas_AnonymousCallRej_assigned:
+    type: string
+    default: "true"
+  tas_callBlocking_assigned:
+    type: string
+    default: "true"
+  tas_callBlocking_blockroamntwk:
+    type: string
+    default: "true"
+  tas_callBarring_assigned:
+    type: string
+    default: "true"
+  tas_callBarring_roamntwk:
+    type: string
+    default: "true"
+  tas_MsgWaitingInd_assigned:
+    type: string
+    default: "true"
+  tas_VoiceMail_assigned:
+    type: string
+    default: "true"
+  tas_AdvancedConference_assigned:
+    type: string
+    default: "true"
+  tas_AutomaticCallBack_assigned:
+    type: string
+    default: "true"
+  tas_OnlineCharging_assigned:
+    type: string
+    default: "true"
+  tas_callBlocking_assigned1:
+    type: string
+    default: "false"
+  tas_callBarring_assigned1:
+    type: string
+    default: "false"
+  tas_CallForwardingVari_assigned1:
+    type: string
+    default: "false"
+  tas_CallForwardingBusy_assigned1:
+    type: string
+    default: "false"
+  tas_CallForwardingNoAns_assigned1:
+    type: string
+    default: "false"
+  tas_CallForwardNotReach_assigned1:
+    type: string
+    default: "false"
+  tas_SelectiveCallRejct_assigned1:
+    type: string
+    default: "false"
+infrastructure:
+  Openstack: {}
+lifecycle:
+  # Stop: {}
+  # Start: {}
+  Uninstall: {}
+  reconfigure: {}
+  Install: {}
+default-driver:
+  ansible:
+    selector:
+      infrastructure-type:
+      - '*'

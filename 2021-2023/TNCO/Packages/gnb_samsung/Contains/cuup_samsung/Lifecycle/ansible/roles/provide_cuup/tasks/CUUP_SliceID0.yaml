@@ -1,0 +1,69 @@
+#####name: Call when Slice ID XPath is not present (Create First slice-Index with value 0)
+#####include: CUUP_SliceID0.yaml
+
+#----------------> CU_UP Slice Create slice  <--------------
+- name: Call RestAPI to Create CU_UP for Slice Index =0 
+  uri:
+    url: "{{ deployment_location.properties.samsung_usm_host }}/oss/netconf/{{ cuup_id }}"
+    # user: ossuser
+    # password: osspasswd
+    method: POST
+    body: "{{lookup('template', 'create_slice_CUUP_Sliceindex0.xml')}}"
+    # body_format: json
+    headers:
+      Authorization: Basic b3NzdXNlcjpvc3NwYXNzd2Q=
+      content-type: "application/xml"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: CU_UP_createSlice
+  # ignore_errors: yes
+
+- name: Display response Slice-Index=0
+  debug:
+    var: CU_UP_createSlice
+    
+- name: CU_UP_getSlice info print Slice-Index=0
+  lineinfile:
+    path: "{{ logsfile }}"
+    line: |
+           __________________________________________________________________________
+           
+           ##### Create Slice for CUUP - Slice-Index=0
+           
+           URL:  
+           {{ CU_UP_createSlice.url }}
+           
+           order_send:
+           {{lookup('template', 'create_slice_CUUP_Sliceindex0.xml')}}
+           
+           result_return:
+           {{ CU_UP_createSlice.content }}
+           __________________________________________________________________________
+
+- name: Log API request through Log module
+  ibm_cp4na_log_message:
+    message_direction: sent
+    external_request_id: "{{ extOrderId }}"
+    content_type: application/json
+    message_data: |
+     ***********************************
+     ###### Create Slice for CUUP - Slice-Index=0
+     
+     URL:
+     {{ CU_UP_createSlice.url }}
+     
+     order_send:
+     {{lookup('template', 'create_slice_CUUP_Sliceindex0.xml')}}
+     ____________________________________________________
+
+     result_return:
+      {{ CU_UP_createSlice.content }}
+    message_type: sample
+    protocol: http
+
+- fail:
+    msg: "Slice creation failed with error {{ CU_UP_createSlice.content }}"
+  when: '"<rpc-error>" in CU_UP_createSlice.content'

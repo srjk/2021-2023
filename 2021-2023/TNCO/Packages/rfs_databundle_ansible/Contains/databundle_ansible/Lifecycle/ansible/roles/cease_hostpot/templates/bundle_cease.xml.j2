@@ -1,0 +1,15 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<soapenv:Body>
+		<spml:modifyRequest timestamp="true" requestID="{{ extOrderId }}" xmlns:spml="urn:siemens:names:prov:gw:SPML:2:0" xmlns:sub="urn:siemens:names:prov:gw:SDL_MULTIAPPSUBSCRIBER:1:0">
+			<version>SDL_MULTIAPPSUBSCRIBER_v10</version>
+			<objectclass>Subscriber</objectclass>
+			<identifier alias="imsi">{{ SUPI }}</identifier>
+			{% if "HOTSPOT" in  listrequestedServices  %}
+				<modification name="{{ hlr_path6 }}" operation="{{ operation4 }}"/>
+				<modification name="udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo[@dnnId='{{ dnn6 }}']" operation="{{ operation4 }}"/>
+				<modification name="udm5gData/servingPlmnId/provisionedData/sessionManagementSubscriptionData/dnnConfiguration[@dnnId='{{ dnn6 }}']" operation="{{ operation4 }}"/>
+				<modification name="pcf/smPolicyData/smPolicySnssaiData/smPolicyDnnData[@dnn='{{ dnn6 }}']" operation="{{ operation4 }}"/>			
+			{% endif %}
+		</spml:modifyRequest>
+	</soapenv:Body>
+</soapenv:Envelope>

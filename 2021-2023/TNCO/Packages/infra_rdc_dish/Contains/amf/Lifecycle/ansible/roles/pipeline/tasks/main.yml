@@ -1,0 +1,50 @@
+- block:   
+  - name: copy
+    copy:
+      dest: "/tmp/test"
+      content: |
+        {{ cnfInstance }}
+  - set_fact:
+      # targetClusterRole: "{{ cnfInstance['custom_fields']['targetClusterRole'] }}"
+      codeCommitRole: "{{ cnfInstance['custom_fields']['AMFCodeCommitRole'] }}"
+      # eksClusterKubeConfig: "{{ cnfInstance['custom_fields']['eksClusterKubeConfig'] }}"
+      # eksClusterName: "{{ cnfInstance['custom_fields']['eksClusterName'] }}"
+      # cdkDeployRegion: "{{ cnfInstance['custom_fields']['cdkDeployRegion'] }}"
+      # profile_name: "{{ cnfInstance['custom_fields']['application_json']['profiles'].keys() }}"
+
+  - name: trigger python
+    shell: "python3 test_status.py {{ codeCommitRole }} {{ deployment_location.properties.lcm_session }} {{ deployment_location.properties.lcm_region_name }} {{ deployment_location.properties.kafka_pod }} {{ deployment_location.properties.kafka_topic }}"
+    register: result
+    failed_when: "result.rc not in [ 0, 1 ]"
+
+  # - set_fact:
+  #     test_result: "{{ result.stdout }}"
+
+  # - set_fact:
+  #     output__commitId: "{{ test_result['commitId'] }}"
+  #     output__pipeline_id: "{{ test_result['pipeline_id'] }}"
+  #     output__response_status: "{{ test_result['response_status'] }}"
+  - set_fact:
+      output__response_status: "{{ result.stdout }}"
+  - fail:
+      msg: "pipeline {{ result.stderr }}"
+    when: "result.stdout != 'Succeeded'"
+
+  # - set_fact:
+  #     namespace: "{{ cnfInstance['custom_fields']['application_json']['profiles'][profile_name[0]].keys()|select('regex','namespace')| first }}"
+
+  # - shell: |
+  #       ASSUME_ROLE_ARN={{ targetClusterRole }}
+  #       CREDS=$(aws sts assume-role --role-arn $ASSUME_ROLE_ARN --role-session-name $(date '+%Y%m%d%H%M%S%3N') --duration-seconds 3600 --query '[Credentials.AccessKeyId,Credentials.SecretAccessKey,Credentials.SessionToken]' --output text)
+  #       export AWS_SECRET_ACCESS_KEY=$(echo $CREDS | cut -d' ' -f2)
+  #       export AWS_ACCESS_KEY_ID=$(echo $CREDS | cut -d' ' -f1)
+  #       export AWS_SESSION_TOKEN=$(echo $CREDS | cut -d' ' -f3)
+  #       {{ eksClusterKubeConfig }}
+  #       kubectl get pod -n {{ cnfInstance['custom_fields']['application_json']['profiles'][profile_name[0]][namespace] }}
+  #       kubectl get ns
+  #   register: result
+  # - debug:
+  #       msg: "{{ result }}"
+
+  # - shell: python3 lm.py "{{ result.stdout_lines | join(',') }}" "{{ deployment_location.properties.kafka_pod }}" "{{ deployment_location.properties.kafka_topic }}" "{{ cnfInstance["custom_fields"]["lcm_orderId"] }}"
+  # when: "cnfInstance['custom_fields']['almLoopback'] | default('false') == 'false'"

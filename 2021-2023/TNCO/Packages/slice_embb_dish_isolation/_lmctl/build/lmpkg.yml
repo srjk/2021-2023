@@ -1,0 +1,9 @@
+schema: '2.0'
+name: slice_embb_dish_isolation
+version: '1.0'
+type: Assembly
+contains:
+- name: nw_slice_iso
+  type: Resource
+  resource-manager: Brent
+  directory: nw_slice_iso

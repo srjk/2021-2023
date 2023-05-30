@@ -1,0 +1,56 @@
+- name: Create the list
+  set_fact:   
+    list_amfTac: "{{ amfSlice_tai.split(',') | list }}" 
+    list_amfSlice_dnnName: "{{ amfSlice_dnnName.split(',') | list }}" 
+    list_amfSlice_snssaiToDnnListName: "{{ amfSlice_snssaiToDnnListName.split(',') | list }}"    
+- name: Insert a line at the end of a file.
+  raw: export USER=root
+
+- name: delete snssaiToDnn 
+  raw: cmm snssaiToDnn delete --snssaiToDnnListName {{ item }} --snssaiName {{ amfSlice_sliceName }}
+  loop: "{{ list_amfSlice_snssaiToDnnListName }}"
+  register: result
+  failed_when:
+    - '"resource not found from DB" not in result.stdout'
+    - '"Field" not in result.stdout'  
+
+- name: delete snssaiToDnnList
+  raw: cmm snssaiToDnnList delete {{ item }}
+  loop: "{{ list_amfSlice_snssaiToDnnListName }}"
+  register: result
+  failed_when:
+    - '"resource not found from DB" not in result.stdout'
+    - '"Field" not in result.stdout'
+
+- name: delete snssaiListItem
+  raw: cmm snssaiListItem delete --snssaiListName {{ amfSlice_snssaiListName}} --snssaiName {{ amfSlice_sliceName }} 
+  register: result
+  failed_when:
+    - '"resource not found from DB" not in result.stdout'
+    - '"Field" not in result.stdout'
+
+- name: delete snssai
+  raw: cmm snssai delete {{ amfSlice_sliceName }}
+  register: result
+  failed_when:
+    - '"resource not found from DB" not in result.stdout'
+    - '"Field" not in result.stdout'
+
+- name: delete snssaiList
+  raw: cmm snssaiList delete {{ amfSlice_snssaiListName }} 
+  register: result
+  failed_when:
+    - '"resource not found from DB" not in result.stdout'
+    - '"Field" not in result.stdout'
+
+- name: delete amftai
+  raw: cmm amfTai delete --plmnName {{ amfSlice_plmnName }} --amfTac {{ item }}
+  loop: "{{ list_amfTac }}"
+  register: result
+  failed_when:
+    - '"resource not found from DB" not in result.stdout'
+    - '"Field" not in result.stdout'    
+
+
+
+

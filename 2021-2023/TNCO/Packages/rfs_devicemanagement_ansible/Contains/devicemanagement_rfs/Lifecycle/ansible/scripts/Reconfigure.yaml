@@ -1,0 +1,31 @@
+---
+- name: Reconfigure
+  hosts: localhost
+  # connection: local
+  gather_facts: False
+  tasks:
+    - name: Conditional role
+      include_role:
+        name: ../roles/BlackListDevice
+      when: "operation | upper == 'BLACKLISTDEVICE'"
+    - name: Conditional role
+      include_role:
+        name: ../roles/RemoveBlackListDevice
+      when: "operation | upper == 'REMOVEBLACKLISTDEVICE'"
+    - name: Conditional role
+      include_role:
+        name: ../roles/ChangeDevice
+      when: "operation == 'ChangeDevice'"
+  # roles:
+  #   - { role: ../roles/suspend, when: operation == 'Suspend' }
+  #   - { role: ../roles/resume, when: operation == 'Resume' }
+  #   - { role: ../roles/BlockSIM, when: operation == 'BlockSIM' }
+  #   - { role: ../roles/UnblockSIM, when: operation == 'UnblockSIM' }
+  #   - { role: ../roles/ChangeSIM, when: operation == 'ChangeSIM' }
+  #   - { role: ../roles/ChangeDevice, when: operation == 'ChangeDevice' }
+  #   #- { role: ../roles/ceasedevicemanagement, when: operation == 'ChangeNumber' }
+  #   - { role: ../roles/changeMSISDN, when: operation == 'ChangeNumber' }
+  #   - { role: ../roles/cleanupMSISDN, when: operation == 'ChangeNumber' }
+  #   # { role: ../roles/createdevicemanagement, when: operation == 'ChangeNumber' }
+  #   - { role: ../roles/BlackListDevice, when: operation | upper == 'BLACKLISTDEVICE' }
+  #   - { role: ../roles/RemoveBlackListDevice, when: operation | upper == 'REMOVEBLACKLISTDEVICE' }

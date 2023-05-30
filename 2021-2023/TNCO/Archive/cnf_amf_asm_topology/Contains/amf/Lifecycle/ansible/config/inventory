@@ -1,0 +1,4 @@
+[amf]
+100.65.2.203 ansible_user=cmm ansible_ssh_pass=Admin@12345!
+[localhost]
+127.0.0.1 ansible_python_interpreter=/usr/local/bin/python  

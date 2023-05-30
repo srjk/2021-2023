@@ -1,0 +1,210 @@
+name: assembly::gnb_samsung::1.0
+description: descriptor for Samsung RAN slicing
+properties:
+#SolSpecific
+  operation:
+    description: GNB_Samsung
+    volatile: true
+    default: Configure
+  deploymentLocationCP:
+    type: string
+    description: site_specific
+    default: SOL003
+  deploymentLocationUP:
+    type: string
+    description: site_specific
+    default: SOL003
+  deploymentLocationDU:
+    type: string
+    description: site_specific
+    default: SOL003
+  resourceManager:
+    type: string
+    default: brent
+  vnfdIdCUCP:
+    type: string
+    volatile: true
+  vnfdIdCUUP:
+    type: string
+    volatile: true
+  vnfInstanceNameCUCP:
+    type: string
+  vnfInstanceNameCUUP:
+    type: string
+#    value: ${vendor}-${function}${nfAppearance}${nfunType}-${region}${azId}${dataCenterType}${logicalDCNo}${env}${envId}
+    # default: or-nrf001c-usw2aza001nd
+  vnfInstanceDescriptionCUCP:
+    type: string
+    default: Deploy Samsung CUCP
+  vnfInstanceDescriptionCUUP:
+    type: string
+    default: Deploy Samsung CUUP
+  vnfInstanceIdCUUP:
+    value: ${cuup_samsung.vnfInstanceId}
+    volatile: true
+  vnfInstanceIdCUCP:
+    value: ${cucp_samsung.vnfInstanceId}
+    volatile: true  
+  cnfPackageVersionFileCUCP:
+    type: string
+    volatile: true
+  cnfPackageVersionFileCUUP:
+    type: string
+    volatile: true
+  vnfdIdCUDU:
+    type: string
+    volatile: true
+  vnfInstanceNameCUDU:
+    type: string
+  vnfInstanceDescriptionCUDU:
+    type: string
+    default: Deploy Samsung DU
+  vnfInstanceIdCUDU:
+    value: ${du_samsung.vnfInstanceId}
+    volatile: true
+  cnfPackageVersionFileCUDU:
+    type: string
+    volatile: true
+  flavourId:
+    type: string
+#    default: small
+  vimType:
+    type: string
+    default: ndc
+  vim_id:
+    type: string
+    default: orchestratortest
+  envType:
+    type: string
+    default: dev    
+  nfType:
+    type: string
+    default: CNF
+  cucp_cnfname:
+    type: string
+    volatile: true
+  cuup_cnfname:
+    type: string
+    volatile: true
+  cucp_chartkey:
+    type: string
+    volatile: true
+  cuup_chartkey:
+    type: string
+    volatile: true
+composition:
+  cucp_samsung:
+    type: $lmctl:/contains:/cucp_samsung:/descriptor_name
+    quantity: 1
+    properties:
+#SolSpecific
+      operation:
+        value: ${operation}
+      # instance_name:
+        # value: ${instance_name}
+      deploymentLocation:
+        value: ${deploymentLocationCP}
+      resourceManager:
+        value: ${cuup_samsung.resourceManager}
+      cucp_chartkey:
+        value: ${cucp_chartkey}
+      cucp_cnfname:
+        value: ${cucp_cnfname}
+      vnfInstanceId:
+        value: ${vnfInstanceIdCUCP}
+      vnfdId:
+        value: ${vnfdIdCUCP}
+      vnfInstanceName:
+        value: ${vnfInstanceNameCUCP}
+      cnfPackageVersionFile:
+        value: ${cnfPackageVersionFileCUCP}
+      vnfInstanceDescription:
+        value: ${vnfInstanceDescriptionCUCP}
+      flavourId:
+        value: ${flavourId}
+      vimType:
+        value: ${vimType}
+      vim_id:
+        value: ${vim_id}
+      envType:
+        value: ${envType}
+      nfType:
+        value: ${nfType}
+  cuup_samsung:
+    type: $lmctl:/contains:/cuup_samsung:/descriptor_name
+    quantity: 1
+    properties:
+#SolSpecific
+      operation:
+        value: ${operation}
+      deploymentLocation:
+        value: ${deploymentLocationUP}
+      resourceManager:
+        value: ${resourceManager}
+      vnfInstanceId:
+        value: ${vnfInstanceIdCUUP}
+      vnfdId:
+        value: ${vnfdIdCUUP}
+      vnfInstanceName:
+        value: ${vnfInstanceNameCUUP}
+      cnfPackageVersionFile:
+        value: ${cnfPackageVersionFileCUUP}
+      vnfInstanceDescription:
+        value: ${vnfInstanceDescriptionCUUP}
+      flavourId:
+        value: ${flavourId}
+      cuup_chartkey:
+        value: ${cuup_chartkey}
+      cuup_cnfname:
+        value: ${cuup_cnfname}
+      vimType:
+        value: ${vimType}
+      vim_id:
+        value: ${vim_id}
+      envType:
+        value: ${envType}
+      nfType:
+        value: ${nfType}
+  du_samsung:
+    type: $lmctl:/contains:/du_samsung:/descriptor_name
+    quantity: 1
+    # items: ${du_id}
+    properties:
+#SolSpecific
+      operation:
+        value: ${operation}
+      # instance_name:
+        # value: ${instance_name}
+      deploymentLocation:
+        value: ${deploymentLocationDU}
+      resourceManager:
+        value: ${cucp_samsung.resourceManager}
+      vnfInstanceId:
+        value: ${vnfInstanceIdCUDU}
+      vnfdId:
+        value: ${vnfdIdCUDU}
+      vnfInstanceName:
+        value: ${vnfInstanceNameCUDU}
+      cnfPackageVersionFile:
+        value: ${cnfPackageVersionFileCUDU}
+      vnfInstanceDescription:
+        value: ${vnfInstanceDescriptionCUDU}
+      flavourId:
+        value: ${flavourId}
+      vimType:
+        value: ${vimType}
+      vim_id:
+        value: ${vim_id}
+      envType:
+        value: ${envType}
+      nfType:
+        value: ${nfType}
+operations:
+  addSliceConfig:
+    source-operation: cuup_samsung.addSliceConfig
+  addSliceConfigDu:
+    source-operation: du_samsung.addSliceConfig
+  removeSlice:
+    source-operation: cuup_samsung.removeSlice
+  removeSliceDu:
+    source-operation: du_samsung.removeSlice

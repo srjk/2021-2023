@@ -1,0 +1,16 @@
+---
+- name: Install
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  # roles:
+  #   - role: ../roles/pipeline
+
+  tasks:
+
+    - name: VoiceBundle Provide Role
+      include_role:
+        name: ../roles/pipeline
+      when: "cnfInstance['custom_fields']['amfConfig'] !=None"
+  # roles:
+ #   - { role: ../roles/pipeline, when: Loopback == 'false' }

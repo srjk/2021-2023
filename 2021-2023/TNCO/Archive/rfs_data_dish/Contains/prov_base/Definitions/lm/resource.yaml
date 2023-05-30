@@ -1,0 +1,71 @@
+description: descriptor for Nokia Provisioning data_rfs
+name: resource::prov_base-rfs_data_dish::1.0
+properties:
+  instance_name:
+   description: name of assembly instance
+   type: string
+  operation:
+    volatile: true
+  deploymentLocation:
+    description: site specific
+    type: string
+    default: DFW
+  resourceManager:
+    type: string
+    read-only: true
+    default: brent
+  extOrderId:
+    volatile: true
+  serviceType:
+    type: string
+  SUPI:
+    volatile: true
+  GPSI:
+    volatile: true
+  href:
+    type: string
+  priority:
+    type: string
+  description:
+    type: string
+  category:
+    type: string
+  state:
+    type: string
+  orderDate:
+    type: string
+  requestedStartDate:
+    type: string
+  startDate:
+    type: string
+  requestedCompletionDate:
+    type: string
+  expectedCompletionDate:
+    type: string
+  completionDate:
+    type: string
+  serviceOrderItemId:
+    type: string  
+  action:
+    type: string
+  SubOrderType:
+    type: string
+  slice_nssai:
+    type: string
+  UEAMBRDownlink:
+    type: string
+  UEAMBRUplink:
+    type: string    
+infrastructure:
+  Openstack: {}
+lifecycle:
+  Install: {}
+  # Stop: {}
+  # Start: {}
+  Reconfigure: {}
+  Uninstall: {}
+default-driver:
+  ansible:
+    selector:
+      infrastructure-type:
+      - '*'

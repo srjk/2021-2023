@@ -1,0 +1,14 @@
+schema: '2.0'
+name: cnf_cu_mavenir
+version: '1.0'
+type: Assembly
+resource-manager: Brent
+contains:
+- name: cucp
+  type: Resource
+  resource-manager: Brent
+  directory: cucp
+- name: cuup
+  type: Resource
+  resource-manager: Brent
+  directory: cuup

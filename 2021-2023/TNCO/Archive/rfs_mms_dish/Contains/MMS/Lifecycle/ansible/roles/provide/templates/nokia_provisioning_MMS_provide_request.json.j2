@@ -1,0 +1,80 @@
+{
+    "id": "{{ extOrderId }}",
+    "imsi": "{{ SUPI  }}",
+    "serviceType": "{{ serviceType }}",
+	"serviceName": "Subscriber - Messaging MMS RFSS",
+    "hlr": {
+        "multipleValueObjects": [
+            {
+                "operation": "add",
+                "path": "hlr/epsPdnContext",
+                "valueObject": {
+                    "apn": "mms",
+                    "contextId": "3",
+                    "type": "both",
+                    "pdnGwDynamicAllocation": "true",
+                    "vplmnAddressAllowed": "false",
+                    "maxBandwidthUp": "16000000",
+                    "maxBandwidthDown": "16000000",
+                    "qos": "MMSQOS",
+                    "pdnChargingCharacteristics": {
+                        "chargingCharacteristicsProfile": "8",
+                        "chargingCharacteristicsBehavior": "0"
+                    },
+                    "eps5gInterworkIndicator": "1"
+                }
+            }
+        ]
+    },
+    "udm": {
+        "multipleValueObjects": [
+            {
+                "operation": "add",
+                "path": "udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo",
+                "valueObject": {
+                    "dnnId": "mms",
+                    "defaultIndication": "false",
+                    "interworkingEPSIndication": "true",
+                    "localBrkOutRoamingAllowed": "false"
+                }
+            },
+            {
+                "operation": "add",
+                "path": "udm5gData/servingPlmnId/provisionedData/sessionManagementSubscriptionData/dnnConfiguration",
+                "valueObject": {
+                    "dnnId": "mms",
+                    "interworkingEPSIndication": "true",
+                    "sessionAmbr": "16000000 bps|16000000 bps",
+                    "udm5gQosProfile": {
+                        "udm5Qi": "9",
+                        "arp": "12|NOT_PREEMPT|PREEMPTABLE",
+                        "priorityLevel": "12"
+                    },
+                    "pduSessionTypes": {
+                        "defaultSessionType": "IPV4V6",
+                        "allowedSessionType": ["IPV4V6"]
+                    },
+                    "sscModes": {
+                        "defaultSscMode": "SSC_MODE_1",
+                        "allowedSscMode": ["SSC_MODE_1"]
+                    }
+                }
+            }
+        ]
+    },
+    "pcf": [
+        {
+            "operation": "add",
+            "path": "pcf/smPolicyData/smPolicySnssaiData/smPolicyDnnData",
+            "valueObject": {
+                "dnn": "mms",
+                "subscCats": [
+                    "PLATINUM",
+                    "PLAN1"
+                ],
+                "subscSpendingLimits": "true",
+                "online": "true"
+            }
+        }
+    ]
+}

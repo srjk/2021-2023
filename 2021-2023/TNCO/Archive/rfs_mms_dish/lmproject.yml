@@ -1,0 +1,10 @@
+schema: '2.0'
+name: rfs_mms_dish
+version: '1.0'
+type: Assembly
+resource-manager: Brent
+contains:
+- name: MMS
+  type: Resource
+  resource-manager: Brent
+  directory: MMS

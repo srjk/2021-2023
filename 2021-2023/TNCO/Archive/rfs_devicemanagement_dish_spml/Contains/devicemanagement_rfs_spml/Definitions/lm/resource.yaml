@@ -1,0 +1,116 @@
+description: descriptor for provisioning device management subscriber service
+name1: resource::devicemanagement_rfs_spml-rfs_devicemanagement_dish_spml::1.0
+properties:
+  operation:
+    volatile: true
+  deploymentLocation:
+    description: site specific
+    type: string
+    default: DFW
+  resourceManager:
+    type: string
+    read-only: true
+    default: brent
+  extOrderId:
+    volatile: true
+  instance_name:
+    type: string
+  serviceType:
+    type: string
+  PEI:
+    volatile: true
+  href:
+    type: string
+  priority:
+    type: string
+  description:
+    type: string
+  category:
+    type: string
+  state:
+    type: string
+  orderDate: 
+    type: string
+  completionDate: 
+    type: string
+  requestedStartDate: 
+    type: string
+  requestedCompletionDate: 
+    type: string
+  expectedCompletionDate:
+    type: string
+  startDate:
+    type: string
+  serviceOrderItemId:
+    type: string  
+  action:
+    type: string
+  GPSI:
+    volatile: true
+  #Old_GPSI:
+    #volatile: true
+  SUPI:
+    volatile: true
+  Name:
+    type: string
+    default : Subscriber - Device Management RFSS
+  Description:
+    type: string
+  Managed:
+    type: string
+  OrderSubType:
+    type: string
+  In_Use:
+    type: string
+  ICCID:
+    type: string
+  Bootstrapped:
+    type: string
+  Nokia_Device_ID:
+    type: string
+  # Coloured_List:
+    # type: string
+  Provisioning_Type:
+    type: string
+  Service_State:
+    type: string
+  serviceInventoryId:
+    type: string
+  serviceInventoryParentId:
+    type: string
+  rootServiceId:
+    type: string
+  ColouredList:
+    type: string
+    volatile: true     
+  GSMACode:
+    type: string
+    volatile: true     
+  GSMAReason:
+    type: string
+    volatile: true    
+  reference_assembly:
+    type: string
+  objectClass:
+    type: string
+    default: Subscriber
+  targetVersion:
+    type: string
+    default: SDL_MULTIAPPSUBSCRIBER_v10
+  objectClassdevice:
+    type: string
+    default: Device
+  targetVersiondevice:
+    type: string
+    default: EIR_NSR_v30
+infrastructure:
+  Openstack: {}
+lifecycle:
+  Install: {}
+  Reconfigure: {}
+  Uninstall: {}
+default-driver:
+  spml:
+    selector:
+      infrastructure-type:
+      - '*'

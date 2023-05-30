@@ -1,0 +1,75 @@
+# convert ALM properties to json provide request for South Bound endpoint - Nokia Provisioning GW 
+
+- name: Creates directory
+  file:
+    path: /tmp/ansible_log
+    state: directory
+    mode: 0775
+
+- name: setting filename
+  set_fact:
+    filename: /tmp/ansible_log/ansible_{{ extOrderId }}_{{ ansible_date_time.iso8601 }}.log
+    listrequestedServices: "{{ requestedServices.split(',') | map('trim') |  list }}"
+- shell: "python3 test.py"
+  register: start_time
+  no_log: True 
+
+
+- name: copy
+  template: 
+    src: nokia_provisioning_gw_tas_provide_request.json.j2
+    dest: /tmp/testing_json.json.j2
+   
+- name: Call RestAPI of SPML/TAS/ENUM Adapter
+  uri:
+    url:  "{{ ansible_env.TAS_ENUM_ADA_HOST }}/dish/Prov/tas/addRequest"
+    method: POST
+    body: "{{lookup('template', 'nokia_provisioning_gw_tas_provide_request.json.j2')}}"
+    status_code: 200
+    body_format: json
+    headers:
+      content-type: "application/json"
+      Returnresult_VoiceTasProvideType: "FULL"
+    return_content: yes
+  register: result_VoiceTasProvide
+  # ignore_errors: yes
+  
+- name: fail if status_code not  200 is not returns
+  fail:
+    msg: Instance creation failed with error code {{ result_VoiceTasProvide.status }} and error message {{ result_VoiceTasProvide.json.error.error_message }}
+  when:  result_VoiceTasProvide.status!=200 and result_VoiceTasProvide.json is defined
+
+- name: Check that url returns a status_code 200 and fail if status_code 200 is not returns
+  fail:
+    msg: Instance creation failed with error code {{ result_VoiceTasProvide.status }} and error message {{ result_VoiceTasProvide.msg }}
+  when: result_VoiceTasProvide.status != 200
+    
+  
+- shell: "python3 test.py"
+  register: end_time
+  no_log: True
+
+- shell: "python3 diff.py '{{ end_time.stdout }}' '{{ start_time.stdout }}'"
+  register: time_diff
+  no_log: True
+
+- name: generate SB json and copy       
+  copy:
+    dest: "{{ filename }}"
+    content: |
+       ***********************************
+       start_time:  {{ start_time.stdout }}
+       end_time:  {{ end_time.stdout }}
+       time_taken:  {{ time_diff.stdout }}
+       ***********************************
+       order_send:  {{lookup('template', 'nokia_provisioning_gw_tas_provide_request.json.j2')}}
+       ____________________________________________________
+       result_VoiceTasProvide_return: {{ result_VoiceTasProvide.json }}  
+            
+    
+
+- name: fail instance if there is a failure from SBI
+  fail:
+    msg: Instance creation failed with error code {{ result_VoiceTasProvide.json.output.errorCode }} and error message {{ result_VoiceTasProvide.json.output.message }}
+  when: result_VoiceTasProvide.json.output.result == "Failure"
+

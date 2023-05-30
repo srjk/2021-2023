@@ -1,0 +1,20 @@
+---
+- name: Reconfigure
+  hosts: localhost
+  # connection: local
+  gather_facts: False
+  pre_tasks:
+    - set_fact:
+        listrequestedServices: "{{ requestedServices.split(',') | map('trim') |  list }}"
+  tasks:
+    - name: Conditional role
+      include_role:
+        name: ../roles/provide
+      when: "'VOICEMAIL' in listrequestedServices and operation.find('PROVIDE') != -1"
+    - name: Conditional role
+      include_role:
+        name: ../roles/cease
+      when: "'VOICEMAIL' in listrequestedServices and operation.find('CEASE') != -1"
+  # roles:
+  #     - { role: ../roles/provide, when: "'VOICEMAIL' in listrequestedServices and operation.find('PROVIDE') != -1" }
+  #     - { role: ../roles/cease, when: "'VOICEMAIL' in listrequestedServices and operation.find('CEASE') != -1" }

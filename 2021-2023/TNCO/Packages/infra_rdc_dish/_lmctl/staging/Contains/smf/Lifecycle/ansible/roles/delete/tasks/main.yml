@@ -1,0 +1,23 @@
+- set_fact:
+    targetClusterRole: "{{ cnfInstance['custom_fields']['targetClusterRole'] }}"
+    stackname: "{{ cnfInstance['custom_fields']['smfNGStackName']}}"
+
+
+- uri:
+    url: "{{ deployment_location.properties.lcmservice_url }}/infra/fetch/delete/order?assemblyName={{ instance_name }}"
+  register: result
+- debug:
+    msg: " order id result {{ result.json.output }}"
+- fail:
+    msg: "order_id not found"
+  when: "result.json.output is none"
+
+- name: trigger python
+  shell: "python3 delete.py {{ targetClusterRole}} {{ deployment_location.properties.lcm_session }} {{ cnfInstance['custom_fields']['smfConfig']['region'] }} {{ stackname }} {{ deployment_location.properties.kafka_pod }} {{ deployment_location.properties.kafka_topic }} {{ result.json.output.order_id }}"
+  register: result_python
+  failed_when: "result_python.rc not in [ 0, 1 ]"
+
+
+- fail:
+    msg: "pipeline {{ result_python.stderr }}"
+  when: "result_python.stdout != 'Succeeded'"

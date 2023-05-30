@@ -1,0 +1,523 @@
+name: assembly::rfs_smsbundle_dish_spml::1.0
+description: descriptor for bundle rfs
+properties:
+  operation:
+    volatile: true
+    description: Provide/Cease/Suspend/Resume 
+    default: Provide
+  deploymentLocation:
+    description: site specific
+    type: string
+    default: DFW     
+  resourceManager:
+    type: string
+    read-only: true
+    default: brent  
+  serviceType:
+    type: string
+  extOrderId:
+    volatile: true
+  SUPI:
+    volatile: true
+  GPSI:
+    volatile: true
+  Old_GPSI:
+    volatile: true
+  dnn7:
+    type: string
+  dnn7_sessionAmbr:
+    type: string
+  subscCats1:
+    type: string
+  subscCats2:
+    type: string
+  reference_assembly:
+    type: string 
+  path11:
+    type: string
+    default: "hlr/baoc"
+  operation5:
+    type: string
+    default: add
+  operation4:
+    type: string
+    default: remove
+  basicServiceGroup:
+    type: string
+    default: TS20-shortMessage
+  status:
+    type: string
+    default: 5
+  operation1:
+    type: string
+    default: "addorset"
+  smsSubscribed:
+    type: string
+    default: true
+  smsSubscribed1:
+    type: string
+    default: false
+  dnnBarred:
+    type: string
+    default: true
+  path12:
+    type: string
+    default: "hlr/epsPdnContext[@contextId='3']/pdnContextBlocking"
+  # operation1:
+    # type: string
+    # default: "addorset"
+  contextId:
+    type: string
+    default: 3
+  flagAPNBlockedOverS6A1:
+    type: string
+    default: false
+  flagAPNBlockedOverSWx1:
+    type: string
+    default: false
+  flagAPNBlockedOverS6A:
+    type: string
+    default: true
+  flagAPNBlockedOverSWx:
+    type: string
+    default: true  
+  ENUM_rrid:
+    type: string
+    default: 1
+  ENUM_rrid1:
+    type: string
+    default: 1
+  ENUM_rridType:
+    type: string
+    default: NAPTR
+  ENUM_ttl:
+    type: string
+    default: 3600
+  ENUM_order:
+    type: string
+    default: 50
+  ENUM_preference:
+    type: string
+    default: 50
+  ENUM_flags:
+    type: string
+    default: u
+  ENUM_service:
+    type: string
+    default: E2U+mms
+  ENUM_replacement:
+    type: string
+    default: []
+  path1:
+    type: string
+    default: "hlr/ts21"
+  path2:
+    type: string
+    default: "hlr/ts22"
+  path3: 
+    type: string
+    default: "hlr/bicroam"
+  operation3:
+    type: string
+    default: "setoradd"
+  osb1:
+    type: string
+    default: true
+  path4:
+    type: string
+    default: "hlr/smsSubData"
+  refPriorityListName:
+    type: string
+    default: SMSTEST
+  path5: 
+    type: string
+    default: "hss/serviceProfile[@profileName='SP1']/globalFilterId"
+  globalFilterId:
+    type: string
+    default: REG-IPSMGW
+  globalFilterId1:
+    type: string
+    default: MSG-ORIG-IPSMGW
+  path6: 
+    type: string
+    default: "udm5gData/servingPlmnId/provisionedData/smsManagementSubscriptionData"
+  path16: 
+    type: string
+    default: "udm5gData/servingPlmnId/provisionedData/smsSubscriptionData"
+  mtSmsBarringAll: 
+    type: string
+    default: false
+  mtSmsBarringRoaming:
+    type: string
+    default: true
+  moSmsSubscribed:
+    type: string
+    default: true
+  moSmsBarringAll:
+    type: string
+    default: false
+  moSmsbarringRoaming:
+    type: string
+    default: true
+  path7:
+    type: string
+    default: "hlr/epsPdnContext"
+  pdnGwDynamicAllocation:
+    type: string
+    default: true
+  vplmnAddressAllowed:
+    type: string
+    default: false
+  maxBandwidthUp:
+    type: string
+    default: 16000000
+  maxBandwidthDown:
+    type: string
+    default: 16000000
+  qos:
+    type: string
+    default: MMSQOS
+  chargingCharacteristicsProfile:
+    type: string
+    default: 8
+  chargingCharacteristicsBehavior:
+    type: string
+    default: 0
+  eps5gInterworkIndicator:
+    type: string
+    default: 1
+  path8:
+    type: string
+    default: "udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo"
+  defaultIndication:
+    type: string
+    default: false
+  interworkingEPSIndication:
+    type: string
+    default: true
+  localBrkOutRoamingAllowed:
+    type: string
+    default: false
+  path9:
+    type: string
+    default: "udm5gData/servingPlmnId/provisionedData/sessionManagementSubscriptionData/dnnConfiguration"
+  udm5Qi:
+    type: string
+    default: 9
+  arp: 
+    type: string
+    default: 12|NOT_PREEMPT|PREEMPTABLE
+  priorityLevel:
+    type: string
+    default: 12
+  defaultSessionType: 
+    type: string
+    default: IPV4V6
+  allowedSessionType:
+    type: string
+    default: IPV4V6
+  defaultSscMode:
+    type: string
+    default: SSC_MODE_1
+  allowedSscMode: 
+    type: string
+    default: SSC_MODE_1
+  path10:
+    type: string
+    default: "pcf/smPolicyData/smPolicySnssaiData/smPolicyDnnData"
+  subscSpendingLimits:
+    type: string
+    default: true
+  online:
+    type: string
+    default: true 
+  path15:
+    type: string
+    default: hlr/osb1='true'
+  status1:
+    type: string
+    default: 4
+  requestedServices:
+    type: string
+  operation2:
+    type: string
+    default: "set"
+  hlr_path:
+    type: string
+    default: "hlr"
+  ENUM_ChangeRequest_view:
+    type: string
+    default: "enum-dns.zones.enum.enumZoneCommon.data"
+  ObjectClass:
+    type: string
+    default: Subscriber
+  ntype:
+    type: string
+    default: both
+  udm_path1:
+    type: string
+    default: "udm5gData/servingPlmnId/provisionedData/smsManagementSubscriptionData/mtSmsBarringRoaming='false'"
+  udm_path2:
+    type: string
+    default: "udm5gData/servingPlmnId/provisionedData/smsManagementSubscriptionData/moSmsbarringRoaming='false'"
+  path14:
+    type: string
+    default: hlr/osb1
+  hss_path:
+    type: string
+    default: hss/serviceProfile[@profileName='SP1']/globalFilterId[@globalFilterId='REG-IPSMGW']
+  udm_path:
+    type: string
+    default: udm5gData/servingPlmnId/provisionedData/smsSubscriptionData
+  hlr_path1:
+    type: string
+    default: hlr/epsPdnContext[@contextId='3']
+  dnn1:
+    type: string
+    default: mms
+  hss_path2:
+    type: string
+    default: hss/serviceProfile[@profileName='SP1']/globalFilterId[@globalFilterId='MSG-ORIG-IPSMGW']
+  scope:
+    type: string
+    default: "uniqueTypeMapping"
+composition:
+  rfs_smsbundle_dish_spml:
+    properties:
+      instance_name:
+        value: ${instance.name}
+      operation:
+        value: ${operation}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      resourceManager:
+        value: ${resourceManager}
+      extOrderId:
+        value: ${extOrderId}
+      serviceType:
+        value: ${serviceType}
+      dnn7:
+        value: ${dnn7}
+      dnn7_sessionAmbr:
+        value: ${dnn7_sessionAmbr}
+      SUPI:
+        value: ${SUPI}
+      GPSI:
+        value: ${GPSI}
+      #Old_GPSI:
+        #value: ${Old_GPSI}
+      subscCats1:
+        value: ${subscCats1}
+      subscCats2:
+        value: ${subscCats2}
+      path11:
+        value: ${path11}
+      operation5:
+        value: ${operation5}
+      operation3:
+        value: ${operation3}
+      operation4:
+        value: ${operation4}
+      basicServiceGroup:
+        value: ${basicServiceGroup}
+      operation1:
+        value: ${operation1}
+      smsSubscribed:
+        value: ${smsSubscribed}
+      scope:
+        value: ${scope}
+      smsSubscribed1:
+        value: ${smsSubscribed1}
+      path12:
+        value: ${path12}
+      flagAPNBlockedOverS6A1:
+        value: ${flagAPNBlockedOverS6A1}
+      flagAPNBlockedOverSWx1:
+        value: ${flagAPNBlockedOverSWx1}
+      flagAPNBlockedOverS6A:
+        value: ${flagAPNBlockedOverS6A}
+      flagAPNBlockedOverSWx:
+        value: ${flagAPNBlockedOverSWx}
+      dnnBarred:
+        value: ${dnnBarred}
+      path1:
+        value: ${path1}
+      path2:
+        value: ${path2}
+      status1:
+        value: ${status1}
+      path3: 
+        value: ${path3}
+      osb1:
+        value: ${osb1}
+      path4:
+        value: ${path4}
+      refPriorityListName:
+        value: ${refPriorityListName}
+      path5: 
+        value: ${path5}
+      globalFilterId:
+        value: ${globalFilterId}
+      globalFilterId1:
+        value: ${globalFilterId1}
+      path6: 
+        value: ${path6}
+      mtSmsBarringAll: 
+        value: ${mtSmsBarringAll}
+      mtSmsBarringRoaming:
+        value: ${mtSmsBarringRoaming}
+      moSmsSubscribed:
+        value: ${moSmsSubscribed}
+      moSmsBarringAll:
+        value: ${moSmsBarringAll}
+      moSmsbarringRoaming:
+        value: ${moSmsbarringRoaming}
+      path7:
+        value: ${path7}
+      pdnGwDynamicAllocation:
+        value: ${pdnGwDynamicAllocation}
+      vplmnAddressAllowed:
+        value: ${vplmnAddressAllowed}
+      maxBandwidthUp:
+        value: ${maxBandwidthUp}
+      maxBandwidthDown:
+        value: ${maxBandwidthDown}
+      qos:
+        value: ${qos}
+      chargingCharacteristicsProfile:
+        value: ${chargingCharacteristicsProfile}
+      chargingCharacteristicsBehavior:
+        value: ${chargingCharacteristicsBehavior}
+      eps5gInterworkIndicator:
+        value: ${eps5gInterworkIndicator}
+      path8:
+        value: ${path8}
+      defaultIndication:
+        value: ${defaultIndication}
+      interworkingEPSIndication:
+        value: ${interworkingEPSIndication}
+      localBrkOutRoamingAllowed:
+        value: ${localBrkOutRoamingAllowed}
+      path9:
+        value: ${path9}
+      udm5Qi:
+        value: ${udm5Qi}
+      arp: 
+        value: ${arp}
+      priorityLevel:
+        value: ${priorityLevel}
+      defaultSessionType: 
+        value: ${defaultSessionType}
+      allowedSessionType:
+        value: ${allowedSessionType}
+      defaultSscMode:
+        value: ${defaultSscMode}
+      allowedSscMode: 
+        value: ${allowedSscMode}
+      path10:
+        value: ${path10}
+      subscSpendingLimits:
+        value: ${subscSpendingLimits}
+      online:
+        value: ${online}
+      path15:
+        value: ${path15}
+      path16:
+        value: ${path16}
+      requestedServices:
+        value: ${requestedServices}
+      operation2:
+        value: ${operation2}
+      hlr_path:
+        value: ${hlr_path}
+      status:
+        value: ${status}
+      contextId:
+        value: ${contextId}
+      ntype:
+        value: ${ntype}
+      ObjectClass:
+        value: ${ObjectClass}
+      udm_path1:
+        value: ${udm_path1}
+      udm_path2:
+        value: ${udm_path2}
+      path14:
+        value: ${path14} 
+      hss_path:
+        value: ${hss_path}
+      hss_path2:
+        value: ${hss_path2}
+      udm_path:
+        value: ${udm_path}
+      hlr_path1:
+        value: ${hlr_path1}
+      dnn1:
+        value: ${dnn1}
+    type: resource::rfs_smsbundle_dish_spml-rfs_smsbundle_dish_spml::1.0
+    quantity: 1
+  bundleenum:
+    properties:
+      instance_name:
+        value: ${instance.name}
+      operation:
+        value: ${operation}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      resourceManager:
+        value: ${resourceManager}
+      extOrderId:
+        value: ${extOrderId}
+      serviceType:
+        value: ${serviceType}
+      dnn7:
+        value: ${dnn7}
+      dnn7_sessionAmbr:
+        value: ${dnn7_sessionAmbr}
+      SUPI:
+        value: ${SUPI}
+ #       value: ${rfs_smsbundle_dish_spml.SUPI}
+      GPSI:
+        value: ${GPSI}
+      Old_GPSI:
+        value: ${Old_GPSI}
+      subscCats1:
+        value: ${subscCats1}
+      subscCats2:
+        value: ${subscCats2}
+      ENUM_rrid:
+        value: ${ENUM_rrid}
+      ENUM_rrid1:
+        value: ${ENUM_rrid1}
+      ENUM_rridType:
+        value: ${ENUM_rridType}
+      ENUM_ttl:
+        value: ${ENUM_ttl}
+      ENUM_order:
+        value: ${ENUM_order}
+      ENUM_preference:
+        value: ${ENUM_preference}
+      ENUM_flags:
+        value: ${ENUM_flags}
+      ENUM_service:
+        value: ${ENUM_service}
+      ENUM_replacement:
+        value: ${ENUM_replacement}
+      ENUM_ChangeRequest_view:
+        value: ${ENUM_ChangeRequest_view}
+      requestedServices:
+        value: ${requestedServices}
+    type: resource::rfs_smsbundleenum_dish_spml-rfs_smsbundle_dish_spml::1.0
+    quantity: 1
+references:
+   reference_assembly:  
+    properties:
+      resourceManager:
+        value: ${resourceManager}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      operation:
+        value: ${operation}
+      name:
+        value: ${reference_assembly}         
+    type: assembly::rfs_databundle_dish_spml::1.0

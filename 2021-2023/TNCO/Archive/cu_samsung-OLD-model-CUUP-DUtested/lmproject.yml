@@ -1,0 +1,14 @@
+schema: '2.0'
+name: cu_samsung
+version: '1.0'
+type: Assembly
+resource-manager: Brent
+contains:
+- name: cucp_samsung
+  type: Resource
+  resource-manager: Brent
+  directory: cucp_samsung   
+- name: cuup_samsung
+  type: Resource
+  resource-manager: Brent
+  directory: cuup_samsung  

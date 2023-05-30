@@ -1,0 +1,36 @@
+--- 
+- name: Stop
+  hosts: localhost
+  connection: local
+  gather_facts: True
+  pre_tasks:
+    - set_fact:
+        listrequestedServices: "{{ requestedServices.split(',') | map('trim') |  list }}"
+  roles:
+    - 
+      role: ../roles/ceasetas
+      when: "operation == 'CleanupMsisdn,ChangeMsisdn'"
+    - 
+      role: ../roles/ceaseenum
+      when: "operation == 'CleanupMsisdn,ChangeMsisdn'"
+#    - 
+#      role: ../roles/ceasemms
+#      when: "operation == 'CleanupMsisdn,ChangeMsisdn'"      
+    - 
+      role: ../roles/changeMSISDN
+      when: "operation == 'CleanupMsisdn,ChangeMsisdn'"
+    - 
+      role: ../roles/cleanupMSISDN
+      when: "operation == 'CleanupMsisdn,ChangeMsisdn'"
+    - 
+      role: ../roles/createmms
+      when: "operation == 'CleanupMsisdn,ChangeMsisdn'"
+#    - 
+#      role: ../roles/createenum
+#      when: "operation == 'CleanupMsisdn,ChangeMsisdn'"      
+    - 
+      role: ../roles/createtas
+      when: "operation == 'CleanupMsisdn,ChangeMsisdn'"
+    - 
+      role: ../roles/changevoicemail
+      when: "operation == 'CleanupMsisdn,ChangeMsisdn' and 'VOICEMAIL' in listrequestedServices"

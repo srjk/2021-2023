@@ -1,0 +1,45 @@
+name: resource::cuup_samsung-cu_samsung::1.0
+description: descriptor for CUUP RAN slicing
+properties:
+  operation:
+    description: CUUP
+    volatile: true
+    default: Configure
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: DFW
+  resourceManager:
+    type: string
+    default: brent
+  gnb_id:
+    type: string
+    # default: 88
+  cuup_sst:
+    type: string
+  cuup_sd:
+    type: string
+  cuup_id:
+    type: string
+    # entry-schema:
+      # type: string
+  cuup_samsung_usm_host:
+    type: string
+  CUUPsliceIndexvalueIncrement:
+    type: integer
+
+lifecycle:
+  Install: {}
+  # Configure: {}
+  # reconfigure: {}
+  Uninstall: {}
+default-driver:
+  ansible:
+    selector:
+      infrastructure-type:
+      - '*'
+# default-driver:
+  # sol003:
+    # selector:
+      # infrastructure-type:
+      # - '*'

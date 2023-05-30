@@ -1,0 +1,36 @@
+2021-07-28 10:27:45,877 - lmctl.cli.lifecycle - ERROR - Could not find project file at path: ./lmproject.yml
+Traceback (most recent call last):
+  File "/home/ssm-user/.local/lib/python3.7/site-packages/lmctl/cli/lifecycle.py", line 57, in open_project
+    return project_sources.Project(project_path)
+  File "/home/ssm-user/.local/lib/python3.7/site-packages/lmctl/project/source/core.py", line 126, in __init__
+    config = self.__read_project_file(tree)
+  File "/home/ssm-user/.local/lib/python3.7/site-packages/lmctl/project/source/core.py", line 132, in __read_project_file
+    raise InvalidProjectError('Could not find project file at path: {0}'.format(project_file_path))
+lmctl.project.source.core.InvalidProjectError: Could not find project file at path: ./lmproject.yml
+2021-07-28 10:27:45,877 - lmctl.cli.lifecycle - ERROR - Could not find project file at path: ./lmproject.yml
+Traceback (most recent call last):
+  File "/home/ssm-user/.local/lib/python3.7/site-packages/lmctl/cli/lifecycle.py", line 57, in open_project
+    return project_sources.Project(project_path)
+  File "/home/ssm-user/.local/lib/python3.7/site-packages/lmctl/project/source/core.py", line 126, in __init__
+    config = self.__read_project_file(tree)
+  File "/home/ssm-user/.local/lib/python3.7/site-packages/lmctl/project/source/core.py", line 132, in __read_project_file
+    raise InvalidProjectError('Could not find project file at path: {0}'.format(project_file_path))
+lmctl.project.source.core.InvalidProjectError: Could not find project file at path: ./lmproject.yml
+2021-07-28 10:27:53,069 - lmctl.cli.lifecycle - ERROR - Could not find project file at path: ./lmproject.yml
+Traceback (most recent call last):
+  File "/home/ssm-user/.local/lib/python3.7/site-packages/lmctl/cli/lifecycle.py", line 57, in open_project
+    return project_sources.Project(project_path)
+  File "/home/ssm-user/.local/lib/python3.7/site-packages/lmctl/project/source/core.py", line 126, in __init__
+    config = self.__read_project_file(tree)
+  File "/home/ssm-user/.local/lib/python3.7/site-packages/lmctl/project/source/core.py", line 132, in __read_project_file
+    raise InvalidProjectError('Could not find project file at path: {0}'.format(project_file_path))
+lmctl.project.source.core.InvalidProjectError: Could not find project file at path: ./lmproject.yml
+2021-07-28 10:27:53,069 - lmctl.cli.lifecycle - ERROR - Could not find project file at path: ./lmproject.yml
+Traceback (most recent call last):
+  File "/home/ssm-user/.local/lib/python3.7/site-packages/lmctl/cli/lifecycle.py", line 57, in open_project
+    return project_sources.Project(project_path)
+  File "/home/ssm-user/.local/lib/python3.7/site-packages/lmctl/project/source/core.py", line 126, in __init__
+    config = self.__read_project_file(tree)
+  File "/home/ssm-user/.local/lib/python3.7/site-packages/lmctl/project/source/core.py", line 132, in __read_project_file
+    raise InvalidProjectError('Could not find project file at path: {0}'.format(project_file_path))
+lmctl.project.source.core.InvalidProjectError: Could not find project file at path: ./lmproject.yml

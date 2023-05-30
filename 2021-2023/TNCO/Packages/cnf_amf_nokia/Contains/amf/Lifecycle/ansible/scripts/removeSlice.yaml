@@ -1,0 +1,33 @@
+---
+- name: addSliceConfigProd
+  hosts: amf
+  gather_facts: False
+  # roles:
+  #   - role: ../roles/addSliceConfigProd
+  tasks:
+    - ping:
+      register: ping_result
+      ignore_unreachable: true
+
+    - name: "testing"
+      fail:
+        msg: "server not reachable please check ip and password"
+      when: ping_result.unreachable is defined 
+
+# - name: run the removeSliceProd yaml file
+#   import_playbook: removeSliceProd.yaml
+#   when: lookup('env','AMF_ENV') == 'prod'
+      
+
+# - name: run the removeSliceStub yaml file
+#   import_playbook: removeSliceStub.yaml
+#   when: lookup('env','AMF_ENV') == 'stub'
+
+- name: run the removeSliceProd yaml file
+  import_playbook: removeSliceProd.yaml
+  when:  AMF_ENV  == 'prod'
+      
+
+- name: run the removeSliceStub yaml file
+  import_playbook: removeSliceStub.yaml
+  when:  AMF_ENV  == 'stub'

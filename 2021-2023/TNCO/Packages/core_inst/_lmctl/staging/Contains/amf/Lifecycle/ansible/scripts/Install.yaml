@@ -1,0 +1,41 @@
+---
+- name: Install
+  hosts: localhost
+  connection: local
+  gather_facts: True
+  # roles:
+    # - role: ../roles/provide_CUCP_3GPP
+    # - role: ../roles/provide_CUCP_VENDOR
+  tasks:
+  - name: Pause for 5 minutes to build app cache
+    ansible.builtin.pause:
+      seconds: 45
+
+# -----------------------> Run playbooks for Provide CUCP  <----------------------------
+    # - name: "##ALM## Run playbook for Provide CUCP_3GPP"
+      # include_role:
+        # name: ../roles/provide_CUCP_3GPP
+    
+    # - name: "##ALM## Run playbook for Provide CUCP_VENDOR"
+      # include_role:
+        # name: ../roles/provide_CUCP_VENDOR
+
+# -----------------------> End time from system  <----------------------------
+    # - name: "##ALM## Get timestamp from the system"
+      # shell: "date +%Y-%m-%d%H:%M:%S.%5N"
+      # register: etime
+    
+# -----------------------> Store request/response Logs in Eventlogger  <----------------------------
+    # - name: "##ALM## Store request and response in DB"
+      # uri:
+        # url: "{{ deployment_location.properties.eventlogger_url }}"
+        # method: POST
+        # body: "{{lookup('template', 'Store.json.j2')}}"
+        # return_content: yes
+        # body_format: json
+        # status_code: 200
+        # validate_certs: no
+        # headers:
+          # content-type: "application/json"
+          # ReturnResultType: "FULL"
+      # register: resultStoreCUCP

@@ -1,0 +1,14 @@
+schema: '2.0'
+name: cnf_pcf_oracle
+version: '1.0'
+type: Assembly
+resource-manager: Brent
+contains:
+- name: pcf
+  type: Resource
+  resource-manager: Brent
+  directory: pcf
+- name: pcf_db
+  type: Resource
+  resource-manager: Brent
+  directory: pcf_db

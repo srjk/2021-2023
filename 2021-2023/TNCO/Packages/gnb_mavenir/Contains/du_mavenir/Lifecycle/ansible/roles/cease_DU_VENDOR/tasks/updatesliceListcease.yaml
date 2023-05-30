@@ -1,0 +1,87 @@
+#----------> DU_VENDOR Delete slice servedPlmnList sliceList for each gnbCellDuVsConfig <-----------
+- name: Delete slice in sliceList for each gnbCellDuVsConfig (Delete existing slice)
+  uri:
+    url: "{{ deployment_location.properties.mcms_host }}/cms-service/webapi/apiservice/ProvMnS/v1/gnbvs,gnbDuConfig={{ du_id }},gnbCellDuVsConfig={{ gnbCellDuVsConfigsliceListCeaseId }},servedPlmnList=1/sliceList={{ sliceIndex_cease }}"
+    method: DELETE
+    body: "{{lookup('template', 'modifyInfoDUvendor.json.j2')}}"
+    # body: 
+      # "gnbId": {{ gnb_id  | int }}
+      # "cnfId": {{ du_id | int }}
+      # "version": "{{ du_version }}"
+      # "configType": "{{ du_vendor_config }}"
+    body_format: json
+    headers:
+      apiInvokerId: "{{ deployment_location.properties.apiInvokerId }}"
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no 
+    status_code: 200
+    return_content: yes
+  register: cease_updateAddslicesliceList
+  # loop: "{{ mysequencegnbCellDuVsConfigsliceListcease }}"  
+  ignore_errors: yes
+  failed_when: "cease_updateAddslicesliceList.status not in [200]"
+
+# - name: DeleteSlice sliceList print
+  # copy:
+    # dest: "/tmp/ansible_log/ceaseDUVenDeletesliceList.json.j2"
+    # content: "{{ cease_updateAddslicesliceList }}"
+
+- name: Insert a line at the end of a file to print cease_updateAddslicesliceList.
+  lineinfile:
+    path: "{{ filen }}"
+    line: |
+           __________________________________________________________________________
+           
+           ##### DELETE API call to delete new slice in sliceList for each gnbCellDuVsConfig
+           
+           URL:  
+           {{ cease_updateAddslicesliceList.url }}
+           
+           order_send:
+           {{lookup('template', 'modifyInfoDUvendor.json.j2')}}
+           
+           result_return: 
+           {{ cease_updateAddslicesliceList.json | to_nice_json }}
+           __________________________________________________________________________
+
+- name: Log API request through Log module
+  ibm_cp4na_log_message:
+    message_direction: sent
+    # external_request_id: "{{ extOrderId }}"
+    external_request_id: "{{ kami_responseDUdel.json.extOrderId }}"
+    content_type: application/json
+    message_data: |
+     ***********************************
+     ##### DELETE API call to delete new slice in sliceList for each gnbCellDuVsConfig
+     
+     URL:  
+     {{ cease_updateAddslicesliceList.url }}
+     
+     order_send:
+     {{lookup('template', 'modifyInfoDUvendor.json.j2')}}
+     ____________________________________________________
+
+     result_return:
+      {{ cease_updateAddslicesliceList.json | to_nice_json }}
+    message_type: sample
+    protocol: http
+
+#-----------------> Print error message when apiInvokerId is Invalid/incorrect/expired <------------
+- name: creating variable and setting value for message error when apiInvokerId is Invalid/incorrect/expired
+  set_fact:
+    target_e: "{{ cease_updateAddslicesliceList.content | regex_search('message') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ cease_updateAddslicesliceList.content | replace('\"','') | replace('{','') | replace('}','') }}. Either apiInvokerId is Invalid/incorrect/expired, please verify the apiInvokerId."
+  when: "target_e=='message'"
+
+#-----------> Print cease_updateAddslicesliceList error message if Add/Delete API calls fails <---------------
+- name: creating variable and setting value for errorInfo  
+  set_fact:
+    target_e1: "{{ cease_updateAddslicesliceList.content | regex_search('error') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ cease_updateAddslicesliceList.content | replace('\"','') | replace('{','') | replace('}','') | replace('error:','') }}"
+  when: "target_e1=='error'"

@@ -1,0 +1,27 @@
+{
+    "serviceType": "Bundle RFS",
+	"serviceName": "Subscriber - Messaging SMS RFSS",
+    "id": "{{ extOrderId }}",
+    "imsi": "{{ SUPI }}",
+    "smsRFS": {
+    "hlr": [
+        {
+            "path": "hlr/baoc",
+            "operation": "add",
+            "valueObject": {
+                "basicServiceGroup": "TS20-shortMessage",
+                "status": "5"
+            }
+        }
+    ],
+    "udm": [
+        {
+            "path": "udm5gData/servingPlmnId/provisionedData/smsSubscriptionData",
+            "operation": "addorset",
+            "valueObject": {
+                "smsSubscribed": "false"
+            }
+        }
+    ]
+    }
+}

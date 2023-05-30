@@ -1,0 +1,20 @@
+{
+	"serviceType": "Bundle RFS",
+	"serviceName": "Subscriber - Messaging Bundle RFSS",
+	"id": "{{ extOrderId }}",
+	"imsi": "{{ SUPI }}",
+	"ENUM": {
+		"ChangeRequest_view": "{{ ENUM_ChangeRequest_view }}",
+		"number": "{{ GPSI }}",
+		"subscriber-id": "{{ GPSI }}",
+		"rrid": "{{ ENUM_rrid }}",
+		"rridType": "{{ ENUM_rridType }}",
+		"ttl": "{{ ENUM_ttl }}",
+		"order": "{{ ENUM_order }}",
+		"preference": "50",
+		"flags": "{{ ENUM_flags }}",
+		"service": "{{ ENUM_service }}",
+		"regexp": "!^(.*)$!mailto: +{{ GPSI }}@mms.mnc340.mcc313.gprs!",
+		"replacement": "{{ ENUM_replacement }}"
+	}
+}

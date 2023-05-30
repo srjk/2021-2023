@@ -1,0 +1,89 @@
+- shell: "python3 test.py"
+  register: start_time
+  no_log: True    
+
+- name: Get token from kami
+  uri:
+    method: POST
+    url: "{{ ansible_env.KAMI_ADA_HOST }}/KamiCore/oauth/token?grant_type=client_credentials"
+    headers: 
+       content-type: "application/json"
+       Authorization: Basic ZGlzaDpkaXNoMTIzNA==
+    validate_certs: no
+  register: token  
+           
+- name: Get order id
+  uri:
+    method: GET
+    url: "{{ ansible_env.KAMI_ADA_HOST }}/KamiCore/getExtOrderId"  
+    return_content: yes
+    body_format: json
+    status_code: 201
+    body: "{ \"almInstanceName\": \"{{ instance_name }}\" }"
+    headers:
+       Returnresult_SMSCeaseType: "FULL"
+       Authorization: Bearer {{ token.json.access_token }}
+    validate_certs: no
+    follow_redirects: yes
+  register: kami_response
+
+- name: Creates directory
+  file:
+    path: /tmp/ansible_log
+    state: directory
+    mode: 0775
+
+- name: setting filename
+  set_fact:
+    filename: /tmp/ansible_log/ansible_{{ kami_response.json.extOrderId }}_{{ ansible_date_time.iso8601 }}.log
+    listrequestedServices: "{{ requestedServices.split(',') | map('trim') |  list }}"
+   
+- name: Call RestAPI of SPML Adapter
+  uri:
+    url:  "{{ ansible_env.PGW_ADA_HOST }}/dish/ProvSpml/api/v1/spmlAdapter/modifyRemoveRequest"
+    method: POST
+    body: "{{lookup('template', 'bundle_cease.json.j2')}}"
+    status_code: 200
+    body_format: json
+    headers:
+      content-type: "application/json"
+      Returnresult_SMSCeaseType: "FULL"
+  register: result_SMSCease
+  ignore_errors: yes
+  
+- name: Check that url returns a status_code 200 and fail if status_code 200 is not returns
+  fail:
+    msg: Instance creation failed with error code {{ result_SMSCease.status }} and error message {{ result_SMSCease.json.error.message }}
+  when:  result_SMSCease.status!=200 and result_SMSCease.json is defined
+
+- name: Check that url returns a status_code 200 and fail if status_code 200 is not returns
+  fail:
+    msg: Instance creation failed with error code {{ result_SMSCease.status }} and error message {{ result_SMSCease.msg }}
+  when: result_SMSCease.status != 200
+
+
+- shell: "python3 test.py"
+  register: end_time
+  no_log: True
+
+- shell: "python3 diff.py '{{ end_time.stdout }}' '{{ start_time.stdout }}'"
+  register: time_diff
+  no_log: True
+
+- name: generate SB json and copy       
+  copy:
+    dest: "{{ filename }}"
+    content: |
+       ***********************************
+       start_time:  {{ start_time.stdout }}
+       end_time:  {{ end_time.stdout }}
+       time_taken:  {{ time_diff.stdout }}
+       ***********************************
+       order_send:  {{lookup('template', 'bundle_cease.json.j2')}}
+       ____________________________________________________
+       result_SMSCease_return: {{ result_SMSCease.json }}  
+
+- name: fail instance if there is a failure from SBI
+  fail:
+    msg: Instance creation failed with error code {{ result_SMSCease.json.output.errorcode }} and error message {{ result_SMSCease.json.output.message }}
+  when: result_SMSCease.json.output.result == "Failure"

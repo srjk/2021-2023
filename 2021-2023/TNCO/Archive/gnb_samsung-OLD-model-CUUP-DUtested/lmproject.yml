@@ -1,0 +1,11 @@
+schema: '2.0'
+name: gnb_samsung
+version: '1.0'
+type: Assembly
+resource-manager: Brent
+# contains:
+# - name: gnb
+  # type: Assembly
+  # resource-manager: Brent
+  # directory: gnb
+

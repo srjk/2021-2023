@@ -1,0 +1,8 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:typ="http://www.netnumber.com/titan/view/soap/types">
+	<soapenv:Header/>
+	<soapenv:Body>
+		<typ:ChangeRequest view="{{ ENUM_ChangeRequest_view }}">
+			<typ:entry>number='{{ GPSI }}' subscriber-id="{{ GPSI }}" rrid={{ ENUM_rrid1 }}</typ:entry>
+		</typ:ChangeRequest>
+	</soapenv:Body>
+</soapenv:Envelope>

@@ -1,0 +1,10 @@
+{
+    "serviceType": "{{ serviceType }}",
+	"serviceName": "Subscriber - Data Roaming RFSS",
+    "id": "{{ kami_response.json.extOrderId  }}",
+    "imsi" : "{{ SUPI }}",
+    "hlr": {
+        "operation" :"set",
+        "epsRoamAreaName": "home"
+    }
+}

@@ -1,0 +1,250 @@
+#-----------------------> Start time from system  <----------------------------
+- name: "##ALM## Get timestamp from the system"
+  shell: "date +%Y-%m-%d%H:%M:%S.%5N"
+  register: stime
+- name: Creates directory
+  file:
+    path: /tmp/ansible_log
+    state: directory
+    mode: 0775
+- name: setting filename
+  set_fact:
+    filename: /tmp/ansible_log/{{ instance_name }}_Create_NSSF.log
+
+
+- name: generate SB json and copy       
+  copy:
+    dest: "{{ filename }}"
+    content: |
+       ***********************************
+       start_time:  {{ stime.stdout }}
+
+# convert ALM properties to json cease request for South Bound endpoint - Nokia Provisioning GW
+- name: Create the list
+  set_fact:
+    list_nssf_amfRegionId: "{{ nssf_amfRegionId }}"
+    list_nssf_amfSetId: "{{ nssf_amfSetId }}"
+    list_nssf_amfFqdn: "{{ nssf_amfFqdn }}"
+    list_nssf_defaultGrantName: "{{ nssf_defaultGrantName }}"
+    #list_nssf_tai: "{{ nssf_tai.split(',') | map('trim') | list }}"
+    list_nssf_nssRuleName: "{{ nssf_nssRuleName }}"
+    sd: "{{ nssf_sd  }}"                        
+
+- name: populate combined var
+  set_fact:
+    var1: '0'
+
+- name: populate combined var
+  set_fact:
+    combined_var: "[{ 'regionId': {{ list_nssf_amfRegionId }}, 'setId': {{ list_nssf_amfSetId }}, 'salience': {{ nssf_confNssaiSalience }} }]"
+  #loop: "{{ data[0]|zip(*data[1:])|list }}"
+  vars:
+    data:
+        -  "{{ list_nssf_amfRegionId }}"
+        -  "{{ list_nssf_amfSetId }}"
+        # -  "{{ list_nssf_amfFqdn }}"
+
+- name: generate new file NSI profile
+  copy: 
+    dest: "/tmp/nsiprofiles_request.json.j2"
+    content: |
+       {
+          "name": "{{ nssf_nsiProfileName }}",
+          "plmn":{
+              "mcc":"{{ nssf_mcc }}",
+               "mnc":"{{ nssf_mnc }}"
+              },
+          "nrfUri": "{{ nssf_nrfUri }}", 
+          "nsiId": "{{ nssf_nsiId }}",
+          "nrfNfMgtUri": "{{ nssf_nrfMgtUri }}",
+          "nrfAccessTokenUri": "{{ nssf_nrfAccessTokenUri }}",
+          "targetAmfSets": {{ combined_var }}
+          }
+
+- name:  create nssaiauth_request
+  copy: 
+    dest: "/tmp/{{ list_nssf_defaultGrantName }}_nssaiauth_request.json.j2"
+    content: |
+       {
+          "name": "{{ list_nssf_defaultGrantName }}",
+          "plmnId":{
+              "mcc":"{{ nssf_mcc }}",
+               "mnc":"{{ nssf_mnc }}"
+              },
+           "snssai":{
+               "sst":"{{ nssf_sst }}",
+                 "sd":"{{ nssf_sd }}"
+              },
+                 "grant":"ALLOWED"
+         }
+#  vars:
+#    data:
+#        -  "{{ list_nssf_defaultGrantName }}"
+#        -  "{{ list_nssf_tai }}"
+
+- name:  create confiured_nssai_request
+  copy: 
+    dest: "/tmp/{{ list_nssf_defaultGrantName }}_configuredsnssais_request.json.j2"
+    content: |
+         {
+              "plmn":{
+                "mcc":"{{ nssf_mcc }}",
+                 "mnc":"{{ nssf_mnc }}"
+             },                                         
+             "nssai":[
+                {
+                 "sst":"{{ nssf_sst }}",
+                   "sd":"{{ nssf_sd }}"
+                 }
+                  ]
+           }
+
+
+- name:  create nssairules_request
+  copy: 
+    dest: "/tmp/{{ list_nssf_nssRuleName }}_nssrules_request.json.j2"
+    content: |
+       {
+         "name":"{{ list_nssf_nssRuleName }}",                                                                             
+         "plmnId":{
+                "mcc":"{{ nssf_mcc }}",
+                 "mnc":"{{ nssf_mnc }}"
+          },                
+         "snssai":{
+           "sst":" {{ nssf_sst }}",
+          "sd":"{{ nssf_sd }}"
+           },
+          "salience": "0",
+          "behavior":{
+            "accessType":"3GPP_ACCESS",
+              "nsiProfiles":[
+                  {
+              "name":"{{ nssf_nsiProfileName }}",
+              "salience": 0
+            }
+          ]
+          }
+             }
+
+#  vars:
+#    data:
+#       -  "{{ list_nssf_nssRuleName }}"
+#        -  "{{ list_nssf_tai }}"
+
+- name: Configure NSI profile
+  uri:
+    url:  "{{ NSSF_HOST }}/nssfStub/nnssf-configuration/v1/nsiprofiles"
+    method: POST
+    body: "{{lookup('template', '/tmp/nsiprofiles_request.json.j2')}}"
+    status_code: 201
+    body_format: json
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    return_content: yes
+  register: result
+
+
+- name: Set Default Grants
+  uri:
+    url:  "{{ NSSF_HOST }}/nssfStub/nnssf-configuration/v1/nssaiauth"
+    method: POST
+    body: "{{lookup('template', '/tmp/{{ list_nssf_defaultGrantName }}_nssaiauth_request.json.j2')}}"
+    status_code: 201
+    body_format: json
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    return_content: yes
+  register: result
+      
+
+- name: Configure Network Slice Selection Rule
+  uri:
+    url:  "{{ NSSF_HOST }}/nssfStub/nnssf-configuration/v1/nssrules"
+    method: POST
+    body: "{{lookup('template', '/tmp/{{ list_nssf_nssRuleName }}_nssrules_request.json.j2')}}"
+    status_code: 201
+    body_format: json
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    return_content: yes
+  register: result
+
+- name: Set Configured NSSAIs
+  uri:
+    url:  "{{ NSSF_HOST }}/nssfStub/nnssf-configuration/v1/configuredsnssais"
+    method: POST
+    body: "{{lookup('template', '/tmp/{{ list_nssf_defaultGrantName }}_configuredsnssais_request.json.j2')}}"
+    status_code: 201
+    body_format: json
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    return_content: yes
+
+
+#- name: Configure AMF Sets
+#  uri:
+#    url:  "{{ NSSF_HOST }}/nssfStub/nnssf-configuration/v1/amfsets"
+#    method: POST
+#    body: "{{lookup('template', 'nokia_provisioning_amfsets_request.json.j2')}}"
+#    status_code: 201
+#    body_format: json
+#    headers:
+#      content-type: "application/json"
+#      cache-control: "no-cache" 
+#    return_content: yes
+#  register: result
+#
+#- name: Configure AMF Sets
+#  uri:
+#    url:  "{{ NSSF_HOST }}/nssfStub/nnssf-configuration/v1/amfresolutions"
+#    method: POST
+#    body: "{{lookup('template', 'nokia_provisioning_amfresolutions_request.json.j2')}}"
+#    status_code: 201
+#    body_format: json
+#    headers:
+#      content-type: "application/json"
+#      cache-control: "no-cache" 
+#    return_content: yes
+#  register: result
+
+- name: Log API request through Log module
+  ibm_cp4na_log_message:
+    message_direction: sent
+    external_request_id: "{{ extOrderId }}"
+    content_type: application/json
+    message_data: |
+     ***********************************
+     order_send:  
+     {{lookup('template', '{{ filename }}')}}
+      
+     ************************************ 
+    message_type: sample
+    protocol: http
+    
+
+
+#-----------------------> End time from system  <----------------------------
+- name: "##ALM## Get timestamp from the system"
+  shell: "date +%Y-%m-%d%H:%M:%S.%5N"
+  register: etime
+
+
+#-----------------------> Store request/response Logs in Eventlogger  <----------------------------
+- name: "##ALM## Store request and response in DB"
+  connection: local
+  uri:
+    url: "{{ deployment_location.properties.eventlogger_url }}"
+    method: POST
+    body: "{{lookup('template', 'Store.json.j2')}}"
+    return_content: yes
+    body_format: json
+    status_code: 200
+    validate_certs: no
+    headers:
+      content-type: "application/json"
+      ReturnResultType: "FULL" 
+  register: resultStore

@@ -1,0 +1,7 @@
+---
+- name: Uninstall
+  hosts: localhost
+  gather_facts: True
+  connection: local
+  roles:
+    - { role: ../roles/cease }

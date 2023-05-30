@@ -1,0 +1,12 @@
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+	<SOAP-ENV:Header/>
+	<SOAP-ENV:Body>
+		<PlexViewRequest Command="dlt-ngfs-subscriber-v2" ProvisioningGroup="TASProv" RequestId="{{ extOrderId }}" SessionId="somuser*Passw0rd12345!">
+			<SubParty>
+				<PartyId>{{ Old_GPSI }}</PartyId>
+				<PrimaryPUID>+{{ Old_GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PrimaryPUID>
+				<ServiceSuspension>true</ServiceSuspension>
+			</SubParty>
+		</PlexViewRequest>
+	</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

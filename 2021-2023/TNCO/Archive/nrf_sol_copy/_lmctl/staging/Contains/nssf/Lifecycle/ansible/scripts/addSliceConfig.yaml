@@ -1,0 +1,9 @@
+---
+- name: run the Togglestub yaml file
+  import_playbook: addSliceConfigProd.yaml
+  when: env == 'Prod'
+  
+
+- name: run the ToggleProd yaml file
+  import_playbook: addSliceConfigStub.yaml
+  when: env == 'Stub'

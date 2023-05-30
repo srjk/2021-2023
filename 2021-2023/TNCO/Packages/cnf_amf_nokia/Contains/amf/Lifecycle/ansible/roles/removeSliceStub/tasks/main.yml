@@ -1,0 +1,203 @@
+#-----------------------> Generate Token from Kami  <----------------------------
+- name: "##ALM## Get token from kami"
+  connection: local
+  uri:
+    method: POST
+    url: "{{ deployment_location.properties.kami_url }}/KamiCore/oauth/token?grant_type=client_credentials"
+    headers: 
+       content-type: "application/json"
+       Authorization: Basic ZGlzaDpkaXNoMTIzNA==
+    validate_certs: no
+  delegate_to: 127.0.0.1 
+  register: token  
+ 
+#-----------------------> Get order id from Kami  <----------------------------
+- name: "##ALM## Get order id"
+  connection: local
+  uri:
+    method: GET
+    url: "{{ deployment_location.properties.kami_url }}/KamiCore/getExtOrderId"  
+    return_content: yes
+    body_format: json
+    status_code: 201
+    body: "{ \"almInstanceName\": \"{{ instance_name }}\" }"
+    headers:
+       ReturnResultType: "FULL"
+       Authorization: Bearer {{ token.json.access_token }}
+    validate_certs: no
+    follow_redirects: yes
+  delegate_to: 127.0.0.1 
+  register: kami_response_Cease
+
+- name: log file for AMF
+  set_fact:
+    extOrderId_Cease: "{{ kami_response_Cease.json.extOrderId }}"
+
+
+
+
+#-----------------------> Start time from system  <----------------------------
+- name: "##ALM## Get timestamp from the system"
+  shell: "date +%Y-%m-%d%H:%M:%S.%5N"
+  register: stime
+
+
+# convert ALM properties to json provide request for South Bound endpoint - Nokia Provisioning GW 
+- name: Create the list
+  set_fact:   
+    list_amfTac: "{{ amfSlice_tai.split(',') | list }}" 
+    list_amfSlice_dnnName: "{{ amfSlice_dnnName.split(',') | list }}"
+    list_amfSlice_snssaiToDnnListName: "{{ amfSlice_snssaiToDnnListName.split(',') | list }}"
+        
+- name: Insert a line at the end of a file.
+  raw: export USER=root
+
+- name: log file for AMF
+  set_fact:
+    Logs: /tmp/ansible_log/{{ instance_name }}_Delete_AMF.log
+
+- name: Insert a line at the end of a file.
+  connection: local
+  file:
+    path: "{{ Logs }}"
+    state: touch
+  delegate_to: 127.0.0.1
+
+- include: snssaitodnn.yaml
+  vars:
+    data:
+        -  "{{ list_amfSlice_dnnName }}"
+        -  "{{ list_amfSlice_snssaiToDnnListName }}"
+    dnnName: "{{ item.0 }}"
+    snssaiToDnnListName: "{{ item.1 }}"
+    filename: "{{ Logs }}"
+  loop: "{{ data[0]|zip(*data[1:])|list }}"
+
+- name: run the command
+  raw: ./cmm amfSetSnssai list | grep {{ amfSlice_plmnName }}~{{ amfSlice_amfRegionId }}~{{ amfSlice_amfSetId }}
+  register: snssai_output
+  
+- name: copy
+  connection: local
+  lineinfile:
+    path: "{{ Logs }}"
+    line: |
+      input: cmm amfSetSnssai list | grep {{ amfSlice_plmnName }}~{{ amfSlice_amfRegionId }}~{{ amfSlice_amfSetId }}
+      output: "{{ result.stdout_lines }}"
+  delegate_to: 127.0.0.1
+
+- name: setting filename
+  set_fact:
+    filename: "{{ snssai_output.stdout | regex_search('(?<=\\s)(.*?)(?=\\s)') }}"
+
+- name: run the command
+  raw: ./cmm amfSetSnssai show {{ filename }} | grep snssaiListName
+  register: snssaiListName_output
+
+- name: Insert a line at the end of a file.
+  connection: local
+  lineinfile:
+    path: "{{ Logs }}"
+    line: |
+      input: cmm amfSetSnssai show {{ filename }} | grep snssaiListName
+      output: {{ snssaiListName_output.stdout }}
+  delegate_to: 127.0.0.1
+
+- name: setting filename
+  set_fact:
+    snssailist: "{{ snssaiListName_output.stdout_lines[0] | replace('| snssaiListName* | ','') | replace (' ','') | replace('|','')  }}"
+
+- name: Insert a line at the end of a file.
+  raw: ./cmm snssaiListItem delete --snssaiListName {{ snssailist }} --snssaiName {{ amfSlice_sliceName }} 
+  register: result
+#  ignore_errors: yes
+
+- name: Insert a line at the end of a file.
+  connection: local
+  lineinfile:
+    path: "{{ Logs }}"
+    line: |
+      input: cmm snssaiListItem delete --snssaiListName {{ snssailist }} --snssaiName {{ amfSlice_sliceName }}
+      output: {{ result.stdout }}
+  delegate_to: 127.0.0.1
+
+# - fail:
+#     msg: "{{ result.stdout | regex_search('ERROR.*') }}"
+#   when:
+#     - '"resource not found from DB" not in result.stdout'
+#     - '"Field" not in result.stdout'
+
+
+
+- include: snssaitodnnList.yaml
+  vars:
+    item: "{{ item }}"
+    filename: "{{ Logs }}"
+  loop: "{{ list_amfSlice_snssaiToDnnListName }}"
+  register: result
+
+
+- name: Insert a line at the end of a file.
+  raw: ./cmm snssai delete --name {{ amfSlice_sliceName }} 
+  register: result
+#  ignore_errors: yes
+
+- name: Insert a line at the end of a file.
+  connection: local
+  lineinfile:
+    path: "{{ Logs }}"
+    line: |
+      input: cmm snssai delete --name {{ amfSlice_sliceName }}
+      output: {{ result.stdout }}
+  delegate_to: 127.0.0.1
+
+# - fail:
+#     msg: "{{ result.stdout | regex_search('ERROR.*') }}"
+#   when:
+#     - '"resource not found from DB" not in result.stdout'
+#     - '"Field" not in result.stdout'
+
+
+#-----------------------> End time from system  <----------------------------
+- name: "##ALM## Get timestamp from the system"
+  shell: "date +%Y-%m-%d%H:%M:%S.%5N"
+  register: etime
+
+
+
+
+- name: Log API request through Log module AMF Cease
+  ibm_cp4na_log_message:
+    message_direction: sent
+    external_request_id: "{{ extOrderId_Cease }}"
+    content_type: application/json
+    message_data: |
+     ***********************************
+     order_send:  
+     {{lookup('template', '{{ Logs }}')}}
+
+     ____________________________________________________
+
+     result_return:
+      {{ result }}
+      
+     ************************************ 
+    message_type: sample
+    protocol: http
+        
+#-----------------------> Store request/response Logs in Eventlogger  <----------------------------
+- name: "##ALM## Store request and response in DB"
+  connection: local
+  uri:
+    url: "{{ deployment_location.properties.eventlogger_url }}"
+    method: POST
+    body: "{{lookup('template', 'Store_delete.json.j2')}}"
+    return_content: yes
+    body_format: json
+    status_code: 200
+    validate_certs: no
+    headers:
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+  delegate_to: 127.0.0.1      
+  register: resultStore

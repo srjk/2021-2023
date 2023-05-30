@@ -1,0 +1,213 @@
+name: assembly::rfs_devicemanagement_ansible::1.0
+description: descriptor for provisioning device management subscriber service 
+properties:
+  operation:
+    volatile: true
+    description: Provide/Cease/Suspend/Resume
+    default: Provide
+  deploymentLocation:
+    description: site specific
+    type: string
+    default: SUBPROV
+  resourceManager:
+    type: string
+    read-only: true
+    default: brent
+  extOrderId:
+    volatile: true
+  loop_back:
+    type: string
+    volatile: true
+    default: OFF    
+  serviceType:
+    type: string
+  PEI:
+    volatile: true
+  # PGW_ADA_HOST:
+    # type: string
+    # default: "http://dish-network-stub-svc:8184"
+  href:
+    type: string
+  priority:
+    type: string
+  description:
+    type: string
+  category:
+    type: string
+  state:
+    type: string
+  orderDate: 
+    type: string
+  completionDate: 
+    type: string
+  requestedStartDate: 
+    type: string
+  requestedCompletionDate: 
+    type: string
+  expectedCompletionDate:
+    type: string
+  startDate:
+    type: string
+  serviceOrderItemId:
+    type: string  
+  action:
+    type: string
+  OrderSubType:
+    type: string
+  GPSI:
+    volatile: true
+  #Old_GPSI:
+    #volatile: true
+  SUPI:
+    volatile: true
+  Name:
+    type: string
+    default : Subscriber - Device Management RFSS
+  Description:
+    type: string
+  Managed:
+    type: string
+  In_Use:
+    type: string
+  ICCID:
+    type: string
+  Bootstrapped:
+    type: string
+  Nokia_Device_ID:
+    type: string
+  # Coloured_List:
+    # type: string
+  Provisioning_Type:
+    type: string
+  Service_State:
+    type: string
+  serviceInventoryId:
+    type: string
+  serviceInventoryParentId:
+    type: string
+  rootServiceId:
+    type: string
+  ColouredList:
+    type: string
+    volatile: true    
+  GSMACode:
+    type: string
+    volatile: true
+    default: 0011     
+  GSMAReason:
+    type: string
+    volatile: true
+    default: Lost    
+  reference_assembly:
+    type: string
+  ResetValue:
+    type: string
+  DeviceModel:
+    type: string
+  NokiaDMProvisioningRequired:
+    type: string 
+  DMProvisioningChanged:
+    type: string
+composition:
+  devicemanagement:
+    type: $lmctl:/contains:/devicemanagement_rfs:/descriptor_name
+    quantity: 1
+    properties:
+      instance_name:
+        value: ${instance.name}
+      operation:
+        value: ${operation}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      resourceManager:
+        value: ${resourceManager}
+      extOrderId:
+        value: ${extOrderId}
+      loop_back:
+        value: ${loop_back}        
+      serviceType:
+        value: ${serviceType}
+      PEI:
+        value: ${PEI}
+      # PGW_ADA_HOST:
+       # value: ${PGW_ADA_HOST}
+      href:
+        value: ${href}
+      priority:
+        value: ${priority}
+      description:
+        value: ${description}
+      category:
+        value: ${category}
+      state:
+        value: ${state}
+      orderDate: 
+        value: ${orderDate}
+      completionDate: 
+        value: ${completionDate}
+      requestedStartDate: 
+        value: ${requestedStartDate}
+      requestedCompletionDate: 
+        value: ${requestedCompletionDate}
+      expectedCompletionDate:
+        value: ${expectedCompletionDate}
+      startDate:
+        value: ${startDate} 
+      serviceOrderItemId:
+        value: ${serviceOrderItemId}    
+      action:
+        value: ${action}
+      GPSI:
+        value: ${GPSI}
+      #Old_GPSI:
+        #value: ${Old_GPSI}
+      OrderSubType:
+        value: ${OrderSubType}
+      SUPI:
+        value: ${SUPI}
+      Name:
+        value: ${Name} 
+      Description:
+        value: ${Description}
+      Managed:
+        value: ${Managed}
+      In_Use:
+        value: ${In_Use}
+      ICCID:
+        value: ${ICCID}
+      Bootstrapped:
+        value: ${Bootstrapped}
+      Nokia_Device_ID:
+        value: ${Nokia_Device_ID}
+      # Coloured_List:
+        # value: ${Coloured_List}
+      Provisioning_Type:
+        value: ${Provisioning_Type}
+      Service_State:
+        value: ${Service_State}
+      serviceInventoryId:
+        value: ${serviceInventoryId}
+      serviceInventoryParentId:
+        value: ${serviceInventoryParentId}
+      rootServiceId:
+        value: ${rootServiceId}
+      ColouredList:
+        value: ${ColouredList}
+      GSMACode:
+        value: ${GSMACode}
+      GSMAReason:
+        value: ${GSMAReason}        
+      reference_assembly:
+        value: ${reference_assembly}
+references:
+   reference_assembly:  
+    properties:
+      resourceManager:
+        value: ${resourceManager}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      operation:
+        value: ${operation}
+      name:
+        value: ${reference_assembly}         
+    type: assembly::rfs_databundle_ansible::1.0

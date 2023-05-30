@@ -1,0 +1,104 @@
+name: assembly::rfs_data_dish::1.0
+description: descriptor for Nokia Provisioning data_rfs
+properties:
+  operation:
+    volatile: true
+  deploymentLocation:
+    description: site specific
+    type: string
+    default: DFW
+  resourceManager:
+    type: string
+    read-only: true
+    default: brent
+  extOrderId:
+    volatile: true
+  serviceType:
+    type: string
+  SUPI:
+    volatile: true
+  GPSI:
+    volatile: true
+  href:
+    type: string
+  priority:
+    type: string
+  description:
+    type: string
+  category:
+    type: string
+  state:
+    type: string
+  orderDate:
+    type: string
+  requestedStartDate:
+    type: string
+  startDate:
+    type: string
+  requestedCompletionDate:
+    type: string
+  expectedCompletionDate:
+    type: string
+  completionDate:
+    type: string
+  serviceOrderItemId:
+    type: string  
+  action:
+    type: string
+  SubOrderType:
+    type: string
+  slice_nssai:
+    type: string
+  UEAMBRDownlink:
+    type: string
+  UEAMBRUplink:
+    type: string
+composition:
+  prov_base:
+    type: $lmctl:/contains:/prov_base:/descriptor_name
+    quantity: 1
+    properties:
+      instance_name:
+        value: ${instance.name}
+      operation:
+        value: ${operation}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      resourceManager:
+        value: ${resourceManager}
+      extOrderId:
+        value: ${extOrderId}
+      href:
+        value: ${href}
+      serviceType:
+        value: ${serviceType}
+      priority:
+        value: ${priority}
+      description:
+        value: ${description}
+      category:
+        value: ${category}
+      state:
+        value: ${state}
+      orderDate:
+        value: ${orderDate}
+      completionDate:
+        value: ${completionDate}
+      requestedStartDate:
+        value: ${requestedStartDate}
+      requestedCompletionDate:
+        value: ${requestedCompletionDate}
+      startDate:
+        value: ${startDate}
+      SUPI:
+        value: ${SUPI}
+      slice_nssai:
+        value: ${slice_nssai}
+      GPSI:
+        value: ${GPSI}
+      UEAMBRUplink:
+        value: ${UEAMBRUplink}
+      UEAMBRDownlink:
+        value: ${UEAMBRDownlink}
+      SubOrderType:
+        value: ${SubOrderType}

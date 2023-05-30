@@ -1,0 +1,49 @@
+{
+       "category": "RFS",
+       "state": "active",
+       "@baseType": "service",
+       "@type": "eMBBNetworkSlice",
+       "serviceCharacteristic": [
+           {
+               "name": "sNSSAI",
+               "value": "{{ slice_snssai }}"
+           },
+           {
+               "name": "sST",
+               "value": "{{ slice_sst }}"
+           },
+           {
+               "name": "SD",
+               "value": "{{ slice_sd }}"
+           },
+           {
+               "name": "dLThptPerUE",
+               "valueType": "string",
+               "value": "{{ dLThptPerUE }}"
+           },
+           {
+               "name": "uLThptPerUE",
+               "valueType": "string",
+               "value": "{{ uLThptPerUE }}"
+           },
+           {
+             "name": "MMTelSupport",
+             "value": {{ MMTelSupport }}
+           },
+           {
+             "name": "IsolatedSlice",
+             "value": "{{ IsolatedSlice }}"
+           }
+       ],
+       "serviceOrder":[
+      {
+         "id":"{{ extOrderId }}",
+         "serviceOrderItemId":"16267042358",
+         "href":"/om/order/search/16267042358"
+      }
+    ],
+       "serviceSpecification": {
+           "id": "349f4b6a-a4e1-4013-be79-a0efd4ea8ppp",
+           "version": "1.0.0"
+    }
+}

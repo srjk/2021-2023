@@ -1,0 +1,39 @@
+{
+    "serviceType": "CLEANNUMBER",
+    "serviceName": "{{ serviceName }}",
+    "id": "{{ extOrderId }}",
+    "imsi": "{{ SUPI }}",
+    "hss": {
+        "multipleValueObjects": [
+            {
+                "path": "privateUserId",
+                "operation": "add",
+                "valueObject": {
+                    "privateUserId": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+                    "provisionedImsi": [
+                        {
+                            "provisionedImsi": "{{ SUPI }}"
+                        }
+                    ],
+                    "msisdn": "{{ GPSI }}",
+                    "preferredAuthenticationScheme": "tlsDigestAkaV2",
+                    "preferredDomain": "ims",
+                    "refGussDataId": "1",
+                    "looseRoutingIndicationRequired": "false",
+                    "digestRealm": "ims.mnc340.mcc313.3gppnetwork.org"
+                }
+            },
+            {
+                "path": "hss/privateUserId[@privateUserId='+{{ Old_GPSI }}@ims.mnc340.mcc313.3gppnetwork.org']",
+                "operation": "remove"
+            },
+            {
+                "path": "upiListItem",
+                "operation": "set",
+                "valueObject": {
+                    "upi": "sip:+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org"
+                }
+            }
+        ]
+    }
+}

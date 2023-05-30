@@ -1,0 +1,17 @@
+schema: '2.0'
+name: infra_bedc_dish
+version: '1.0'
+type: Assembly
+contains:
+- name: eks_bedc
+  type: Resource
+  resource-manager: Brent
+  directory: eks_bedc
+- name: upfd
+  type: Resource
+  resource-manager: Brent
+  directory: upfd
+- name: nfs
+  type: Resource
+  resource-manager: Brent
+  directory: nfs

@@ -1,0 +1,8 @@
+---
+- name: Unstall
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  # roles: 
+   # - { role: ../roles/BPIdelete, when: ansible_env.BPI_ENV == 'prod' }
+    

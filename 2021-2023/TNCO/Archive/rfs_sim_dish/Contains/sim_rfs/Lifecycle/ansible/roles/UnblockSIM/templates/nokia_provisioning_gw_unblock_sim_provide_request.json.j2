@@ -1,0 +1,18 @@
+{
+    "serviceType": "{{ serviceType }}",
+	"serviceName": "Subscriber - SIM RFSS",
+    "id": "{{ extOrderId  }}",
+    "imsi" : "{{ SUPI }}",
+    "hlr":    {
+        "operation" : "remove",	
+        "path": "hlr/imsiActive"
+    },
+	"hss": {
+        "operation" : "addorset",
+        "adminBlocked": "false"
+    },
+    "udm": {
+        "operation" : "remove",
+        "path": "udm5gData/servingPlmnId/provisionedData/accessAndMobilitySubscriptionData/accessRestr"
+    }
+}

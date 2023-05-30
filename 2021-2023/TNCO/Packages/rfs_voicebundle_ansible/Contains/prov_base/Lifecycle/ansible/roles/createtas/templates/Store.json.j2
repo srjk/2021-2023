@@ -1,0 +1,16 @@
+{
+        "alm_instance_name": "{{ instance_name }}",
+        "assembly_name": "rfs_voicebundle_ansible",
+        "external_order_id": "{{ extOrderId }}",
+        "target_system": "Nokia TAS",
+        "target_system_url": "{{ tas_provide_url }}",
+        "execution_start_time": "{{ stime.start }}",
+        "execution_end_time": "{{ etime.end }}",
+        "request": "{{ lookup('template', 'Bundle_Voice_provide_TAS.xml.j2')| regex_replace('[\r\n\t]','') | regex_replace('[\"]','\\"') }}",
+        "response": "{{ result.content | regex_replace('[\r\n\t]','') | regex_replace('[\"]','\\"')}}",
+		{% if target=="FailureReason" %}
+           "status": "Failure"
+		{% else %}
+		   "status": "Success"
+		{% endif %}
+}

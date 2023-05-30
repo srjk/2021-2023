@@ -1,0 +1,14 @@
+- name: Delete snssaiToDnn.
+  raw: cmm snssaiToDnn delete  --snssaiToDnnListName {{ snssaiToDnnListName }} --snssaiName {{ amfSlice_sliceName }}
+  register: result_del_snssaiToDnn
+  failed_when: "result_del_snssaiToDnn.rc not in [0,1]"
+#  ignore_errors: yes
+
+- name:  Insert a line at the end of a file.
+  connection: local
+  lineinfile:
+    path: "{{ Logs }}"
+    line: |
+          input: cmm snssaiToDnn delete  --snssaiToDnnListName {{ snssaiToDnnListName }} --snssaiName {{ amfSlice_sliceName }}
+          output: {{ result_del_snssaiToDnn.stdout }}
+  delegate_to: 127.0.0.1

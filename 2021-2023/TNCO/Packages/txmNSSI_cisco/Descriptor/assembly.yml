@@ -1,0 +1,135 @@
+name: assembly::txmNSSI_cisco::1.0
+description: descriptor for Transport slice
+properties:
+  operation:
+    volatile: true
+    description: Provide/Cease
+    default: Provide
+  deploymentLocation:
+    description: site specific
+    type: string
+    default: SUBPROV     
+  resourceManager:
+    type: string
+    read-only: true
+    default: brent
+  extOrderId:
+    volatile: true  
+  slice_type:
+    type: string
+    default: dynamic
+  as_number:
+    type: string
+    default: 64001
+  endpoint_peName:
+    type: list
+    entry-schema:
+      type: string
+  endpoint_ifType:
+    type: list
+    entry-schema:
+      type: string    
+  endpoint_ifId:
+    type: list
+    entry-schema:
+      type: string
+  endpoint_peIp:
+    type: list
+    entry-schema:
+      type: string
+  endpoint_cePeProtocol:
+    type: list
+    entry-schema:
+      type: string
+  endpoint_cePeRemoteAS:
+    type: list
+    entry-schema:
+      type: string
+  endpoint_cePeRemoteASIP:
+    type: list
+    entry-schema:
+      type: string
+  slice_txm_profile:
+    type: string
+    default: BRONZE
+  slice_snssai:
+    type: string
+    default: demo-slice2
+  bpi_eMBBNetworkSlice_name:
+    type: string
+    default: RRR
+  bpi_eMBBNetworkSlice_id:
+    type: string
+    default: RRR
+  bpi_ServiceProfile_name:
+    type: string
+    default: RRR
+  bpi_ServiceProfile_id:
+    type: string
+    default: RRR
+  bpi_transportNetworkSliceSubnet_name:
+    type: string
+    default: RRR
+  bpi_transportNetworkSliceSubnet_id:
+    type: string
+    default: RRR
+  bpi_SliceProfile_name:
+    type: string
+    default: RRR
+  bpi_SliceProfile_id:
+    type: string
+    default: RRR
+composition:
+  tsci_cisco:
+    properties:
+      instance_name:
+       value: ${instance.name}
+      operation:
+        value: ${operation}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      resourceManager:
+        value: ${resourceManager}
+      extOrderId:
+       value: ${extOrderId}
+      cnc_slice_type:
+        value: ${slice_type}
+      cnc_as_number:
+        value: ${as_number}
+      pe_name:
+        value: ${endpoint_peName}
+      if_type:
+        value: ${endpoint_ifType}
+      if_id:
+        value: ${endpoint_ifId}
+      pe_ip_addr:
+        value: ${endpoint_peIp}
+      ce_pe_prot:
+        value: ${endpoint_cePeProtocol}
+      ce_pe_remoteAs:
+        value: ${endpoint_cePeRemoteAS}
+      ce_pe_remoteAsIp:
+        value: ${endpoint_cePeRemoteASIP}
+      cnc_nsst:
+        value: ${slice_txm_profile}
+      slice_snssai:
+        value: ${slice_snssai}
+      bpi_eMBBNetworkSlice_name:
+        value: ${bpi_eMBBNetworkSlice_name}
+      bpi_eMBBNetworkSlice_id:
+        value: ${bpi_eMBBNetworkSlice_id}
+      bpi_ServiceProfile_name:
+        value: ${bpi_ServiceProfile_name}
+      bpi_ServiceProfile_id:
+        value: ${bpi_ServiceProfile_id}
+      bpi_transportNetworkSliceSubnet_name:
+        value: ${bpi_transportNetworkSliceSubnet_name}
+      bpi_transportNetworkSliceSubnet_id:
+        value: ${bpi_transportNetworkSliceSubnet_id}
+      bpi_SliceProfile_name:
+        value: ${bpi_SliceProfile_name}
+      bpi_SliceProfile_id:
+        value: ${bpi_SliceProfile_id}
+    type: $lmctl:/contains:/tsci_cisco:/descriptor_name
+    quantity: 1
+      

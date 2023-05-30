@@ -1,0 +1,24 @@
+---
+# - name: addSliceConfig
+  # hosts: localhost
+  # connection: local
+  # gather_facts: True       
+  # roles:
+    # - role: ../roles/addSliceConfig
+ 
+    
+# - name: run the Togglestub yaml file
+#   import_playbook: addSliceConfigProd.yaml
+#   when: lookup('env','PCF_ENV') == 'prod'
+      
+# - name: run the ToggleProd yaml file
+#   import_playbook: addSliceConfigStub.yaml
+#   when: lookup('env','PCF_ENV') == 'stub'
+
+- name: run the Togglestub yaml file
+  import_playbook: addSliceConfigProd.yaml
+  when: PCF_ENV == 'prod'
+      
+- name: run the ToggleProd yaml file
+  import_playbook: addSliceConfigStub.yaml
+  when: PCF_ENV == 'stub'

@@ -1,0 +1,25 @@
+{
+    "serviceType": "{{ serviceType }}",
+	"serviceName": "Subscriber - Data Hotspot Tethering RFSS",
+    "id": "{{ extOrderId }}",
+    "imsi": "{{ SUPI }}",
+    "hlr": [
+        {
+            "path": "hlr/epsPdnContext[@contextId='7']/pdnContextBlocking",
+            "operation": "addorset",
+            "valueObject": {
+                "flagAPNBlockedOverS6A": "true",
+                "flagAPNBlockedOverSWx": "true"
+            }
+        }
+    ],
+    "udm": [
+        {
+            "path": "udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo[@dnnId='hotspot']/dnnBarred='true'",
+            "operation": "setoradd",
+            "valueObject": {
+                "dnnBarred": "true"
+            }
+        }
+    ]
+}

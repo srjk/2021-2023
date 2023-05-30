@@ -1,0 +1,20 @@
+{
+    "serviceType": "{{ serviceType }}",
+	"serviceName": "Subscriber - SIM RFSS",
+    "id": "{{ extOrderId }}",
+    "imsi" : "{{ SUPI }}",
+    "hlr": {
+        "operation" :"setoradd",
+        "imsiActive": "false"
+    },
+	"hss": {
+        "operation" :"setoradd",
+        "adminBlocked": "true"
+    },
+	"accessAndMobilitySubscriptionData": {
+        "operation" :"setoradd",
+        "accessRestr": [
+		"NR"
+		]
+    }	
+}

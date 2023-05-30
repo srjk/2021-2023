@@ -1,0 +1,67 @@
+#----------------> DU Slice Create slice for Slice Index =0  <--------------
+- name: Call RestAPI to Create DU for Slice Index =0 
+  uri:
+    url: "{{ deployment_location.properties.samsung_usm_host }}/oss/netconf/{{ du_id }}"
+    # user: ossuser
+    # password: osspasswd
+    method: POST
+    body: "{{lookup('template', 'create_slice_DU_Sliceindex0.xml')}}"
+    # body_format: json
+    headers:
+      Authorization: Basic b3NzdXNlcjpvc3NwYXNzd2Q=
+      content-type: "application/xml"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: DU_createSlice
+  # ignore_errors: yes
+
+- name: Display response for Slice Index =0 
+  debug:
+    var: DU_createSlice
+    
+- name: DU_getSlice info print for Slice Index =0 
+  lineinfile:
+    path: "{{ logsfile }}"
+    line: |
+           __________________________________________________________________________
+           
+           ##### Create Slice for DU for Slice Index =0 
+           
+           URL:  
+           {{ DU_createSlice.url }}
+           
+           order_send:
+           {{lookup('template', 'create_slice_DU_Sliceindex0.xml')}}
+           
+           result_return:
+           {{ DU_createSlice.content }}
+           __________________________________________________________________________
+
+- name: Log API request through Log module
+  ibm_cp4na_log_message:
+    message_direction: sent
+    external_request_id: "{{ extOrderId }}"
+    content_type: application/json
+    message_data: |
+     ***********************************
+     ##### Create Slice for DU for Slice Index =0 
+     
+     URL:  
+     {{ DU_createSlice.url }}
+     
+     order_send:
+     {{lookup('template', 'create_slice_DU_Sliceindex0.xml')}}
+     ____________________________________________________
+
+     result_return:
+      {{ DU_createSlice.content }}
+    message_type: sample
+    protocol: http
+
+
+- fail:
+    msg: "Slice creation failed with error {{ DU_createSlice.content }}"
+  when: '"<rpc-error>" in DU_createSlice.content'

@@ -1,0 +1,122 @@
+- name: Configure NSI auth                                                                                                                                                                                  
+  shell: "curl --location --request GET '{{ NSSF_HOST }}/nnssf-configuration/v1/configuredsnssais/{{ mcc }}:{{ mnc }}' --http2-prior-knowledge"
+  register: result_csn
+
+- debug: var=result_csn
+    
+- block:
+    - name: Configure NSI auth
+      shell: "curl --location --request POST '{{ NSSF_HOST }}/nnssf-configuration/v1/configuredsnssais' --http2-prior-knowledge --header 'Accept: application/json' --header 'Content-Type: application/json' -d@/tmp/{{ myvar }}_configuredsnssais_request.json.j2 "
+      register: result_profile
+    - name : failed                     
+      fail:                                    
+        msg: "{{ result_profile.stdout }}"     
+      when: "'status' in result_profile.stdout"
+  when: "'status' in result_csn.stdout"
+
+- block:
+    - name: covert to json
+      set_fact:
+        csn_pre: "{{ result_csn.stdout | from_json }}"
+        data: [{'sst': "{{ sst }}" , 'sd':  "{{ sd }}"  }]
+    - name: adding value
+      set_fact:
+        csn_post: "{{  csn_pre.nssai + data  }}"
+    
+    - debug: var=csn_post
+    
+    - name:  create nssaiauth_request
+      copy: 
+        dest: "/tmp/{{ myvar }}_configuredsnssais_request.json.j2"
+        content: |
+          {    "plmn":{
+               "mcc":"{{ mcc }}",
+                "mnc":"{{ mnc }}"
+              },
+              "nssai": {{ csn_post }}
+          }
+    - replace:
+        path: "/tmp/{{ myvar }}_configuredsnssais_request.json.j2"
+        regexp: ''''
+        replace: '"'
+
+    - name: Configure NSI auth
+      shell: "curl --location --request PUT '{{ NSSF_HOST }}/nnssf-configuration/v1/configuredsnssais/{{ mcc }}:{{ mnc }}' --http2-prior-knowledge --header 'Accept: application/json' --header 'Content-Type: application/json' -d@/tmp/{{ myvar }}_configuredsnssais_request.json.j2  -s -o responseConfiguredNSSAI.txt -w '%{http_code}'"
+      register: result_Configuredsnnsai
+
+    - name: print the status code
+      debug:
+        msg: "{{ result_Configuredsnnsai.stdout }}"
+
+
+    - name: Cat the response output to a register
+      command: cat responseConfiguredNSSAI.txt
+      register: responseConfiguredNSSAI
+
+    - name: Log the request response of ConfiguredNSSAI
+      lineinfile:
+        path: "{{ filename }}"
+        line: |
+           ***********************************
+           Configure ConfiguredNSSAI:
+           Request:
+           curl --location --request PUT '{{ NSSF_HOST }}/nnssf-configuration/v1/configuredsnssais/{{ mcc }}:{{ mnc }}' --http2-prior-knowledge --header 'Accept: application/json' --header 'Content-Type: application/json' -d@/tmp/{{ myvar }}_configuredsnssais_request.json.j2
+  
+           Response:
+           {{ responseConfiguredNSSAI }}
+           ************************************
+
+    - name: DELETE NSSI Rule
+      shell: "curl --location --request DELETE '{{ NSSF_HOST }}/nnssf-configuration/v1/nssrules/{{ list_nssf_nssRuleName }}'  --http2-prior-knowledge --header 'Accept: application/json' --header 'Content-Type: application/json'"
+      register: result_Delete_NSSRules
+      when: "'200' not in result_Configuredsnnsai.stdout"
+      
+    - name: Log the request response of Delete NSS Rules for Rollback
+      lineinfile:
+        path: "{{ filename }}"
+        line: |
+           ***********************************
+           Delete NSS Rules:
+           Request:
+           curl --location --request DELETE '{{ NSSF_HOST }}/nnssf-configuration/v1/nssrules/{{ list_nssf_nssRuleName }}'  --http2-prior-knowledge --header 'Accept: application/json' --header 'Content-Type: application/json'
+           
+           Response:
+           {{ result_Delete_NSSRules }}
+      when: "'200' not in result_Configuredsnnsai.stdout"
+    
+    
+    - name: DELETE NSSI AUTH
+      shell: "curl --location --request DELETE '{{ NSSF_HOST }}/nnssf-configuration/v1/nssaiauth/{{ list_nssf_defaultGrantName }}' --http2-prior-knowledge --header 'Accept: application/json' --header 'Content-Type: application/json'"
+    #    loop: "{{ list_nssf_defaultGrantName }}"
+      register: result_Delete_AUTH
+    #    when: "result_NSSRules.stdout != 201"
+      when: "'200' not in result_Configuredsnnsai.stdout"
+    
+    
+    - name: Log the request response of Delete NSSI AUTH for Rollback
+      lineinfile:
+        path: "{{ filename }}"
+        line: |
+           ***********************************
+           Delete NSSAI AUTH:
+           Request:
+           curl --location --request DELETE '{{ NSSF_HOST }}/nnssf-configuration/v1/nssaiauth/{{ list_nssf_defaultGrantName }}' --http2-prior-knowledge --header 'Accept: application/json' --header 'Content-Type: application/json'
+           
+           Response:
+           {{ result_Delete_AUTH }}
+      when: "'200' not in result_Configuredsnnsai.stdout"
+
+
+    - name : failed
+      fail:
+        msg: "{{ responseConfiguredNSSAI.stdout }}"
+      when: "'200' not in result_Configuredsnnsai.stdout"
+
+  when: "'status' not in result_csn.stdout"
+
+
+
+#- name : failed
+#  fail: 
+#    msg: result_profile.stdout
+#  when: 'status' in result_profile.stdout

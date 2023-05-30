@@ -1,0 +1,19 @@
+- name: Insert a line at the end of a file.
+  raw: ./cmm snssaiToDnn create --dataNetworkName {{ dnnName }} --snssaiToDnnListName {{ snssaiToDnnListName }} --snssaiName {{ amfSlice_sliceName }}
+  register: result
+#  ignore_errors: yes
+
+- name: Insert a .
+  connection: local
+  lineinfile:
+    path: "{{ filename }}"
+    line: |
+          input: cmm snssaiToDnn create --dataNetworkName {{ dnnName }} --snssaiToDnnListName {{ snssaiToDnnListName }} --snssaiName {{ amfSlice_sliceName }}
+          output: {{ result.stdout }}
+  delegate_to: 127.0.0.1
+
+# - fail:
+#     msg: "{{ result.stdout | regex_search('ERROR.*') }}"
+#   when:
+#     - '"The relevant data content already exists" not in result.stdout'
+#     - '"Field" not in result.stdout'

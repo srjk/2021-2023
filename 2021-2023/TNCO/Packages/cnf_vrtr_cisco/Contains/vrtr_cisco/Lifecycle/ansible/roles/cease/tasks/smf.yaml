@@ -1,0 +1,48 @@
+- name: Remove SMF vRouter Config.
+  uri:
+    url: "{{ deployment_location.properties.cnc_host1 }}/crosswork/proxy/nso/restconf/operations/tailf-ncs:devices/device={{ device_name }}/apply-template"
+    method: POST
+    body: "{{lookup('template', 'smf-remove.xml.j2')}}"
+    # body_format: json
+    status_code: [200]
+    headers:
+      content-type: "application/yang-data+xml"
+      Authorization: "Bearer {{ token1 }}"
+      ReturnResultType: "FULL"
+    return_content: yes
+    validate_certs: no
+  register: result
+
+
+- name: Set Logs Filename
+  set_fact:
+   filename: /tmp/ansible_log/{{ instance_name }}_Cease_vRouter.log
+
+
+- name: Generate SB json and copy       
+  copy:
+   dest: "{{ filename }}"
+   content: |
+     ***********************************
+     order_send:  
+     {{lookup('template', 'smf-remove.xml.j2')}}
+     ____________________________________________________
+
+     result_return:
+      {{ result }}
+
+- name: Log API request through Log module
+  ibm_cp4na_log_message:
+    message_direction: sent
+    external_request_id: "{{ extOrderId }}"
+    content_type: application/json
+    message_data: |
+     ***********************************
+     order_send:  
+     {{lookup('template', 'smf-remove.xml.j2')}}
+     ____________________________________________________
+
+     result_return:
+      {{ result }}
+    message_type: sample
+    protocol: http  

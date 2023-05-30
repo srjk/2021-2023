@@ -1,0 +1,4 @@
+      - name: Validate the  AMF params
+        fail:
+          msg: 'input params not found in mandatory params {{ amfloop }}'
+        when: "'{{ amfloop }}' not in {{ keyitem }}"

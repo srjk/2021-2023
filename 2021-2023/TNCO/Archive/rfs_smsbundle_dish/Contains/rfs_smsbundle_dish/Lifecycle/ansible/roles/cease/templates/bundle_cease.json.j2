@@ -1,0 +1,60 @@
+{
+    "serviceType": "Bundle RFS",
+    "serviceName": "Subscriber - Messaging Bundle RFSS",
+    "id": "{{ kami_response.json.extOrderId }}",
+    "imsi": "{{ SUPI }}",
+		"smsRFS": {
+			"hlr": {
+				"multipleValueObjects": [
+					{
+						"path": "{{ path1 }}",
+						"operation": "remove"
+					},
+					{
+						"path": "{{ path2 }}",
+						"operation": "remove"
+					},
+					{
+						"path": "{{ path3 }}",
+						"operation": "remove"
+					},
+					{
+						"path": "hlr/osb1",
+						"operation": "remove"
+					},
+					{
+						"path": "hlr/baoc",
+						"operation": "remove"
+					},
+					{
+						"path": "hlr/smsSubData",
+						"operation": "remove"
+					}
+				]
+			},
+			"hss": {
+				"multipleValueObjects": [
+					{
+						"path": "hss/serviceProfile[@profileName='SP1']/globalFilterId[@globalFilterId='REG-IPSMGW']",
+						"operation": "remove"
+					},
+					{
+						"path": "hss/serviceProfile[@profileName='SP1']/globalFilterId[@globalFilterId='MSG-ORIG-IPSMGW']",
+						"operation": "remove"
+					}
+				]
+			},
+			"udm": {
+				"multipleValueObjects": [
+					{
+						"path": "udm5gData/servingPlmnId/provisionedData/smsSubscriptionData/smsSubscribed",
+						"operation": "remove"
+					},
+					{
+						"path": "udm5gData/servingPlmnId/provisionedData/smsManagementSubscriptionData",
+						"operation": "remove"
+					}
+				]
+			}
+		}
+}

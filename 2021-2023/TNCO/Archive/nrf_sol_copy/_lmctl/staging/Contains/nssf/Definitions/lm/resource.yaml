@@ -1,0 +1,86 @@
+name: resource::nssf-nrf::1.0
+description: descriptor for nrf
+properties:
+  operation:
+    volatile: true
+    default: Install
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: SOL003
+  resourceManager:
+    type: string
+    default: brent
+  vnfdId:
+    type: string
+    default: oracle-nrf-1.11.0-v1
+  vnfInstanceName:
+    type: string
+    # default: or-nrf001c-usw2aza001nd
+  vnfInstanceDescription:
+    type: string
+    default: Deploy Oracle NRF
+  vnfInstanceId:
+    type: string
+  flavourId:
+    type: string
+    default: small
+  vimType:
+    type: string
+    default: ndc
+  vim_id:
+    type: string
+    default: orchestratortest
+  envType:
+    type: string
+    default: dev
+  nfType:
+    type: string
+    default: CNF
+  pgw_url:
+    type: string
+  # my_cert:
+  #   type: certificate
+  #   default: test
+  timeoutSeconds:
+    type: integer
+    volatile: true
+lifecycle:
+  Install:
+    drivers:
+      ansible:
+        selector:
+          infrastructure-type:
+          - '*'
+        timeout: ${timeoutSeconds}s
+  Configure: {}
+  Reconfigure: {}
+  Uninstall: {}
+  addSliceConfig:
+    drivers:
+      ansible:
+        selector:
+          infrastructure-type:
+          - '*'
+  removeSlice:
+    drivers:
+      ansible:
+        selector:
+          infrastructure-type:
+          - '*'
+default-driver:
+  sol003:
+    selector:
+      infrastructure-type:
+      - '*'
+operations:
+  addSliceConfig:
+    description: activate new slice parameters
+    properties:
+      instance_name:
+        type: string
+  removeSlice:
+    description: removeSlice new slice parameters
+    properties:
+      instance_name:
+        type: string

@@ -1,0 +1,9 @@
+---
+- name: Install
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  roles:
+    - role: ../roles/provide
+
+

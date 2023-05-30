@@ -1,0 +1,18 @@
+---
+- name: Stop
+  hosts: localhost
+  connection: local
+  gather_facts: True
+  pre_tasks:
+    - set_fact:
+        listrequestedServices: "{{ requestedServices.split(',') | map('trim') |  list }}"
+  roles:
+      - { role: ../roles/provide, when: "'MMS' in listrequestedServices and operation.find('PROVIDE') != -1" }
+      - { role: ../roles/provide, when: "'MMS' in listrequestedServices and operation == 'Provide'" }
+      - { role: ../roles/cease, when: "'MMS' in listrequestedServices and operation.find('CEASE') != -1" }
+      - { role: ../roles/cease, when: "'MMS' in listrequestedServices and operation == 'Cease'" }
+  #   - { role: ../roles/BlockSIM, when: operation == 'BlockSIM' }
+  #   - { role: ../roles/UnblockSIM, when: operation == 'UnblockSIM' }
+  #   - { role: ../roles/ChangeSIM, when: operation == 'ChangeSIM' }
+  #   - { role: ../roles/ChangeDevice, when: operation == 'ChangeDevice' }
+    

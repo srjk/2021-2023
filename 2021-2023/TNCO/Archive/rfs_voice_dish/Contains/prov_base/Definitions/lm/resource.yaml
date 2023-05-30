@@ -1,0 +1,99 @@
+description: descriptor for Nokia Provisioning GW resource
+name: resource::prov_base-rfs_voice_dish::1.0
+properties:
+  instance_name:
+    description: name of assembly instance
+  operation:
+    volatile: true
+  deploymentLocation:
+    description: site specific
+    type: string
+    default: DFW     
+  resourceManager:
+    type: string
+    read-only: true
+    default: brent    
+  extOrderId:
+    volatile: true
+  serviceType:
+    type: string
+  SUPI:
+    volatile: true
+  GPSI:
+    volatile: true
+  href:
+    type: string
+  priority:
+    type: string
+  description:
+    type: string
+  category:
+    type: string
+  state:
+    type: string
+  orderDate: 
+    type: string
+  SubOrderType:
+    type: string
+  completionDate: 
+    type: string
+  requestedStartDate: 
+    type: string
+  requestedCompletionDate: 
+    type: string
+  expectedCompletionDate:
+    type: string
+  startDate:
+    type: string
+  serviceOrderItemId:
+    type: string  
+  action:
+    type: string
+    default : add  
+  tas_callingLineId_assigned:
+    type: string
+  tas_AnonymousCallRejection_assigned:
+    type: string
+  # tas_callBlock_incoming:
+  #   type: string
+  # tas_callBarring_outgoing:
+  #   type: string
+  # tas_callBarring_CntrlCallBarringAll:
+  #   type: string
+  # tas_callBarring_TollFree:
+  #   type: string
+  # tas_callBarring_IntraLataToll:
+  #   type: string
+  # tas_callBarring_InterLataToll:
+  #   type: string
+  # tas_callWaiting_enabled:
+  #   type: string
+  # tas_callTransfer_enabled:
+  #   type: string
+  tas_msgWaitInd_enabled:
+    type: string
+  tas_conferenceCalling_enabled:
+    type: string
+  # tas_busyredialccbs_enabled:
+  #   type: string
+  # tas_donotdisturb_enabled:
+  #   type: string
+  # tas_speeddialling_enabled:
+  #   type: string
+  tas_automaticcallback_enabled:
+    type: string
+  tas_callinglineid_restriction:
+    type: string
+  reference_assembly:
+    type: string    
+infrastructure:
+  Openstack: {}
+lifecycle:
+  Install: {}
+  reconfigure: {}
+  Uninstall: {}
+default-driver:
+  ansible:
+    selector:
+      infrastructure-type:
+      - '*'

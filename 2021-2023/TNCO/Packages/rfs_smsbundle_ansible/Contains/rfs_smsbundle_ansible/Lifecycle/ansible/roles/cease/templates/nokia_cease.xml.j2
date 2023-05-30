@@ -1,0 +1,19 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<soapenv:Body>
+		<spml:modifyRequest timestamp="true" requestID="{{ kami_response.json.extOrderId }}" xmlns:spml="urn:siemens:names:prov:gw:SPML:2:0" xmlns:sub="urn:siemens:names:prov:gw:SDL_MULTIAPPSUBSCRIBER:1:0">
+			<version>SDL_MULTIAPPSUBSCRIBER_v10</version>
+			<objectclass>Subscriber</objectclass>
+			<identifier alias="imsi">{{ SUPI }}</identifier>
+			<modification name="{{ path1 }}" operation="{{ operation4 }}"/>
+			<modification name="{{ path2 }}" operation="{{ operation4 }}"/>
+			<modification name="{{ path3 }}" operation="{{ operation4 }}"/>
+			<modification name="{{ path14 }}" operation="{{ operation4 }}"/>
+			<modification name="{{ path11 }}" operation="{{ operation4 }}"/> 
+			<modification name="{{ path4 }}" operation="{{ operation4 }}"/>
+			<modification name="{{ hss_path }}" operation="{{ operation4 }}"/>
+			<modification name="{{ hss_path2 }}" operation="{{ operation4 }}"/>
+			<modification name="{{ path16 }}/smsSubscribed" operation="{{ operation4 }}"/>
+			<modification name="{{ path6 }}" operation="{{ operation4 }}"/>
+		</spml:modifyRequest>
+	</soapenv:Body>
+</soapenv:Envelope>

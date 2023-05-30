@@ -1,0 +1,4 @@
+[smf]
+100.64.3.148 ansible_ssh_user=root ansible_ssh_pass=root ansible_ssh_common_args='-o StrictHostKeyChecking=no' ansible_python_interpreter=/usr/bin/python3
+[localhost]
+127.0.0.1 ansible_python_interpreter=/usr/local/bin/python

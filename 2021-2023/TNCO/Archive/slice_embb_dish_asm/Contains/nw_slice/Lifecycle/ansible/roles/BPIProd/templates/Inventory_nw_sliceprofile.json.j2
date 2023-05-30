@@ -1,0 +1,55 @@
+{
+        "category": "RFS",
+        "state": "active",
+        "@baseType": "service",
+        "@type": "SliceProfile",
+        "serviceCharacteristic": [
+            {
+                "name": "sliceProfileId",
+                "value": "eMBB SliceProfile - Test21"
+            },
+            {
+                "name": "sNSSAIList",
+                "valueType": "Object",
+                "value": {
+                    "@type": "JSONSpecification",
+                    "sNSSAIId": [
+                        "01-ABTEST21"
+                    ]
+                }
+            },
+            {
+                "name": "pLMNIdList",
+                "valueType": "Object",
+                "value": {
+                    "@type": "JSONSpecification",
+                    "pLMNId": [
+                        "mcc 313",
+                        "mnc 340"
+                    ]
+                }
+            },
+            {
+                "name": "perfReq",
+                "valueType": "Object",
+                "value": {
+                    "@type": "JSONSpecification",
+                    "eMBBPerfReq": [
+                        "testReq"
+                    ]
+                }
+            }
+        ],
+        "serviceRelationship": [
+          {
+             "relationshipType":"dependsOn",
+             "service":{
+             "id":"{{ NetworkSliceSubnet.json.id }}"
+          }
+       }
+     ],
+        "serviceSpecification": {
+            "id": "349f4b6a-a4e1-4013-be79-a0efd4ea8sss",
+            "version": "1.0.0"
+        }
+    }

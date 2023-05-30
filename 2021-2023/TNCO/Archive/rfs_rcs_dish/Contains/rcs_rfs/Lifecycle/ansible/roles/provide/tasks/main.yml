@@ -1,0 +1,19 @@
+# convert ALM properties to json provide request for South Bound endpoint - Nokia Provisioning GW 
+    
+- name: Call RestAPI of SPML Adapter
+  uri:
+    url:  "http://dish-ms-prov-ada-voicemail:8185/dish/ProvVoicemail/rcs/provide/Messaging"
+    method: POST
+    body: "{{lookup('template', 'nokia_provisioning_gw_SMS_RCS_provide_request.json.j2')}}"
+    status_code: 200
+    body_format: json
+    headers:
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+    return_content: yes
+  register: result
+
+- name: fail instance if there is a failure from SBI
+  fail:
+    msg: Instance creation failed with error code {{ result.json.errorCode }} and error message {{ result.json.msg }}
+  when: result.json.result == "Failure"

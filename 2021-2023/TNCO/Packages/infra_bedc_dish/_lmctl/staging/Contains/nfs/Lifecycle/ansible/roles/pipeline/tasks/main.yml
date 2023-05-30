@@ -1,0 +1,23 @@
+- block:   
+  - name: copy
+    copy:
+      dest: "/tmp/test_bedc"
+      content: |
+        {{ cnfInstance }}
+  - set_fact:
+      filename: "/tmp/{{ instance_name }}"
+  - set_fact:
+      # targetClusterRole: "{{ cnfInstance['config_context']['targetClusterRole'] }}"
+      codeCommitRole: "{{ cnfInstance['custom_fields']['nfsCodeCommitRole'] }}"
+
+
+  - name: trigger python
+    shell: "python3 test_status.py {{ codeCommitRole }} {{ deployment_location.properties.lcm_session }} {{ deployment_location.properties.lcm_region_name }} {{ deployment_location.properties.kafka_pod }} {{ deployment_location.properties.kafka_topic }}"
+    register: result
+    failed_when: "result.rc not in [ 0, 1 ]"
+
+  - set_fact:
+      output__response_status: "{{ result.stdout }}"
+  - fail:
+      msg: "pipeline {{ result.stderr }}"
+    when: "result.stdout != 'Succeeded'"

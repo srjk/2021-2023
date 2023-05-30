@@ -1,0 +1,9 @@
+schema: '2.0'
+name: cnf_smf_nokia_sol003
+version: '1.0'
+type: Assembly
+contains:
+- name: cnf_smf_nokia_sol003
+  type: Resource
+  resource-manager: Brent
+  directory: cnf_smf_nokia_sol003

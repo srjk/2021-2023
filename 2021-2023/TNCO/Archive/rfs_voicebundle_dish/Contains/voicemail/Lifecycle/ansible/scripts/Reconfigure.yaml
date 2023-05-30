@@ -1,0 +1,18 @@
+---
+- name: Reconfigure
+  hosts: localhost
+  connection: local
+  gather_facts: true
+  pre_tasks:
+    - set_fact:
+        listrequestedServices: "{{ requestedServices.split(',') | map('trim') |  list }}"
+  roles:
+      - { role: ../roles/provide, when: "'VOICEMAIL' in listrequestedServices and operation.find('PROVIDE') != -1" }
+      - { role: ../roles/cease, when: "'VOICEMAIL' in listrequestedServices and operation.find('CEASE') != -1" }
+  # - { role: ../roles/Changenumbervm, when: operation == 'ChangeNumber' }
+  #   - { role: ../roles/suspend, when: operation == 'Suspend' }
+  #   - { role: ../roles/resume, when: operation == 'Resume' }
+  #   - { role: ../roles/BlockSIM, when: operation == 'BlockSIM' }
+  #   - { role: ../roles/UnblockSIM, when: operation == 'UnblockSIM' }
+  #   - { role: ../roles/ChangeSIM, when: operation == 'ChangeSIM' }
+  #   - { role: ../roles/ChangeDevice, when: operation == 'ChangeDevice' }

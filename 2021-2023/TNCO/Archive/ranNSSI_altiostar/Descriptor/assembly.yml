@@ -1,0 +1,130 @@
+name: assembly::ranNSSI_altiostar::1.0
+description: descriptor for Altiostar RAN slicing
+properties:
+#SolSpecific
+  operation:
+    description: CUCP_3GPP
+    volatile: true
+    default: Configure
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: SUBPROV
+  resourceManager:
+    type: string
+    default: brent
+  gnb_id:
+    type: string
+    # default: 88
+  ran_vendor:
+    type: string
+  slice_sst:
+    type: string
+  slice_sd:
+    type: string
+  slice_snssai:
+    type: string
+    # default: 01000022
+  cucp_id:
+    type: string
+  cuup_id:
+    type: string
+  du_id:
+    type: list
+    entry-schema:
+      type: string
+  extOrderId:
+    volatile: true
+  IsolatedSlice:
+    type: string
+  numberofterminals:
+    type: string
+  locationScope:
+    type: string
+  area:
+    type: string
+  areaSize:
+    type: string
+  dLThptPerUE:
+    type: string
+  uLThptPerUE:
+    type: string
+  latency:
+    type: string
+  MMTelSupport:
+    type: string
+  ServiceState:
+    type: string
+  # mcms_host:
+    # type: string
+    # default: https://ib-orc-220-mcms-001:18080
+  bpi_eMBBNetworkSlice_name:
+    type: string
+    default: RRR
+  bpi_eMBBNetworkSlice_id:
+    type: string
+    default: RRR
+  bpi_ServiceProfile_name:
+    type: string
+    default: RRR
+  bpi_ServiceProfile_id:
+    type: string
+    default: RRR
+  bpi_ranNetworkSliceSubnet_name:
+    type: string
+    default: RRR
+  bpi_ranNetworkSliceSubnet_id:
+    type: string
+    default: RRR
+  bpi_SliceProfile_name:
+    type: string
+    default: RRR
+  bpi_SliceProfile_id:
+    type: string
+    default: RRR
+
+composition:    
+  slice_altiostar:
+    type: $lmctl:/contains:/slice_altiostar:/descriptor_name
+    quantity: 1
+    # items: ${du_id}
+    properties:
+#SolSpecific
+      operation:
+        value: ${operation}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      resourceManager:
+        value: ${resourceManager}
+      gnb_id:
+        value: ${gnb_id}
+      cucp_sst:
+        value: ${slice_sst}
+      cucp_sd:
+        value: ${slice_sd}
+      du_snssai:
+        value: ${slice_snssai}
+      du_id:
+        value: ${du_id}
+      cucp_id:
+        value: ${cucp_id}
+      cuup_id:
+        value: ${cuup_id}
+      bpi_eMBBNetworkSlice_name:
+        value: ${bpi_eMBBNetworkSlice_name}
+      bpi_eMBBNetworkSlice_id:
+        value: ${bpi_eMBBNetworkSlice_id}
+      bpi_ServiceProfile_name:
+        value: ${bpi_ServiceProfile_name}
+      bpi_ServiceProfile_id:
+        value: ${bpi_ServiceProfile_id}
+      bpi_ranNetworkSliceSubnet_name:
+        value: ${bpi_ranNetworkSliceSubnet_name}
+      bpi_ranNetworkSliceSubnet_id:
+        value: ${bpi_ranNetworkSliceSubnet_id}
+      bpi_SliceProfile_name:
+        value: ${bpi_SliceProfile_name}
+      bpi_SliceProfile_id:
+        value: ${bpi_SliceProfile_id}
+      # mcms_host: 
+        # value: ${mcms_host}         

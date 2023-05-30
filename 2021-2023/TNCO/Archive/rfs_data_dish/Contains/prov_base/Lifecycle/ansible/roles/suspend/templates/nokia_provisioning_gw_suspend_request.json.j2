@@ -1,0 +1,53 @@
+{
+    "serviceType": "{{ serviceType }}",
+	"serviceName": "Subscriber - Data RFSS",
+    "id": "{{ extOrderId }}",
+    "imsi": "{{ SUPI }}",
+    "hlr": [
+        {
+            "path": "hlr",
+            "operation": "set",
+            "valueObject": {
+                "odbgprs": 2
+            }
+        },
+        {
+            "path": "hlr/eps",
+            "operation": "set",
+            "valueObject": {
+                "defaultPdnContextId": 2
+            }
+        },
+        {
+            "path": "hlr/epsPdnContext[@contextId='1']/pdnContextBlocking",
+            "operation": "addorset",
+            "valueObject": {
+                "flagAPNBlockedOverS6A": "true",
+                "flagAPNBlockedOverSWx": "true"
+            }
+        }
+    ],
+    "udm": [
+        {
+            "path": "udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo[@dnnId='ota']",
+            "operation": "set",
+            "valueObject": {
+                "defaultIndication": true
+            }
+        },
+        {
+            "path": "udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo[@dnnId='internet']",
+            "operation": "set",
+            "valueObject": {
+                "defaultIndication": false
+            }
+        },
+        {
+            "path": "udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo[@dnnId='internet']/dnnBarred='true'",
+            "operation": "setoradd",
+            "valueObject": {
+                "dnnBarred": true
+            }
+        }
+    ]
+}

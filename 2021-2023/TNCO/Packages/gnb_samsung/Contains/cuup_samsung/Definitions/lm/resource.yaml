@@ -1,0 +1,128 @@
+name: resource::cuup_samsung-gnb_samsung::1.0
+description: descriptor for CUUP RAN slicing
+properties:
+  operation:
+    description: CUUP_RAN
+    volatile: true
+    default: Configure
+  instance_name:
+    description: name of assembly instance
+    type: string
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: SUBPROV
+  resourceManager:
+    type: string
+    default: brent
+  vnfInstanceId:
+    type: string
+    volatile: true
+  vnfdId:
+    type: string
+    volatile: true
+  vnfInstanceName:
+    type: string
+  cnfPackageVersionFile:
+    type: string
+    volatile: true
+  vnfInstanceDescription:
+    type: string
+  flavourId:
+    type: string
+  vimType:
+    type: string
+  vim_id:
+    type: string
+  envType:
+    type: string
+    default: dev    
+  nfType:
+    type: string
+    default: CNF
+  cuup_cnfname:
+    type: string
+    volatile: true
+  cuup_chartkey:
+    type: string
+    volatile: true
+lifecycle:
+  addSliceConfig:
+    drivers:
+      ansible:
+        selector:
+          infrastructure-type:
+          - '*'
+  removeSlice:
+    drivers:
+      ansible:
+        selector:
+          infrastructure-type:
+          - '*'
+  Install: {}
+  Create: {}
+  reconfigure: {}
+  Uninstall: {}
+  Delete: {}
+# default-driver:
+  # ansible:
+    # selector:
+      # infrastructure-type:
+      # - '*'
+default-driver:
+  sol003:
+    selector:
+      infrastructure-type:
+      - '*'
+operations:
+  addSliceConfig:
+    description: activate new slice parameters
+    properties:
+      gnb_id:
+        type: string
+      cuup_sst:
+        type: string
+      cuup_sd:
+        type: string
+      # cuup_snssai:
+        # type: string
+      cuup_mcc:
+        type: string
+      cuup_mnc:
+        type: string
+      plmn_index:
+        type: string
+      samsung_usm_host:
+        type: string
+      cuup_id:
+        type: string
+      extOrderId:
+        type: string
+      instance_name:
+        type: string
+        
+  removeSlice:
+    description: activate new slice parameters
+    properties:
+      gnb_id:
+        type: string
+      cuup_sst:
+        type: string
+      cuup_sd:
+        type: string
+      # cuup_snssai:
+        # type: string
+      cuup_mcc:
+        type: string
+      cuup_mnc:
+        type: string
+      plmn_index:
+        type: string
+      samsung_usm_host:
+        type: string
+      cuup_id:
+        type: string
+      extOrderId:
+        type: string
+      instance_name:
+        type: string

@@ -1,0 +1,92 @@
+description: descriptor for bundle
+name: resource::tsci_cisco-txmNSSI_cisco::1.0
+properties:
+  operation:
+    volatile: true
+  instance_name:
+   description: name of assembly instance
+   type: string
+  deploymentLocation:
+    description: site specific
+    type: string
+    default: DFW
+  extOrderId:
+    volatile: true
+  resourceManager:
+    type: string
+    read-only: true
+    default: brent
+  cnc_slice_type:
+    type: string
+    default: dynamic
+  cnc_as_number:
+    type: string
+  username: 
+    type: string
+    default: slicing-testing
+  password: 
+    type: string
+    default: AWSdevtesting1!
+  pe_name:
+    type: list
+    entry-schema:
+      type: string
+  if_type:
+    type: list
+    entry-schema:
+      type: string
+  if_id:
+    type: list
+    entry-schema:
+      type: string
+  pe_ip_addr:
+    type: list
+    entry-schema:
+      type: string
+  ce_pe_prot:
+    type: list
+    entry-schema:
+      type: string
+  ce_pe_remoteAs:
+    type: list
+    entry-schema:
+      type: string
+  ce_pe_remoteAsIp:
+    type: list
+    entry-schema:
+      type: string
+  cnc_nsst:
+    type: string
+#    default: BRONZE
+  slice_snssai:
+    type: string
+#    default: demo-slice2
+  # cnc_host:
+    # type: string
+    # value: ${deployment_location.properties.cnc_host1}
+   # default: https://ib-orc-220-cnc-001:8144
+  bpi_eMBBNetworkSlice_name:
+    type: string
+  bpi_eMBBNetworkSlice_id:
+    type: string
+  bpi_ServiceProfile_name:
+    type: string
+  bpi_ServiceProfile_id:
+    type: string
+  bpi_transportNetworkSliceSubnet_name:
+    type: string
+  bpi_transportNetworkSliceSubnet_id:
+    type: string
+  bpi_SliceProfile_name:
+    type: string
+  bpi_SliceProfile_id:
+    type: string
+lifecycle:
+  Install: {}
+  Reconfigure: {}
+  Uninstall: {}
+default-driver:
+  ansible:
+    selector:
+      infrastructure-type:
+      - '*'

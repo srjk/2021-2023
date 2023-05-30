@@ -1,0 +1,58 @@
+- name: Create the list
+  set_fact:   
+    list_amfTac: "{{ amfSlice_tai.split(',') | list }}" 
+    list_amfSlice_dnnName: "{{ amfSlice_dnnName.split(',') | list }}" 
+    list_amfSlice_snssaiToDnnListName: "{{ amfSlice_snssaiToDnnListName.split(',') | list }}"    
+# - name: Insert a line at the end of a file.
+  # raw: export USER=root
+- name: generate SB json and copy       
+  copy:
+    dest: "/tmp/remote_server_{{ instance_name }}.sh"
+    content: |
+      #
+
+- name: delete snssaiToDnn
+  lineinfile:
+    path: "/tmp/remote_server_{{ instance_name }}.sh"
+    line: cmm snssaiToDnn delete --snssaiToDnnListName {{ item }} --snssaiName {{ amfSlice_sliceName }}
+  loop: "{{ list_amfSlice_snssaiToDnnListName }}"
+ 
+
+- name: delete snssaiToDnnList
+  lineinfile:
+    path: "/tmp/remote_server_{{ instance_name }}.sh"
+    line: cmm snssaiToDnnList delete {{ item }}
+  loop: "{{ list_amfSlice_snssaiToDnnListName }}"
+
+
+- name: delete snssaiListItem
+  lineinfile:
+    path: "/tmp/remote_server_{{ instance_name }}.sh"
+    line: cmm snssaiListItem delete --snssaiListName {{ amfSlice_snssaiListName}} --snssaiName {{ amfSlice_sliceName }} 
+
+
+- name: delete snssai
+  lineinfile:
+    path: "/tmp/remote_server_{{ instance_name }}.sh"
+    line: cmm snssai delete {{ amfSlice_sliceName }}
+
+
+- name: delete snssaiList
+  lineinfile:
+    path: "/tmp/remote_server_{{ instance_name }}.sh"
+    line: cmm snssaiList delete {{ amfSlice_snssaiListName }} 
+
+
+- name: delete amftai
+  lineinfile:
+    path: "/tmp/remote_server_{{ instance_name }}.sh"
+    line: cmm amfTai delete --plmnName {{ amfSlice_plmnName }} --amfTac {{ item }}
+  loop: "{{ list_amfTac }}"
+
+
+    
+
+
+
+
+

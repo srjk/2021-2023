@@ -1,0 +1,72 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <soapenv:Body>
+        <spml:modifyRequest timestamp="true" requestID="{{ extOrderId }}" xmlns:spml="urn:siemens:names:prov:gw:SPML:2:0" xmlns:sub="urn:siemens:names:prov:gw:SDL_MULTIAPPSUBSCRIBER:1:0">
+            <version>SDL_MULTIAPPSUBSCRIBER_v10</version>
+            <objectclass>Subscriber</objectclass>
+            <identifier alias="imsi">{{ SUPI }}</identifier>
+		{% if "DATA_ROAM" in  listrequestedServices  %}
+				<modification name="hlr" operation="{{ operation2 }}">
+					<valueObject xsi:type="sub:HLR">
+						<epsRoamAreaName>{{ RoamingPartner }}</epsRoamAreaName>
+					</valueObject>
+				</modification>
+		{% endif %}
+		{% if "HOTSPOT" in  listrequestedServices  %}
+				<modification name="{{ hlr_dnn6_path }}" operation="{{ operation5 }}">
+					<valueObject xsi:type="sub:EPSPdnContext">
+						<apn>{{ dnn6 }}</apn>
+						<contextId>{{ dnn6_contextId }}</contextId>
+						<type>{{ dnn6_type }}</type>
+						<pdnGwDynamicAllocation>{{ dnn6_pdnGwDynamicAllocation }}</pdnGwDynamicAllocation>
+						<vplmnAddressAllowed>{{ dnn6_vplmnAddressAllowed }}</vplmnAddressAllowed>
+						<maxBandwidthUp>{{ dnn6_sessionAmbr.split("|")[0].split(" ")[0] }}</maxBandwidthUp>
+						<maxBandwidthDown>{{ dnn6_sessionAmbr.split("|")[1].split(" ")[0] }}</maxBandwidthDown>
+						<qos>internetQosEps</qos>
+						<pdnChargingCharacteristics>
+							<chargingCharacteristicsProfile>{{ dnn6_chargingCharacteristicsProfile }}</chargingCharacteristicsProfile>
+							<chargingCharacteristicsBehavior>{{ dnn6_chargingCharacteristicsBehavior }}</chargingCharacteristicsBehavior>
+						</pdnChargingCharacteristics>
+						<eps5gInterworkIndicator>{{ dnn6_eps5gInterworkIndicator }}</eps5gInterworkIndicator>
+					</valueObject>
+				</modification>
+				<modification name="{{ udm_path }}" operation="{{ operation5 }}">
+					<valueObject xsi:type="sub:UdmDnnInfo">
+						<dnnId>{{ dnn6 }}</dnnId>
+						<defaultIndication>{{ udm_dnn6_defaultIndication }}</defaultIndication>
+						<interworkingEPSIndication>{{ udm_dnn6_interworkingEPSIndication }}</interworkingEPSIndication>
+						<localBrkOutRoamingAllowed>{{ udm_dnn6_localBrkOutRoamingAllowed }}</localBrkOutRoamingAllowed>
+					</valueObject>
+				</modification>
+				<modification name="{{ udm_dnn6_path }}" operation="{{ operation5 }}">
+					<valueObject xsi:type="sub:UdmDnnConfiguration">
+						<dnnId>{{ dnn6 }}</dnnId>
+						<interworkingEPSIndication>{{ udm_dnn6_interworkingEPSIndication1 }}</interworkingEPSIndication>
+						<sessionAmbr>{{ dnn6_sessionAmbr }}</sessionAmbr>
+						<udm5gQosProfile>
+							<udm5Qi>{{ udm_dnn6_udm5Qi }}</udm5Qi>
+							<arp>{{ udm_dnn6_arp }}</arp>
+							<priorityLevel>{{ udm_dnn6_priorityLevel }}</priorityLevel>
+						</udm5gQosProfile>
+						<pduSessionTypes>
+							<defaultSessionType>{{ dnn6_defaultSessionType }}</defaultSessionType>
+							<allowedSessionType>{{ dnn6_allowedSessionType }}</allowedSessionType>
+						</pduSessionTypes>
+						<sscModes>
+							<defaultSscMode>{{ dnn6_defaultSscMode }}</defaultSscMode>
+							<allowedSscMode>{{ dnn6_allowedSscMode }}</allowedSscMode>
+						</sscModes>
+					</valueObject>
+				</modification>
+				<modification name="{{ pcf_path }}" operation="{{ operation5 }}">
+					<valueObject xsi:type="sub:SmPolicyDnnData">
+						<dnn>{{ dnn6 }}</dnn>
+						<subscCats>{{ subscCats1 }}</subscCats>
+						<subscCats>{{ subscCats2 }}</subscCats>
+						<subscSpendingLimits>{{ dnn6_subscSpendingLimits }}</subscSpendingLimits>
+						<online>{{ dnn6_online }}</online>
+					</valueObject>
+				</modification>
+		{% endif %}
+        </spml:modifyRequest>
+    </soapenv:Body>
+</soapenv:Envelope>

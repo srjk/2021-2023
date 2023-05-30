@@ -1,0 +1,72 @@
+{
+	"serviceType": "Bundle RFS",
+	"serviceName": "{{ serviceName }}",
+	"id": "{{ kami_response.json.extOrderId }}",
+	"imsi": "{{ SUPI }}",
+	"voice RFS": {
+		"hlr": {
+			"multipleValueObjects": [
+			  {
+					"path": "{{ hlr_path1 }}",
+					"operation": "{{ operation2 }}"
+				},
+				{
+					"path": "{{ hlr_path2 }}",
+					"operation": "{{ operation2 }}"
+				},
+				{
+					"path": "{{ hlr_path3 }}",
+					"operation": "{{ operation2 }}"
+				}
+			]
+		},
+		"hss": {
+			"path": "{{ hss_path1 }}",
+			"operation": "{{ operation2 }}"
+		},
+		"udm": {
+			"multipleValueObjects": [
+			  {
+				"operation": "{{ operation2 }}",
+				"path": "udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo[@dnnId='{{ dnn1 }}']"
+			},
+			{
+				"operation": "{{ operation2 }}",
+				"path": "udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo[@dnnId='{{ dnn2 }}']"
+			},
+			{
+				"operation": "{{ operation2 }}",
+				"path": "udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo[@dnnId='{{ dnn3 }}']"
+			},
+			{
+				"operation": "{{ operation2 }}",
+				"path": "udm5gData/servingPlmnId/provisionedData/sessionManagementSubscriptionData/dnnConfiguration[@dnnId='{{ dnn1 }}']"
+			},
+			{
+				"operation": "{{ operation2 }}",
+				"path": "udm5gData/servingPlmnId/provisionedData/sessionManagementSubscriptionData/dnnConfiguration[@dnnId='{{ dnn2 }}']"
+			},
+			{
+				"operation": "{{ operation2 }}",
+				"path": "udm5gData/servingPlmnId/provisionedData/sessionManagementSubscriptionData/dnnConfiguration[@dnnId='{{ dnn3 }}']"
+			}
+		]
+	},
+	"pcf": [{
+		"multipleValueObjects": [{
+				"operation": "{{ operation2 }}",
+				"path": "pcf/smPolicyData/smPolicySnssaiData/smPolicyDnnData[@dnn='{{ dnn1 }}']"
+			},
+			{
+				"operation": "{{ operation2 }}",
+				"path": "pcf/smPolicyData/smPolicySnssaiData/smPolicyDnnData[@dnn='{{ dnn2 }}']"
+			},
+			{
+				"operation": "{{ operation2 }}",
+				"path": "pcf/smPolicyData/smPolicySnssaiData/smPolicyDnnData[@dnn='{{ dnn3 }}']"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,90 @@
+# Send Command to South Bound endpoint - Nokia SMF
+- name: Create the list
+  set_fact:   
+    list_smf_dnnName: "{{ smf_dnnName.split(',') | map('trim')| list }}" 
+
+
+- name: Creates directory
+  file:
+    path: /tmp/ansible_log
+    state: directory
+    mode: 0775
+
+- name: setting filename
+  set_fact:
+    filename: /tmp/ansible_log/ansible_{{ ansible_date_time.iso8601 }}.log
+- shell: "python3 test.py"
+  register: start_time
+  no_log: True
+
+
+
+
+- name: generate SB json and copy it to utility server
+  copy:
+    dest: "smf_create.sh"
+    content: |
+      #!/usr/bin/expect
+      spawn ssh -o HostKeyAlgorithms=+ssh-dss -o StrictHostKeyChecking=no {{ SMF_USER }}@{{ SMF_IP }} -p {{ SMF_PORT }}
+      expect "password: "
+      send "{{ SMF_PASS }}\r"
+      expect eof 
+
+
+- name: Insert a line at the end of a file.
+  lineinfile:
+    path: "smf_create.sh"
+    line: |
+            send "configure mobile-gateway profile list slice-instance-list {{ smfSlice_sliceInstanceListName }} \r" 
+            send "exit \r"
+            send "configure mobile-gateway profile list slice-instance-list {{ smfSlice_sliceInstanceListName }} slice-instance {{ smfSlice_slice_instance  }} \r"
+            send "configure mobile-gateway pdn 5 instance-type user \r"
+            send "configure mobile-gateway profile list slice-list {{ smfSlice_sliceListName }} slice {{ smfSlice_sliceName }} sst {{ smfSlice_sst }} sd {{ smfSlice_sd }} slice-instances {{ smfSlice_sliceInstanceListName }} \r"
+            send "configure mobile-gateway pdn 5 slices slice-list {{ smfSlice_sliceListName }} \r"
+            send "configure mobile-gateway pdn 5 slices slice-instance-list {{ smfSlice_sliceInstanceListName }} \r"
+
+- name: Insert a line at the end of a file.
+  lineinfile:
+    path: "smf_create.sh"
+    line: send "configure mobile-gateway pdn 5 apn {{ item }} slices slice-list {{ smfSlice_sliceListName }}\r"
+  loop: "{{ list_smf_dnnName }}"
+
+- name: Insert a line at the end of a file.
+  lineinfile:
+    path: "smf_create.sh"
+    line: send "exit all\r"
+
+- name: Insert a line at the end of a file.
+  lineinfile:
+    path: "smf_create.sh"
+    line: expect eof
+
+- name: running script
+  command: chmod 775 smf_create.sh
+- name: running script
+  shell: ./smf_create.sh
+  register: result
+
+- debug: var=result
+
+- shell: "python3 test.py"
+  register: end_time
+  no_log: True
+
+# - debug: msg="{{ result.date  }}"
+
+- shell: "python3 diff.py '{{ end_time.stdout }}' '{{ start_time.stdout }}'"
+  register: time_diff
+
+- name: generate SB json and copy       
+  copy:
+    dest: "{{ filename }}"
+    content: |
+       ***********************************
+       start_time:  {{ start_time.stdout }}
+       end_time:  {{ end_time.stdout }}
+       time_taken:  {{ time_diff.stdout }}
+       ***********************************
+       order_send:  {{lookup('file', 'smf_create.sh')}}
+       ____________________________________________________
+       result_return: {{ result }}

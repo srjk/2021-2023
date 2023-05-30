@@ -1,0 +1,221 @@
+name: resource::nw_slice_iso-slice_embb_dish_isolation::1.0
+description: descriptor for nwslice
+properties:
+  operation:
+    description: Install/Configure/Uninstall
+    volatile: true
+    default: Install
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: DFW
+  resourceManager:
+    type: string
+    default: brent
+  extOrderId:
+    type: string
+  instance_name:
+    description: name of assembly instance
+#CreateVnfRequest
+  instance_desc:
+    description: cnf instance description
+    default: cnf instance description
+  smfSlice_sliceListName:
+    type: string
+  smfSlice_sliceInstanceListName:
+    type: string
+  slice_tai:
+    type: string
+  slice_sst:
+    type: string
+  slice_sd:
+    type: string
+  slice_ratePlan:
+    type: string
+  slice_pcfSessionRuleName:
+    type: string
+  slice_pcfSessionRuleId:
+    type: string
+  slice_pcfQoSInfoName:
+    type: string
+  slice_pcfQoSInfoId:
+    type: string
+  slice_pcfQosDataReflectiveQos:
+    type: string
+  slice_pcfQosDataQnc:
+    type: string
+  slice_pcfQosDataPriorityLevel:
+    type: string
+  slice_pcfQoSDataName:
+    type: string
+  slice_pcfQoSDataMaxBrUl:
+    type: string
+  slice_pcfQoSDataMaxBrDl:
+    type: string
+  slice_pcfQoSDataGbrUl:
+    type: string
+  slice_pcfQoSDataGbrDl:
+    type: string
+  slice_pcfQosDataDefQoSFlowInd:
+    type: string
+  slice_pcfQosDataArpPriority:
+    type: string
+  slice_pcfQosDataArpPreemptVuln:
+    type: string
+  slice_pcfQosDataArpPreemptCap:
+    type: string
+  slice_pcfQoSData5QI:
+    type: string
+  slice_pcfPccRuleUlFlowName:
+    type: string
+  slice_pcfPccRuleUlFlowDirection:
+    type: string
+  slice_pcfPccRuleUlFlowDesc:
+    type: string
+  slice_pcfPccRuleType:
+    type: string
+  slice_pcfPccRulePrecedence:
+    type: string
+  slice_pcfPccRuleName:
+    type: string
+  slice_pcfPccRuleDlFlowName:
+    type: string
+  slice_pcfPccRuleDlFlowDirection:
+    type: string
+  slice_nsiId:
+    type: string
+  slice_nrfMgtUri:
+    type: string
+  slice_nrfAccessTokenUri:
+    type: string
+  slice_mnc:
+    type: string
+    default: 340
+  slice_mcc:
+    type: string
+    default: 313
+  slice_dnnList:
+    type: string
+  slice_chgProfileName:
+    type: string
+    default: 1
+  slice_amfSetId:
+    type: string
+  slice_amfSet:
+    type: string
+  slice_amfRegionId:
+    type: string
+  slice_amfRegion:
+    type: string
+  slice_pcfPccRuleDlFlowDesc:
+    type: string
+  nssf_nssRuleName:
+    type: string
+  nssf_nssAmfId:
+    type: string
+  nssf_nsiProfileName:
+    type: string
+  nssf_grantName:
+    type: string
+  amfSlice_snssaiToDnnListName:
+    type: string
+  amfSlice_snssaiListName:
+    type: string
+  amfSlice_sliceName:
+    type: string
+  amfSlice_sst:
+    type: string
+  amfSlice_sd:
+    type: string
+  amfSlice_plmnName:
+    type: string
+  slice_amfSetFqdn:
+    type: string
+  slice_snssai:
+    type: string
+  slice_ndc:
+    type: string
+  slice_rdc:
+    type: string
+  amf_assembly_name:
+    type: string
+  smf_assembly_name:
+    type: string
+  nsssf_assembly_name:
+    type: string
+  pcf_assembly_name:
+    type: string
+  upf_assembly_name:
+    type: string
+  smfSlice_sliceName:
+    type: string
+  sliceprofileid:
+    type: string
+  NetworkSliceSubnetid:
+    type: string
+  serviceprofileid:
+    type: string
+  NetworkSliceid:
+    type: string
+#  amf_bpi_id:
+ #   type: string
+#  smf_bpi_id:
+ #   type: string
+#  upf_bpi_id:
+ #   type: string
+#  pcf_bpi_id:
+ #   type: string
+#  nssf_bpi_id:
+ #   type: string
+  IsolatedSlice:
+    type: string
+  numberofterminals:
+    type: string
+  locationScope:
+    type: string
+  dLThptPerUE:
+    type: string
+  uLThptPerUE:
+    type: string
+  latency:
+    type: string
+  MMTelSupport:
+    type: string
+  area:
+    type: string
+    default: test_area
+  areaSize:
+    type: string
+    default: test_size
+  noi_check:
+    type: string
+    default: false
+  bpi_eMBBNetworkSlice_name:
+    type: string
+  bpi_eMBBNetworkSlice_id:
+    type: string
+  bpi_ServiceProfile_name:
+    type: string
+  bpi_ServiceProfile_id:
+    type: string
+  bpi_transportNetworkSliceSubnet_name:
+    type: string
+  bpi_transportNetworkSliceSubnet_id:
+    type: string
+  bpi_SliceProfile_name:
+    type: string
+  bpi_SliceProfile_id:
+    type: string
+lifecycle:
+  Uninstall:
+    drivers:
+      ansible:
+        selector:
+          infrastructure-type:
+          - '*'
+  Install:
+default-driver:
+  ansible:
+    selector:
+      infrastructure-type:
+      - '*'

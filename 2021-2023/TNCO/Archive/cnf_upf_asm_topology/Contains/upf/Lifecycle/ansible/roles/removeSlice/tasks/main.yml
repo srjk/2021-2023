@@ -1,0 +1,61 @@
+# Send Command to South Bound endpoint - Nokia SMF
+- name: Create the list
+  set_fact:   
+    list_smf_dnnName: "{{ smf_dnnName.split(',') | list }}" 
+    # list_amfSlice_dnnName: "{{ amfSlice_dnnName.split(',') | list }}" 
+
+- name: generate SB json and copy it to utility server
+  copy:
+    dest: "smf_{{ instance_name }}_delete.sh"
+    content: |
+      #!/usr/bin/expect
+      spawn ssh admin@10.223.128.243 -p 2222
+      expect "password: "
+      send "admin\r"
+      expect eof 
+
+
+- name: Insert a line at the end of a file.
+  lineinfile:
+    path: "smf_{{ instance_name }}_delete.sh"
+    line: send "configure mobile-gateway pdn 5 apn {{ item }} slices no slice-list\r"
+  loop: "{{ list_smf_dnnName }}"
+
+- name: Insert a line at the end of a file.
+  lineinfile:
+    path: "smf_{{ instance_name }}_delete.sh"
+    line: |
+            send "configure mobile-gateway pdn 5 slices no slice-instance-list\r"
+            send "configure mobile-gateway pdn 5 slices no slice-list\r"
+            send "configure mobile-gateway pdn 5 no instance-type\r"
+            send "configure mobile-gateway profile list slice-list {{ smfSlice_sliceListName }} no slice {{ smfSlice_sliceName }}\r"
+            send "configure mobile-gateway profile list no slice-list {{ smfSlice_sliceListName }}\r"
+            send "configure mobile-gateway profile list slice-instance-list {{ smfSlice_sliceInstanceListName }}  no slice-instance {{ smfSlice_slice_instance }}\r"
+            send "configure mobile-gateway profile list no slice-instance-list {{ smfSlice_sliceInstanceListName }}\r"
+
+- name: Insert a line at the end of a file.
+  lineinfile:
+    path: "smf_{{ instance_name }}_delete.sh"
+    line: expect eof
+
+# - name: Insert a line at the end of a file.
+#   lineinfile:
+#     path: "/tmp/smf_{{ instance_name }}.sh"
+#     line: exit all
+# - name: Insert a line at the end of a file.
+  # lineinfile:
+    # path: "/tmp/smf.txt"
+    # line: slice-instance-list "{{ smfSlice_sliceInstanceListName}}"
+
+#- name: shell command
+#  shell: "sh /home/smf2.sh > smf_log.txt "
+   #    args:
+#    executable: /bin/bash
+
+- name: running script
+  command: chmod 775 smf_{{ instance_name }}_delete.sh
+- name: running script
+  command: ./smf_{{ instance_name }}_delete.sh
+  register: result
+
+- debug: var=result

@@ -1,0 +1,165 @@
+- name: Creates directory
+  file:
+    path: /tmp/ansible_log
+    state: directory
+    mode: 0775
+
+# - name: setting filename
+  # set_fact:
+    # filename: /tmp/ansible_log/ansible_{{ extOrderId }}_{{ ansible_date_time.iso8601 }}.log
+    # listrequestedServices: "{{ requestedServices.split(',') | map('trim') |  list }}"
+
+- name: Validate the client certificate and verify onboarding is successful or no and get apiInvokerId
+  uri:
+    # url:  "{{ ansible_env.PGW_ADA_HOST }}/dish/ProvSpml/api/v1/spmlAdapter/modifyAddRequest"
+    url: "{{ mcms_host }}/cms-service/webapi/apicore/apiinvokermanagement/v1/onboardedinvokers"
+    method: POST
+    body: "{{lookup('template', 'clientCertificate.json.j2')}}"
+    body_format: json
+    headers:
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+  register: clientCertificate
+  # ignore_errors: yes
+
+- name: Initiate Authentication with apiInvokerId
+  uri:
+    url: "{{ mcms_host }}/cms-service/webapi/apicore/aef-security/v1/check-authentication"
+    method: POST
+    body: "{{lookup('template', 'CheckAuthentication.json.j2')}}"
+    body_format: json
+    status_code: 200
+    headers:
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+  register: authentication
+  # ignore_errors: yes
+
+- name: Call RestAPI to Retrieve NRCellDU and rRMPolicyMemberList info
+  uri:
+    # url: "{{ mcms_host }}/cms-service/webapi/apiservice/ProvMnS/v1/data=1,ManagedElement=1/GNBDUFunction={{ du_id }}?attributes=NRCellDU,rRMPolicyMemberList"
+    url: "{{ mcms_host }}/cms-service/webapi/apiservice/ProvMnS/v1/data=1,ManagedElement=1/GNBDUFunction={{ du_id }}?attributes=NRCellDU,rRMPolicyMemberList"    
+    method: GET
+    body: "{{lookup('template', 'getInfoDU3GPP.json.j2')}}"
+    body_format: json
+    headers:
+      apiInvokerId: "{{ authentication.json.apiInvokerId }}"
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+  # retries: "{{ ansible_env.RETRY_COUNT }}"
+  # delay: "{{ ansible_env.RETRY_INTERVAL }}" 
+  register: retrieveAllInfo
+  # loop: "{{ du_id }}"
+  # ignore_errors: yes
+
+- name: retrieveAllInfo print
+  copy:
+    dest: "/tmp/ceasDU3gppretrieveAllInfo.json.j2"
+    content: "{{ retrieveAllInfo }}"
+
+# - name: print NRCellDU length
+  # set_fact:
+    # NRCellDUlen: "{{ retrieveAllInfo.data[1].NRCellDU|length|int -1 }}"
+
+# - name: Generate sequence for NRCellDU id's
+  # set_fact:
+    # mysequence: "{{ mysequence | default([]) + [retrieveAllInfo.data[1].NRCellDU[item|int].id|int] }}"
+  # with_sequence: start=0 end={{ NRCellDUlen }}
+
+#- name: print number of NRCellDU IDs
+#  debug:
+#    msg: "{{ mysequence }}"
+    
+- name: update pLMNInfoList for EACH NRCellDU (Remove existing slice)
+  uri:
+    # url: "{{ mcms_host }}/cms-service/webapi/apiservice/ProvMnS/v1/data=1,ManagedElement=1,GNBCUCPFunction={{ du_id }}/NRCellDU={{ item }}"
+    url: "{{ mcms_host }}/cms-service/webapi/apiservice/ProvMnS/v1/data=1,ManagedElement=1,GNBDUFunction={{ du_id }}/NRCellDU=1"
+    method: PATCH
+    body: "{{lookup('template', 'modifyInfoDU3GPP.json.j2')}}"
+    body_format: json
+    headers:
+      apiInvokerId: "{{ authentication.json.apiInvokerId }}"
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+  # retries: "{{ ansible_env.RETRY_COUNT }}"
+  # delay: "{{ ansible_env.RETRY_INTERVAL }}" 
+  register: updatepLMNInfoList
+  # loop: "{{ du_id }}"
+  # loop: "{{ mysequence }}"
+  # ignore_errors: yes
+
+- name: updatepLMNInfoList print
+  copy:
+    dest: "/tmp/ceasDU3gppupdatepLMNInfoList.json.j2"
+    content: "{{ updatepLMNInfoList }}"
+
+- name: update each NRCellDU rRMPolicyMemberList (Remove existing slice)
+  uri:
+    # url: "{{ mcms_host }}/cms-service/webapi/apiservice/ProvMnS/v1/GNBDUFunction={{ du_id }}/NRCellDU={{ item }}/rRMPolicyMemberList"
+    url: "{{ mcms_host }}/cms-service/webapi/apiservice/ProvMnS/v1/GNBDUFunction={{ du_id }}/NRCellDU=1/rRMPolicyMemberList"
+    method: PATCH
+    body: "{{lookup('template', 'modifyInfoDU3GPP.json.j2')}}"
+    body_format: json
+    headers:
+      apiInvokerId: "{{ authentication.json.apiInvokerId }}"
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+  # retries: "{{ ansible_env.RETRY_COUNT }}"
+  # delay: "{{ ansible_env.RETRY_INTERVAL }}"
+  register: updaterRMPolicyMemberList
+  # loop: "{{ du_id }}"  
+  # loop: "{{ mysequence }}"  
+  # ignore_errors: yes  
+
+- name: updaterRMPolicyMemberList print
+  copy:
+    dest: "/tmp/ceasDU3gppupdaterRMPolicyMemberList.json.j2"
+    content: "{{ updaterRMPolicyMemberList }}"
+
+- name: update DU Level rRMPolicyMemberList (Remove existing slice)
+  uri:
+    # url: "{{ mcms_host }}/cms-service/webapi/apiservice/ProvMnS/v1/data=1,ManagedElement=1,GNBCUCPFunction={{  du_id }},attributes/rRMPolicyMemberList=1"
+    url: "{{ mcms_host }}/cms-service/webapi/apiservice/ProvMnS/v1/data=1,ManagedElement=1,GNBCUCPFunction=7,attributes/rRMPolicyMemberList=1"
+    method: PATCH
+    body: "{{lookup('template', 'modifyInfoDU3GPP.json.j2')}}"
+    body_format: json
+    headers:
+      apiInvokerId: "{{ authentication.json.apiInvokerId }}"
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+  # retries: "{{ ansible_env.RETRY_COUNT }}"
+  # delay: "{{ ansible_env.RETRY_INTERVAL }}"
+  register: updateDUrRMPolicyMemberList
+  # ignore_errors: yes  
+
+- name: updaterDURMPolicyMemberList print
+  copy:
+    dest: "/tmp/proDU3gppupdaterDURMPolicyMemberList.json.j2"
+    content: "{{ updateDUrRMPolicyMemberList }}"
+
+# - name: Check that url returns a status_code 200 and fail if status_code 200 is not returns
+  # fail:
+    # msg: Instance creation failed with error code {{ result.status }} and error message {{ result.json.error.message }}
+  # when:  result.status!=200 and result.json is defined
+
+# - name: Check that url returns a status_code 200 and fail if status_code 200 is not returns
+  # fail:
+    # msg: Instance creation failed with error code {{ result.status }} and error message {{ result.msg }}
+  # when: result.status != 200
+
+# - name: fail instance if there is a failure from SBI
+  # fail:
+    # msg: Instance creation failed with error code {{ result.json.output.errorcode }} and error message {{ result.json.output.message }}
+  # when: result.json.output.result == "Failure"

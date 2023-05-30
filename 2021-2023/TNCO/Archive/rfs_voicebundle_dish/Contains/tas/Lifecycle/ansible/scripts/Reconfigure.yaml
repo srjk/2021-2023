@@ -1,0 +1,16 @@
+---
+- name: Stop
+  hosts: localhost
+  connection: local
+  gather_facts: True
+  roles:
+    - { role: ../roles/provide, when: operation.find('PROVIDE') != -1 }
+    - { role: ../roles/cease, when: operation.find('CEASE') != -1 }
+    - { role: ../roles/suspend, when: operation == 'Suspend' }
+    - { role: ../roles/resume, when: operation == 'Resume' }
+    - { role: ../roles/BlockSIM, when: operation == 'BlockSIM' }
+    - { role: ../roles/UnblockSIM, when: operation == 'UnblockSIM' }
+    - { role: ../roles/ChangeSIM, when: operation == 'ChangeSIM' }
+    - { role: ../roles/ChangeDevice, when: operation == 'ChangeDevice' }
+    # - { role: ../roles/ceasetas, when: operation == 'ChangeNumber' }
+    # - { role: ../roles/createtas, when: operation == 'ChangeNumber' }

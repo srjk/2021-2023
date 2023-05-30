@@ -1,0 +1,6 @@
+---
+- name: removeSliceProd
+  hosts: localhost
+  gather_facts: false
+  roles:
+    - role: ../roles/removeSliceProd

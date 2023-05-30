@@ -1,0 +1,238 @@
+- name: Creates directory
+  file:
+    path: /tmp/ansible_log
+    state: directory
+    mode: 0775
+
+- name: setting filename
+  set_fact:
+    filename: /tmp/ansible_log/ansible_{{ ansible_date_time.iso8601 }}.log
+
+- shell: "python3 test.py"
+  register: start_time
+  no_log: True
+
+
+# convert ALM properties to json - addslice
+- name: TMF Authentication token
+  uri:
+    method: POST
+    url: "{{ ansible_env.BPI_TURL }}/oauth/token?grant_type=password&client_id=tmf-api&username=tmf-api&password={{ ansible_env.BPI_PASS }}&scopes=read%20write&client_secret=secret-to-change"
+    headers:
+      Authorization: Basic dG1mLWFwaTpzZWNyZXQtdG8tY2hhbmdl
+      Host: "{{ ansible_env.BPI_HOST }}"
+    validate_certs: no
+  register: auth_response
+
+- shell: "python3 test.py"
+  register: end_time
+  no_log: True
+
+# - debug: msg="{{ result.date  }}"
+
+- shell: "python3 diff.py '{{ end_time.stdout }}' '{{ start_time.stdout }}'"
+  register: time_diff
+
+- name: generate SB json and copy       
+  copy:
+    dest: "{{ filename }}"
+    content: |
+       ***********************************
+       start_time:  {{ start_time.stdout }}
+       end_time:  {{ end_time.stdout }}
+       time_taken:  {{ time_diff.stdout }}
+       ***********************************
+       ____________________________________________________
+       token: {{ auth_response.json }}
+       ---------------------------------------
+
+- shell: "python3 test.py"
+  register: start_time
+  no_log: True
+
+- name: Create & associate NetworkSlice
+  uri:
+    method: POST
+    url: "https://{{ ansible_env.BPI_IP }}/blueplanet-inventory-tmf-api/v1/service"
+    body: "{{lookup('template', 'Inventory_nw_NetworkSlice.json.j2')}}"
+    status_code: 201
+    body_format: json
+    headers:
+      Authorization: Bearer {{ auth_response.json.access_token }}
+      Accept: "application/json"
+      Host: "{{ ansible_env.BPI_HOST }}"
+      content-type: "application/json"
+    validate_certs: no
+  register: NetworkSlice
+
+#- copy: content="{{ NetworkSlice.json }}" dest=/tmp/Inventory_nw_NetworkSlice_create_{{ instance_name }}.json.j2
+
+- shell: "python3 test.py"
+  register: end_time
+  no_log: True
+
+# - debug: msg="{{ result.date  }}"
+
+- shell: "python3 diff.py '{{ end_time.stdout }}' '{{ start_time.stdout }}'"
+  register: time_diff
+
+- name: generate SB json and copy       
+  copy:
+    dest: "{{ filename }}"
+    content: |
+       ***********************************
+       start_time:  {{ start_time.stdout }}
+       end_time:  {{ end_time.stdout }}
+       time_taken:  {{ time_diff.stdout }}
+       ***********************************
+       order_send:  {{lookup('template', 'Inventory_nw_NetworkSlice.json.j2')}}
+       ____________________________________________________
+       result_return: {{ NetworkSlice.json }}
+# - copy: content="{{ NetworkSlice.json.id }}" dest=/tmp/Inventory_nw_NetworkSlice_id_{{ instance_name }}.json.j2
+
+- shell: "python3 test.py"
+  register: start_time
+  no_log: True
+
+
+- name: Create ServiceProfile
+  uri:
+    method: POST
+    url: "https://{{ ansible_env.BPI_IP }}/blueplanet-inventory-tmf-api/v1/service"
+    body: "{{lookup('template', 'Inventory_nw_serviceprofile.json.j2')}}"
+    status_code: 201
+    body_format: json
+    headers:
+      Authorization: Bearer {{ auth_response.json.access_token }}
+      Accept: "application/json"
+      Host: "{{ ansible_env.BPI_HOST }}"
+      content-type: "application/json"
+    validate_certs: no
+  register: result
+# - debug:  var=result["json"]["id"]
+
+#- copy: content="{{ result.json }}" dest=/tmp/Inventory_nw_serviceprofile_create_{{ instance_name }}.json.j2
+
+# - copy: content="{{ result.json.id }}" dest=/tmp/Inventory_nw_serviceprofile_id_{{ instance_name }}.json.j2
+- shell: "python3 test.py"
+  register: end_time
+  no_log: True
+
+# - debug: msg="{{ result.date  }}"
+
+- shell: "python3 diff.py '{{ end_time.stdout }}' '{{ start_time.stdout }}'"
+  register: time_diff
+
+- name: generate SB json and copy       
+  copy:
+    dest: "{{ filename }}"
+    content: |
+       ***********************************
+       start_time:  {{ start_time.stdout }}
+       end_time:  {{ end_time.stdout }}
+       time_taken:  {{ time_diff.stdout }}
+       ***********************************
+       order_send:  {{lookup('template', 'Inventory_nw_serviceprofile.json.j2')}}
+       ____________________________________________________
+       result_return: {{ result.json }}
+
+- shell: "python3 test.py"
+  register: start_time
+  no_log: True
+
+- name:  Create & associate NetworkSliceSubnet
+  uri:
+    method: POST
+    url: "https://{{ ansible_env.BPI_IP }}/blueplanet-inventory-tmf-api/v1/service"
+    body: "{{lookup('template', 'Inventory_nw_NetworkSliceSubnet.json.j2')}}"
+    status_code: 201
+    body_format: json
+    timeout: 40
+    headers:
+      Authorization: Bearer {{ auth_response.json.access_token }}
+      Accept: "application/json"
+      Host: "{{ ansible_env.BPI_HOST }}"
+      content-type: "application/json"
+    validate_certs: no
+  register: NetworkSliceSubnet
+
+#- copy: content="{{ NetworkSliceSubnet.json }}" dest=/tmp/Inventory_nw_NetworkSliceSubnet_create_{{ instance_name }}.json.j2
+
+- shell: "python3 test.py"
+  register: end_time
+  no_log: True
+
+# - debug: msg="{{ result.date  }}"
+
+- shell: "python3 diff.py '{{ end_time.stdout }}' '{{ start_time.stdout }}'"
+  register: time_diff
+
+- name: generate SB json and copy       
+  copy:
+    dest: "{{ filename }}"
+    content: |
+       ***********************************
+       start_time:  {{ start_time.stdout }}
+       end_time:  {{ end_time.stdout }}
+       time_taken:  {{ time_diff.stdout }}
+       ***********************************
+       order_send:  {{lookup('template', 'Inventory_nw_NetworkSliceSubnet.json.j2')}}
+       ____________________________________________________
+       result_return: {{ NetworkSliceSubnet.json }}
+
+
+# - copy: content="{{ NetworkSliceSubnet.json.id }}" dest=/tmp/Inventory_nw_NetworkSliceSubnet_id_{{ instance_name }}.json.j2
+- shell: "python3 test.py"
+  register: start_time
+  no_log: True
+
+
+- name: Create SliceProfile
+  uri:
+    method: POST
+    url: "https://{{ ansible_env.BPI_IP }}/blueplanet-inventory-tmf-api/v1/service"
+    body: "{{lookup('template', 'Inventory_nw_sliceprofile.json.j2')}}"
+    status_code: 201
+    body_format: json
+    timeout: 40
+    headers:
+      Authorization: Bearer {{ auth_response.json.access_token }}
+      Accept: "application/json"
+      Host: "{{ ansible_env.BPI_HOST }}"
+      content-type: "application/json"
+    validate_certs: no
+  register: dishid
+# - debug:  var=dishid["json"]["id"]
+
+#- copy: content="{{ dishid.json }}" dest=/tmp/Inventory_nw_sliceprofile_create_{{ instance_name }}.json.j2
+
+# - copy: content="{{ dishid.json.id }}" dest=/tmp/Inventory_nw_sliceprofile_id_{{ instance_name }}.json.j2
+
+- name: 
+  set_fact:
+    output__sliceprofileid: "{{ dishid.json.id }}"
+    output__NetworkSliceSubnetid: "{{ NetworkSliceSubnet.json.id }}"
+    output__serviceprofileid: "{{ result.json.id }}"
+    output__NetworkSliceid: "{{ NetworkSlice.json.id }}"
+
+- shell: "python3 test.py"
+  register: end_time
+  no_log: True
+
+# - debug: msg="{{ result.date  }}"
+
+- shell: "python3 diff.py '{{ end_time.stdout }}' '{{ start_time.stdout }}'"
+  register: time_diff
+
+- name: generate SB json and copy       
+  copy:
+    dest: "{{ filename }}"
+    content: |
+       ***********************************
+       start_time:  {{ start_time.stdout }}
+       end_time:  {{ end_time.stdout }}
+       time_taken:  {{ time_diff.stdout }}
+       ***********************************
+       order_send:  {{lookup('template', 'Inventory_nw_sliceprofile.json.j2')}}
+       ____________________________________________________
+       result_return: {{ dishid.json }}

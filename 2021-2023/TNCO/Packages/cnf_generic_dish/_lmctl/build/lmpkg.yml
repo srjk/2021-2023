@@ -1,0 +1,9 @@
+schema: '2.0'
+name: cnf_generic_dish
+version: '1.0'
+type: Assembly
+contains:
+- name: cnfInstance
+  type: Resource
+  resource-manager: Brent
+  directory: cnfInstance

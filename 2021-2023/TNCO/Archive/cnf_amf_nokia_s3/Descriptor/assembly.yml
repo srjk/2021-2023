@@ -1,0 +1,50 @@
+name: assembly::cnf_amf_nokia_s3::2.0
+description: descriptor for sol_amf
+properties:
+#SolSpecific
+  operation:
+    description: addSliceConfig
+    volatile: true
+    default: Configure
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: SOL003
+  resourceManager:
+    type: string
+    default: brent 
+  amf_ip:
+    type: string
+    default: 10.223.128.209
+  amf_user:
+    type: string
+    default: cmm
+  amf_password:
+    type: string
+    default: Dish_123456
+composition:
+  amf:
+    type: $lmctl:/contains:/amf:/descriptor_name
+    quantity: 1    
+    properties:
+#SolSpecific
+      operation:
+        value: ${operation}    
+      deploymentLocation:
+        value: ${deploymentLocation}
+      resourceManager:
+        value: ${resourceManager}
+      instance_name:
+        value: ${instance.name} 
+      amf_ip:
+        value: ${amf_ip} 
+      amf_user:
+        value: ${amf_user} 
+      amf_password:
+        value: ${amf_password}    
+operations:
+  addSliceConfig:
+    source-operation: amf.addSliceConfig        
+  removeSlice:
+    source-operation: amf.removeSlice        
+

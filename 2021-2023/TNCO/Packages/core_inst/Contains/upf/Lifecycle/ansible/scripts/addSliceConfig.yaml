@@ -1,0 +1,50 @@
+---
+- name: Install
+  hosts: localhost
+  connection: local
+  gather_facts: True
+  # roles:
+    # - role: ../roles/provide_DU_3GPP
+    # - role: ../roles/provide_DU_VENDOR
+  tasks:
+#-----------------------> Start time from system  <----------------------------
+    - name: "##ALM## Get timestamp from the system"
+      shell: "date +%Y-%m-%d%H:%M:%S.%5N"
+      register: stime
+
+#-----------------------> Print Start time  <----------------------------
+    # - name: "##ALM## Start time"
+      # debug: msg="{{ stime }}"
+
+#-----------------------> Run playbooks for Provide DU  <----------------------------
+    - name: "##ALM## Run playbook for Provide DU_3GPP"
+      include_role:
+        name: ../roles/provide_DU_3GPP
+    
+    - name: "##ALM## Run playbook for Provide DU_VENDOR"
+      include_role:
+        name: ../roles/provide_DU_VENDOR
+
+#-----------------------> End time from system  <----------------------------
+    - name: "##ALM## Get timestamp from the system"
+      shell: "date +%Y-%m-%d%H:%M:%S.%5N"
+      register: etime
+    
+#-----------------------> Print End time  <----------------------------
+    # - name: "##ALM## end time"
+      # debug: msg="{{ etime }}"
+
+#-----------------------> Store request/response Logs in Eventlogger  <----------------------------
+    - name: "##ALM## Store request and response in DB"
+      uri:
+        url: "{{ deployment_location.properties.eventlogger_url }}"
+        method: POST
+        body: "{{lookup('template', 'Store.json.j2')}}"
+        return_content: yes
+        body_format: json
+        status_code: 200
+        validate_certs: no
+        headers:
+          content-type: "application/json"
+          ReturnResultType: "FULL"
+      register: resultStoreDU

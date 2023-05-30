@@ -1,0 +1,27 @@
+#----------------------->Set Pgw url    <----------------------------
+- name: "##ALM## setting PGW url"
+  set_fact:
+    pgw_url: "{{ deployment_location.properties.pgw_url2 }}"
+
+
+
+#-----------------------> Call for PGW provide operation for Secondary URL <----------------------------
+- name: "##PGW##Call Soap of SPML Adapter"
+  environment:
+    SSL_CERT_FILE: "pgwcertificate.cert"
+  uri:
+    url: "{{ pgw_url }}"
+    method: POST
+    body: "{{lookup('template', 'nokia_pgw_provide.xml.j2')}}"
+    #status_code: [200,201]
+    validate_certs: no
+    return_content: yes
+    headers:
+      content-type: "text/xml"
+      ReturnResultType: "FULL"
+      return_content: yes
+      SOAPAction: ""
+  register: result
+  until: result.status == 200
+  retries: "{{ RETRY_COUNT }}"
+  delay: "{{ RETRY_INTERVAL }}"

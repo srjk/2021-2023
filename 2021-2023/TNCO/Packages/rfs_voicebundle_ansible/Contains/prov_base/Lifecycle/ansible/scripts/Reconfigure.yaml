@@ -1,0 +1,60 @@
+--- 
+- name: Stop
+  hosts: localhost
+  # connection: local
+  gather_facts: False
+  pre_tasks:
+    - set_fact:
+        listrequestedServices: "{{ requestedServices.split(',') | map('trim') |  list }}"
+  tasks:
+    - name: Conditional role
+      include_role:
+        name: ../roles/ceasetas
+      when: "operation == 'CleanupMsisdn,ChangeMsisdn'"
+    - name: Conditional role
+      include_role:
+        name: ../roles/ceaseenum
+      when: "operation == 'CleanupMsisdn,ChangeMsisdn'"
+    - name: Conditional role
+      include_role:
+        name: ../roles/changeMSISDN
+      when: "operation == 'CleanupMsisdn,ChangeMsisdn'"
+    - name: Conditional role
+      include_role:
+        name: ../roles/cleanupMSISDN
+      when: "operation == 'CleanupMsisdn,ChangeMsisdn'"
+    - name: Conditional role
+      include_role:
+        name: ../roles/createenum
+      when: "operation == 'CleanupMsisdn,ChangeMsisdn'"
+    - name: Conditional role
+      include_role:
+        name: ../roles/createtas
+      when: "operation == 'CleanupMsisdn,ChangeMsisdn'"
+    - name: Conditional role
+      include_role:
+        name: ../roles/changevoicemail
+      when: "operation == 'CleanupMsisdn,ChangeMsisdn' and 'VOICEMAIL' in listrequestedServices"
+  # roles: 
+  #   - 
+  #     role: ../roles/ceasetas
+  #     when: "operation == 'CleanupMsisdn,ChangeMsisdn'"
+  #   - 
+  #     role: ../roles/ceaseenum
+  #     when: "operation == 'CleanupMsisdn,ChangeMsisdn'"
+    
+  #   - 
+  #     role: ../roles/changeMSISDN
+  #     when: "operation == 'CleanupMsisdn,ChangeMsisdn'"
+  #   - 
+  #     role: ../roles/cleanupMSISDN
+  #     when: "operation == 'CleanupMsisdn,ChangeMsisdn'"
+  #   - 
+  #    role: ../roles/createenum
+  #    when: "operation == 'CleanupMsisdn,ChangeMsisdn'"      
+  #   - 
+  #     role: ../roles/createtas
+  #     when: "operation == 'CleanupMsisdn,ChangeMsisdn'"
+  #   - 
+  #     role: ../roles/changevoicemail
+  #     when: "operation == 'CleanupMsisdn,ChangeMsisdn' and 'VOICEMAIL' in listrequestedServices"

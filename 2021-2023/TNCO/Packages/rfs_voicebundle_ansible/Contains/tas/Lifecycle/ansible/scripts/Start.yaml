@@ -1,0 +1,33 @@
+---
+- name: Start
+  hosts: localhost
+  # connection: local
+  gather_facts: True
+  pre_tasks:
+
+    - name: Get ALM Token
+      uri:
+        method: POST
+        url: https://alm-ishtar-alm.dish-roks-poc-f5ae0bb7881b3b49feaa20ca32bad577-0000.us-south.containers.appdomain.cloud/oauth/token?grant_type=client_credentials
+        headers:
+          Authorization: Basic QWRtaW46dGxxR2pCZGJFbGdwcGNGTU85VHRuV2RrU3hFdlNrOURzcmluVTNqaDJyVT0=
+        validate_certs: no
+      register: auth_response
+
+    - name: Get Assembly Status
+      uri:
+        method: GET
+        url: https://alm-ishtar-alm.dish-roks-poc-f5ae0bb7881b3b49feaa20ca32bad577-0000.us-south.containers.appdomain.cloud/api/topology/assemblies?nameContains={{ instance_name }}
+        headers:
+          Authorization: Bearer {{ auth_response.json.access_token }}
+        validate_certs: no
+      register: alm_response1
+      
+    - name: Setting facts
+      set_fact:
+        operation1: "{{ alm_response1.json.assemblies[0].lastTransition.intentType }}"     
+
+  roles:
+    - { role: ../roles/resume, when: ((operation1 is defined) and (operation1 == 'ChangeAssemblyState')) }
+
+

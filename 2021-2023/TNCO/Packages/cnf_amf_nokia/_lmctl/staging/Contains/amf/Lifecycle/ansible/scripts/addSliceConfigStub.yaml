@@ -1,0 +1,19 @@
+---
+- name: addSliceConfigStub
+  hosts: amf
+  gather_facts: False
+  # roles:
+  #   - role: ../roles/addSliceConfigStub
+  tasks:
+    # - ping:
+    #   register: ping_result
+    #   ignore_unreachable: true
+
+    # - name: "testing"
+    #   fail:
+    #     msg: "please make sure all server up and run again"
+    #   when: ping_result.unreachable is defined
+    #   any_errors_fatal: true
+    - include_role:
+        name: ../roles/addSliceConfigStub
+      # when: "ping_result.unreachable is not defined"       

@@ -1,0 +1,45 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ instance_name }}
+  namespace: {{ nameSpace }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ instance_name }}
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ instance_name }}
+    spec:
+      containers:
+        - name: {{ instance_name }}
+          image: busybox
+          args:
+            - sleep
+            - "1000000"
+---            
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ instance_name }}
+  namespace: {{ nameSpace }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ instance_name }}
+  serviceName: "{{ instance_name }}"    
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ instance_name }}
+    spec:
+      containers:
+      - name: {{ instance_name }}
+        image: busybox
+        args:
+            - sleep
+            - "1000000"

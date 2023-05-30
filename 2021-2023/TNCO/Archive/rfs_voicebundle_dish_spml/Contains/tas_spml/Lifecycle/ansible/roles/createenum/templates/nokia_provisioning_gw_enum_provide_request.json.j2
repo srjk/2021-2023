@@ -1,0 +1,20 @@
+{
+"serviceType": "Bundle RFS",
+"serviceName": "{{ serviceName }}",
+"id": "{{ extOrderId }}",
+"imsi": "{{ SUPI }}",
+"ENUM": {
+"ChangeRequest_view": "{{ ENUM_ChangeRequest_view }}",
+"number": "{{ GPSI }}",
+"subscriber-id": "{{ GPSI }}",
+"rrid": "0",
+"rridType": "NAPTR",
+"ttl": "900",
+"order": "50",
+"preference": "50",
+"flags": "u",
+"service": "E2U+sip",
+"regexp": "!^(.*)$!sip:+{{ GPSI }};npdi@ims.mnc340.mcc313.3gppnetwork.org;user=phone!",
+"replacement": "[]"
+}
+}

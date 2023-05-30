@@ -1,0 +1,53 @@
+{
+    "service":"{{ serviceType }}",
+    "id": "{{ extOrderId }}",
+    "imsi": "{{ imsi }}",
+    "hlr": [
+        {
+            "path": "hlr",
+            "operation": "set",
+            "valueObject": {
+                "odbgprs": 2
+            }
+        },
+        {
+            "path": "hlr/epsPdnContext[@contextId='6']/pdnContextBlocking",
+            "operation": "addorset",
+            "valueObject": {
+                "flagAPNBlockedOverS6A": "true",
+                "flagAPNBlockedOverSWx": "true"
+            }
+        },
+        {
+            "path": "hlr/eps",
+            "operation": "set",
+            "valueObject": {
+                "defaultPdnContextId": 9
+            }
+        } 
+    ],
+    "udm": [
+        {
+            "path": "udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo[@nssaiId='{{ slice_sst }}']/dnnInfo[@dnnId='{{ dnn1 }}']",
+            "operation": "setoradd",
+            "valueObject": {
+                "dnnBarred": true
+            }
+            
+        },
+        {
+            "path": "udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo[@nssaiId='{{ slice_sst }}']/dnnInfo[@dnnId='{{ dnn1 }}']",
+            "operation": "set",
+            "valueObject": {
+                "defaultIndication": false
+            }
+        },
+        {
+            "path": "udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo[@nssaiId='{{ slice_sst }}']/dnnInfo[@dnnId='{{ dnn2 }}']",
+            "operation": "set",
+            "valueObject": {
+                "defaultIndication": true
+            }
+        }
+    ]
+}

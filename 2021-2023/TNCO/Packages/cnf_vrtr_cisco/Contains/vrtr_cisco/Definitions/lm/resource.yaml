@@ -1,0 +1,40 @@
+description: descriptor for bundle
+name: resource::vrtr_cisco-cnf_vrtr_cisco::1.0
+properties:
+  operation:
+    volatile: true
+  instance_name:
+   description: name of assembly instance
+   type: string
+  deploymentLocation:
+    description: site specific
+    type: string
+    default: DFW
+  resourceManager:
+    type: string
+    read-only: true
+    default: brent
+  device_name:
+    type: string
+  template_name:
+    type: string
+  template_param:
+    type: map
+    entry-schema: string
+  username:
+    type: string
+    default:  slicing-testing
+  password:
+    type: string
+    default: AWSdevtesting1!
+  extOrderId:
+    volatile: true       
+lifecycle:
+  Install: {}
+  Reconfigure: {}
+  Uninstall: {}
+default-driver:
+  ansible:
+    selector:
+      infrastructure-type:
+      - '*'

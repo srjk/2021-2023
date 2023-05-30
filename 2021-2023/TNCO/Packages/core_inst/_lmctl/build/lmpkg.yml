@@ -1,0 +1,17 @@
+schema: '2.0'
+name: core_inst
+version: '1.0'
+type: Assembly
+contains:
+- name: amf
+  type: Resource
+  resource-manager: Brent
+  directory: amf
+- name: smf
+  type: Resource
+  resource-manager: Brent
+  directory: smf
+- name: upf
+  type: Resource
+  resource-manager: Brent
+  directory: upf

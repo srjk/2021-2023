@@ -1,0 +1,67 @@
+description: descriptor for Nokia voicemail resource
+name: resource::voicemail-rfs_voicemail_dish::1.0
+properties:
+  instance_name:
+    description: name of assembly instance
+  operation:
+    volatile: true
+  deploymentLocation:
+    description: site specific
+    type: string
+    default: DFW
+  resourceManager:
+    type: string
+    read-only: true
+    default: brent
+  extOrderId:
+    volatile: true
+  serviceType:
+    type: string
+  Version:
+    type: string
+  GPSI:
+    volatile: true
+  href:
+    type: string
+  priority:
+    type: string
+  description:
+    type: string
+  category:
+    type: string
+  state:
+    type: string
+  orderDate: 
+    type: string
+  completionDate: 
+    type: string
+  requestedStartDate: 
+    type: string
+  requestedCompletionDate: 
+    type: string
+  expectedCompletionDate:
+    type: string
+  startDate:
+    type: string
+  serviceOrderItemId:
+    type: string  
+  action:
+    type: string
+  reference_assembly:
+    type: string
+  SubOrederType:
+    type: string
+  Token:
+    type: string
+    default: "Aladin:opensimsim"
+infrastructure:
+  Openstack: {}
+lifecycle:
+  Install: {}
+  reconfigure: {}
+  Uninstall: {}
+default-driver:
+  ansible:
+    selector:
+      infrastructure-type:
+      - '*'

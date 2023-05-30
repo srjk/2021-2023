@@ -1,0 +1,22 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<soapenv:Body>
+		<spml:modifyRequest timestamp="true" requestID="{{ kami_response.json.extOrderId }}" xmlns:spml="urn:siemens:names:prov:gw:SPML:2:0" xmlns:sub="urn:siemens:names:prov:gw:SDL_MULTIAPPSUBSCRIBER:1:0">
+			<version>SDL_MULTIAPPSUBSCRIBER_v10</version>
+			<objectclass>Subscriber</objectclass>
+			<identifier alias="imsi">{{ SUPI }}</identifier>
+			<modification name="{{ hlr_path1 }}" operation="{{ operation2 }}"/>
+			<modification name="{{ hlr_path2 }}" operation="{{ operation2 }}"/>
+			<modification name="{{ hlr_path3 }}" operation="{{ operation2 }}"/>
+			<modification name="{{ hss_path1 }}" operation="{{ operation2 }}"/>
+<modification name="udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo[@dnnId='{{ dnn1 }}']" operation="{{ operation2 }}"/>
+<modification name="udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo[@dnnId='{{ dnn2 }}']" operation="{{ operation2 }}"/>
+<modification name="udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo[@dnnId='{{ dnn3 }}']" operation="{{ operation2 }}"/>
+<modification name="udm5gData/servingPlmnId/provisionedData/sessionManagementSubscriptionData/dnnConfiguration[@dnnId='{{ dnn1 }}']" operation="{{ operation2 }}"/>
+<modification name="udm5gData/servingPlmnId/provisionedData/sessionManagementSubscriptionData/dnnConfiguration[@dnnId='{{ dnn2 }}']" operation="{{ operation2 }}"/>
+<modification name="udm5gData/servingPlmnId/provisionedData/sessionManagementSubscriptionData/dnnConfiguration[@dnnId='{{ dnn3 }}']" operation="{{ operation2 }}"/>
+<modification name="pcf/smPolicyData/smPolicySnssaiData/smPolicyDnnData[@dnn='{{ dnn1 }}']" operation="{{ operation2 }}"/>			
+<modification name="pcf/smPolicyData/smPolicySnssaiData/smPolicyDnnData[@dnn='{{ dnn2 }}']" operation="{{ operation2 }}"/>			
+<modification name="pcf/smPolicyData/smPolicySnssaiData/smPolicyDnnData[@dnn='{{ dnn3 }}']" operation="{{ operation2 }}"/>			
+</spml:modifyRequest>
+	</soapenv:Body>
+</soapenv:Envelope>

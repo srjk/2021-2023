@@ -1,0 +1,60 @@
+# convert ALM properties to json cease request for South Bound endpoint - Nokia Provisioning GW
+# - name: Get ALM Token
+  # uri:
+    # method: POST
+    # url: http://acb9412dc15104e988c43d6afeac6124-986749247.us-east-2.elb.amazonaws.com/oauth/token?grant_type=client_credentials
+    # headers:
+       # Authorization: Basic TG1DbGllbnQ6cGFzczEyMw==
+    # validate_certs: no
+  # register: auth_response
+
+# - name: Get Assembly Status
+  # uri:
+    # method: GET
+    # url: http://acb9412dc15104e988c43d6afeac6124-986749247.us-east-2.elb.amazonaws.com/api/topology/assemblies?nameContains={{ instance_name }}
+    # environment:
+      # SSL_CERT_FILE:
+    # headers:
+       # Authorization: Bearer {{ auth_response.json.access_token }}
+    # validate_certs: yes
+  # register: alm_response1 
+  
+# - name: Get token from kami
+  # uri:
+    # method: POST
+    # url: http://dish-tmf-adapter-svc:8289/KamiCore/oauth/token?grant_type=client_credentials
+    # headers: 
+       # content-type: "application/json"
+       # Authorization: Basic ZGlzaDpkaXNoMTIzNA==
+  # register: token  
+# - name: Get order id
+  # uri:
+    # method: GET
+    # url: http://dish-tmf-adapter-svc:8289/KamiCore/getExtOrderId  
+    # return_content: yes
+    # body_format: json
+    # status_code: 201
+    # body: "{ \"alm_instance_name\": \"{{ alm_response1.json.assemblies[0].name }}\" }"
+    # headers:
+       # ReturnResultType: "FULL"
+       # Authorization: Bearer {{ token.json.access_token }}
+    # follow_redirects: yes
+  # register: kami_response
+
+- name: Call RestAPI of SPML/TAS/ENUM Adapter
+  uri:
+    url: "{{ ansible_env.TAS_ENUM_ADA_HOST }}/dish/Prov/tas/resumeRequest"
+    method: POST
+    body: "{{lookup('template', 'nokia_provisioning_gw_tas_resume_request.json.j2')}}"
+    status_code: 200
+    body_format: json
+    headers:
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+    return_content: yes
+  register: resultTas
+
+- name: fail instance if there is a failure from SBI
+  fail:
+    msg: Instance creation failed with error code {{ resultTas.json.errorCode }} and error message {{ resultTas.json.msg }}
+  when: resultTas.json.result == "Failure"

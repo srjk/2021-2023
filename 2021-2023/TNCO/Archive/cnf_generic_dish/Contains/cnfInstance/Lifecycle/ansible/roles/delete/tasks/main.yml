@@ -1,0 +1,29 @@
+- uri:
+    url: "http://ib-orc-cnflcm-service-001:18085/cnflcmservice/fetch/delete/order?assemblyName={{ instance_name }}"
+  register: result
+- debug:
+    msg: " order id result {{ result.json.output }}"
+- fail:
+    msg: "order_id not found"
+  when: "result.json.output is none"
+
+- name: copy
+  copy:
+    dest: "/tmp/test"
+    content: |
+      {{ cnfInstance }}
+- name: trigger python
+  shell: "python3 delete.py {{ role }} {{ session }} {{ region_name }} {{ kafka_pod }} {{ kafka_topic }} {{ result.json.output.order_id }}"
+  register: result
+# - set_fact:
+#     test_result: "{{ result.stdout }}"
+
+# - set_fact:
+#     output__commitId: "{{ test_result['commitId'] }}"
+#     output__pipeline_id: "{{ test_result['pipeline_id'] }}"
+#     output__response_status: "{{ test_result['response_status'] }}"
+- set_fact:
+    output__response_status: "{{ result.stdout }}"
+- fail:
+    msg: "pipeline {{ result.stdout }}"
+  when: "result.stdout != 'Succeeded'"

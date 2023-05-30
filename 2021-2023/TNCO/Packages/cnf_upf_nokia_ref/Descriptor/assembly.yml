@@ -1,0 +1,85 @@
+description: descriptor for sol_upf
+properties:
+#SolSpecific
+  operation:
+    description: addSliceConfig
+    volatile: true
+    default: Configure
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: SOL003
+  resourceManager:
+    type: string
+    default: brent
+  vnfdId:
+    default: nokia-upfv-21.8.77
+    volatile: true
+  vnfInstanceName:
+    type: string
+    default: use1-az2-itd-upf01
+  vnfInstanceDescription:
+    type: string
+    default: Deploy NOKIA UPFV IBM
+  vnfInstanceId:
+    value: ${upf.vnfInstanceId}
+    volatile: true
+  flavourId:
+    type: string
+    default: small
+  vimType:
+    type: string
+    default: ndc
+  vim_id:
+    type: string
+    default: orchestratortest
+  envType:
+    type: string
+    default: dev    
+  nfType:
+    type: string
+    default: CNF
+  cnfPackageVersionFile:
+    type: string
+    volatile: true
+  alm_assembly_name:
+    type: string
+composition:
+  upf:
+    type: $lmctl:/contains:/ref_upf:/descriptor_name
+    quantity: 1
+    properties:
+      operation:
+        value: ${operation}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      resourceManager:
+        value: ${resourceManager}
+      instance_name:
+        value: ${instance.name}
+      vnfdId:
+        value: ${vnfdId}
+      vnfInstanceName:
+        value: ${vnfInstanceName}
+      vnfInstanceDescription:
+        value: ${vnfInstanceDescription}
+      vnfInstanceId:
+        value: ${vnfInstanceId}
+      flavourId:
+        value: ${flavourId}
+      vimType:
+        value: ${vimType}
+      vim_id:
+        value: ${vim_id}
+      envType:
+        value: ${envType}
+      nfType:
+        value: ${nfType}
+      cnfPackageVersionFile:
+        value: ${cnfPackageVersionFile}
+references:
+  upf_ref:
+    properties:
+      name:
+        value: ${alm_assembly_name}
+    type: assembly::cnf_upf_nokia::1.0

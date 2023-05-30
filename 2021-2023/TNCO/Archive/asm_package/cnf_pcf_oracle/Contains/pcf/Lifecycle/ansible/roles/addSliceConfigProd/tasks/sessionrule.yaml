@@ -1,0 +1,27 @@
+- name: Create QoS Data
+  uri:
+    url: "{{ PCF_HOST }}/oc-cnpolicy-configuration/v1/policydata/pcfsm/sessionrules"
+    method: POST
+    body: "{{lookup('template', '/tmp/{{ sessionRule }}_session_info.json.j2')}}"
+    status_code: 201
+    body_format: json
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    return_content: yes
+  #loop: "{{ list_pcf_qosData_Id }}"
+  register: sessionrule
+
+- name: Insert a line at the end of a file.
+
+  lineinfile:
+
+    path: "{{ filen }}"
+
+    line: |
+           order_send:  {{lookup('template', '/tmp/{{ sessionRule }}_session_info.json.j2')}}
+           __________________________________________________________________________
+           
+           result_return: {{ sessionrule }}
+           
+           __________________________________________________________________________

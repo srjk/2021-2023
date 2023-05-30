@@ -1,0 +1,13 @@
+---
+- name: Reconfigure
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  roles:
+  # - { role: ../roles/Changenumbervm, when: operation == 'ChangeNumber' }
+  #   - { role: ../roles/suspend, when: operation == 'Suspend' }
+  #   - { role: ../roles/resume, when: operation == 'Resume' }
+  #   - { role: ../roles/BlockSIM, when: operation == 'BlockSIM' }
+  #   - { role: ../roles/UnblockSIM, when: operation == 'UnblockSIM' }
+  #   - { role: ../roles/ChangeSIM, when: operation == 'ChangeSIM' }
+  #   - { role: ../roles/ChangeDevice, when: operation == 'ChangeDevice' }

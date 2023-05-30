@@ -1,0 +1,59 @@
+#-------------------> update pLMNInfoList for EACH NRCellDU with new slice <----------------
+- name: update pLMNInfoList for EACH NRCellDU with new S-NSSAI (add new slice)
+  uri:
+    url:  "{{ deployment_location.properties.mcms_host }}/cms-service/webapi/apiservice/ProvMnS/v1/data=1,ManagedElement=1,GNBDUFunction={{ du_id }},NRCellDU={{ NRCellDUid }},attributes/pLMNInfoList"
+    method: PUT
+    body: "{{lookup('template', 'modifypLMNInfoListDU3GPP.json.j2')}}"
+    body_format: json
+    headers:
+      apiInvokerId: "{{ deployment_location.properties.apiInvokerId }}"
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: [201,500]
+    return_content: yes
+  register: updatepLMNInfoList
+  # loop: "{{ mysequenceNRCellDU }}"
+  ignore_errors: yes
+  failed_when: "updatepLMNInfoList.status not in [201,500]"
+
+- name: Insert a line at the end of a file to print updatepLMNInfoList.
+  lineinfile:
+    path: "{{ filen }}"
+    line: |
+           __________________________________________________________________________
+           
+           ##### PUT API call to update pLMNInfoList for EACH NRCellDU with new S-NSSAI (add new slice)
+           
+           URL:  
+           {{ updatepLMNInfoList.url }}
+           
+           order_send:
+           {{lookup('template', 'modifypLMNInfoListDU3GPP.json.j2')}}
+           
+           result_return: 
+           {{ updatepLMNInfoList.json | to_nice_json }}
+           __________________________________________________________________________
+
+- name: updatepLMNInfoList content result print all
+  set_fact:
+    target: "{{ updatepLMNInfoList.content }}"
+
+#-----------------> Print error message when apiInvokerId is Invalid/incorrect/expired <------------
+- name: creating variable and setting value for message error when apiInvokerId is Invalid/incorrect/expired
+  set_fact:
+    target_e: "{{ updatepLMNInfoList.content | regex_search('message') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ updatepLMNInfoList.content | replace('\"','') | replace('{','') | replace('}','') }}. Either apiInvokerId is Invalid/incorrect/expired, please verify the apiInvokerId."
+  when: "target_e=='message'"
+
+#-----------> Print updatepLMNInfoList error message if Add/Delete API calls fails <---------------
+# - name: creating variable and setting value for errorInfo  
+  # set_fact:
+    # target_e1: "{{ updatepLMNInfoList.content | regex_search('error') }}"
+
+# - fail:
+    # msg: "Instance creation failed with error {{ updatepLMNInfoList.content | replace('\"','') | replace('{','') | replace('}','') | replace('error:','') }}"
+  # when: "target_e1=='error'"

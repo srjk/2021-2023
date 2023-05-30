@@ -1,0 +1,51 @@
+{
+         "category": "RFS",
+         "state": "active",
+         "@baseType": "service",
+         "@type": "coreNetworkSliceSubnet",
+         "serviceCharacteristic": [
+             {
+                 "name": "networkSliceSubnetType",
+                 "value": "Core Network"
+             }
+         ],
+         "serviceRelationship": [
+           {
+              "relationshipType":"dependsOn",
+              "service":{
+              "id":"{{ NetworkSlice.json.id }}"
+           }
+        }
+     ],
+     "supportingResource": [
+       {
+         "id": "{{ smf_bpi_id }}",
+         "name": "{{ smf_assembly_name }}",
+         "role": "SMF"
+       },
+       {
+         "id": "{{ amf_bpi_id }}",
+         "name": "{{ amf_assembly_name }}",
+         "role": "AMF"
+       },
+       {
+         "id": "{{ upf_bpi_id }}",
+         "name": "{{ upf_assembly_name }}",
+         "role": "UPF"
+       },
+       {
+         "id": "{{ pcf_bpi_id }}",
+         "name": "{{ pcf_assembly_name }}",
+         "role": "PCF"
+       },
+       {
+         "id": "{{ nssf_bpi_id }}",
+         "name": "{{ nsssf_assembly_name }}",
+         "role": "NSSF"
+       }
+     ],
+         "serviceSpecification": {
+             "id": "349f4b6a-a4e1-4013-be79-a0efd4ea8ppp",
+             "version": "1.0.0"
+        }
+    }

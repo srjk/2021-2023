@@ -1,0 +1,20 @@
+- name: Create snssaiToDnnList.
+  raw: cmm snssaiToDnnList create --name {{ item }}
+  register: resultsnssaiToDnnList
+  failed_when: "resultsnssaiToDnnList.rc not in [0,1]"
+#  ignore_errors: yes
+
+- name: Insert a line  end of a file.
+  connection: local
+  lineinfile:
+    path: "{{ Logs }}"
+    line: |
+          input: cmm snssaiToDnnList create --name {{ item }}
+          output: {{ resultsnssaiToDnnList.stdout }}
+  delegate_to: 127.0.0.1
+
+- fail:
+    msg: "{{ resultsnssaiToDnnList.stdout | regex_search('ERROR.*') }}"
+  when:
+    - '"The relevant data content already exists" not in resultsnssaiToDnnList.stdout'
+    - '"Field" not in resultsnssaiToDnnList.stdout'

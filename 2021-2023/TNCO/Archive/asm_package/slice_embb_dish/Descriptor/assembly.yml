@@ -1,0 +1,642 @@
+name: assembly::slice_embb_dish::1.0
+description: descriptor for nwslice sol003
+properties:
+  operation:
+    description: addSliceConfig
+    volatile: true
+    default: Install
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: DFW
+  resourceManager:
+    type: string
+    read-only: true
+    default: brent
+  extOrderId:
+    type: string
+  smfSlice_sliceListName:
+    type: string
+  smfSlice_sliceInstanceListName:
+    type: string
+  slice_tai:
+    type: string
+  slice_sst:
+    type: string
+  slice_sd:
+    type: string
+  slice_ratePlan:
+    type: string
+  slice_pcfSessionRuleName:
+    type: string
+  slice_pcfSessionRuleId:
+    type: string
+  slice_pcfQoSInfoName:
+    type: string
+  slice_pcfQoSInfoId:
+    type: string
+  slice_pcfQosDataReflectiveQos:
+    type: string
+  slice_pcfQosDataQnc:
+    type: string
+  slice_pcfQosDataPriorityLevel:
+    type: string
+  slice_pcfQoSDataName:
+    type: string
+  slice_pcfQoSDataMaxBrUl:
+    type: string
+  slice_pcfQoSDataMaxBrDl:
+    type: string
+  slice_pcfQoSDataGbrUl:
+    type: string
+  slice_pcfQoSDataGbrDl:
+    type: string
+  slice_pcfQosDataDefQoSFlowInd:
+    type: string
+  slice_pcfQosDataArpPriority:
+    type: string
+  slice_pcfQosDataArpPreemptVuln:
+    type: string
+  slice_pcfQosDataArpPreemptCap:
+    type: string
+  slice_pcfQoSData5QI:
+    type: string
+  slice_pcfPccRuleUlFlowName:
+    type: string
+  slice_pcfPccRuleUlFlowDirection:
+    type: string
+  slice_pcfPccRuleUlFlowDesc:
+    type: string
+  slice_pcfPccRuleType:
+    type: string
+  slice_pcfPccRulePrecedence:
+    type: string
+  slice_pcfPccRuleName:
+    type: string
+  slice_pcfPccRuleDlFlowName:
+    type: string
+  slice_pcfPccRuleDlFlowDirection:
+    type: string
+  slice_nsiId:
+    type: string
+  slice_nrfMgtUri:
+    type: string
+  slice_nrfAccessTokenUri:
+    type: string
+  slice_mnc:
+    type: string
+    default: 340
+  slice_mcc:
+    type: string
+    default: 313
+  slice_dnnList:
+    type: string
+  slice_chgProfileName:
+    type: string
+    default: 1
+  slice_amfSetId:
+    type: string
+  slice_amfSet:
+    type: string
+  slice_amfRegionId:
+    type: string
+  slice_amfRegion:
+    type: string
+  slice_pcfPccRuleDlFlowDesc:
+    type: string
+  nssf_nssRuleName:
+    type: string
+  nssf_nssAmfId:
+    type: string
+  nssf_nsiProfileName:
+    type: string
+  nssf_grantName:
+    type: string
+  amfSlice_snssaiToDnnListName:
+    type: string
+  amfSlice_snssaiListName:
+    type: string
+  amfSlice_sliceName:
+    type: string
+  amfSlice_plmnName:
+    type: string
+  slice_amfSetFqdn:
+    type: string
+  slice_snssai:
+    type: string
+  slice_ndc:
+    type: string
+  slice_rdc:
+    type: string
+  amf_assembly_name:
+    type: string
+  smf_assembly_name:
+    type: string
+  nsssf_assembly_name:
+    type: string
+  pcf_assembly_name:
+    type: string
+  upf_assembly_name:
+    type: string
+  vnfInstanceId:
+    type: string
+  smfSlice_sliceName:
+    type: string
+#  amf_bpi_id:
+ #   type: string
+#  smf_bpi_id:
+ #   type: string
+#  upf_bpi_id:
+ #   type: string
+#  pcf_bpi_id:
+ #   type: string
+#  nssf_bpi_id:
+ #   type: string
+  IsolatedSlice:
+    type: string
+  numberofterminals:
+    type: string
+  locationScope:
+    type: string
+  dLThptPerUE:
+    type: string
+  uLThptPerUE:
+    type: string
+  latency:
+    type: string
+  MMTelSupport:
+    type: string
+  area:
+    type: string
+    default: test_area
+  areaSize:  
+    type: string
+    default: test_size
+composition:
+  nw_slice:
+    type: $lmctl:/contains:/nw_slice:/descriptor_name
+    quantity: 1
+    properties:
+      instance_name:
+        value: ${instance.name}
+      operation:
+        value: ${operation}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      extOrderId:
+        value: ${extOrderId}
+      resourceManager:
+        value: ${resourceManager}
+      smfSlice_sliceListName:
+        value: ${smfSlice_sliceListName}
+      smfSlice_sliceInstanceListName:
+        value: ${smfSlice_sliceInstanceListName}
+   #   amf_bpi_id:
+    #    value: ${amf_bpi_id}
+   #   smf_bpi_id:
+    #    value: ${smf_bpi_id}
+   #   upf_bpi_id:
+    #    value: ${upf_bpi_id}
+   #   pcf_bpi_id:
+     #   value: ${pcf_bpi_id}
+   #  nssf_bpi_id:
+    #    value: ${upf_bpi_id}
+      slice_tai:
+        value: ${slice_tai}
+      slice_sst:
+        value: ${slice_sst}
+      slice_sd:
+        value: ${slice_sd}
+      slice_ratePlan:
+        value: ${slice_ratePlan}
+      slice_pcfSessionRuleName:
+        value: ${slice_pcfSessionRuleName}
+      slice_pcfSessionRuleId:
+        value: ${slice_pcfSessionRuleId}
+      slice_pcfQoSInfoName:
+        value: ${slice_pcfQoSInfoName}
+      slice_pcfQoSInfoId:
+        value: ${slice_pcfQoSInfoId}
+      slice_pcfQosDataReflectiveQos:
+        value: ${slice_pcfQosDataReflectiveQos}
+      slice_pcfQosDataQnc:
+        value: ${slice_pcfQosDataQnc}
+      slice_pcfQosDataPriorityLevel:
+        value: ${slice_pcfQosDataPriorityLevel}
+      slice_pcfQoSDataName:
+        value: ${slice_pcfQoSDataName}
+      slice_pcfQoSDataMaxBrUl:
+        value: ${slice_pcfQoSDataMaxBrUl}
+      slice_pcfQoSDataMaxBrDl:
+        value: ${slice_pcfQoSDataMaxBrDl}
+      slice_pcfQoSDataGbrUl:
+        value: ${slice_pcfQoSDataGbrUl}
+      slice_pcfQoSDataGbrDl:
+        value: ${slice_pcfQoSDataGbrDl}
+      slice_pcfQosDataDefQoSFlowInd:
+        value: ${slice_pcfQosDataDefQoSFlowInd}
+      slice_pcfQosDataArpPriority:
+        value: ${slice_pcfQosDataArpPriority}
+      slice_pcfQosDataArpPreemptVuln:
+        value: ${slice_pcfQosDataArpPreemptVuln}
+      slice_pcfQosDataArpPreemptCap:
+        value: ${slice_pcfQosDataArpPreemptCap}
+      slice_pcfQoSData5QI:
+        value: ${slice_pcfQoSData5QI}
+      slice_pcfPccRuleUlFlowName:
+        value: ${slice_pcfPccRuleUlFlowName}
+      slice_pcfPccRuleUlFlowDirection:
+        value: ${slice_pcfPccRuleUlFlowDirection}
+      slice_pcfPccRuleUlFlowDesc:
+        value: ${slice_pcfPccRuleUlFlowDesc}
+      slice_pcfPccRuleType:
+        value: ${slice_pcfPccRuleType}
+      slice_pcfPccRulePrecedence:
+        value: ${slice_pcfPccRulePrecedence}
+      slice_pcfPccRuleName:
+        value: ${slice_pcfPccRuleName}
+      slice_pcfPccRuleDlFlowName:
+        value: ${slice_pcfPccRuleDlFlowName}
+      slice_pcfPccRuleDlFlowDirection:
+        value: ${slice_pcfPccRuleDlFlowDirection}
+      slice_nsiId:
+        value: ${slice_nsiId}
+      slice_nrfMgtUri:
+        value: ${slice_nrfMgtUri}
+      slice_nrfAccessTokenUri:
+        value: ${slice_nrfAccessTokenUri}
+      slice_mnc:
+        value: ${slice_mnc}
+      slice_mcc:
+        value: ${slice_mcc}
+      slice_dnnList:
+        value: ${slice_dnnList}
+      slice_chgProfileName:
+        value: ${slice_chgProfileName}
+      slice_amfSetId:
+        value: ${slice_amfSetId}
+      slice_amfSet:
+        value: ${slice_amfSet}
+      slice_amfRegionId:
+        value: ${slice_amfRegionId}
+      slice_amfRegion:
+        value: ${slice_amfRegion}
+      slice_pcfPccRuleDlFlowDesc:
+        value: ${slice_pcfPccRuleDlFlowDesc}
+      nssf_nssRuleName:
+        value: ${nssf_nssRuleName}
+      nssf_nssAmfId:
+        value: ${nssf_nssAmfId}
+      nssf_nsiProfileName:
+        value: ${nssf_nsiProfileName}
+      nssf_grantName:
+        value: ${nssf_grantName}
+      amfSlice_snssaiToDnnListName:
+        value: ${amfSlice_snssaiToDnnListName}
+      amfSlice_snssaiListName:
+        value: ${amfSlice_snssaiListName}
+      amfSlice_sliceName:
+        value: ${amfSlice_sliceName}
+      amfSlice_plmnName:
+        value: ${amfSlice_plmnName}
+      slice_amfSetFqdn:
+        value: ${slice_amfSetFqdn}
+      slice_snssai:
+        value: ${slice_snssai}
+      slice_ndc:
+        value: ${slice_ndc}
+      slice_rdc:
+        value: ${slice_rdc}
+      amf_assembly_name:
+        value: ${amf_assembly_name}
+      smf_assembly_name:
+        value: ${smf_assembly_name}
+      nsssf_assembly_name:
+        value: ${nsssf_assembly_name}
+      pcf_assembly_name:
+        value: ${pcf_assembly_name}
+      upf_assembly_name:
+        value: ${upf_assembly_name}
+      smfSlice_sliceName:
+        value: ${smfSlice_sliceName}
+      IsolatedSlice:
+        value: ${IsolatedSlice}
+      numberofterminals:
+        value: ${numberofterminals}
+      locationScope:
+        value: ${locationScope}
+      dLThptPerUE:
+        value: ${dLThptPerUE}
+      uLThptPerUE:
+        value: ${uLThptPerUE}
+      latency:
+        value: ${latency}
+      MMTelSupport:
+        value: ${MMTelSupport}
+      area:
+        value: ${area}
+      areaSize:
+        value: ${areaSize}
+references:
+  sol_operation_nssf:
+    properties:
+      resourceManager:
+        value: ${resourceManager}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      operation:
+        value: ${operation}
+      name:
+        value: ${nsssf_assembly_name}
+    type: assembly::cnf_nssf_oracle::1.0
+  sol_operation_amf:
+    properties:
+      resourceManager:
+        value: ${resourceManager}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      operation:
+        value: ${operation}
+      name:
+        value: ${amf_assembly_name}
+    type: assembly::cnf_amf_nokia::1.0
+  sol_operation_smf:
+    properties:
+      resourceManager:
+        value: ${resourceManager}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      operation:
+        value: ${operation}
+      name:
+        value: ${smf_assembly_name}
+    type: assembly::cnf_smf_nokia::1.0
+  sol_operation_pcf:
+    properties:
+      resourceManager:
+        value: ${resourceManager}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      operation:
+        value: ${operation}
+      name:
+        value: ${pcf_assembly_name}
+    type: assembly::cnf_pcf_oracle::1.0
+  # sol_operation_upf:
+    # properties:
+      # resourceManager:
+        # value: ${resourceManager}
+      # deploymentLocation:
+        # value: ${deploymentLocation}
+      # operation:
+        # value: ${operation}
+      # name:
+        # value: ${upf_assembly_name}
+    # type: assembly::cnf_upf_oracle::1.0
+relationships:
+  sol_operation_relationship_amf:
+    properties:
+      amfSlice_plmnName:
+        value: ${target.amfSlice_plmnName}
+      amfSlice_tai:
+        value: ${target.slice_tai}
+      amfSlice_sliceName:
+        value: ${target.amfSlice_sliceName}
+      amfSlice_sst:
+        value: ${target.slice_sst}
+      amfSlice_sd:
+        value: ${target.slice_sd}
+      amfSlice_snssaiListName:
+        value: ${target.amfSlice_snssaiListName}
+      amfSlice_amfRegionId:
+        value: ${target.slice_amfRegionId}
+      amfSlice_amfSetId:
+        value: ${target.slice_amfSetId}
+      amfSlice_snssaiToDnnListName:
+        value: ${target.amfSlice_snssaiToDnnListName}
+      amfSlice_dnnName:
+        value: ${target.slice_dnnList}
+      instance_name:
+        value: ${instance.name} 
+      # amfSlice_timeZone:
+      #   value: Default
+      # amfSlice_supportedInAllTacFlag:
+      #   value: true
+      # amfSlice_defaultSnssaiSelection:
+      #   value: LOCAL
+    lifecycle:
+      Create:
+      - source.addSliceConfig
+      Cease:
+      - source.removeSlice
+    source-state: Active
+    source-state-modifier: post
+    target-state: Active
+    target-state-modifier: post
+    source-capabilities:
+    - sol_operation_amf.capability
+    target-requirements:
+    - nw_slice.requirement
+  sol_operation_relationship_nssf:
+    properties:
+      nssf_nsiProfileName:
+        value: ${target.nssf_nsiProfileName}
+      nssf_nrfUri:
+        value: ${target.slice_nrfMgtUri}
+      nssf_nsiId:
+        value: ${target.slice_nsiId}
+      nssf_nrfMgtUri:
+        value: ${target.slice_nrfMgtUri}
+      nssf_nrfAccessTokenUri:
+        value: ${target.slice_nrfAccessTokenUri}
+      nssf_amfRegionId:
+        value: ${target.slice_amfRegionId}
+      nssf_amfSetId:
+        value: ${target.slice_amfSetId}
+      nssf_amfFqdn:
+        value: ${target.slice_amfSetFqdn}
+      nssf_defaultGrantName:
+        value: ${target.nssf_grantName}
+      nssf_mcc:
+        value: ${target.slice_mcc}
+      nssf_mnc:
+        value: ${target.slice_mnc}
+      nssf_tai:
+        value: ${target.slice_tai}
+      nssf_sst:
+        value: ${target.slice_sst}
+      nssf_sd:
+        value: ${target.slice_sd}
+      nssf_nssAmfId:
+        value: ${target.nssf_nssAmfId}
+      nssf_nssRuleName:
+        value: ${target.nssf_nssRuleName}
+    lifecycle:
+      Create:
+      - source.addSliceConfig
+      Cease: 
+      - source.removeSlice
+    source-state: Active
+    source-state-modifier: post
+    target-state: Active
+    target-state-modifier: post
+    source-capabilities:
+    - sol_operation_nssf.capability
+    target-requirements:
+    - nw_slice.requirement
+  sol_operation_relationship_smf:
+    properties:
+      smfSlice_sliceInstanceListName:
+        value: ${target.smfSlice_sliceInstanceListName}
+      smfSlice_sliceListName:
+        value: ${target.smfSlice_sliceListName}
+      smfSlice_sliceName:
+        value: ${target.smfSlice_sliceName}
+      smfSlice_sst:
+        value: ${target.slice_sst}
+      smfSlice_sd:
+        value: ${target.slice_sd}
+      smf_dnnName:
+        value: ${target.slice_dnnList}
+      instance_name:
+        value: ${instance.name}       
+    lifecycle:
+      Create:
+      - source.addSliceConfig
+      Cease:
+      - source.removeSlice
+    source-state: Active
+    source-state-modifier: post
+    target-state: Active
+    target-state-modifier: post
+    source-capabilities:
+    - sol_operation_smf.capability
+    target-requirements:
+    - nw_slice.requirement
+  sol_operation_relationship_pcf:
+    properties:
+      pcf_chgData_afChargingIdentifier:
+        value: ${target.slice_chgProfileName}
+      pcf_chgData_appSvcProvId:
+        value: ${target.slice_chgProfileName}
+      pcf_chgData_chgId:
+        value: ${target.slice_chgProfileName}
+      pcf_chgData_profileName:
+        value: ${target.slice_chgProfileName}
+      pcf_qosData_Id:
+        value: ${target.slice_pcfQoSDataName}
+      pcf_qosData_Name:
+        value: ${target.slice_pcfQoSDataName}
+      pcf_qosData_5Qi:
+        value: ${target.slice_pcfQoSData5QI}
+      pcf_qosData_MaxBrUl:
+        value: ${target.slice_pcfQoSDataMaxBrUl}
+      pcf_qosData_MaxBrDl:
+        value: ${target.slice_pcfQoSDataMaxBrDl}
+      pcf_qosData_GbrUl:
+        value: ${target.slice_pcfQoSDataGbrUl}
+      pcf_qosData_GbrDl:
+        value: ${target.slice_pcfQoSDataGbrDl}
+      pcf_qosData_Qnc:
+        value: ${target.slice_pcfQosDataQnc}
+      pcf_qosData_ReflectiveQoS:
+        value: ${target.slice_pcfQosDataReflectiveQos}
+      pcf_qosData_PriorityLevel:
+        value: ${target.slice_pcfQosDataPriorityLevel}
+      pcf_qosData_DefQoSFlowInd:
+        value: ${target.slice_pcfQosDataDefQoSFlowInd}
+      pcf_qosData_ArpPriority:
+        value: ${target.slice_pcfQosDataArpPriority}
+      pcf_qosData_ArpPreemptCap:
+        value: ${target.slice_pcfQosDataArpPreemptCap}
+      pcf_qosData_ArpPreemptVuln:
+        value: ${target.slice_pcfQosDataArpPreemptVuln}
+      pcf_pccRule_Id:
+        value: ${target.slice_pcfPccRuleName}
+      pcf_pccRule_Name:
+        value: ${target.slice_pcfPccRuleName}
+      pcf_pccRule_Type:
+        value: ${target.slice_pcfPccRuleType}
+      pcf_pccRule_DLFlowName:
+        value: ${target.slice_pcfPccRuleDlFlowName}
+      pcf_pccRule_DLFlowDirection:
+        value: ${target.slice_pcfPccRuleDlFlowDirection}
+      pcf_pccRule_DLFlowDesc:
+        value: ${target.slice_pcfPccRuleDlFlowDesc}
+      pcf_pccRule_ULFlowName:
+        value: ${target.slice_pcfPccRuleUlFlowName}
+      pcf_pccRule_ULFlowDirection:
+        value: ${target.slice_pcfPccRuleUlFlowDirection}
+      pcf_pccRule_ULFlowDesc:
+        value: ${target.slice_pcfPccRuleUlFlowDesc}
+      pcf_pccRule_precedence:
+        value: ${target.slice_pcfPccRulePrecedence}
+      pcf_pccRule_refQoSData:
+        value: ${target.slice_pcfQoSDataName}
+      pcf_qosInfo_Id:
+        value: ${target.slice_pcfQoSInfoId}
+      pcf_qosInfo_name:
+        value: ${target.slice_pcfQoSInfoName}
+      pcf_qosInfo_desc:
+        value: ${target.slice_pcfQoSDataName}
+      pcf_qosInfo_5Qi:
+        value: ${target.slice_pcfQoSData5QI}
+      pcf_qosInfo_priorityLevel:
+        value: ${target.slice_pcfQosDataArpPriority}
+      pcf_qosInfo_preemptCap:
+        value: ${target.slice_pcfQosDataArpPreemptCap}
+      pcf_qosInfo_preemptVuln:
+        value: ${target.slice_pcfQosDataArpPreemptVuln}
+      pcf_sessionRule_Id:
+        value: ${target.slice_pcfSessionRuleId}
+      pcf_sessionRule_Name:
+        value: ${target.slice_pcfSessionRuleName}
+      pcf_sessionRule_Ambr_Ul:
+        value: ${target.slice_pcfQoSDataMaxBrUl}
+      pcf_sessionRule_Ambr_Dl:
+        value: ${target.slice_pcfQoSDataMaxBrDl}
+      pcf_sessionRule_QosId:
+        value: ${target.slice_pcfQoSInfoId}
+      pcf_policyTable_sst:
+        value: ${target.slice_sst}
+      pcf_policyTable_sd:
+        value: ${target.slice_sd}
+      pcf_policyTable_ratePlan:
+        value: ${target.slice_ratePlan}
+      pcf_policyTable_sessionRule:
+        value: ${target.slice_pcfSessionRuleName}
+      pcf_policyTable_dnn:
+        value: ${target.slice_dnnList}
+      pcf_policyTable_pccRuleList:
+        value: ${target.slice_pcfPccRuleName}
+    lifecycle:
+      Create:
+      - source.addSliceConfig
+      Cease: 
+      - source.removeSlice
+    source-state: Active
+    source-state-modifier: post
+    target-state: Active
+    target-state-modifier: post
+    source-capabilities:
+    - sol_operation_pcf.capability
+    target-requirements:
+    - nw_slice.requirement
+  # sol_operation_relationship_upf:
+    # properties:
+      # pcf_chgData_afChargingIdentifier:
+        # value: ${target.slice_chgProfileName
+    # lifecycle:
+      # Create:
+      # - source.addSliceConfig
+      # Cease: 
+      # - source.removeSlice
+    # source-state: Active
+    # source-state-modifier: post
+    # target-state: Active
+    # target-state-modifier: pre
+    # source-capabilities:
+    # - sol_operation_pcf.capability
+    # target-requirements:
+    # - nw_slice.requirement
+

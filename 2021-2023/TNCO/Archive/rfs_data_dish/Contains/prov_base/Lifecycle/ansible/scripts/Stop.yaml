@@ -1,0 +1,31 @@
+---
+- name: Stop
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  pre_tasks:
+
+    - name: Get ALM Token
+      uri:
+        method: POST
+        url: http://acb9412dc15104e988c43d6afeac6124-986749247.us-east-2.elb.amazonaws.com/oauth/token?grant_type=client_credentials
+        headers:
+           Authorization: Basic TG1DbGllbnQ6cGFzczEyMw==
+        validate_certs: no
+      register: auth_response
+
+    - name: Get Assembly Status
+      uri:
+        method: GET
+        url: http://acb9412dc15104e988c43d6afeac6124-986749247.us-east-2.elb.amazonaws.com/api/topology/assemblies?nameContains={{ instance_name }}
+        headers:
+           Authorization: Bearer {{ auth_response.json.access_token }}
+        validate_certs: no
+      register: alm_response1
+      
+    - name: Setting facts
+      set_fact:
+        operation1: "{{ alm_response1.json.assemblies[0].lastTransition.intentType }}"       
+
+  roles:
+    - { role: ../roles/suspend, when: ((operation1 is defined) and (operation1 == 'ChangeAssemblyState')) }

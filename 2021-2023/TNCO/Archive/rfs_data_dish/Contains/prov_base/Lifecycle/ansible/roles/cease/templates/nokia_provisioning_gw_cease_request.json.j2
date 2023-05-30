@@ -1,0 +1,24 @@
+{
+    "serviceType": "{{ serviceType }}",
+	"serviceName": "Subscriber - Data RFSS",
+    "id": "{{ kami_response.json.extOrderId }}",
+    "imsi": "{{ SUPI }} ",
+    "hlr": {
+        "path": "hlr",
+        "operation": "remove"
+    },
+    "hss": {
+        "path": "hss",
+        "operation": "remove"
+    },
+    "udm": {
+        "path": "udm5gData",
+        "operation": "remove"
+    },
+    "pcf": [
+        {
+            "path": "pcf",
+            "operation": "remove"
+        }
+    ]
+}

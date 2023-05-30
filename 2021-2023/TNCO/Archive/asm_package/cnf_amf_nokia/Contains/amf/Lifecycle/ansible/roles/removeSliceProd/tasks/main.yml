@@ -1,0 +1,59 @@
+# convert ALM properties to json provide request for South Bound endpoint - Nokia Provisioning GW 
+- name: Create the list
+  set_fact:   
+    list_amfTac: "{{ amfSlice_tai.split(',') | list }}" 
+    list_amfSlice_dnnName: "{{ amfSlice_dnnName.split(',') | list }}"
+    list_amfSlice_snssaiToDnnListName: "{{ amfSlice_snssaiToDnnListName.split(',') | list }}"
+        
+- name: Insert a line at the end of a file.
+  raw: export USER=root
+
+- name: Insert a line at the end of a file.
+  raw: cmm snssaiToDnn delete  --snssaiToDnnListName {{ item.1 }} --snssaiName {{ amfSlice_sliceName }}
+  loop: "{{ data[0]|zip(*data[1:])|list }}"
+  vars:
+    data:
+        -  "{{ list_amfSlice_dnnName }}"
+        -  "{{ list_amfSlice_snssaiToDnnListName }}"
+  register: result
+  failed_when:
+    - '"The relevant data content already exists" not in result.stdout'
+    - '"Field" not in result.stdout'
+
+
+- name: Insert a line at the end of a file.
+  raw: cmm snssaiToDnnList delete --name {{ item }}
+  loop: "{{ list_amfSlice_snssaiToDnnListName }}"
+  register: result
+  failed_when:
+    - '"The relevant data content already exists" not in result.stdout'
+    - '"Field" not in result.stdout'
+
+- name: Insert a line at the end of a file.
+  raw: cmm snssaiListItem delete --snssaiListName {{ amfSlice_snssaiListName}} --snssaiName {{ amfSlice_sliceName }} 
+  register: result
+  failed_when:
+    - '"The relevant data content already exists" not in result.stdout'
+    - '"Field" not in result.stdout'
+
+- name: Insert a line at the end of a file.
+  raw: cmm snssai delete --name {{ amfSlice_sliceName }} 
+  register: result
+  failed_when:
+    - '"The relevant data content already exists" not in result.stdout'
+    - '"Field" not in result.stdout'
+
+- name: Insert a line at the end of a file.
+  raw: cmm snssaiList delete --name {{ amfSlice_snssaiListName }} 
+  register: result
+  failed_when:
+    - '"The relevant data content already exists" not in result.stdout'
+    - '"Field" not in result.stdout'
+    
+# - name: Insert a line at the end of a file.
+#   raw:  cmm amfTai delete --plmnName {{ amfSlice_plmnName }} --amfTac {{ item }} 
+#   loop: "{{ list_amfTac }}"
+#   register: result
+#   failed_when:
+#     - '"The relevant data content already exists" not in result.stdout'
+#     - '"Field" not in result.stdout'   

@@ -1,0 +1,43 @@
+name: resource::ducell_samsung-du_samsung::1.0
+description: descriptor for ducell RAN slicing
+properties:
+  operation:
+    description: ducell
+    volatile: true
+    default: Configure
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: DFW
+  resourceManager:
+    type: string
+    default: brent
+  ducell_sst:
+    type: string
+  ducell_sd:
+    type: string
+  ducell_id:
+    type: string
+    # entry-schema:
+      # type: string
+  plmn_index:
+    type: string
+  ducell_samsung_usm_host:
+    type: string
+
+lifecycle:
+  Install: {}
+  # Configure: {}
+  # reconfigure: {}
+  Uninstall: {}
+default-driver:
+  ansible:
+    selector:
+      infrastructure-type:
+      - '*'
+# default-driver:
+  # sol003:
+    # selector:
+      # infrastructure-type:
+      # - '*'
+     

@@ -1,0 +1,69 @@
+
+- name: Creates directory
+  file:
+    path: /tmp/ansible_log
+    state: directory
+    mode: 0775
+
+- name: setting filename
+  set_fact:
+    filename: /tmp/ansible_log/ansible_{{ extOrderId }}_{{ ansible_date_time.iso8601 }}.log
+- shell: "python3 test.py"
+  register: start_time
+  no_log: True 
+
+
+- name: generate SB json
+  template:
+    src: nokia_blocklist_device_request.json.j2
+    dest: /tmp/devicemanagement_provide_request_{{ instance_name }}.json
+   
+- name: Call RestAPI
+  uri:
+    url: "{{ ansible_env.PGW_ADA_HOST }}/dish/ProvSpml/api/v1/spmlAdapter/addRequest"
+    method: POST
+    body: "{{lookup('template', 'nokia_blocklist_device_request.json.j2')}}"
+    status_code: 200
+    body_format: json
+    headers:
+      content-type: "application/json"
+      Returnresult_BlackListDeviceType: "FULL"
+  register: result_BlackListDevice
+  ignore_errors: yes
+  
+- name: Check that url returns a status_code 200 and fail if status_code 200 is not returns
+  fail:
+    msg: Instance creation failed with error code {{ result_BlackListDevice.status }} and error message {{ result_BlackListDevice.json.error.error_message }}
+  when:  result_BlackListDevice.status!=200 and result_BlackListDevice.json is defined
+
+- name: Check that url returns a status_code 200 and fail if status_code 200 is not returns
+  fail:
+    msg: Instance creation failed with error code {{ result_BlackListDevice.status }} and error message {{ result_BlackListDevice.msg }}
+  when: result_BlackListDevice.status != 200
+
+- shell: "python3 test.py"
+  register: end_time
+  no_log: True
+
+- shell: "python3 diff.py '{{ end_time.stdout }}' '{{ start_time.stdout }}'"
+  register: time_diff
+  no_log: True
+
+- name: generate SB json and copy       
+  copy:
+    dest: "{{ filename }}"
+    content: |
+       ***********************************
+       start_time:  {{ start_time.stdout }}
+       end_time:  {{ end_time.stdout }}
+       time_taken:  {{ time_diff.stdout }}
+       ***********************************
+       order_send:  {{lookup('template', 'nokia_blocklist_device_request.json.j2')}}
+       ____________________________________________________
+       result_BlackListDevice_return: {{ result_BlackListDevice.json }}
+    
+
+- name: fail instance if there is a failure from SBI
+  fail:
+    msg: Instance creation failed with error code {{ result_BlackListDevice.json.output.errorcode }} and error message {{ result_BlackListDevice.json.output.message }}
+  when: result_BlackListDevice.json.output.result == "Failure"

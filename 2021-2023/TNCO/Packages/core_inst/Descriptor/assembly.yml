@@ -1,0 +1,313 @@
+name: assembly::core_inst::1.0
+description: descriptor for Mavenir RAN slicing
+properties:
+#SolSpecific
+  operation:
+    description: core_inst
+    volatile: true
+    default: Configure
+  deploymentLocationCP:
+    type: string
+    description: site_specific
+    default: SUBPROV
+  deploymentLocationUP:
+    type: string
+    description: site_specific
+    default: SUBPROV
+  deploymentLocationDU:
+    type: string
+    description: site_specific
+    default: SUBPROV
+  resourceManager:
+    type: string
+    default: brent
+  # gnb_id:
+    # type: string
+    # default: 88
+  # amf_id:
+    # type: string
+  # du_id:
+    # type: string
+    # entry-schema:
+      # type: string
+  vnfdIdamf:
+    type: string
+    volatile: true
+  vnfdIdsmf:
+    type: string
+    volatile: true
+  vnfInstanceNameamf:
+    type: string
+  vnfInstanceNamesmf:
+    type: string
+#    value: ${vendor}-${function}${nfAppearance}${nfunType}-${region}${azId}${dataCenterType}${logicalDCNo}${env}${envId}
+    # default: or-nrf001c-usw2aza001nd
+  vnfInstanceDescriptionamf:
+    type: string
+    default: Deploy Mavenir amf
+  vnfInstanceDescriptionsmf:
+    type: string
+    default: Deploy Mavenir smf
+  vnfInstanceIdsmf:
+    value: ${smf.vnfInstanceId}
+    volatile: true
+  vnfInstanceIdamf:
+    value: ${amf.vnfInstanceId}
+    volatile: true  
+  cnfPackageVersionFileamf:
+    type: string
+    volatile: true
+  cnfPackageVersionFilesmf:
+    type: string
+    volatile: true
+  vnfdIdupf:
+    type: string
+    volatile: true
+  vnfInstanceNameupf:
+    type: string
+  vnfInstanceDescriptionupf:
+    type: string
+    default: Deploy Mavenir upf
+  vnfInstanceIdupf:
+    value: ${upf.vnfInstanceId}
+    volatile: true
+  cnfPackageVersionFileupf:
+    type: string
+    volatile: true
+  flavourId:
+    type: string
+#    default: small
+  vimType:
+    type: string
+    default: ndc
+  vim_id:
+    type: string
+    default: orchestratortest
+  envType:
+    type: string
+    default: dev    
+  nfType:
+    type: string
+    default: CNF
+  amf_cnfname:
+    type: string
+    volatile: true
+  smf_cnfname:
+    type: string
+    volatile: true
+  amf_chartkey:
+    type: string
+    volatile: true
+  smf_chartkey:
+    type: string
+    volatile: true
+  # mcms_host:
+    # type: string
+    # default: https://ib-orc-220-mcms-001:18080
+  # amf_snssai:
+    # type: string
+    # # default: 1000011
+  # bpi_eMBBNetworkSlice_name:
+    # type: string
+    # default: RRR
+  # bpi_eMBBNetworkSlice_id:
+    # type: string
+    # default: RRR
+  # bpi_ServiceProfile_name:
+    # type: string
+    # default: RRR
+  # bpi_ServiceProfile_id:
+    # type: string
+    # default: RRR
+  # bpi_ranNetworkSliceSubnet_name:
+    # type: string
+    # default: RRR
+  # bpi_ranNetworkSliceSubnet_id:
+    # type: string
+    # default: RRR
+  # bpi_SliceProfile_name:
+    # type: string
+    # default: RRR
+  # bpi_SliceProfile_id:
+    # type: string
+    # default: RRR
+composition:
+  amf:
+    type: $lmctl:/contains:/amf:/descriptor_name
+    quantity: 1
+    properties:
+#SolSpecific
+      operation:
+        value: ${operation}
+      # instance_name:
+        # value: ${instance_name}
+      deploymentLocation:
+        value: ${deploymentLocationCP}
+      resourceManager:
+        value: ${resourceManager}
+      amf_chartkey:
+        value: ${amf_chartkey}
+      amf_cnfname:
+        value: ${amf_cnfname}
+      # gnb_id:
+        # value: ${gnb_id}
+      # amf_id:
+        # value: ${amf_id}
+      # extOrderId:
+        # value: ${extOrderId}
+      # amf_sst:
+        # value: ${slice_sst}
+      # amf_sd:
+        # value: ${slice_sd}
+      # amf_snssai:
+        # value: ${slice_snssai}
+      # amf_mcc:
+        # value: ${slice_mcc}
+      # amf_mnc:
+        # value: ${slice_mnc}
+      vnfInstanceId:
+        value: ${vnfInstanceIdamf}
+      vnfdId:
+        value: ${vnfdIdamf}
+      vnfInstanceName:
+        value: ${vnfInstanceNameamf}
+      cnfPackageVersionFile:
+        value: ${cnfPackageVersionFileamf}
+      vnfInstanceDescription:
+        value: ${vnfInstanceDescriptionamf}
+      flavourId:
+        value: ${flavourId}
+      vimType:
+        value: ${vimType}
+      vim_id:
+        value: ${vim_id}
+      envType:
+        value: ${envType}
+      nfType:
+        value: ${nfType}
+      # bpi_eMBBNetworkSlice_name:
+        # value: ${bpi_eMBBNetworkSlice_name}
+      # bpi_eMBBNetworkSlice_id:
+        # value: ${bpi_eMBBNetworkSlice_id}
+      # bpi_ServiceProfile_name:
+        # value: ${bpi_ServiceProfile_name}
+      # bpi_ServiceProfile_id:
+        # value: ${bpi_ServiceProfile_id}
+      # bpi_ranNetworkSliceSubnet_name:
+        # value: ${bpi_ranNetworkSliceSubnet_name}
+      # bpi_ranNetworkSliceSubnet_id:
+        # value: ${bpi_ranNetworkSliceSubnet_id}
+      # bpi_SliceProfile_name:
+        # value: ${bpi_SliceProfile_name}
+      # bpi_SliceProfile_id:
+        # value: ${bpi_SliceProfile_id}
+  smf:
+    type: $lmctl:/contains:/smf:/descriptor_name
+    quantity: 1
+    properties:
+#SolSpecific
+      operation:
+        value: ${operation}
+      deploymentLocation:
+        value: ${deploymentLocationUP}
+      resourceManager:
+        value: ${resourceManager}
+      vnfInstanceId:
+        value: ${vnfInstanceIdsmf}
+      vnfdId:
+        value: ${vnfdIdsmf}
+      vnfInstanceName:
+        value: ${vnfInstanceNamesmf}
+      cnfPackageVersionFile:
+        value: ${cnfPackageVersionFilesmf}
+      vnfInstanceDescription:
+        value: ${vnfInstanceDescriptionsmf}
+      flavourId:
+        value: ${flavourId}
+      smf_chartkey:
+        value: ${smf_chartkey}
+      smf_cnfname:
+        value: ${smf_cnfname}
+      vimType:
+        value: ${vimType}
+      vim_id:
+        value: ${vim_id}
+      envType:
+        value: ${envType}
+      nfType:
+        value: ${nfType}
+  upf:
+    type: $lmctl:/contains:/upf:/descriptor_name
+    quantity: 1
+    # items: ${du_id}
+    properties:
+#SolSpecific
+      operation:
+        value: ${operation}
+      # instance_name:
+        # value: ${instance_name}
+      deploymentLocation:
+        value: ${deploymentLocationDU}
+      resourceManager:
+        value: ${resourceManager}
+      # gnb_id:
+        # value: ${amf.gnb_id}
+      # du_id:
+        # value: ${du_id}
+      # extOrderId:
+        # value: ${extOrderId}
+      # du_sst:
+        # value: ${slice_sst}
+      # du_sd:
+        # value: ${slice_sd}
+      # du_snssai:
+        # value: ${slice_snssai}
+      # du_mcc:
+        # value: ${slice_mcc}
+      # du_mnc:
+        # value: ${slice_mnc}
+      vnfInstanceId:
+        value: ${vnfInstanceIdupf}
+      vnfdId:
+        value: ${vnfdIdupf}
+      vnfInstanceName:
+        value: ${vnfInstanceNameupf}
+      cnfPackageVersionFile:
+        value: ${cnfPackageVersionFileupf}
+      vnfInstanceDescription:
+        value: ${vnfInstanceDescriptionupf}
+      flavourId:
+        value: ${flavourId}
+      vimType:
+        value: ${vimType}
+      vim_id:
+        value: ${vim_id}
+      envType:
+        value: ${envType}
+      nfType:
+        value: ${nfType}
+      # bpi_eMBBNetworkSlice_name:
+        # value: ${bpi_eMBBNetworkSlice_name}
+      # bpi_eMBBNetworkSlice_id:
+        # value: ${bpi_eMBBNetworkSlice_id}
+      # bpi_ServiceProfile_name:
+        # value: ${bpi_ServiceProfile_name}
+      # bpi_ServiceProfile_id:
+        # value: ${bpi_ServiceProfile_id}
+      # bpi_ranNetworkSliceSubnet_name:
+        # value: ${bpi_ranNetworkSliceSubnet_name}
+      # bpi_ranNetworkSliceSubnet_id:
+        # value: ${bpi_ranNetworkSliceSubnet_id}
+      # bpi_SliceProfile_name:
+        # value: ${bpi_SliceProfile_name}
+      # bpi_SliceProfile_id:
+        # value: ${bpi_SliceProfile_id}
+# operations:
+#   addSliceConfig:
+#     source-operation: amf.addSliceConfig
+#   addSliceConfigDu:
+#     source-operation: upf.addSliceConfig
+#   removeSlice:
+#     source-operation: amf.removeSlice
+#   removeSliceDu:
+#     source-operation: upf.removeSlice

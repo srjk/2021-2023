@@ -1,0 +1,18 @@
+schema: '2.0'
+name: rfs_voice_dish
+version: '1.0'
+type: Assembly
+resource-manager: Brent
+contains:
+- name: tas
+  type: Resource
+  resource-manager: Brent
+  directory: tas
+- name: enum
+  type: Resource
+  resource-manager: Brent
+  directory: enum
+- name: prov_base
+  type: Resource
+  resource-manager: Brent
+  directory: prov_base

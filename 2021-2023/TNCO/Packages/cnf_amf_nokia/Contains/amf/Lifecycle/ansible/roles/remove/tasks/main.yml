@@ -1,0 +1,12 @@
+
+# Deploy k8s instances on Specified NameSpace.
+
+- name: Genrate K8s Deployment & Satefulset Templates into Ansible pods
+  template:
+    src: deploy.yaml
+    dest: /tmp/deploy.yaml
+
+- name: Logon into kubernetes Ansible Pods
+  shell: |
+    export KUBECONFIG=/home/ald/kubeconfig
+    kubectl delete -f /tmp/deploy.yaml

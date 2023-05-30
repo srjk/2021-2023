@@ -1,0 +1,9 @@
+<input>
+    <template-name>ct-bootstrap-{{ template_name }}</template-name>
+{% for inputkey in key_list %}
+    <variable>
+        <name>{{ inputkey }}</name>
+        <value>'{{ template_param[inputkey] }}'</value>
+    </variable>
+{% endfor %}
+        </input>

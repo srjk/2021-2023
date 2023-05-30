@@ -1,0 +1,88 @@
+- block:   
+  - name: copy
+    copy:
+      dest: "/tmp/test"
+      content: |
+        {{ cnfInstance }}
+  - set_fact:
+      filename: "/tmp/{{ instance_name }}"
+  - set_fact:
+      # targetClusterRole: "{{ cnfInstance['config_context']['targetClusterRole'] }}"
+      codeCommitRole: "{{ cnfInstance['custom_fields']['SMFCodeCommitRole'] }}"
+      # eksClusterKubeConfig: "{{ cnfInstance['config_context']['eksClusterKubeConfig'] }}"
+      # eksClusterName: "{{ cnfInstance['config_context']['eksClusterName'] }}"
+      # cdkDeployRegion: "{{ cnfInstance['config_context']['cdkDeployRegion'] }}"
+      # profile_name: "{{ cnfInstance['config_context']['application_json']['profiles'].keys() }}"
+
+
+  # - name: Extract file name before the last '/'
+  #   set_fact:
+  #     file_without_path: "{{ cnfInstance.config_context.site_bucket_tar | basename }}"
+  #   register: result
+  # - name: Split the file name into parts based on '.'
+  #   set_fact:
+  #     ext_parts: "{{ file_without_path.split('.') | default([]) }}"
+  #   # when: result.changed
+  #   register: result
+  # - name: Extract the extension
+  #   set_fact:
+  #     ext: "{{ ext_parts[-1] | default('') }}"
+  #   #when: result.changed
+  #   register: result
+  # - name: Remove the extension from the file name
+  #   set_fact:
+  #     file_without_ext: "{{ file_without_path if ext == '' else file_without_path | regex_replace('\\.[^.]+$', '') }}"
+  #   when:  ext in ['tar', 'zip', 'tgz', 'tar.gz','gz']
+  #   register: result
+  # - name: Display result
+  #   debug:
+  #     var: file_without_ext
+
+
+  # - get_url:
+  #     url: "{{ deployment_location.properties.nexus_url }}/repository/nflcm/{{ cnfInstance.config_context.site_bucket_tar }}"
+  #     username: "{{ deployment_location.properties.nexus_username }}"
+  #     password: "{{ deployment_location.properties.nexus_password }}"
+  #     dest: "/tmp/{{ instance_name }}.{{ ext }}"
+  #     validate_certs: no
+
+  # - shell: "python3 extract_file.py {{ filename }}.{{ ext }}"
+
+
+
+  - name: trigger python
+    shell: "python3 test_status.py {{ codeCommitRole }} {{ deployment_location.properties.lcm_session }} {{ deployment_location.properties.lcm_region_name }} {{ deployment_location.properties.kafka_pod }} {{ deployment_location.properties.kafka_topic }}"
+    register: result
+    failed_when: "result.rc not in [ 0, 1 ]"
+
+  # - set_fact:
+  #     test_result: "{{ result.stdout }}"
+
+  # - set_fact:
+  #     output__commitId: "{{ test_result['commitId'] }}"
+  #     output__pipeline_id: "{{ test_result['pipeline_id'] }}"
+  #     output__response_status: "{{ test_result['response_status'] }}"
+  - set_fact:
+      output__response_status: "{{ result.stdout }}"
+  - fail:
+      msg: "pipeline {{ result.stderr }}"
+    when: "result.stdout != 'Succeeded'"
+
+  # - set_fact:
+  #     namespace: "{{ cnfInstance['config_context']['application_json']['profiles'][profile_name[0]].keys()|select('regex','namespace')| first }}"
+
+  # - shell: |
+  #       ASSUME_ROLE_ARN={{ targetClusterRole }}
+  #       CREDS=$(aws sts assume-role --role-arn $ASSUME_ROLE_ARN --role-session-name $(date '+%Y%m%d%H%M%S%3N') --duration-seconds 3600 --query '[Credentials.AccessKeyId,Credentials.SecretAccessKey,Credentials.SessionToken]' --output text)
+  #       export AWS_SECRET_ACCESS_KEY=$(echo $CREDS | cut -d' ' -f2)
+  #       export AWS_ACCESS_KEY_ID=$(echo $CREDS | cut -d' ' -f1)
+  #       export AWS_SESSION_TOKEN=$(echo $CREDS | cut -d' ' -f3)
+  #       {{ eksClusterKubeConfig }}
+  #       kubectl get pod -n {{ cnfInstance['config_context']['application_json']['profiles'][profile_name[0]][namespace] }}
+  #       kubectl get ns
+  #   register: result
+  # - debug:
+  #       msg: "{{ result }}"
+
+  # - shell: python3 lm.py "{{ result.stdout_lines | join(',') }}" "{{ deployment_location.properties.kafka_pod }}" "{{ deployment_location.properties.kafka_topic }}" "{{ cnfInstance["custom_fields"]["lcm_orderId"] }}"
+  # when: "cnfInstance['config_context']['almLoopback'] | default('false') == 'false'"

@@ -1,0 +1,74 @@
+name: assembly::du_samsung::1.0
+description: descriptor for Samsung RAN slicing
+properties:
+#SolSpecific
+  operation:
+    description: DU
+    volatile: true
+    default: Configure
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: DFW
+  resourceManager:
+    type: string
+    default: brent
+  du_sst:
+    type: string
+  du_sd:
+    type: string
+  du_id:
+    type: string
+  ducell_id:
+    type: list
+    entry-schema:
+      type: string
+  plmn_index:
+    type: string
+  du_samsung_usm_host:
+    type: string
+
+composition:
+  ducell_samsung:
+    type: $lmctl:/contains:/ducell_samsung:/descriptor_name
+    # quantity: 1
+    items: ${ducell_id}
+    properties:
+      operation:
+        value: ${operation}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      resourceManager:
+        value: ${resourceManager}
+      ducell_sst:
+        value: ${du_sst}
+      ducell_sd:
+        value: ${du_sd}
+      ducell_id:
+        value: ${item}
+      plmn_index:
+        value: ${plmn_index}
+      ducell_samsung_usm_host:
+        value: ${du_samsung_usm_host}
+
+  du_samsung:
+    type: $lmctl:/contains:/du_samsung:/descriptor_name
+    quantity: 1    
+    properties:
+      operation:
+        value: ${operation}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      resourceManager:
+        value: ${resourceManager}
+      du_sst:
+        value: ${ducell_samsung.du_sst}
+      du_sd:
+        value: ${du_sd}
+      du_id:
+        value: ${du_id}
+      plmn_index:
+        value: ${plmn_index}
+      du_samsung_usm_host:
+        value: ${du_samsung_usm_host}
+        

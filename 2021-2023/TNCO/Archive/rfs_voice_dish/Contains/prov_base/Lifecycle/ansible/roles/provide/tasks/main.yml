@@ -1,0 +1,19 @@
+# convert ALM properties to json provide request for South Bound endpoint - Nokia Provisioning GW 
+    
+- name: Call RestAPI of SPML Adapter
+  uri:
+    url:  "http://dish-prov-ada-svc:8183/dish/ProvSpml/api/v1/spmlAdapter/modifyAddRequest"
+    method: POST
+    body: "{{lookup('template', 'nokia_provisioning_gw_provide_request.json.j2')}}"
+    status_code: 200
+    body_format: json
+    headers:
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+    return_content: yes
+  register: resultPgw
+
+- name: fail instance if there is a failure from SBI
+  fail:
+    msg: Instance creation failed with error code {{ resultPgw.json.errorcode }} and error message {{ resultPgw.json.errormessage }}
+  when: resultPgw.json.result == "failure"

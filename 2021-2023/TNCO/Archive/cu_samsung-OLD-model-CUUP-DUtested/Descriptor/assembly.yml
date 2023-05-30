@@ -1,0 +1,76 @@
+name: assembly::cu_samsung::1.0
+description: descriptor for Samsung RAN slicing
+properties:
+#SolSpecific
+  operation:
+    description: CU
+    volatile: true
+    default: Configure
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: DFW
+  resourceManager:
+    type: string
+    default: brent
+  cu_sst:
+    type: string
+  cu_sd:
+    type: string
+  cucp_id:
+    type: string
+  cuup_id:
+    type: list
+    entry-schema:
+      type: string
+  plmn_index:
+    type: string
+    default: 0
+  cu_samsung_usm_host:
+    type: string
+
+
+composition:
+  cuup_samsung:
+    type: $lmctl:/contains:/cuup_samsung:/descriptor_name
+    # quantity: 1
+    items: ${cuup_id}
+    properties:
+      operation:
+        value: ${operation}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      resourceManager:
+        value: ${resourceManager}
+      cuup_sst:
+        value: ${cu_sst}
+      cuup_sd:
+        value: ${cu_sd}
+      cuup_id:
+        value: ${item}
+      plmn_index:
+        value: ${plmn_index}
+      cuup_samsung_usm_host:
+        value: ${cu_samsung_usm_host}
+
+  cucp_samsung:
+    type: $lmctl:/contains:/cucp_samsung:/descriptor_name
+    quantity: 1    
+    properties:
+      operation:
+        value: ${operation}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      resourceManager:
+        value: ${resourceManager}
+      cucp_sst:
+        value: ${cuup_samsung.cuup_sst}
+      cucp_sd:
+        value: ${cu_sd}
+      cucp_id:
+        value: ${cucp_id}
+      plmn_index:
+        value: ${plmn_index}
+      cucp_samsung_usm_host:
+        value: ${cu_samsung_usm_host}
+        

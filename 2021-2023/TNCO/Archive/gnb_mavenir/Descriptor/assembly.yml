@@ -1,0 +1,313 @@
+name: assembly::gnb_mavenir::1.0
+description: descriptor for Mavenir RAN slicing
+properties:
+#SolSpecific
+  operation:
+    description: GNB_Mavenir
+    volatile: true
+    default: Configure
+  deploymentLocationCP:
+    type: string
+    description: site_specific
+    default: SOL003
+  deploymentLocationUP:
+    type: string
+    description: site_specific
+    default: SOL003
+  deploymentLocationDU:
+    type: string
+    description: site_specific
+    default: SOL003
+  resourceManager:
+    type: string
+    default: brent
+  # gnb_id:
+    # type: string
+    # default: 88
+  # cucp_id:
+    # type: string
+  # du_id:
+    # type: string
+    # entry-schema:
+      # type: string
+  vnfdIdCUCP:
+    type: string
+    volatile: true
+  vnfdIdCUUP:
+    type: string
+    volatile: true
+  vnfInstanceNameCUCP:
+    type: string
+  vnfInstanceNameCUUP:
+    type: string
+#    value: ${vendor}-${function}${nfAppearance}${nfunType}-${region}${azId}${dataCenterType}${logicalDCNo}${env}${envId}
+    # default: or-nrf001c-usw2aza001nd
+  vnfInstanceDescriptionCUCP:
+    type: string
+    default: Deploy Mavenir CUCP
+  vnfInstanceDescriptionCUUP:
+    type: string
+    default: Deploy Mavenir CUUP
+  vnfInstanceIdCUUP:
+    value: ${cuup.vnfInstanceId}
+    volatile: true
+  vnfInstanceIdCUCP:
+    value: ${cucp_mavenir.vnfInstanceId}
+    volatile: true  
+  cnfPackageVersionFileCUCP:
+    type: string
+    volatile: true
+  cnfPackageVersionFileCUUP:
+    type: string
+    volatile: true
+  vnfdIdCUDU:
+    type: string
+    volatile: true
+  vnfInstanceNameCUDU:
+    type: string
+  vnfInstanceDescriptionCUDU:
+    type: string
+    default: Deploy Mavenir DU
+  vnfInstanceIdCUDU:
+    value: ${du_mavenir.vnfInstanceId}
+    volatile: true
+  cnfPackageVersionFileCUDU:
+    type: string
+    volatile: true
+  flavourId:
+    type: string
+#    default: small
+  vimType:
+    type: string
+    default: ndc
+  vim_id:
+    type: string
+    default: orchestratortest
+  envType:
+    type: string
+    default: dev    
+  nfType:
+    type: string
+    default: CNF
+  cucp_cnfname:
+    type: string
+    volatile: true
+  cuup_cnfname:
+    type: string
+    volatile: true
+  cucp_chartkey:
+    type: string
+    volatile: true
+  cuup_chartkey:
+    type: string
+    volatile: true
+  # mcms_host:
+    # type: string
+    # default: https://ib-orc-220-mcms-001:18080
+  # cucp_snssai:
+    # type: string
+    # # default: 1000011
+  # bpi_eMBBNetworkSlice_name:
+    # type: string
+    # default: RRR
+  # bpi_eMBBNetworkSlice_id:
+    # type: string
+    # default: RRR
+  # bpi_ServiceProfile_name:
+    # type: string
+    # default: RRR
+  # bpi_ServiceProfile_id:
+    # type: string
+    # default: RRR
+  # bpi_ranNetworkSliceSubnet_name:
+    # type: string
+    # default: RRR
+  # bpi_ranNetworkSliceSubnet_id:
+    # type: string
+    # default: RRR
+  # bpi_SliceProfile_name:
+    # type: string
+    # default: RRR
+  # bpi_SliceProfile_id:
+    # type: string
+    # default: RRR
+composition:
+  cucp_mavenir:
+    type: $lmctl:/contains:/cucp_mavenir:/descriptor_name
+    quantity: 1
+    properties:
+#SolSpecific
+      operation:
+        value: ${operation}
+      # instance_name:
+        # value: ${instance_name}
+      deploymentLocation:
+        value: ${deploymentLocationCP}
+      resourceManager:
+        value: ${cuup.resourceManager}
+      cucp_chartkey:
+        value: ${cucp_chartkey}
+      cucp_cnfname:
+        value: ${cucp_cnfname}
+      # gnb_id:
+        # value: ${gnb_id}
+      # cucp_id:
+        # value: ${cucp_id}
+      # extOrderId:
+        # value: ${extOrderId}
+      # cucp_sst:
+        # value: ${slice_sst}
+      # cucp_sd:
+        # value: ${slice_sd}
+      # cucp_snssai:
+        # value: ${slice_snssai}
+      # cucp_mcc:
+        # value: ${slice_mcc}
+      # cucp_mnc:
+        # value: ${slice_mnc}
+      vnfInstanceId:
+        value: ${vnfInstanceIdCUCP}
+      vnfdId:
+        value: ${vnfdIdCUCP}
+      vnfInstanceName:
+        value: ${vnfInstanceNameCUCP}
+      cnfPackageVersionFile:
+        value: ${cnfPackageVersionFileCUCP}
+      vnfInstanceDescription:
+        value: ${vnfInstanceDescriptionCUCP}
+      flavourId:
+        value: ${flavourId}
+      vimType:
+        value: ${vimType}
+      vim_id:
+        value: ${vim_id}
+      envType:
+        value: ${envType}
+      nfType:
+        value: ${nfType}
+      # bpi_eMBBNetworkSlice_name:
+        # value: ${bpi_eMBBNetworkSlice_name}
+      # bpi_eMBBNetworkSlice_id:
+        # value: ${bpi_eMBBNetworkSlice_id}
+      # bpi_ServiceProfile_name:
+        # value: ${bpi_ServiceProfile_name}
+      # bpi_ServiceProfile_id:
+        # value: ${bpi_ServiceProfile_id}
+      # bpi_ranNetworkSliceSubnet_name:
+        # value: ${bpi_ranNetworkSliceSubnet_name}
+      # bpi_ranNetworkSliceSubnet_id:
+        # value: ${bpi_ranNetworkSliceSubnet_id}
+      # bpi_SliceProfile_name:
+        # value: ${bpi_SliceProfile_name}
+      # bpi_SliceProfile_id:
+        # value: ${bpi_SliceProfile_id}
+  cuup:
+    type: $lmctl:/contains:/cuup:/descriptor_name
+    quantity: 1
+    properties:
+#SolSpecific
+      operation:
+        value: ${operation}
+      deploymentLocation:
+        value: ${deploymentLocationUP}
+      resourceManager:
+        value: ${resourceManager}
+      vnfInstanceId:
+        value: ${vnfInstanceIdCUUP}
+      vnfdId:
+        value: ${vnfdIdCUUP}
+      vnfInstanceName:
+        value: ${vnfInstanceNameCUUP}
+      cnfPackageVersionFile:
+        value: ${cnfPackageVersionFileCUUP}
+      vnfInstanceDescription:
+        value: ${vnfInstanceDescriptionCUUP}
+      flavourId:
+        value: ${flavourId}
+      cuup_chartkey:
+        value: ${cuup_chartkey}
+      cuup_cnfname:
+        value: ${cuup_cnfname}
+      vimType:
+        value: ${vimType}
+      vim_id:
+        value: ${vim_id}
+      envType:
+        value: ${envType}
+      nfType:
+        value: ${nfType}
+  du_mavenir:
+    type: $lmctl:/contains:/du_mavenir:/descriptor_name
+    quantity: 1
+    # items: ${du_id}
+    properties:
+#SolSpecific
+      operation:
+        value: ${operation}
+      # instance_name:
+        # value: ${instance_name}
+      deploymentLocation:
+        value: ${deploymentLocationDU}
+      resourceManager:
+        value: ${cucp_mavenir.resourceManager}
+      # gnb_id:
+        # value: ${cucp_mavenir.gnb_id}
+      # du_id:
+        # value: ${du_id}
+      # extOrderId:
+        # value: ${extOrderId}
+      # du_sst:
+        # value: ${slice_sst}
+      # du_sd:
+        # value: ${slice_sd}
+      # du_snssai:
+        # value: ${slice_snssai}
+      # du_mcc:
+        # value: ${slice_mcc}
+      # du_mnc:
+        # value: ${slice_mnc}
+      vnfInstanceId:
+        value: ${vnfInstanceIdCUDU}
+      vnfdId:
+        value: ${vnfdIdCUDU}
+      vnfInstanceName:
+        value: ${vnfInstanceNameCUDU}
+      cnfPackageVersionFile:
+        value: ${cnfPackageVersionFileCUDU}
+      vnfInstanceDescription:
+        value: ${vnfInstanceDescriptionCUDU}
+      flavourId:
+        value: ${flavourId}
+      vimType:
+        value: ${vimType}
+      vim_id:
+        value: ${vim_id}
+      envType:
+        value: ${envType}
+      nfType:
+        value: ${nfType}
+      # bpi_eMBBNetworkSlice_name:
+        # value: ${bpi_eMBBNetworkSlice_name}
+      # bpi_eMBBNetworkSlice_id:
+        # value: ${bpi_eMBBNetworkSlice_id}
+      # bpi_ServiceProfile_name:
+        # value: ${bpi_ServiceProfile_name}
+      # bpi_ServiceProfile_id:
+        # value: ${bpi_ServiceProfile_id}
+      # bpi_ranNetworkSliceSubnet_name:
+        # value: ${bpi_ranNetworkSliceSubnet_name}
+      # bpi_ranNetworkSliceSubnet_id:
+        # value: ${bpi_ranNetworkSliceSubnet_id}
+      # bpi_SliceProfile_name:
+        # value: ${bpi_SliceProfile_name}
+      # bpi_SliceProfile_id:
+        # value: ${bpi_SliceProfile_id}
+operations:
+  addSliceConfig:
+    source-operation: cucp_mavenir.addSliceConfig
+  addSliceConfigDu:
+    source-operation: du_mavenir.addSliceConfig
+  removeSlice:
+    source-operation: cucp_mavenir.removeSlice
+  removeSliceDu:
+    source-operation: du_mavenir.removeSlice

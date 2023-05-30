@@ -1,0 +1,9 @@
+schema: '2.0'
+name: rfs_dataroam_dish
+version: '1.0'
+type: Assembly
+contains:
+- name: dataroam_rfs
+  type: Resource
+  resource-manager: lm
+  directory: dataroam_rfs

@@ -1,0 +1,30 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <soapenv:Body>
+      <spml:modifyRequest timestamp="true" requestID="{{ extOrderId-TimeStamp }}" xmlns:spml="urn:siemens:names:prov:gw:SPML:2:0" xmlns:sub="urn:siemens:names:prov:gw:SDL_MULTIAPPSUBSCRIBER:1:0">
+	<version>SDL_MULTIAPPSUBSCRIBER_v10</version>
+        <objectclass>Subscriber</objectclass>
+        <identifier>{{ SUPI }}</identifier>
+<modification operation="{{ operation_pgw }}"> 
+    <valueObject xsi:type="sub:PrivateUserId"> 
+             	<privateUserId>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</privateUserId>
+	     	<provisionedImsi>
+			<provisionedImsi>{{ SUPI }}</provisionedImsi>
+		</provisionedImsi>						
+		<msisdn>{{ GPSI }}</msisdn>
+		<preferredAuthenticationScheme>{{ preferredAuthenticationScheme }}</preferredAuthenticationScheme>
+		<preferredDomain>ims</preferredDomain>
+		<refGussDataId>{{ refGussDataId }}</refGussDataId>
+		<looseRoutingIndicationRequired>{{ looseRoutingIndicationRequired }}</looseRoutingIndicationRequired>
+		<digestRealm>{{ digestRealm }}</digestRealm>
+    </valueObject> 
+</modification>
+<modification operation="{{ operation2 }}"  name="hss/privateUserId[@privateUserId='+{{ Old_GPSI }}@ims.mnc340.mcc313.3gppnetwork.org']">
+</modification>
+<modification operation="set">
+<valueObject xsi:type="sub:UpiListItem">
+<upi>sip:+${NEW-MSISDN}@ims.mnc340.mcc313.3gppnetwork.org</upi>
+</valueObject>
+</modification>
+</spml:modifyRequest>
+</soapenv:Body>
+</soapenv:Envelope>

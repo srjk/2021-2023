@@ -1,0 +1,36 @@
+2021-09-30 11:46:12,319 - lmctl.cli.ctlmgmt - ERROR - Config environment variable LMCONFIG is not set
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.7/site-packages/lmctl/cli/ctlmgmt.py", line 13, in get_ctl
+    return ctl_config.get_ctl(config_path)
+  File "/home/ec2-user/.local/lib/python3.7/site-packages/lmctl/ctl/config.py", line 179, in get_ctl
+    config_path = CtlConfigFinder(config_path, 'LMCONFIG').find()
+  File "/home/ec2-user/.local/lib/python3.7/site-packages/lmctl/ctl/config.py", line 155, in find
+    raise ConfigError('Config environment variable {0} is not set'.format(self.potential_env_var))
+lmctl.ctl.common.ConfigError: Config environment variable LMCONFIG is not set
+2021-09-30 11:46:12,319 - lmctl.cli.ctlmgmt - ERROR - Config environment variable LMCONFIG is not set
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.7/site-packages/lmctl/cli/ctlmgmt.py", line 13, in get_ctl
+    return ctl_config.get_ctl(config_path)
+  File "/home/ec2-user/.local/lib/python3.7/site-packages/lmctl/ctl/config.py", line 179, in get_ctl
+    config_path = CtlConfigFinder(config_path, 'LMCONFIG').find()
+  File "/home/ec2-user/.local/lib/python3.7/site-packages/lmctl/ctl/config.py", line 155, in find
+    raise ConfigError('Config environment variable {0} is not set'.format(self.potential_env_var))
+lmctl.ctl.common.ConfigError: Config environment variable LMCONFIG is not set
+2021-09-30 12:21:52,601 - lmctl.cli.ctlmgmt - ERROR - Config environment variable LMCONFIG is not set
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.7/site-packages/lmctl/cli/ctlmgmt.py", line 13, in get_ctl
+    return ctl_config.get_ctl(config_path)
+  File "/home/ec2-user/.local/lib/python3.7/site-packages/lmctl/ctl/config.py", line 179, in get_ctl
+    config_path = CtlConfigFinder(config_path, 'LMCONFIG').find()
+  File "/home/ec2-user/.local/lib/python3.7/site-packages/lmctl/ctl/config.py", line 155, in find
+    raise ConfigError('Config environment variable {0} is not set'.format(self.potential_env_var))
+lmctl.ctl.common.ConfigError: Config environment variable LMCONFIG is not set
+2021-09-30 12:21:52,601 - lmctl.cli.ctlmgmt - ERROR - Config environment variable LMCONFIG is not set
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.7/site-packages/lmctl/cli/ctlmgmt.py", line 13, in get_ctl
+    return ctl_config.get_ctl(config_path)
+  File "/home/ec2-user/.local/lib/python3.7/site-packages/lmctl/ctl/config.py", line 179, in get_ctl
+    config_path = CtlConfigFinder(config_path, 'LMCONFIG').find()
+  File "/home/ec2-user/.local/lib/python3.7/site-packages/lmctl/ctl/config.py", line 155, in find
+    raise ConfigError('Config environment variable {0} is not set'.format(self.potential_env_var))
+lmctl.ctl.common.ConfigError: Config environment variable LMCONFIG is not set

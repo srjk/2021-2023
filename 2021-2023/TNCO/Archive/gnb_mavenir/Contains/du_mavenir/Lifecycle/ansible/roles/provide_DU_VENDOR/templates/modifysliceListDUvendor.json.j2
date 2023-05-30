@@ -1,0 +1,11 @@
+{
+  "gnbId": {{ gnb_id  | int }},
+  "cnfId": {{ du_id | int }},
+  "version": "{{ du_version }}",
+  "configType": "{{ du_vendor_config }}",
+  "attributeListIn": {
+			 "sd":"{{ du_sd }}",
+			 "sliceIndex":{{ idsliceListDUVendor }},
+			 "sst":{{ du_sst | int }}
+	}
+}

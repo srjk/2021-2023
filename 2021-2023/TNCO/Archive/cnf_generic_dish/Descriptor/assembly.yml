@@ -1,0 +1,50 @@
+name: assembly::cnf_generic_dish::1.0
+description: descriptor for LCM
+properties:
+  cnfInstance:
+    type: cnfInstancedata
+composition:
+  cnf_Instance:
+    type: $lmctl:/contains:/cnfInstance:/descriptor_name
+    quantity: 1
+    properties:
+      instance_name:
+        value: ${instance.name}
+      cnfInstance:
+        value: ${cnfInstance}
+data_types:
+  cnfInstancedata: 
+    properties:
+      name:
+        type: string
+      cluster:
+        type: map
+        entry-schema: clusterdata
+      config_context:
+        type: map
+        entry-schema: config_contextdata
+  clusterdata:
+    properties:
+      name:
+        type: string
+      site:
+        type: map
+        entry-schema: sitedata
+  sitedata:
+    properties:
+      name: 
+        type: string
+      region:
+        type: string
+  config_contextdata:
+    properties:
+      codeCommitRepo:
+        type: string
+      deploymentType:
+        type: string
+      site_bucket_tar:
+        type: string
+      application_json:
+        type: map
+      config_json:
+        type: map

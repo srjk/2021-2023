@@ -1,0 +1,108 @@
+name: assembly::cnf_amf_nokia_ref::1.0
+description: descriptor for sol_amf
+properties:
+#SolSpecific
+  operation:
+    description: addSliceConfig
+    volatile: true
+    default: Configure
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: DFW
+  resourceManager:
+    type: string
+    default: brent
+  extOrderId:
+    type: string  
+  instance_name:
+    description: name of assembly instance
+  slice_tai:
+    type: string
+  slice_sst:
+    type: string
+  slice_sd:
+    type: string
+  slice_dnnList:
+    type: string
+  slice_amfSetId:
+    type: string
+  slice_amfRegionId:
+    type: string
+  amfSlice_snssaiToDnnListName:
+    type: string
+  amfSlice_snssaiListName:
+    type: string
+  amfSlice_sliceName:
+    type: string
+  amfSlice_plmnName:
+    type: string
+  alm_assembly_name:
+    type: string
+composition:
+  ref:
+    type: $lmctl:/contains:/ref:/descriptor_name
+    quantity: 1
+    properties:
+      instance_name:
+        value: ${instance_name}
+references:
+  amf:
+    properties:
+      name:
+        value: ${alm_assembly_name}
+    type: assembly::cnf_amf_nokia::1.0
+relationships:
+  sol_operation_relationship_amf:
+    properties:
+      amfSlice_plmnName:
+        value: ${amfSlice_plmnName}
+      amfSlice_tai:
+        value: ${slice_tai}
+      amfSlice_sliceName:
+        value: ${amfSlice_sliceName}
+      amfSlice_sst:
+        value: ${slice_sst}
+      amfSlice_sd:
+        value: ${slice_sd}
+      amfSlice_snssaiListName:
+        value: ${amfSlice_snssaiListName}
+      amfSlice_amfRegionId:
+        value: ${slice_amfRegionId}
+      amfSlice_amfSetId:
+        value: ${slice_amfSetId}
+      amfSlice_snssaiToDnnListName:
+        value: ${amfSlice_snssaiToDnnListName}
+      amfSlice_dnnName:
+        value: ${slice_dnnList}
+      snssaiListName:
+        value: ${snssaiListName}
+      instance_name:
+        value: ${ref.instance_name}
+      extOrderId:
+        value: ${extOrderId}
+      # amfSlice_timeZone:
+      #   value: Default
+      # amfSlice_supportedInAllTacFlag:
+      #   value: true
+      # amfSlice_defaultSnssaiSelection:
+      #   value: LOCAL
+    lifecycle:
+      Create:
+      - source.addSliceConfig
+      Cease:
+      - source.removeSlice
+    source-state: Active
+    source-state-modifier: post
+    target-state: Active
+    target-state-modifier: post
+    source-capabilities:
+    - amf.capability
+    target-requirements:
+    - ref.requirement
+operations:
+  addSliceConfig:
+    source-operation: amf.addSliceConfig
+  removeSlice:
+    source-operation: amf.removeSlice
+

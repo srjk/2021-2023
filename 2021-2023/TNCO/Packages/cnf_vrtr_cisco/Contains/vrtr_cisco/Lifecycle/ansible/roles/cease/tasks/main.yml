@@ -1,0 +1,122 @@
+
+#-----------------------> Start time from system  <----------------------------
+- name: "##ALM## Get timestamp from the system"
+  shell: "date +%Y-%m-%d%H:%M:%S.%5N"
+  register: stime
+
+#-----------------------> Print Start time  <----------------------------
+- name: "##ALM## Start time"
+  debug: msg="{{ stime }}"
+
+#----------------------> Get ticket ID  <----------------------------
+- name: Get Ticket.
+  uri:
+    url: "{{ deployment_location.properties.cnc_host1 }}/crosswork/sso/v1/tickets"
+    method: POST
+    headers:
+      content-type: "application/x-www-form-urlencoded"
+      ReturnResultType: "FULL"
+      return_content: yes
+      Accept: text/plain
+    validate_certs: no
+    status_code: 201
+    return_content: yes
+    body:
+      username: "{{ username }}"
+      password: "{{ password }}"
+    body_format: form-urlencoded
+  register: ticket
+  # ignore_errors: yes
+
+- name: ticket print.
+  debug:
+    msg: "{{ ticket.location }}"
+
+#----------------------> Get Token  <----------------------------
+
+- name: Get Token.
+  uri:
+    url: "{{ deployment_location.properties.cnc_host1 }}/crosswork/sso/v1/tickets/{{ ticket.location | regex_search('tickets/.*') | replace('tickets/','') }}"
+    method: POST
+    headers:
+      content-type: "application/x-www-form-urlencoded"
+      ReturnResultType: "FULL"
+    return_content: yes
+    validate_certs: no
+    status_code: 200
+    body:
+      service: "https://10.194.132.78:30603/app-dashboard"
+    body_format: form-urlencoded
+  register: token
+  # ignore_errors: yes
+  
+  
+- name: token print.
+  debug:
+    msg: "{{ token.content }}"
+
+
+
+#----------------------> Calls to remove vRouter Config  <----------------------------
+- name: Call to remove amf vRouter config
+  include: amf.yaml
+  vars:
+    token1: "{{ token.content }}"
+  when: "template_name == 'ct-bootstrap-amf'"
+
+- name: Call to remove amf vRouter config
+  include: smf.yaml
+  vars:
+    token1: "{{ token.content }}"
+  when: "template_name == 'ct-bootstrap-smf'"  
+
+- name: Call to remove upf_n3 vRouter config
+  include: upfn3.yaml
+  vars:
+    token1: "{{ token.content }}"
+  when: "template_name == 'ct-bootstrap-upf-n3'"   
+
+- name: Call to remove upf_n6 vRouter config
+  include: upfn6.yaml
+  vars:
+    token1: "{{ token.content }}"
+  when: "template_name == 'ct-bootstrap-upf-n6'"       
+
+
+##-----------------------> search error from result content  <-------------------------
+#- name: "##ALM## Print Error message"
+#  set_fact:
+#    target: "{{ result.content | regex_search('error') }}"
+
+
+#-----------------------> End time from system  <----------------------------
+- name: "##ALM## Get timestamp from the system"
+  shell: "date +%Y-%m-%d%H:%M:%S.%5N"
+  register: etime
+
+#-----------------------> Print End time  <----------------------------
+- name: "##ALM## end time"
+  debug: msg="{{ etime }}"
+  
+  
+##-----------------------> Store request/response Logs in Eventlogger  <----------------------------
+#- name: "##ALM## Store request and response in DB"
+#  uri:
+#    url: "{{ deployment_location.properties.eventlogger_url }}"
+#    method: POST
+#    body: "{{lookup('template', 'Store-Provide.json.j2')}}"
+#    return_content: yes
+#    body_format: json
+#    status_code: 200
+#    validate_certs: no
+#    headers:
+#      content-type: "application/json"
+#      ReturnResultType: "FULL"
+#  register: resultStore
+#
+#    
+##-----------------------> Print error message for Failure case  <----------------------------
+#- fail:
+#    msg: "Instance creation failed with {{ result.content | regex_search('<error-message>.*</#error-message>') | replace('<error-message>','') | replace('{','/') | replace('}','/') |replace('</#error-message>','') }}"
+#  when: "target=='error'" 
+ 

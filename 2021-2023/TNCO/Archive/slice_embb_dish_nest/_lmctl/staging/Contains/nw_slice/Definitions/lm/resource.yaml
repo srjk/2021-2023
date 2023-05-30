@@ -1,0 +1,24 @@
+name: resource::nw_slice-slice_embb_dish_nest::1.0
+description: descriptor for nwslice
+properties:
+  operation:
+    description: Install/Configure/Uninstall
+    volatile: true
+    default: Install
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: DFW
+  resourceManager:
+    type: string
+    default: brent
+  instance_name:
+    description: name of assembly instance
+lifecycle:
+  Uninstall: {}
+  Install: {}
+default-driver:
+  ansible:
+    selector:
+      infrastructure-type:
+      - '*'

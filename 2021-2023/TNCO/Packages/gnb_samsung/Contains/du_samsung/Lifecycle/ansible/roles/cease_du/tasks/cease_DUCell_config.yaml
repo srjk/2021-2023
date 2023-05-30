@@ -1,0 +1,224 @@
+######--->  DUcell configuration- Create (DUCell_createslice,Lock,slicegroup,cac-use,slicegroupportion,Unlock)
+######--->  DUcell configuration- Cease (Lock,slicegroupportion,cac-not-use,slicegroup,DUCell_deleteslice)
+######--->  DU Slice-ID - Cease
+
+#----------------> DUCell DUCell_cellLock  <--------------
+- name: Call RestAPI to DUCELL_CELL_LOCK FOR PARTICULAR CELL-IDENTITY
+  uri:
+    url: "{{ deployment_location.properties.samsung_usm_host }}/oss/netconf/{{ du_id }}"
+    # user: ossuser
+    # password: osspasswd
+    method: POST
+    body: "{{lookup('template', 'lock_ducell_cellstatus.xml')}}"
+    # body_format: json
+    headers:
+      Authorization: Basic b3NzdXNlcjpvc3NwYXNzd2Q=
+      content-type: "application/xml"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: DUCell_cellLock
+  # ignore_errors: yes
+
+- name: Display response DUCell_cellLock
+  debug:
+    var: DUCell_cellLock
+
+- name: info print DUCell_cellLock
+  lineinfile:
+    path: "{{ logsfile }}"
+    line: |
+           __________________________________________________________________________
+
+           ##### DUCELL_CELL_LOCK FOR PARTICULAR CELL-IDENTITY
+
+           URL:
+           {{ DUCell_cellLock.url }}
+
+           order_send:
+           {{lookup('template', 'lock_ducell_cellstatus.xml')}}
+
+           result_return:
+           {{ DUCell_cellLock.content }}
+           __________________________________________________________________________
+           
+- fail:
+    msg: "Slice creation failed with error {{ DUCell_cellLock.content }}"
+  when: '"<rpc-error>" in DUCell_cellLock.content'
+
+#----------------> DUCell delete_slicegroupportion_ducell  <--------------
+- name: Call RestAPI to Delete delete_slicegroupportion_ducell
+  uri:
+    url: "{{ deployment_location.properties.samsung_usm_host }}/oss/netconf/{{ du_id }}"
+    # user: ossuser
+    # password: osspasswd
+    method: POST
+    body: "{{lookup('template', 'delete_slicegroupportion_ducell.xml')}}"
+    # body_format: json
+    headers:
+      Authorization: Basic b3NzdXNlcjpvc3NwYXNzd2Q=
+      content-type: "application/xml"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: delete_slicegroupportion_ducell
+  # ignore_errors: yes
+
+- name: Display response
+  debug:
+    var: delete_slicegroupportion_ducell
+
+- name: delete_slicegroupportion_ducell info print
+  lineinfile:
+    path: "{{ logsfile }}"
+    line: |
+           __________________________________________________________________________
+
+           ##### Delete for delete_slicegroupportion_ducell
+
+           URL:
+           {{ delete_slicegroupportion_ducell.url }}
+
+           order_send:
+           {{lookup('template', 'delete_slicegroupportion_ducell.xml')}}
+
+           result_return:
+           {{ delete_slicegroupportion_ducell.content }}
+           __________________________________________________________________________           
+- fail:
+    msg: "Slice creation failed with error {{ delete_slicegroupportion_ducell.content }}"
+  when: '"<rpc-error>" in delete_slicegroupportion_ducell.content'
+
+#----------------> DUCell delete_ducell_cac_not_use  <--------------
+- name: Call RestAPI to Delete delete_ducell_cac_not_use
+  uri:
+    url: "{{ deployment_location.properties.samsung_usm_host }}/oss/netconf/{{ du_id }}"
+    # user: ossuser
+    # password: osspasswd
+    method: POST
+    body: "{{lookup('template', 'delete_ducell_cac_not_use.xml')}}"
+    # body_format: json
+    headers:
+      Authorization: Basic b3NzdXNlcjpvc3NwYXNzd2Q=
+      content-type: "application/xml"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: delete_ducell_cac_not_use
+  # ignore_errors: yes
+
+- name: Display response
+  debug:
+    var: delete_ducell_cac_not_use
+
+- name: delete_ducell_cac_not_use info print
+  lineinfile:
+    path: "{{ logsfile }}"
+    line: |
+           __________________________________________________________________________
+
+           ##### Delete for delete_ducell_cac_not_use
+
+           URL:
+           {{ delete_ducell_cac_not_use.url }}
+
+           order_send:
+           {{lookup('template', 'delete_ducell_cac_not_use.xml')}}
+
+           result_return:
+           {{ delete_ducell_cac_not_use.content }}
+           __________________________________________________________________________
+
+- fail:
+    msg: "Slice creation failed with error {{ delete_ducell_cac_not_use.content }}"
+  when: '"<rpc-error>" in delete_ducell_cac_not_use.content'
+
+#####----------------> DUCell cease_ducell_slicegroup  <--------------
+# - name: Call RestAPI to delete_ducell_slicegroup
+  # uri:
+    # url: "{{ deployment_location.properties.samsung_usm_host }}/oss/netconf/{{ du_id }}"
+    # method: POST
+    # body: "{{lookup('template', 'delete_ducell_slicegroup.xml')}}"
+    # headers:
+      # Authorization: Basic b3NzdXNlcjpvc3NwYXNzd2Q=
+      # content-type: "application/xml"
+      # ReturnResultType: "FULL"
+      # return_content: yes
+    # validate_certs: no
+    # status_code: 200
+    # return_content: yes
+  # register: delete_ducell_slicegroup
+
+# - name: Display response
+  # debug:
+    # var: delete_ducell_slicegroup
+
+# - name: delete_ducell_slicegroup info print
+  # lineinfile:
+    # path: "{{ logsfile }}"
+    # line: |
+           # __________________________________________________________________________
+
+           #### Delete for delete_ducell_slicegroup
+
+           # URL:
+           # {{ delete_ducell_slicegroup.url }}
+
+           # order_send:
+           # {{lookup('template', 'delete_ducell_slicegroup.xml')}}
+
+           # result_return:
+           # {{ delete_ducell_slicegroup.content }}
+           # __________________________________________________________________________
+
+
+#----------------> DUCell Slice ID Configuration- Delete <--------------
+- name: Call RestAPI to Delete DU_CELL Slice ID
+  uri:
+    url: "{{ deployment_location.properties.samsung_usm_host }}/oss/netconf/{{ du_id }}"
+    # user: ossuser
+    # password: osspasswd
+    method: POST
+    body: "{{lookup('template', 'delete_slice_ducell.xml')}}"
+    # body_format: json
+    headers:
+      Authorization: Basic b3NzdXNlcjpvc3NwYXNzd2Q=
+      content-type: "application/xml"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: DUCell_deleteSlice
+  # ignore_errors: yes
+
+- name: Display response DUCell_deleteSlice
+  debug:
+    var: DUCell_deleteSlice
+
+- name: DUCell_deleteSlice info print
+  lineinfile:
+    path: "{{ logsfile }}"
+    line: |
+           __________________________________________________________________________
+
+           #####  Delete DU_CELL Slice ID
+
+           URL:
+           {{ DUCell_deleteSlice.url }}
+
+           order_send:
+           {{lookup('template', 'delete_slice_ducell.xml')}}
+
+           result_return:
+           {{ DUCell_deleteSlice.content }}
+           __________________________________________________________________________           
+- fail:
+    msg: "Slice creation failed with error {{ DUCell_deleteSlice.content }}"
+  when: '"<rpc-error>" in DUCell_deleteSlice.content'

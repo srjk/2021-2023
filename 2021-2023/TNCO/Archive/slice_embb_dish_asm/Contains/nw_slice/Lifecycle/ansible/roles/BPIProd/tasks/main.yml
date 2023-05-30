@@ -1,0 +1,87 @@
+
+# convert ALM properties to json - addslice
+- name: TMF Authentication token
+  uri:
+    method: POST
+    url: "{{ ansible_env.BPI_TURL }}/oauth/token?grant_type=password&client_id=tmf-api&username=tmf-api&password={{ ansible_env.BPI_PASS }}&scopes=read%20write&client_secret=secret-to-change"
+    headers:
+      Authorization: Basic dG1mLWFwaTpzZWNyZXQtdG8tY2hhbmdl
+      validate_certs: no
+  register: auth_response
+
+- name: Create & associate NetworkSlice
+  uri:
+    method: POST
+    url: "{{ ansible_env.BPI_HOST }}/blueplanet-inventory-tmf-api/v1/service"
+    body: "{{lookup('template', 'Inventory_nw_NetworkSlice.json.j2')}}"
+    status_code: 201
+    body_format: json
+    headers:
+      Authorization: Bearer {{ auth_response.json.access_token }}
+      Accept: "application/json"
+      content-type: "application/json"
+  register: NetworkSlice
+
+- copy: content="{{ NetworkSlice.json }}" dest=/tmp/Inventory_nw_NetworkSlice_create_{{ instance_name }}.json.j2
+
+# - copy: content="{{ NetworkSlice.json.id }}" dest=/tmp/Inventory_nw_NetworkSlice_id_{{ instance_name }}.json.j2
+
+- name: Create ServiceProfile
+  uri:
+    method: POST
+    url: "{{ ansible_env.BPI_HOST }}/blueplanet-inventory-tmf-api/v1/service"
+    body: "{{lookup('template', 'Inventory_nw_serviceprofile.json.j2')}}"
+    status_code: 201
+    body_format: json
+    headers:
+      Authorization: Bearer {{ auth_response.json.access_token }}
+      Accept: "application/json"
+      content-type: "application/json"
+  register: result
+# - debug:  var=result["json"]["id"]
+
+- copy: content="{{ result.json }}" dest=/tmp/Inventory_nw_serviceprofile_create_{{ instance_name }}.json.j2
+
+# - copy: content="{{ result.json.id }}" dest=/tmp/Inventory_nw_serviceprofile_id_{{ instance_name }}.json.j2
+
+- name:  Create & associate NetworkSliceSubnet
+  uri:
+    method: POST
+    url: "{{ ansible_env.BPI_HOST }}/blueplanet-inventory-tmf-api/v1/service"
+    body: "{{lookup('template', 'Inventory_nw_NetworkSliceSubnet.json.j2')}}"
+    status_code: 201
+    body_format: json
+    headers:
+      Authorization: Bearer {{ auth_response.json.access_token }}
+      Accept: "application/json"
+      content-type: "application/json"
+  register: NetworkSliceSubnet
+
+- copy: content="{{ NetworkSliceSubnet.json }}" dest=/tmp/Inventory_nw_NetworkSliceSubnet_create_{{ instance_name }}.json.j2
+
+# - copy: content="{{ NetworkSliceSubnet.json.id }}" dest=/tmp/Inventory_nw_NetworkSliceSubnet_id_{{ instance_name }}.json.j2
+
+- name: Create SliceProfile
+  uri:
+    method: POST
+    url: "{{ ansible_env.BPI_HOST }}/blueplanet-inventory-tmf-api/v1/service"
+    body: "{{lookup('template', 'Inventory_nw_sliceprofile.json.j2')}}"
+    status_code: 201
+    body_format: json
+    headers:
+      Authorization: Bearer {{ auth_response.json.access_token }}
+      Accept: "application/json"
+      content-type: "application/json"
+  register: dishid
+# - debug:  var=dishid["json"]["id"]
+
+- copy: content="{{ dishid.json }}" dest=/tmp/Inventory_nw_sliceprofile_create_{{ instance_name }}.json.j2
+
+# - copy: content="{{ dishid.json.id }}" dest=/tmp/Inventory_nw_sliceprofile_id_{{ instance_name }}.json.j2
+
+- name: 
+  set_fact:
+    output__sliceprofileid: "{{ dishid.json.id }}"
+    output__NetworkSliceSubnetid: "{{ NetworkSliceSubnet.json.id }}"
+    output__serviceprofileid: "{{ result.json.id }}"
+    output__NetworkSliceid: "{{ NetworkSlice.json.id }}"

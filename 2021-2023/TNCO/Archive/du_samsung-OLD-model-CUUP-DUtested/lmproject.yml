@@ -1,0 +1,14 @@
+schema: '2.0'
+name: du_samsung
+version: '1.0'
+type: Assembly
+resource-manager: Brent
+contains:
+- name: du_samsung
+  type: Resource
+  resource-manager: Brent
+  directory: du_samsung    
+- name: ducell_samsung
+  type: Resource
+  resource-manager: Brent
+  directory: ducell_samsung  

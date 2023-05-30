@@ -1,0 +1,168 @@
+#-----------------------> Start time from system  <----------------------------
+- name: "##ALM## Get timestamp from the system"
+  shell: "date +%Y-%m-%d%H:%M:%S.%5N"
+  register: stime
+
+- name: Create the list
+  set_fact:
+    list_pcf_qosData_Name: "{{ pcf_qosData_Name.split(',') | map('trim') | list }}"
+    list_pcf_pccRule_Name: "{{ pcf_pccRule_Name.split(',') | map('trim')| list }}"
+    list_pcf_qosInfo_name: "{{ pcf_qosInfo_name.split(',') | map('trim')| list }}"
+    list_pcf_sessionRule_Name: "{{ pcf_sessionRule_Name.split(',') | map('trim')| list }}"
+- name: setting filename
+  set_fact:
+    filename: /tmp/ansible_log/ansible_{{ ansible_date_time.iso8601 }}.log
+    policyTable: /tmp/policytable_{{ ansible_date_time.iso8601 }}.json
+
+#- name: Gettting Policy table data 
+#  uri:
+#    url:  "{{ PCF_HOST }}/oc-cnpolicy-configuration/v1/policydata/common/policytables/export"
+#    method: GET
+#    status_code: 200
+#    headers:
+#      content-type: "application/json"
+#      cache-control: "no-cache"
+#    return_content: yes
+#  register: auth_response
+
+- name: TMF Authentication token
+  uri:
+    method: GET
+    url: "{{ PCF_HOST }}/pcfStub/oc-cnpolicy-configuration/v1/policydata/common/policytables/export"
+    body_format: json
+    headers:
+      Accept: "application/json"
+      content-type: "application/json"
+    return_content: yes
+  register: auth_response
+
+# - debug: var=len_array
+
+- name: write var to file
+  copy: 
+    content: "{{ auth_response.content | trim }}" 
+    dest: "{{ policyTable }}"
+
+# - name: ruuning python file
+  # shell: "{{ auth_response.json.exportData[0].rows }}"  > /tmp/test_file.json
+
+- name: Create the list
+  set_fact:
+    list_pcf_policyTable_dnn: "{{ pcf_policyTable_dnn.split(',') | map('trim')| list  }}"
+
+# - name: Create the list
+#   set_fact:
+#     list_pcf_policyTable_dnn: ['internet','ota','ims','ims','ims','sos','xcap']
+#   when: "'ims' in  pcf_policyTable_dnn"
+
+- name: ruuning python file
+  shell: |
+    python3 delete.py "{{ pcf_policyTable_sst }}" "{{ pcf_policyTable_sd }}" "{{ item.0 }}"  "{{ pcf_policyTable_ratePlan }}" "{{ item.1  }}" "{{ item.2 }}" "{{ policyTable }}" "{{ slice_planType }}"
+  loop: "{{ data[0]|zip(*data[1:])|list }}"
+  vars:
+    data:
+        -  "{{ list_pcf_policyTable_dnn  }}"
+        -  "{{ pcf_policyTable_sessionRule.split(',') | map('trim')| list  }}"
+        -  "{{ pcf_policyTable_pccRuleList.split(',') | map('trim')| list  }}"  
+  register: response 
+
+
+- name: Create a PCC Rule
+  uri:
+    url:  "{{ PCF_HOST }}/pcfStub/oc-cnpolicy-configuration/v1/policydata/common/policytables/import?action=replace"
+    method: POST
+    body: "{{lookup('file', '{{ policyTable }}')}}"
+    status_code: 201
+    body_format: json
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    return_content: yes
+  register: result
+
+
+# - name: Update PolicyTable
+#   uri:
+#     url:  "http://dish-pcf-stub:8191/pcfStub//oc-cnpolicy-configuration/v1/policydata/common/policytables/import"
+#     method: POST
+#     body: "{{lookup('template', '/tmp/policy_table.json.j2')}}"
+#     status_code: 200
+#     body_format: json
+#     headers:
+#       content-type: "application/json"
+#       cache-control: "no-cache"
+#     return_content: yes
+#   register: result
+
+
+- name: Delete session Rule
+  uri:
+    url:  "{{ PCF_HOST }}/pcfStub/oc-cnpolicy-configuration/v1/policydata/pcfsm/sessionrules/{{ item }}"
+    method: DELETE
+    status_code: 204
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    return_content: yes
+  loop: "{{ list_pcf_sessionRule_Name }}"
+  register: result
+
+- name: Delete Qos information
+  uri:
+    url:  "{{ PCF_HOST }}/pcfStub/oc-cnpolicy-configuration/v1/policydata/pcfsm/qosinformation/{{ item }}"
+    method: DELETE
+    status_code: 204
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    return_content: yes
+  loop: "{{ list_pcf_qosInfo_name }}"
+  register: result
+
+- name: Delete Pcc rule
+  uri:
+    url:  "{{ PCF_HOST }}/pcfStub/oc-cnpolicy-configuration/v1/policydata/pcfsm/pccrules/{{ item }}"
+    method: DELETE
+    status_code: 204
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    return_content: yes
+  loop: "{{ list_pcf_pccRule_Name }}"
+  register: result
+
+- name: Delete Qos data
+  uri:
+    url:  "{{ PCF_HOST }}/pcfStub/oc-cnpolicy-configuration/v1/policydata/pcfsm/qosdata/{{ item }}"
+    method: DELETE
+    status_code: 204
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    return_content: yes
+  loop: "{{ list_pcf_qosData_Name }}"
+  register: result
+  
+  
+
+#-----------------------> End time from system  <----------------------------
+- name: "##ALM## Get timestamp from the system"
+  shell: "date +%Y-%m-%d%H:%M:%S.%5N"
+  register: etime
+
+
+#-----------------------> Store request/response Logs in Eventlogger  <----------------------------
+- name: "##ALM## Store request and response in DB"
+  connection: local
+  uri:
+    url: http://ib-orc-230-event-logger-001:8100/evntLogger/log/event
+    method: POST
+    body: "{{lookup('template', 'Store.json.j2')}}"
+    return_content: yes
+    body_format: json
+    status_code: 200
+    validate_certs: no
+    headers:
+      content-type: "application/json"
+      ReturnResultType: "FULL" 
+  register: resultStore

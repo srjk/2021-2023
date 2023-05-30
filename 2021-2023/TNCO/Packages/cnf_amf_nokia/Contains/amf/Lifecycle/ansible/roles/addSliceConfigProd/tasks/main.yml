@@ -1,0 +1,298 @@
+#-----------------------> Start time from system  <----------------------------
+- name: "##ALM## Get timestamp from the system"
+  connection: local
+  shell: "date +%Y-%m-%d%H:%M:%S.%5N"
+  delegate_to: 127.0.0.1
+  register: stime
+- name: Creates directory
+  file:
+    path: /tmp/ansible_log
+    state: directory
+    mode: 0775
+  delegate_to: 127.0.0.1
+# convert ALM properties to json provide request for South Bound endpoint - Nokia Provisioning GW
+- name: Create the list
+  set_fact:
+    list_amfTac: "{{ amfSlice_tai.split(',') | list }}"
+    list_amfSlice_dnnName: "{{ amfSlice_dnnName.split(',') | list }}"
+    list_amfSlice_snssaiToDnnListName: "{{ amfSlice_snssaiToDnnListName.split(',') | list }}"
+
+- name: Insert a line at the end of a file.
+  raw: export USER=root
+
+- name: Insert a line at the end of a file.
+  raw: export USER=root
+
+- name: log file for AMF
+  set_fact:
+    Logs: /tmp/ansible_log/{{ instance_name }}_Create_AMF.log
+
+- name: Create snssai and Insert a line at the end of a file.
+  raw: "cmm snssai create --name {{ amfSlice_sliceName }} --sliceServiceType {{ amfSlice_sst }} --sliceDifferentiator {{ amfSlice_sd | upper }}"
+  register: result1
+  failed_when: "result1.rc not in [0,1]"
+
+- name: copy
+  connection: local
+  copy:
+    dest: "{{ Logs }}"
+    content: |
+      input: cmm snssai create --name {{ amfSlice_sliceName }} --sliceServiceType {{ amfSlice_sst }} --sliceDifferentiator {{ amfSlice_sd | upper }}
+      output: {{ result1.stdout }}
+  delegate_to: 127.0.0.1
+
+- fail:
+    msg: "{{ result1.stdout_lines[0]  }}"
+  when:
+    - '"The relevant data content already exists" not in result1.stdout'
+    - '"Field" not in result1.stdout'
+
+- name: run the command
+  raw: cmm amfSetSnssai list | grep {{ amfSlice_plmnName }}~{{ amfSlice_amfRegionId }}~{{ amfSlice_amfSetId }}
+  register: snssai_output
+
+- name: Insert a line at the end of a file.
+  connection: local
+  lineinfile:
+    path: "{{ Logs }}"
+    line: |
+       input: cmm amfSetSnssai list | grep {{ amfSlice_plmnName }}~{{ amfSlice_amfRegionId }}~{{ amfSlice_amfSetId }}
+       output: {{ snssai_output.stdout }}
+  delegate_to: 127.0.0.1
+
+- name: setting filename
+  set_fact:
+    filename: "{{ snssai_output.stdout | regex_search('(?<=\\s)(.*?)(?=\\s)') }}"
+
+- name: run the command
+  raw: cmm amfSetSnssai show {{ filename }} | grep snssaiListName
+  register: snssaiListName_output
+
+- name: Insert a line at the end of a file.
+  connection: local
+  lineinfile:
+    path: "{{ Logs }}"
+    line: |
+      input: cmm amfSetSnssai show {{ filename }} | grep snssaiListName
+      output: {{ snssaiListName_output.stdout | replace('| snssaiListName* | ','') | replace (' ','') | replace('|','') }}
+  delegate_to: 127.0.0.1
+
+- name: setting filename
+  set_fact:
+    snssailist: "{{ snssaiListName_output.stdout | regex_search('\\|.+? +? \\|+') | replace('| snssaiListName* | ','') | replace (' ','') | replace('|','') }}"
+
+
+#------------------>Create snssaiListItem<------------
+- block:
+    - name: Create snssaiListItem and Insert a line at the end of a file.
+      raw: cmm snssaiListItem create --snssaiListName {{ snssailist }} --snssaiName {{ amfSlice_sliceName }}
+      register: result_block
+      failed_when: "result_block.rc not in [0,1]"
+
+    - name: Insert a line at the end of a file.
+      connection: local
+      lineinfile:
+        path: "{{ Logs }}"
+        line: |
+              input: cmm snssaiListItem create --snssaiListName {{ snssailist }} --snssaiName {{ amfSlice_sliceName }}
+              output: {{ result_block.stdout }}
+      delegate_to: 127.0.0.1
+    #  ignore_errors: yes
+
+#   ------------> Resuce Operation 1<----------------------
+  rescue:
+    - name: Rescue to delete snssai and Insert a line at the end of a file.
+      raw: cmm snssai delete --name {{ amfSlice_sliceName }}
+      register: result2
+    #  ignore_errors: yes
+
+    - name: Insert a line at the end of a file.
+      connection: local
+      lineinfile:
+        path: "{{ Logs }}"
+        line: |
+              input: cmm snssai delete --name {{ amfSlice_sliceName }}
+              output: {{ result2.stdout }}
+      delegate_to: 127.0.0.1
+
+  always:
+    - fail:
+        msg: "{{ result_block.stdout | regex_search('ERROR.*') }}"
+      when:
+        - '"The relevant data content already exists" not in result_block.stdout'
+        - '"Field" not  in result_block.stdout'
+
+#--------------------> Create snssaiToDnnList <-----------------
+
+- block:
+    - name: Call to include snssaitodnnList.yaml
+      include: snssaitodnnList.yaml
+      vars:
+        item: "{{ item }}"
+        filename: "{{ Logs }}"
+      loop: "{{ list_amfSlice_snssaiToDnnListName }}"
+
+
+
+
+#-----------------------> Rescue operation 2<----------------------------
+  rescue:
+    - name: Rescue 2 to delete snssaiToDnnList and Insert a line at the end of a file.
+      include: snssaitodnnList_del.yaml
+      vars:
+        item: "{{ item }}"
+        filename: "{{ Logs }}"
+      loop: "{{ list_amfSlice_snssaiToDnnListName }}"
+
+
+    - name: Rescue 2 to delete snssaiListItem and Insert a line at the end of a file.
+      raw: cmm snssaiListItem delete --snssaiListName {{ snssailist }} --snssaiName {{ amfSlice_sliceName }}
+      register: result_snssaiListItem
+
+
+    - name: Insert a line at the end of a file.
+      connection: local
+      lineinfile:
+        path: "{{ Logs }}"
+        line: |
+           input: cmm snssaiListItem delete --snssaiListName {{ snssailist }} --snssaiName {{ amfSlice_sliceName }}
+           output: {{ result_snssaiListItem.stdout }}
+      delegate_to: 127.0.0.1
+
+    - name:  Rescue 2 to delete snssai and Insert a line at the end of a file.
+      raw: cmm snssai delete --name {{ amfSlice_sliceName }}
+      register: result_snssai
+
+
+    - name: Insert a line at the end of a file.
+      connection: local
+      lineinfile:
+        path: "{{ Logs }}"
+        line: |
+           input: cmm snssai delete --name {{ amfSlice_sliceName }}
+           output: {{ result_snssai.stdout }}
+      delegate_to: 127.0.0.1
+
+#   ------------> always<---------------
+  always:
+    - fail:
+        msg: "{{ resultsnssaiToDnnList.stdout | regex_search('ERROR.*') }}"
+      when:
+        - '"The relevant data content already exists" not in resultsnssaiToDnnList.stdout'
+        - '"Field" not in resultsnssaiToDnnList.stdout'
+
+
+
+
+
+#-------------------> Create snssaitodnn <----------------------
+
+- block:
+    - name: Call to include snssaitodnn.yaml
+      include: snssaitodnn.yaml
+      vars:
+        data:
+            -  "{{ list_amfSlice_dnnName }}"
+            -  "{{ list_amfSlice_snssaiToDnnListName }}"
+        dnnName: "{{ item.0 }}"
+        snssaiToDnnListName: "{{ item.1 }}"
+        filename: "{{ Logs }}"
+      loop: "{{ data[0]|zip(*data[1:])|list }}"
+
+
+
+#-----------------------> Rescue operation 3<----------------------------
+  rescue:
+    - name: Rescue 3 to delete snssaiToDnn and Insert a line at the end of a file.
+      include: snssaitodnn_del.yaml
+      vars:
+        data:
+            -  "{{ list_amfSlice_dnnName }}"
+            -  "{{ list_amfSlice_snssaiToDnnListName }}"
+        dnnName: "{{ item.0 }}"
+        snssaiToDnnListName: "{{ item.1 }}"
+        filename: "{{ Logs }}"
+      loop: "{{ data[0]|zip(*data[1:])|list }}"
+
+
+    - name: Rescue 3 to delete snssaiToDnnList and Insert a line at the end of a file.
+      include: snssaitodnnList_del.yaml
+      vars:
+        item: "{{ item }}"
+        filename: "{{ Logs }}"
+      loop: "{{ list_amfSlice_snssaiToDnnListName }}"
+
+    - name: Rescue 3 to delete snssaiListItem and Insert a line at the end of a file.
+      raw: cmm snssaiListItem delete --snssaiListName {{ snssailist }} --snssaiName {{ amfSlice_sliceName }}
+      register: result_snssaiListItem1
+
+    - name: Insert a line at the end of a file.
+      connection: local
+      lineinfile:
+        path: "{{ Logs }}"
+        line: |
+           input: cmm snssaiListItem delete --snssaiListName {{ snssailist }} --snssaiName {{ amfSlice_sliceName }}
+           output: {{ result_snssaiListItem1.stdout }}
+      delegate_to: 127.0.0.1
+
+    - name:  Rescue 3 to delete snssai and Insert a line at the end of a file.
+      raw: cmm snssai delete --name {{ amfSlice_sliceName }}
+      register: result_snssai1
+
+    - name: Insert a line at the end of a file.
+      connection: local
+      lineinfile:
+        path: "{{ Logs }}"
+        line: |
+           input: cmm snssai delete --name {{ amfSlice_sliceName }}
+           output: {{ result_snssai1.stdout }}
+      delegate_to: 127.0.0.1
+
+
+  always:
+    - fail:
+        msg: "{{ result_snssaiToDnn1.stdout | regex_search('ERROR.*') }}"
+      when:
+        - '"The relevant data content already exists" not in result_snssaiToDnn1.stdout'
+        - '"Field" not in result_snssaiToDnn1.stdout'
+
+
+- name: Log API request through Log module
+  ibm_cp4na_log_message:
+    message_direction: sent
+    external_request_id: "{{ extOrderId }}"
+    content_type: application/json
+    message_data: |
+     ***********************************
+     order_send:  
+     {{lookup('template', '{{ Logs }}')}}
+
+     ************************************ 
+    message_type: sample
+    protocol: http
+
+
+
+#-----------------------> End time from system  <----------------------------
+- name: "##ALM## Get timestamp from the system"
+  connection: local
+  shell: "date +%Y-%m-%d%H:%M:%S.%5N"
+  delegate_to: 127.0.0.1   
+  register: etime
+
+#-----------------------> Store request/response Logs in Eventlogger  <----------------------------
+- name: "##ALM## Store request and response in DB"
+  connection: local
+  uri:
+    url: "{{ deployment_location.properties.eventlogger_url }}"
+    method: POST
+    body: "{{lookup('template', 'Store.json.j2')}}"
+    return_content: yes
+    body_format: json
+    status_code: 200
+    validate_certs: no
+    headers:
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+  delegate_to: 127.0.0.1      
+  register: resultStore

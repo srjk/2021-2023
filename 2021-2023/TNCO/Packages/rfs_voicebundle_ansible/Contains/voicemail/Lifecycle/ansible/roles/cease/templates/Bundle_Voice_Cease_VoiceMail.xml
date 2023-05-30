@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Provisioning xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <Request>
+      <Header>
+         <EntityIdentifiers>
+          <Identifier Type='TelephoneNumber' Value= '{{ GPSI }}'/> 
+         </EntityIdentifiers>
+         <Command>{{ voicemail_command1 }}</Command>
+         <Version>{{ voicemail_Version }}</Version>
+         <RequestID>{{ kami_response.json.extOrderId }}</RequestID>
+         <HostReference>{{ voicemail_hostreference }}</HostReference>
+         <EntityName>{{ voicemail_EntityName }}</EntityName>
+      </Header>
+   </Request>
+</Provisioning>

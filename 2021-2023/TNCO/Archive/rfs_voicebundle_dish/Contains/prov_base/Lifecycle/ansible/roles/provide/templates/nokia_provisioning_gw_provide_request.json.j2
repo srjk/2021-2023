@@ -1,0 +1,351 @@
+{
+    "serviceType": "Bundle RFS",
+    "serviceName": "Subscriber - Voice Bundle RFSS",
+    "id": "{{ extOrderId }}",
+    "imsi": "{{ SUPI }}",
+    "voiceRFS": {
+        "hlr": {
+            "multipleValueObjects": [
+                {
+                    "path": "{{ hlr_path }}",
+                    "operation": "{{ operation1 }}",
+                    "valueObject": {
+                        "apn": "{{ dnn1 }}",
+                        "contextId": "{{ dnn1_contextId }}",
+                        "type": "{{ dnn1_type }}",
+                        "pdnGwDynamicAllocation": "{{ dnn1_pdnGwDynamicAllocation }}",
+                        "vplmnAddressAllowed": "{{ dnn1_vplmnAddressAllowed }}",
+                        "maxBandwidthUp": "{{ dnn1_sessionAmbr.split("|")[0].split(" ")[0]  }}",
+                        "maxBandwidthDown": "{{ dnn1_sessionAmbr.split("|")[1].split(" ")[0] }}",
+                        "qos": "{{ dnn1_qos }}",
+                        "pdnChargingCharacteristics": {
+                            "chargingCharacteristicsProfile": "{{ dnn1_pdnChargingCharacteristics_chargingCharacteristicsProfile }}",
+                            "chargingCharacteristicsBehavior": "{{ dnn1_pdnChargingCharacteristics_chargingCharacteristicsBehavior }}"
+                        },
+                        "eps5gInterworkIndicator": "{{ eps5gInterworkIndicator }}"
+                    }
+                },
+                {
+                    "path": "{{ hlr_path }}",
+                    "operation": "{{ operation1 }}",
+                    "valueObject": {
+                        "apn": "{{ dnn2_apn }}",
+                        "contextId": "{{ dnn2_contextId }}",
+                        "type": "{{ dnn2_type }}",
+                        "pdnGwDynamicAllocation": "{{ dnn2_pdnGwDynamicAllocation }}",
+                        "vplmnAddressAllowed": "{{ dnn2_vplmnAddressAllowed }}",
+                        "maxBandwidthUp": "{{ dnn2_sessionAmbr.split("|")[0].split(" ")[0]  }}",
+                        "maxBandwidthDown": "{{ dnn2_sessionAmbr.split("|")[1].split(" ")[0] }}",
+                        "qos": "{{ dnn2_qos }}",
+                        "pdnChargingCharacteristics": {
+                            "chargingCharacteristicsProfile": "{{ dnn2_pdnChargingCharacteristics_chargingCharacteristicsProfile }}",
+                            "chargingCharacteristicsBehavior": "{{ dnn2_pdnChargingCharacteristics_chargingCharacteristicsProfile_chargingCharacteristicsBehavior }}"
+                        },
+                        "eps5gInterworkIndicator": "{{ eps5gInterworkIndicator }}"
+                    }
+                },
+                {
+                    "path": "{{ hlr_path }}",
+                    "operation": "{{ operation1 }}",
+                    "valueObject": {
+                        "apn": "{{ dnn3_apn }}",
+                        "contextId": "{{ dnn3_contextId }}",
+                        "type": "{{ dnn3_type }}",
+                        "pdnGwDynamicAllocation": "{{ dnn3_pdnGwDynamicAllocation }}",
+                        "vplmnAddressAllowed": "{{ dnn3_vplmnAddressAllowed }}",
+                        "maxBandwidthUp": "{{ dnn3_sessionAmbr.split("|")[0].split(" ")[0]  }}",
+                        "maxBandwidthDown": "{{ dnn3_sessionAmbr.split("|")[1].split(" ")[0] }}",
+                        "qos": "{{ dnn3_qos }}",
+                        "pdnChargingCharacteristics": {
+                            "chargingCharacteristicsProfile": "{{ dnn3_pdnChargingCharacteristics_chargingCharacteristicsProfile }}",
+                            "chargingCharacteristicsBehavior": "{{ dnn3_pdnChargingCharacteristics_chargingCharacteristicsBehavio }}"
+                        },
+                        "eps5gInterworkIndicator": "{{ eps5gInterworkIndicator }}"
+                    }
+                }
+            ]
+        },
+         "hss": {
+        "operation": "{{ operation1 }}",
+        "subscriptionId": "{{ hss_subscriptionId }}",
+        "profileType": "{{ hss_profileType }}",
+        "adminBlocked": "{{ hss_adminBlocked }}",
+        "defaultScscfRequired": "{{ hss_defaultScscfRequired }}",
+        "maximumPublicIds": "{{ hss_maximumPublicIds }}",
+        "privateUserId": [
+            {
+                "privateUserId": "{{ SUPI }}@ims.mnc340.mcc313.3gppnetwork.org",
+                "provisionedImsi": [
+                    {
+                        "provisionedImsi": "{{ SUPI }}"
+                    }
+                ],
+                "msisdn": "{{ GPSI }}",
+                "preferredAuthenticationScheme": "{{ preferredAuthenticationScheme }}",
+                "preferredDomain": "{{ dnn1 }}",
+                "refGussDataId": "{{ refGussDataId }}",
+                "looseRoutingIndicationRequired": "{{ looseRoutingIndicationRequired }}",
+                "digestRealm": "{{ digestRealm }}"
+            },
+            {
+                "privateUserId": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+                "provisionedImsi": [
+                    {
+                        "provisionedImsi": "{{ SUPI }}"
+                    }
+                ],
+                "msisdn": "{{ GPSI }}",
+                "preferredAuthenticationScheme": "{{ preferredAuthenticationScheme }}",
+                "preferredDomain": "{{ dnn1 }}",
+                "refGussDataId": "{{ refGussDataId }}",
+                "looseRoutingIndicationRequired": "{{ looseRoutingIndicationRequired }}",
+                "digestRealm": "{{ digestRealm }}"
+            }
+        ],
+        "implicitRegisteredSet": [
+            {
+                "irsId": "{{ irsId }}"
+            }
+        ],
+        "publicUserId": [
+            {
+                "originalPublicUserId": "sip:+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+                "barringIndication": "{{ barringIndication }}",
+                "defaultIndication": "{{ defaultIndication }}",
+                "serviceProfileName": "{{ serviceProfileName }}",
+                "irsId": "{{ irsId }}"
+            },
+            {
+                "originalPublicUserId": "sip:{{ SUPI }}@ims.mnc340.mcc313.3gppnetwork.org",
+                "barringIndication": "{{ barringIndication1 }}",
+                "defaultIndication": "{{ defaultIndication1 }}",
+                "serviceProfileName": "{{ serviceProfileName }}",
+                "irsId": "{{ irsId }}"
+            },
+            {
+                "originalPublicUserId": "tel:+{{ GPSI }}",
+                "barringIndication": "{{ barringIndication }}",
+                "defaultIndication": "{{ defaultIndication1 }}",
+                "serviceProfileName": "{{ serviceProfileName }}",
+                "irsId": "{{ irsId }}"
+            }
+        ],
+        "serviceProfile": [
+            {
+                "profileName": "{{ profileName }}",
+                "mandatoryCapability": [
+                    {
+                        "mandatoryCapability": "{{ mandatoryCapability }}"
+                    }
+                ],
+                "globalFilterId": [
+                    {
+                        "globalFilterId": "{{ globalFilterId }}"
+                    },
+                    {
+                        "globalFilterId": "{{ globalFilterId1 }}"
+                    },
+                    {
+                        "globalFilterId": "{{ globalFilterId2 }}"
+                    },
+                    {
+                        "globalFilterId": "{{ globalFilterId3 }}"
+                    },
+                    {
+                        "globalFilterId": "{{ globalFilterId4 }}"
+                    },
+                    {
+                        "globalFilterId": "{{ globalFilterId5 }}"
+                    }
+                ],
+                "subscribedMediaProfileID": {
+                    "sessionReleasePolicy": "{{ sessionReleasePolicy }}",
+                    "forkingPolicy": "{{ forkingPolicy }}"
+                }
+            }
+        ],
+        "gussData": [
+            {
+                "gussDataId": "{{ gussDataId }}",
+                "uiccSecurityType": "{{ uiccSecurityType }}",
+                "keyLifetime": "{{ keyLifetime }}",
+                "ussData": [
+                    {
+                        "ussDataId": "{{ ussDataId }}",
+                        "gsId": "{{ gsld }}",
+                        "activeIndication": "{{ activeIndication }}",
+                        "ussType": "{{ ussType }}",
+                        "refNafGroupId": "{{ refNafGroupId }}",
+                        "keySelectionId": "{{ keySelectionId }}",
+                        "upiListItem": [
+                            {
+                                "upi": "sip:+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+        "udm": {
+            "multipleValueObjects": [
+                {
+                    "operation": "{{ operation1 }}",
+                    "path": "{{ udm_path }}",
+                    "valueObject": {
+                        "dnnId": "{{ dnn1 }}",
+                        "defaultIndication": "{{ defaultIndication1 }}",
+                        "interworkingEPSIndication": "{{ interworkingEPSIndication }}",
+                        "localBrkOutRoamingAllowed": "{{ localBrkOutRoamingAllowed }}"
+                    }
+                },
+                {
+                    "operation": "{{ operation1 }}",
+                    "path": "{{ udm_path }}",
+                    "valueObject": {
+                        "dnnId": "{{ dnn2 }}",
+                        "defaultIndication": "{{ defaultIndication1 }}",
+                        "interworkingEPSIndication": "{{ interworkingEPSIndication }}",
+                        "localBrkOutRoamingAllowed": "{{ localBrkOutRoamingAllowed }}"
+                    }
+                },
+                {
+                    "operation": "{{ operation1 }}",
+                    "path": "{{ udm_path }}",
+                    "valueObject": {
+                        "dnnId": "{{ dnn3 }}",
+                        "defaultIndication": "{{ defaultIndication1 }}",
+                        "interworkingEPSIndication": "{{ interworkingEPSIndication }}",
+                        "localBrkOutRoamingAllowed": "{{ localBrkOutRoamingAllowed }}"
+                    }
+                },
+                {
+                    "operation": "{{ operation1 }}",
+                    "path": "{{ udm_path1 }}",
+                    "valueObject": {
+                        "dnnId": "{{ dnn1 }}",
+                        "interworkingEPSIndication": "{{ interworkingEPSIndication }}",
+                        "sessionAmbr": "{{ dnn1_sessionAmbr }}",
+                        "udm5gQosProfile": {
+                            "udm5Qi": "{{ udm5Qi }}",
+                            "arp": "{{ dnn1_arp }}",
+                            "priorityLevel": "{{ dnn1_priorityLevel }}"
+                        },
+                        "pduSessionTypes": {
+                          "defaultSessionType": "{{ defaultSessionType }}",
+                            "allowedSessionType": [
+                                "{{ allowedSessionType }}"
+                            ]
+                        },
+                        "sscModes": {
+                            "defaultSscMode": "{{ sscModes_defaultSscMode }}",
+                            "allowedSscMode": [
+                                "{{ allowedSscMode }}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "operation": "{{ operation1 }}",
+                    "path": "{{ udm_path1 }}",
+                    "valueObject": {
+                        "dnnId": "{{ dnn2 }}",
+                        "interworkingEPSIndication": "{{ interworkingEPSIndication }}",
+                        "sessionAmbr": "{{ dnn2_sessionAmbr }}",
+                        "udm5gQosProfile": {
+                            "udm5Qi": "{{ udm5Qi }}",
+                            "arp": "{{ dnn2_arp }}",
+                            "priorityLevel": "{{ dnn2_priorityLevel }}"
+                        },
+                        "pduSessionTypes": {
+                          "defaultSessionType": "{{ defaultSessionType }}",
+                            "allowedSessionType": [
+                                "{{ allowedSessionType }}"
+                            ]
+                        },
+                        "sscModes": {
+                            "defaultSscMode": "{{ sscModes_defaultSscMode }}",
+                            "allowedSscMode": [
+                                "{{ allowedSscMode }}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "operation": "{{ operation1 }}",
+                    "path": "{{ udm_path1 }}",
+                    "valueObject": {
+                        "dnnId": "{{ dnn3 }}",
+                        "interworkingEPSIndication": "{{ interworkingEPSIndication }}",
+                        "sessionAmbr": "{{ dnn3_sessionAmbr }}",
+                        "udm5gQosProfile": {
+                            "udm5Qi": "{{ udm5gQosProfile_udm5Qi }}",
+                            "arp": "{{ dnn3_arp }}",
+                            "priorityLevel": "{{ dnn3_priorityLevel }}"
+                        },
+                        "pduSessionTypes": {
+                          "defaultSessionType": "{{ defaultSessionType }}",
+                            "allowedSessionType": [
+                                "{{ allowedSessionType }}"
+                            ]
+                        },
+                        "sscModes": {
+                            "defaultSscMode": "{{ sscModes_defaultSscMode }}",
+                            "allowedSscMode": [
+                                "{{ allowedSscMode }}"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        "pcf": [
+            {
+                "multipleValueObjects": [
+                    {
+                        "operation": "{{ operation1 }}",
+                        "path": "{{ pcf_path }}",
+                        "valueObject": {
+                            "dnn": "{{ dnn1 }}",
+                            "allowedServices": [
+                                "{{ allowedServices }}"
+                            ],
+                            "subscCats": [
+                                "{{ subscCats1 }}",
+                                "{{ subscCats2 }}"
+                            ],
+                            "subscSpendingLimits": "{{ subscSpendingLimits }}",
+                            "online": "{{ online }}"
+                        }
+                    },
+                    {
+                        "operation": "{{ operation1 }}",
+                        "path": "{{ pcf_path }}",
+                        "valueObject": {
+                            "dnn": "{{ dnn2 }}",
+                            "subscCats": [
+                                "{{ subscCats1 }}",
+                                "{{ subscCats2 }}"
+                            ],
+                            "subscSpendingLimits": "{{ subscSpendingLimits }}",
+                            "online": "{{ online }}"
+                        }
+                    },
+                    {
+                        "operation": "{{ operation1 }}",
+                        "path": "{{ pcf_path }}",
+                        "valueObject": {
+                            "dnn": "{{ dnn3 }}",
+                            "subscCats": [
+                                "{{ subscCats1 }}",
+                                "{{ subscCats2 }}"
+                            ],
+                            "subscSpendingLimits": "{{ subscSpendingLimits }}",
+                            "online": "{{ online }}"
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}

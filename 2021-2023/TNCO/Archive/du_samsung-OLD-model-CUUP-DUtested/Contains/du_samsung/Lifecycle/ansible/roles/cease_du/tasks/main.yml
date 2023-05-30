@@ -1,0 +1,84 @@
+- name: Creates directory
+  file:
+    path: /tmp/ansible_log
+    state: directory
+    mode: 0775
+
+- name: setting filename logs for Provide_DU
+  set_fact:
+    filename: /tmp/ansible_log/cease_DU_GNB_SAMSUNG.log
+
+- name: setting filename for xml parse
+  set_fact:
+    xmlfilename: /tmp/ansible_log/cease_DU_GNB_SAMSUNG.xml
+
+#----------------> DU Slice retrieval  <--------------
+- name: Call RestAPI to retrieve DU Slice ID
+  uri:
+    url: "{{ du_samsung_usm_host }}/oss/netconf/<<DU-neId>>"
+    # user: ossuser
+    # password: osspasswd
+    method: POST
+    body: "{{lookup('template', 'get_slice_du.xml')}}"
+    # body_format: json
+    headers:
+      Authorization: Basic b3NzdXNlcjpvc3NwYXNzd2Q=
+      content-type: "application/xml"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: DU_getSlice
+  # ignore_errors: yes
+
+- name: Display response
+  debug:
+    var: DU_getSlice
+
+- name: DU_getSlice info print
+  copy:
+    dest: "{{ filename }}"
+    content: |
+              __________________________________________________________________________
+              
+              ##### retrieve Slice for DU
+              
+              URL:
+              {{ DU_getSlice.url }}
+              
+              order_send:
+              {{lookup('template', 'get_slice_du.xml')}}
+              
+              result_return:
+              {{ DU_getSlice.content }}
+              __________________________________________________________________________
+
+- name: DU_getSlice content print for xml parse
+  copy:
+    dest: "{{ xmlfilename }}"
+    content: |
+              {{ DU_getSlice.content }}
+
+- name: Remove rpc-reply tag
+  lineinfile:
+    dest: "{{ xmlfilename }}"
+    regexp: 'rpc-reply*'
+    backup: no
+    state: absent
+
+- block:
+    - name: Call when Slice ID Xpath is present (Slice-Index value already present)
+      include: cease_DU_XpathIsPresent.yaml
+      vars:
+        xmlfile: "{{ xmlfilename }}"
+        logsfile: "{{ filename }}"
+      register: cease_DU_XpathIsPresent
+
+  rescue:
+    - name: Call when Slice ID XPath is not present (Delete First slice-Index with value 0)
+      include: cease_DU_SliceID0.yaml
+      vars:
+        xmlfile: "{{ xmlfilename }}"
+        logsfile: "{{ filename }}"
+      register: cease_DU_SliceID0

@@ -1,0 +1,4 @@
+      - name: Validate the  upfn6 params
+        fail:
+          msg: 'input params not found in mandatory params {{ upfn6loop }}'
+        when: "'{{ upfn6loop }}' not in {{ keyitem }}"

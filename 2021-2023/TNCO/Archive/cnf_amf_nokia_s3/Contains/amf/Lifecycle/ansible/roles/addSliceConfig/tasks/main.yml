@@ -1,0 +1,80 @@
+# convert ALM properties to json provide request for South Bound endpoint - Nokia Provisioning GW 
+- name: Create the list
+  set_fact:   
+    list_amfTac: "{{ amfSlice_tai.split(',') | list }}" 
+    list_amfSlice_dnnName: "{{ amfSlice_dnnName.split(',') | list }}"
+    list_amfSlice_snssaiToDnnListName: "{{ amfSlice_snssaiToDnnListName.split(',') | list }}"
+        
+- name: Insert a line at the end of a file.
+  raw: export USER=root
+
+- name: Insert a line at the end of a file.
+  raw: cmm amfTai create --plmnName {{ amfSlice_plmnName }} --amfTac {{ item }}  --timeZoneName {{ amfSlice_timeZone}}
+  loop: "{{ list_amfTac }}"
+  register: result
+  failed_when:
+    - '"The relevant data content already exists" not in result.stdout'
+    - '"Field" not in result.stdout'
+
+
+- name: Insert a line at the end of a file.
+  raw: cmm snssaiList create --name {{ amfSlice_snssaiListName }} 
+  register: result
+  failed_when:
+    - '"The relevant data content already exists" not in result.stdout'
+    - '"Field" not in result.stdout'
+
+- name: Insert a line at the end of a file.
+  raw: cmm snssai create --name {{ amfSlice_sliceName }} --sliceServiceType {{ amfSlice_sst }} --sliceDifferentiator {{ amfSlice_sd }} --supportedInAllTa {{ amfSlice_supportedInAllTacFlag }} 
+  register: result
+  failed_when:
+    - '"The relevant data content already exists" not in result.stdout'
+    - '"Field" not in result.stdout'
+
+- name: Insert a line at the end of a file.
+  raw: cmm snssaiListItem create --snssaiListName {{ amfSlice_snssaiListName}} --snssaiName {{ amfSlice_sliceName }} 
+  register: result
+  failed_when:
+    - '"The relevant data content already exists" not in result.stdout'
+    - '"Field" not in result.stdout'
+
+- name: Insert a line at the end of a file.
+  raw: cmm amfSetSnssai create --plmnName {{ amfSlice_plmnName }} --amfRegionId {{ amfSlice_amfRegionId}} --amfSetId {{ amfSlice_amfSetId }} --snssaiListName {{ amfSlice_snssaiListName }}
+  register: result
+  failed_when:
+    - '"The relevant data content already exists" not in result.stdout'
+    - '"Field" not in result.stdout'
+    - '"Only 1 plmnName, amfRegionId, and amfSetId record can be provisioned" not in result.stdout'
+
+- name: Insert a line at the end of a file.
+  raw: cmm snssaiToDnnList create --name {{ item }}
+  loop: "{{ list_amfSlice_snssaiToDnnListName }}"
+  register: result
+  failed_when:
+    - '"The relevant data content already exists" not in result.stdout'
+    - '"Field" not in result.stdout'
+# - name: Insert a line at the end of a file.
+#   lineinfile:
+#     path: "/tmp/remote_server_{{ instance_name }}.sh"
+#     line: |
+#       cmm snssaiList create --name {{ amfSlice_snssaiListName }}
+#       cmm snssai create --name {{ amfSlice_sliceName }} --sliceServiceType {{ amfSlice_sst }} --sliceDifferentiator {{ amfSlice_sd }} --supportedInAllTa {{ amfSlice_supportedInAllTacFlag }}
+#       cmm snssaiListItem create --snssaiListName {{ amfSlice_snssaiListName}} --snssaiName {{ amfSlice_sliceName }} 
+#       cmm amfSetSnssai create --plmnName {{ amfSlice_plmnName }} --amfRegionId {{ amfSlice_amfRegionId}} --amfSetId {{ amfSlice_amfSetId }} --snssaiListName {{ amfSlice_snssaiListName }}
+#       cmm snssaiToDnnList create --name {{ amfSlice_snssaiToDnnListName }}
+
+
+
+- name: Insert a line at the end of a file.
+  raw: cmm snssaiToDnn create --dataNetworkName {{ item.0 }} --snssaiToDnnListName {{ item.1 }} --snssaiName {{ amfSlice_sliceName }}
+  loop: "{{ data[0]|zip(*data[1:])|list }}"
+  vars:
+    data:
+        -  "{{ list_amfSlice_dnnName }}"
+        -  "{{ list_amfSlice_snssaiToDnnListName }}"
+  register: result
+  failed_when:
+    - '"The relevant data content already exists" not in result.stdout'
+    - '"Field" not in result.stdout'
+
+

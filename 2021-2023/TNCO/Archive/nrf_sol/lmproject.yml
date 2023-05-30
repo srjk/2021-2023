@@ -1,0 +1,10 @@
+schema: '2.0'
+name: nrf
+version: '1.0'
+type: Assembly
+contains:
+- name: nrf
+  type: Resource
+  resource-manager: Brent
+  directory: nrf
+  #

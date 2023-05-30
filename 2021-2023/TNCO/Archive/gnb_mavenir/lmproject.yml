@@ -1,0 +1,18 @@
+schema: '2.0'
+name: gnb_mavenir
+version: '1.0'
+type: Assembly
+resource-manager: Brent
+contains:
+- name: cucp_mavenir
+  type: Resource
+  resource-manager: Brent
+  directory: cucp_mavenir
+- name: cuup
+  type: Resource
+  resource-manager: Brent
+  directory: cuup    
+- name: du_mavenir
+  type: Resource
+  resource-manager: Brent
+  directory: du_mavenir  

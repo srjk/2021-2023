@@ -1,0 +1,80 @@
+name: resource::ran_slice-ranNSSI::1.0
+description: Resource for nwslice
+properties:
+  operation:
+    description: Install/Configure/Uninstall
+    volatile: true
+    default: Install
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: DFW
+  resourceManager:
+    type: string
+    default: brent
+  gnb_id:
+    type: string
+    # # default: 88
+  slice_sst:
+    type: string
+  slice_sd:
+    type: string
+  slice_snssai:
+    type: string
+    default: 01000022
+  slice_mcc:
+    type: string
+    default: 313
+  slice_mnc:
+    type: string
+    default: 340
+  cucp_id:
+    type: list
+    entry-schema:
+      type: string
+  du_id:
+    type: list
+    entry-schema:
+      type: string
+  # mcms_host:
+    # type: string
+    # default: https://ib-orc-220-mcms-001:18080
+  gnb_info:
+    type: list
+  bpi_eMBBNetworkSlice_name:
+    type: string
+    default: RRR
+  bpi_eMBBNetworkSlice_id:
+    type: string
+    default: RRR
+  bpi_ServiceProfile_name:
+    type: string
+    default: RRR
+  bpi_ServiceProfile_id:
+    type: string
+    default: RRR
+  bpi_ranNetworkSliceSubnet_name:
+    type: string
+    default: RRR
+  bpi_ranNetworkSliceSubnet_id:
+    type: string
+    default: RRR
+  bpi_SliceProfile_name:
+    type: string
+    default: RRR
+  bpi_SliceProfile_id:
+    type: string
+    default: RRR
+lifecycle:
+  Uninstall:
+    drivers:
+      ansible:
+        selector:
+          infrastructure-type:
+          - '*'
+  Install: {}
+default-driver:
+  ansible:
+    selector:
+      infrastructure-type:
+      - '*'

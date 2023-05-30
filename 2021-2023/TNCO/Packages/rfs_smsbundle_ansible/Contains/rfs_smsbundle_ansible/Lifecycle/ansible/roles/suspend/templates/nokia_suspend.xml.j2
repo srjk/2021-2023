@@ -1,0 +1,22 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<soapenv:Body>
+		<spml:modifyRequest timestamp="true" requestID="{{ extOrderId }}" xmlns:spml="urn:siemens:names:prov:gw:SPML:2:0" xmlns:sub="urn:siemens:names:prov:gw:SDL_MULTIAPPSUBSCRIBER:1:0">
+			<version>SDL_MULTIAPPSUBSCRIBER_v10</version>
+			<objectclass>Subscriber</objectclass>
+			<identifier alias="imsi">{{ SUPI }}</identifier>
+	{% if "SMS" in  listrequestedServices  %}
+			<modification name="{{ path11 }}" operation="{{ operation5 }}">
+                        <valueObject xsi:type="sub:BAOC">
+                        <basicServiceGroup>{{ basicServiceGroup }}</basicServiceGroup>
+                        <status>5</status>
+                        </valueObject>
+			</modification>
+			<modification name="{{ path16 }}" operation="{{ operation1 }}">
+				<valueObject xsi:type="sub:UdmSmsSubscriptionData">
+					<smsSubscribed>{{ smsSubscribed1 }}</smsSubscribed>
+				</valueObject>
+			</modification>
+	{% endif %}
+		</spml:modifyRequest>
+	</soapenv:Body>
+</soapenv:Envelope>

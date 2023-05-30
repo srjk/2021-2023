@@ -1,0 +1,91 @@
+#-----------------------> Start time from system  <----------------------------
+- name: "##ALM## Get timestamp from the system"
+  shell: "date +%Y-%m-%d%H:%M:%S.%5N"
+  register: stime
+
+#-----------------------> Print Start time  <----------------------------
+- name: "##ALM## Start time"
+  debug: msg="{{ stime }}"
+
+#-----------------------> List requested services  <----------------------------
+- name: "##ALM## setting filename"
+  set_fact:
+    # filename: /tmp/ansible_log/ansible_{{ extOrderId }}.log
+    listrequestedServices: "{{ requestedServices.split(',') | map('trim') |  list }}"
+    pgw_url: "{{ deployment_location.properties.pgw_url }}"
+
+#-----------------------> PGW API call for Provide_Addon with primary URL  <----------------------------
+- name: "##PGW## Call Soap of SPML Adapter"
+  environment:
+    SSL_CERT_FILE: "pgwcertificate.cert"
+  uri:
+    url: "{{ pgw_url }}"
+    method: POST
+    validate_certs: no
+    return_content: yes
+    body: "{{lookup('template', 'bundle.xml.j2')}}"
+    #status_code: [200,201]
+    # retry_count: "{{ ansible_env.RETRY_COUNT }}"
+    # retry_interval: "{{ ansible_env.RETRY_INTERVAL }}"
+    headers:
+      content-type: "text/xml"
+      ReturnResultType: "FULL"
+      return_content: yes
+      SOAPAction: ""
+  register: result
+  until: result.status == 200
+  retries: "{{ RETRY_COUNT }}"
+  delay: "{{ RETRY_INTERVAL }}"
+  failed_when: "result.status not in [-1,200]"
+# #  ignore_errors: yes
+
+#-----------------------> Call second.yaml for secondary URL  <----------------------------
+- name: "##ALM## Call second.yaml"
+  include_tasks: second.yaml
+  when: result.status == -1
+  
+#-----------------------> End time from system  <----------------------------
+- name: "##ALM## Get timestamp from the system"
+  shell: "date +%Y-%m-%d%H:%M:%S.%5N"
+  register: etime
+
+#-----------------------> Print End time  <----------------------------
+- name: "##ALM## end time"
+  debug: msg="{{ etime }}"
+
+# - name: generate SB json and copy       
+  # copy:
+    # dest: "{{ filename }}"
+    # content: |
+       # ***********************************
+       # start_time:  {{ stime.start }}
+       # end_time:  {{ etime.end }}
+       # ***********************************
+       # order_send:  {{lookup('template', 'bundle.xml.j2')}}
+       # ____________________________________________________
+       # result_return: {{ result }}
+
+#-----------------------> creating variable and seetting value  <-------------------------
+- name: "##ALM## creating variable and seetting value"
+  set_fact:
+    target: "{{ result.content | regex_search('error') }}"
+
+#-----------------------> Store request/response Logs in Eventlogger  <----------------------------  
+- name: "##ALM## Store request and response in DB"
+  uri:
+    url: "{{ deployment_location.properties.eventlogger_url }}"
+    method: POST
+    body: "{{lookup('template', 'Store.json.j2')}}"
+    return_content: yes
+    body_format: json
+    status_code: 200
+    validate_certs: no
+    headers:
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+  register: resultStore
+  
+#-----------------------> Print error message  <----------------------------
+- fail:
+    msg: "Instance creation failed with error code {{ result.content | regex_search('errorCode=[^ ]+') | replace('\"','') |replace('errorCode=','') }} and error message {{ result.content | regex_search('<errorMessage>.*</errorMessage>') | replace('<errorMessage>','') |replace('</errorMessage>','') }}"
+  when: "target=='error'"

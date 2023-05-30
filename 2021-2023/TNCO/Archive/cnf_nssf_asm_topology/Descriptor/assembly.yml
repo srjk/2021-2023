@@ -1,0 +1,66 @@
+name: assembly::cnf_nssf_asm_topology::1.0
+description: descriptor for sol_nssf
+properties:
+#SolSpecific
+  operation:
+    description: addSliceConfig
+    volatile: true
+    default: Install
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: DFW
+  resourceManager:
+    type: string
+    default: brent
+  instance_name:
+    description: name of assembly instance
+    type: string
+    default: "or-nsf001c-usw2aza001rd-5466c9578-wdvcn"
+  nameSpace:
+    type: string
+    default: "usw2-ns-or-nsf-001"    
+  # url:
+  #   type: string
+  #   default:  http://acb9412dc15104e988c43d6afeac6124-986749247.us-east-2.elb.amazonaws.com/nssfStub/
+#CreateVnfRequest
+  # vnfInstanceName:
+  #   description: cnf_instance_name
+  #   default: cnf_instance_name
+  # vnfdId:
+  #   description: cnf_package_identifier
+  #   default: cnf_package_identifier
+  # vnfPkgId:
+  #   description: cnf_package_identifier
+  #   default: VnfPackage-vMRF
+  # vnfInstanceId:
+  #   type: string
+#NSSF
+composition:
+  nssf:
+    type: $lmctl:/contains:/nssf:/descriptor_name
+    quantity: 1    
+    properties:
+      operation:
+        value: ${operation}    
+      deploymentLocation:
+        value: ${deploymentLocation}
+      resourceManager:
+        value: ${resourceManager}
+      instance_name:
+        value: ${instance.name} 
+      nameSpace:
+        value: ${nameSpace}         
+#CreateVnfRequest
+      # vnfdId:
+      #   value: ${vnfdId}
+      # vnfInstanceName:
+      #   value: ${vnfInstanceName}    
+      # vnfPkgId:
+      #   value: ${vnfPkgId}
+      # vnfInstanceId:
+      #   value: ${vnfInstanceId}  
+#NSSF 
+operations:
+  addSliceConfig:
+    source-operation: nssf.addSliceConfig

@@ -1,0 +1,31 @@
+---
+- name: Stop
+  hosts: localhost
+  connection: local
+  gather_facts: True
+  pre_tasks:
+    - name: setting filename
+      set_fact:
+        listrequestedServices: "{{ requestedServices.split(',') | map('trim') |  list }}"
+    - name: setting filename
+      set_fact:
+        length_requestedServices: "{{  listrequestedServices | reject('search','DATA_ROAM') | list | length | int }}"         
+  roles:
+    - { role: ../roles/suspend, when: "operation.find('SUSPEND') != -1 and length_requestedServices | int >= 1 "}
+    - { role: ../roles/resume, when: "operation.find('RESUME') != -1 and length_requestedServices | int >= 1 "}
+    - { role: ../roles/suspend, when: "operation == 'Suspend' and length_requestedServices | int >= 1 " }
+    - { role: ../roles/resume, when: "operation == 'Resume' and length_requestedServices | int >= 1 " }
+    - { role: ../roles/BlockSIM, when: operation == 'BlockSIM' }
+    - { role: ../roles/UnblockSIM, when: operation == 'UnblockSIM' }
+    - { role: ../roles/ChangeSIM, when: operation == 'ChangeSIM' }
+    - { role: ../roles/ChangeDevice, when: operation == 'ChangeDevice' }
+    #- { role: ../roles/ceasebundle, when: operation == 'ChangeNumber' }
+    - { role: ../roles/changeMSISDN, when: operation == 'ChangeNumber' }
+    - { role: ../roles/cleanupMSISDN, when: operation == 'ChangeNumber' }
+    #- { role: ../roles/createMSISDN, when: operation == 'ChangeNumber' }
+    - { role: ../roles/provide_addon, when: operation.find('PROVIDE') != -1 }
+    - { role: ../roles/cease_hostpot, when: "operation == 'Cease' and 'DATA_ROAM' not in listrequestedServices"}
+    - { role: ../roles/cease_addon, when: "operation == 'Cease' and 'DATA_ROAM' in  listrequestedServices"}
+    - { role: ../roles/cease_hostpot, when: "operation.find('CEASE') != -1  and 'DATA_ROAM' not in listrequestedServices"}
+    - { role: ../roles/cease_addon, when: "operation.find('CEASE') != -1 and 'DATA_ROAM' in  listrequestedServices"}
+    

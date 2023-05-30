@@ -1,0 +1,191 @@
+name: resource::upf-core_inst::1.0
+description: descriptor for upf RAN slicing
+properties:
+  operation:
+    description: upf_RAN
+    volatile: true
+    default: Configure
+  instance_name:
+    description: name of assembly instance
+    type: string
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: SUBPROV
+  resourceManager:
+    type: string
+    default: brent
+  # gnb_id:
+    # type: string
+    # default: 88
+  # upf_sst:
+    # type: string
+  # upf_sd:
+    # type: string
+  # upf_snssai:
+    # type: string
+    # default: 10000229
+  # upf_mcc:
+    # type: string
+  # upf_mnc:
+    # type: string
+  upf_3gpp_config:
+    type: string
+    default: upf_3GPP
+  upf_version:
+    type: string
+    volatile: true
+    default: 5.0.383.191
+  # upf_id:
+    # type: string
+    # entry-schema:
+      # type: string
+  upf_vendor_config:
+    type: string
+    default: upf_VENDOR
+  numDlUePerTti:
+    type: string
+    default: 1
+  resType:
+    type: string
+    default: NS_RES_ISOLATED
+  numUlUePerTti:
+    type: string
+    default: 1
+  nsResId:
+    type: string
+    default: 2
+  numDlPrb:
+    type: string
+    default: 75
+  numUlPrb:
+    type: string
+    default: 11
+  nsiId:
+    type: string
+    default: 2
+  dlSlaTargetRate:
+    type: string
+    default: 50000000
+  ulSlaTargetRate:
+    type: string
+    default: 5000000
+  # mcms_host:
+    # type: string
+    # default: https://ib-orc-220-mcms-001:18080
+  # extOrderId:
+    # volatile: true
+  # idxRRMupf3gpp:
+    # type: integer
+  # idnsAddInfoupfVendor:  
+    # type: integer
+  # idsliceListupfVendor:
+    # type: integer
+  vnfInstanceId:
+    type: string
+    volatile: true
+  vnfdId:
+    type: string
+    volatile: true
+  vnfInstanceName:
+    type: string
+  cnfPackageVersionFile:
+    type: string
+    volatile: true
+  vnfInstanceDescription:
+    type: string
+  flavourId:
+    type: string
+  vimType:
+    type: string
+  vim_id:
+    type: string
+  envType:
+    type: string
+    default: dev
+  nfType:
+    type: string
+    default: CNF
+lifecycle:
+  addSliceConfig:
+    drivers:
+      ansible:
+        selector:
+          infrastructure-type:
+          - '*'
+  removeSlice:
+    drivers:
+      ansible:
+        selector:
+          infrastructure-type:
+          - '*'
+  Install: {}
+  Create: {}
+  Configure: {}
+  reconfigure: {}
+  Uninstall: {}
+default-driver:
+  ansible:
+    selector:
+      infrastructure-type:
+      - '*'
+# default-driver:
+#   sol003:
+#     selector:
+#       infrastructure-type:
+#       - '*'
+operations:
+  addSliceConfig:
+    description: activate new slice parameters
+    properties:
+      gnb_id:
+        type: string
+      upf_sst:
+        type: string
+      upf_sd:
+        type: string
+      upf_snssai:
+        type: string
+      upf_mcc:
+        type: string
+      upf_mnc:
+        type: string
+      # upf_3gpp_config:
+        # type: string
+      # upf_version:
+        # type: string
+      upf_id:
+        type: string
+        # entry-schema:
+          # type: string
+      extOrderId:
+        type: string
+      instance_name:
+        type: string
+  removeSlice:
+    description: activate new slice parameters
+    properties:
+      gnb_id:
+        type: string
+      upf_sst:
+        type: string
+      upf_sd:
+        type: string
+      upf_snssai:
+        type: string
+      upf_mcc:
+        type: string
+      upf_mnc:
+        type: string
+      # upf_3gpp_config:
+        # type: string
+      # upf_version:
+        # type: string
+      upf_id:
+        type: string
+        # entry-schema:
+          # type: string
+      extOrderId:
+        type: string
+      instance_name:
+        type: string

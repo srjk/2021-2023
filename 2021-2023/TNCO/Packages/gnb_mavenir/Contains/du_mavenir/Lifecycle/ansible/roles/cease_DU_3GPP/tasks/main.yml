@@ -1,0 +1,329 @@
+- name: Creates directory
+  file:
+    path: /tmp/ansible_log
+    state: directory
+    mode: 0775
+
+- name: setting filename logs for Cease_DU_3GPP
+  set_fact:
+    filename: /tmp/ansible_log/{{ instance_name }}_Delete_DU_3GPP_GNB_MAVENIR.log
+    # filename: /tmp/ansible_log/ansible_provide_CUCP_3GPP_{{ instance_name }}.log
+
+######--------#-----> Generate Token from Kami  <----------------------------
+- name: "##ALM## Get token from kami"
+  uri:
+    method: POST
+    url: "{{ deployment_location.properties.kami_url }}/KamiCore/oauth/token?grant_type=client_credentials"
+    headers: 
+       content-type: "application/json"
+       Authorization: Basic ZGlzaDpkaXNoMTIzNA==
+    validate_certs: no
+  register: token  
+     
+######--------#-----> Get order id from Kami  <----------------------------
+- name: "##ALM## Get order id"
+  uri:
+    method: GET
+    url: "{{ deployment_location.properties.kami_url }}/KamiCore/getExtOrderId"  
+    return_content: yes
+    body_format: json
+    status_code: 201
+    body: "{ \"almInstanceName\": \"{{ instance_name }}\" }"
+    headers:
+       ReturnResultType: "FULL"
+       Authorization: Bearer {{ token.json.access_token }}
+    validate_certs: no
+    follow_redirects: yes
+  register: kami_responseDUdel
+  ignore_errors: yes
+
+- name: log file for DU Mavenir
+  set_fact:
+    extOrderId: "{{ kami_responseDUdel.json.extOrderId }}"
+
+# - name: Validate the client certificate and verify onboarding is successful or no and get apiInvokerId
+  # uri:
+    # # url:  "{{ ansible_env.PGW_ADA_HOST }}/dish/ProvSpml/api/v1/spmlAdapter/modifyAddRequest"
+    # url: "{{ mcms_host }}/cms-service/webapi/apicore/apiinvokermanagement/v1/onboardedinvokers"
+    # method: POST
+    # body: "{{lookup('template', 'clientCertificate.json.j2')}}"
+    # body_format: json
+    # headers:
+      # content-type: "application/json"
+      # ReturnResultType: "FULL"
+      # return_content: yes
+    # validate_certs: no
+  # register: clientCertificate
+  # # ignore_errors: yes
+
+# - name: Initiate Authentication with apiInvokerId
+  # uri:
+    # url: "{{ mcms_host }}/cms-service/webapi/apicore/aef-security/v1/check-authentication"
+    # method: POST
+    # body: "{{lookup('template', 'CheckAuthentication.json.j2')}}"
+    # body_format: json
+    # status_code: 200
+    # headers:
+      # content-type: "application/json"
+      # ReturnResultType: "FULL"
+      # return_content: yes
+    # validate_certs: no
+  # register: authentication
+  # # ignore_errors: yes
+
+#-----------------------> DU_3GPP NRCellDU Info pLMNInfoList <----------------------------
+- name: Call RestAPI to Retrieve NRCellDU info
+  uri:
+    url:  "{{ deployment_location.properties.mcms_host }}/cms-service/webapi/apiservice/ProvMnS/v1/data=1,ManagedElement=1/GNBDUFunction={{ du_id }}?attributes=rRMPolicyMemberList,NRCellDU"
+    method: GET
+    body: "{{lookup('template', 'getInfoDU3GPP.json.j2')}}"
+    # body: 
+      # "gnbId": {{ gnb_id  | int }}
+      # "cnfId": {{ du_id | int }}
+      # "version": "{{ du_version }}"
+      # "configType": "{{ du_3gpp_config }}"
+    body_format: json
+    headers:
+      apiInvokerId: "{{ deployment_location.properties.apiInvokerId }}"
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: cease_retrieveAll_NRCellDUInfo
+  ignore_errors: yes
+  failed_when: "cease_retrieveAll_NRCellDUInfo.status not in [200]"
+
+# - name: retrieveAllInfo NRCellDU info print
+  # copy:
+    # dest: "/tmp/ansible_log/resp_ceaseDU3gppretrieveAllNRCellDUInfo.json.j2"
+    # content: "{{ cease_retrieveAll_NRCellDUInfo }}"
+
+- name: retrieveAll NRCellDU info print
+  copy:
+    dest: "{{ filename }}"
+    content: |
+              __________________________________________________________________________
+            
+              ##### GET API call to retrieveAll NRCellDU pLMNInfoList Info
+              
+              URL:
+              {{ cease_retrieveAll_NRCellDUInfo.url }}
+              
+              order_send:
+              {{lookup('template', 'getInfoDU3GPP.json.j2')}}
+              
+              result_return:
+              {{ cease_retrieveAll_NRCellDUInfo.json | to_nice_json }}
+              __________________________________________________________________________
+
+- name: Log API request through Log module
+  ibm_cp4na_log_message:
+    message_direction: sent
+    # external_request_id: "{{ extOrderId }}"
+    external_request_id: "{{ kami_responseDUdel.json.extOrderId }}"
+    content_type: application/json
+    message_data: |
+     ***********************************
+     ##### GET API call to retrieveAll NRCellDU pLMNInfoList Info
+     
+     URL:
+     {{ cease_retrieveAll_NRCellDUInfo.url }}
+     
+     order_send:
+     {{lookup('template', 'getInfoDU3GPP.json.j2')}}
+     ____________________________________________________
+
+     result_return:
+      {{ cease_retrieveAll_NRCellDUInfo.json | to_nice_json }}
+    message_type: sample
+    protocol: http
+
+#----------> Print error message when apiInvokerId is Invalid/incorrect/expired <------------
+- name: creating variable and setting value for message error when apiInvokerId is Invalid/incorrect/expired
+  set_fact:
+    target_e: "{{ cease_retrieveAll_NRCellDUInfo.content | regex_search('message') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ cease_retrieveAll_NRCellDUInfo.content | replace('\"','') | replace('{','') | replace('}','') }}. Either apiInvokerId is Invalid/incorrect/expired, please verify the apiInvokerId."
+  when: "target_e=='message'"
+
+#----> Print error message when Invalid location or input data for: <gnbId> or <cnfId> or <version> <-------
+- name: creating variable and setting value for errorInfo when wrong input data of gnbId> or <cnfId> or <version>  or any other errors
+  set_fact:
+    target_e1: "{{ cease_retrieveAll_NRCellDUInfo.content | regex_search('error') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ cease_retrieveAll_NRCellDUInfo.content | replace('\"','') | replace('{','') | replace('}','') | replace('error:','') }}"
+  when: "target_e1=='error'"
+
+# - name: retrieveAllInfo NRCellDU length copy file 
+  # copy:
+    # dest: "/tmp/ansible_log/deleteretrieveNRCellDULen.json.j2"
+    # content: "{{ cease_retrieveAll_NRCellDUInfo.json.data[1].NRCellDU|length|int -1 }}"
+
+- name: print NRCellDU length
+  set_fact:
+    NRCellDUlen: "{{ cease_retrieveAll_NRCellDUInfo.json.data[1].NRCellDU|length|int -1 }}"
+
+- name: Generate sequence for NRCellDU id's
+  set_fact:
+    mysequenceNRCellDUcease: "{{ mysequenceNRCellDUcease | default([]) + [cease_retrieveAll_NRCellDUInfo.json.data[1].NRCellDU[item|int].id|int] }}"
+  with_sequence: start=0 end={{ NRCellDUlen }}
+
+- name: print number of NRCellDU IDs
+  debug:
+    msg: "{{ mysequenceNRCellDUcease }}"
+
+- name: Call to include Delete pLMNInfoList for EACH NRCellDU with  S-NSSAI(Delete existing slice)
+  include: updatepLMNInfoListcease.yaml
+  vars:
+    data:
+        -  "{{ mysequenceNRCellDUcease }}"
+    filen: "{{ filename }}"
+    NRCellDUidcease: "{{ item }}"
+  loop: "{{ mysequenceNRCellDUcease }}"
+
+
+#-----------------------> DU_3GPP rRMPolicyMemberList <----------------------------
+- name: Call RestAPI to Retrieve rRMPolicyMemberList info
+  uri:
+    url:  "{{ deployment_location.properties.mcms_host }}/cms-service/webapi/apiservice/ProvMnS/v1/data=1,ManagedElement=1/GNBDUFunction={{ du_id }}?attributes=rRMPolicyMemberList,NRCellDU"
+    method: GET
+    body: "{{lookup('template', 'getInfoDU3GPP.json.j2')}}"
+    # body: 
+      # "gnbId": {{ gnb_id  | int }}
+      # "cnfId": {{ du_id | int }}
+      # "version": "{{ du_version }}"
+      # "configType": "{{ du_3gpp_config }}"
+    body_format: json
+    headers:
+      apiInvokerId: "{{ deployment_location.properties.apiInvokerId }}"
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: cease_retrieveAll_rRMPolicyMemberList
+  ignore_errors: yes
+  failed_when: "cease_retrieveAll_rRMPolicyMemberList.status not in [200]"
+
+# - name: retrieveAllInfo NRCellDU info print
+  # copy:
+    # dest: "/tmp/ansible_log/resp_ceaseDU3gppretrieveAllrRMPolicyMemberList.json.j2"
+    # content: "{{ cease_retrieveAll_rRMPolicyMemberList }}"
+
+- name: Insert a line at the end of a file retrieveAll rRMPolicyMemberList info print.
+  lineinfile:
+    path: "{{ filename }}"
+    line: |
+           __________________________________________________________________________
+           
+           ##### GET API call to retrieveAll NRCellDU rRMPolicyMemberList Info
+           
+           URL:  
+           {{ cease_retrieveAll_rRMPolicyMemberList.url }}
+           
+           order_send:
+           {{lookup('template', 'getInfoDU3GPP.json.j2')}}
+           
+           result_return: 
+           {{ cease_retrieveAll_rRMPolicyMemberList.json | to_nice_json }}
+           __________________________________________________________________________
+
+- name: Log API request through Log module
+  ibm_cp4na_log_message:
+    message_direction: sent
+    # external_request_id: "{{ extOrderId }}"
+    external_request_id: "{{ kami_responseDUdel.json.extOrderId }}"
+    content_type: application/json
+    message_data: |
+     ***********************************
+     ##### GET API call to retrieveAll NRCellDU rRMPolicyMemberList Info
+     
+     URL:  
+     {{ cease_retrieveAll_rRMPolicyMemberList.url }}
+     
+     order_send:
+     {{lookup('template', 'getInfoDU3GPP.json.j2')}}
+     ____________________________________________________
+
+     result_return:
+      {{ cease_retrieveAll_rRMPolicyMemberList.json | to_nice_json }}
+    message_type: sample
+    protocol: http
+
+#-----------------> Print error message when apiInvokerId is Invalid/incorrect/expired <------------
+- name: creating variable and setting value for message error when apiInvokerId is Invalid/incorrect/expired
+  set_fact:
+    target_e: "{{ cease_retrieveAll_rRMPolicyMemberList.content | regex_search('message') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ cease_retrieveAll_rRMPolicyMemberList.content | replace('\"','') | replace('{','') | replace('}','') }}. Either apiInvokerId is Invalid/incorrect/expired, please verify the apiInvokerId."
+  when: "target_e=='message'"
+
+#----> Print error message when Invalid location or input data for: <gnbId> or <cnfId> or <version> <-------
+- name: creating variable and setting value for errorInfo when wrong input data of gnbId> or <cnfId> or <version>  or any other errors
+  set_fact:
+    target_e1: "{{ cease_retrieveAll_rRMPolicyMemberList.content | regex_search('error') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ cease_retrieveAll_rRMPolicyMemberList.content | replace('\"','') | replace('{','') | replace('}','') | replace('error:','') }}"
+  when: "target_e1=='error'"
+
+#------------------> Count number of each NRCellDU id's for rRMPolicyMemberList <---------------
+# - name: retrieveAllInfo NRCellDU print for RRMPolicy
+  # copy:
+    # dest: "/tmp/ansible_log/retrieveRRMNRCellDULen.json.j2"
+    # content: "{{ cease_retrieveAll_rRMPolicyMemberList.json.data[1].NRCellDU|length|int -1 }}"
+
+- name: print NRCellDU length for RRMPolicy
+  set_fact:
+    NRCellDUlen: "{{ cease_retrieveAll_rRMPolicyMemberList.json.data[1].NRCellDU|length|int -1 }}"
+
+- name: Generate sequence for NRCellDU idx's for RRMPolicy
+  set_fact:
+    mysequenceNRCellDURRMcease: "{{ mysequenceNRCellDURRMcease | default([]) + [cease_retrieveAll_rRMPolicyMemberList.json.data[1].NRCellDU[item|int].id|int] }}"
+  with_sequence: start=0 end={{ NRCellDUlen }}
+
+- name: print number of NRCellDU IDs
+  debug:
+    msg: "{{ mysequenceNRCellDURRMcease }}"
+
+#----------> Get maximum length of rRMPolicyMemberList input of idx value for deleting  <------------
+# - name: 
+  # set_fact:
+    # output_idx: "{{ cease_retrieveAll_rRMPolicyMemberList.json.data[0].rRMPolicyMemberList|length|int}}"
+
+# - name: Print idx to be deleted
+  # debug:
+    # msg: "{{ output_idx | max }}"
+
+- name: Retrieve idx value from the rRMPolicyMemberList 
+  set_fact:
+    type_data: "{{ cease_retrieveAll_rRMPolicyMemberList.json.data[0].rRMPolicyMemberList }}" 
+    jmsquery: "[?sNSSAI==`{{ du_sst | int }}{{ du_sd }}`].{mcc: mcc , mnc: mnc, idx: idx}"
+    query1: "[?mcc==mcc].{idx: idx}"
+
+- name: Filter idx value for rRMPolicyMemberList 
+  set_fact:
+    rRMDUidxDel: "{{ type_data | json_query(jmsquery) | json_query(query1) }}"
+
+
+- name: Call to include Delete rRMPolicyMemberList for each NRCellDU (Delete existing slice)
+  include: updaterRMPolicyMemberListcease.yaml
+  vars:
+    data:
+        -  "{{ mysequenceNRCellDURRMcease }}"
+    filen: "{{ filename }}"
+    NRCellDURRMidcease: "{{ item }}"
+  loop: "{{ mysequenceNRCellDURRMcease }}"
+  when: "rRMDUidxDel | length >=1"
+
+
+
+#-----------------------> DU_3GPP rRMPolicyMemberList at DU Level  <--------------------------
+#Currently skipped this step as the above step deletes slice at both level. Need confirmation from Mavenir 
+# - name: update DU Level rRMPolicyMemberList (Remove existing slice)

@@ -1,0 +1,35 @@
+{
+    "serviceType": "Bundle RFS",
+    "serviceName": "Subscriber - Messaging Bundle RFSS",
+    "id": "{{ kami_response.json.extOrderId }}",
+    "imsi": "{{ SUPI }}"
+	  ,
+		"mmsRFS": {
+			"hlr": {
+				"multipleValueObjects": [
+					{
+						"path": "hlr/epsPdnContext[@contextId='3']",
+						"operation": "remove"
+					}
+				]
+			},
+			"udm": {
+				"multipleValueObjects": [
+					{
+						"path": "udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo[@dnnId='{{ dnn7 }}']",
+						"operation": "remove"
+					},
+					{
+						"path": "udm5gData/servingPlmnId/provisionedData/sessionManagementSubscriptionData/dnnConfiguration[@dnnId='{{ dnn7 }}']",
+						"operation": "remove"
+					}
+				]
+			},
+			"pcf": [
+				{
+					"path": "pcf/smPolicyData/smPolicySnssaiData/smPolicyDnnData[@dnn='{{ dnn7 }}']",
+					"operation": "remove"
+				}
+			]
+		}
+}

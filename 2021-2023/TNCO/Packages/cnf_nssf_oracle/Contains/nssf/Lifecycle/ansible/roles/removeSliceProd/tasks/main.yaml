@@ -1,0 +1,160 @@
+#-----------------------> Start time from system  <----------------------------
+- name: "##ALM## Get timestamp from the system"
+  shell: "date +%Y-%m-%d%H:%M:%S.%5N"
+  register: stime
+
+
+- name: Create the list
+  set_fact:
+    list_nssf_defaultGrantName: "{{ nssf_defaultGrantName }}"
+    list_nssf_nssRuleName: "{{ nssf_nssRuleName }}"
+    list_nssf_configurednssi: "test"    
+
+- name: Creates directory
+  file:
+    path: /tmp/ansible_log
+    state: directory
+    mode: 0775
+
+- name: setting filename
+  set_fact:
+    filename: /tmp/ansible_log/{{ instance_name }}_Delete_NSSF.log
+- shell: "python3 test.py"
+  register: start_time
+  no_log: True
+
+- name: generate SB json and copy       
+  copy:
+    dest: "{{ filename }}"
+    content: |
+       ***********************************
+       start_time:  {{ start_time.stdout }}
+
+
+- include: myremov.yaml
+  vars:
+    myvar: "{{ list_nssf_configurednssi }}"
+    mcc: "{{ nssf_mcc }}"
+    mnc: "{{ nssf_mnc }}"
+    sd: "{{ nssf_sd  }}"
+    sst: "{{ nssf_sst }}"
+  #loop: "{{ list_nssf_nssRuleName }}"
+  register: result_profile
+
+
+- name: delete nsi rule
+  shell: "curl --location --request DELETE '{{ NSSF_HOST }}/nnssf-configuration/v1/nssrules/{{ list_nssf_nssRuleName }}' --http2-prior-knowledge --header 'Accept: application/json' --header 'Content-Type: application/json'"
+  #loop: "{{ list_nssf_nssRuleName }}"
+  register: result_profile1
+
+- name: Log the request response of Cease NSS Rules
+  lineinfile:
+    path: "{{ filename }}"
+    line: |
+       ***********************************
+       Cease NSS Rules:
+       Request:
+       curl --location --request DELETE '{{ NSSF_HOST }}/nnssf-configuration/v1/nssrules/{{ list_nssf_nssRuleName }}' --http2-prior-knowledge --header 'Accept: application/json' --header 'Content-Type: application/json'
+       
+       Response:
+       {{ result_profile1 }}
+
+- name: delete nsi auth
+  shell: "curl --location --request DELETE '{{ NSSF_HOST }}/nnssf-configuration/v1/nssaiauth/{{ list_nssf_defaultGrantName }}' --http2-prior-knowledge --header 'Accept: application/json' --header 'Content-Type: application/json'"
+  #loop: "{{ list_nssf_defaultGrantName }}"
+  register: result_profile
+
+- name: Log the request response of Cease NSS Auth
+  lineinfile:
+    path: "{{ filename }}"
+    line: |
+       ***********************************
+       Cease NSS Auth:
+       Request:
+       curl --location --request DELETE '{{ NSSF_HOST }}/nnssf-configuration/v1/nssaiauth/{{ list_nssf_defaultGrantName }}' --http2-prior-knowledge --header 'Accept: application/json' --header 'Content-Type: application/json'
+       
+       Response:
+       {{ result_profile }}
+
+# - name: Configure NSI profile
+#   shell: "curl --location --request DELETE 'http://10.223.195.14/nnssf-configuration/v1/nsiprofiles/{{ nssf_nsiProfileName }}' --header 'Accept: application/json' --header 'Content-Type: application/json'"
+#   register: result_profile
+
+- shell: "python3 test.py"
+  register: end_time
+  no_log: True
+
+- shell: "python3 diff.py '{{ end_time.stdout }}' '{{ start_time.stdout }}'"
+  register: time_diff
+
+- name: Insert a line at the end of a file.
+  lineinfile:
+    path: "{{ filename }}"
+    line: |
+           end_time:  {{ end_time.stdout }}
+           time_taken:  {{ time_diff.stdout }}
+
+
+
+#-----------------------> End time from system  <----------------------------
+- name: "##ALM## Get timestamp from the system"
+  shell: "date +%Y-%m-%d%H:%M:%S.%5N"
+  register: etime
+
+
+#-----------------------> Generate Token from Kami  <----------------------------
+- name: "##ALM## Get token from kami"
+  uri:
+    method: POST
+    url: "{{ deployment_location.properties.kami_url }}/KamiCore/oauth/token?grant_type=client_credentials"
+    headers: 
+       content-type: "application/json"
+       Authorization: Basic ZGlzaDpkaXNoMTIzNA==
+    validate_certs: no
+  register: token  
+ 
+#-----------------------> Get order id from Kami  <----------------------------
+- name: "##ALM## Get order id"
+  uri:
+    method: GET
+    url: "{{ deployment_location.properties.kami_url }}/KamiCore/getExtOrderId"  
+    return_content: yes
+    body_format: json
+    status_code: 201
+    body: "{ \"almInstanceName\": \"{{ instance_name }}\" }"
+    headers:
+       ReturnResultType: "FULL"
+       Authorization: Bearer {{ token.json.access_token }}
+    validate_certs: no
+    follow_redirects: yes
+  register: kami_response
+
+- name: Log API request through Log module
+  ibm_cp4na_log_message:
+    message_direction: sent
+    external_request_id: "{{ kami_response.json.extOrderId }}"
+    content_type: application/json
+    message_data: |
+     ***********************************
+     order_send:  
+     {{lookup('template', '{{ filename }}')}}
+      
+     ************************************ 
+    message_type: sample
+    protocol: http
+
+#-----------------------> Store request/response Logs in Eventlogger  <----------------------------
+- name: "##ALM## Store request and response in DB"
+  connection: local
+  uri:
+    url: "{{ deployment_location.properties.eventlogger_url }}"
+    method: POST
+    body: "{{lookup('template', 'Store_delete.json.j2')}}"
+    return_content: yes
+    body_format: json
+    status_code: 200
+    validate_certs: no
+    headers:
+      content-type: "application/json"
+      ReturnResultType: "FULL" 
+  register: resultStore

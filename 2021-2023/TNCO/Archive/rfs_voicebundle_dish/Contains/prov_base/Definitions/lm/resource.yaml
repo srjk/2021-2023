@@ -1,0 +1,396 @@
+description: descriptor for Nokia Provisioning GW resource
+name: resource::prov_base-rfs_voicebundle_dish::1.0
+properties:
+  instance_name:
+    description: name of assembly instance
+  operation:
+    volatile: true
+  deploymentLocation:
+    description: site specific
+    type: string
+    default: DFW     
+  resourceManager:
+    type: string
+    read-only: true
+    default: brent
+  requestedServices:
+    type: string
+    volatile: true  
+  extOrderId:
+    volatile: true
+  serviceName:
+    type: string
+    default: Subscriber - Voice Bundle RFSS
+  loop_back:
+    type: string
+    volatile: true
+#    default: OFF
+  SUPI:
+    volatile: true
+  GPSI:
+    volatile: true
+  Old_GPSI:
+    volatile: true     
+  dnn1:
+    type: string
+  dnn1_sessionAmbr:
+    type: string
+  dnn2:
+    type: string
+  dnn2_sessionAmbr:
+    type: string
+  dnn3:
+    type: string
+  dnn3_sessionAmbr:
+    type: string
+  subscCats1:
+    type: string
+  subscCats2:
+    type: string
+  href:
+    type: string
+  priority:
+    type: string
+  description:
+    type: string
+  category:
+    type: string
+  state:
+    type: string
+  orderDate: 
+    type: string
+  SubOrderType:
+    type: string
+  completionDate: 
+    type: string
+  requestedStartDate: 
+    type: string
+  requestedCompletionDate: 
+    type: string
+  expectedCompletionDate:
+    type: string
+  startDate:
+    type: string
+  serviceOrderItemId:
+    type: string  
+  action:
+    type: string
+    default: add
+  hlr_path:
+    type: string
+    default: hlr/epsPdnContext
+  operation_pgw:
+    type: string
+    default: add
+  dnn1_contextId:
+    type: string
+    default: 4
+  dnn1_type:
+    type: string
+    default: both
+  dnn1_pdnGwDynamicAllocation:
+    type: string
+    default: true
+  dnn1_vplmnAddressAllowed:
+    type: string
+    default: false
+  dnn1_maxBandwidthUp:
+    type: string
+    default: 16000000
+  dnn1_maxBandwidthDown:
+    type: string
+    default: 16000000
+  dnn1_qos:
+    type: string
+    default: IMSSIGNAL
+  dnn1_pdnChargingCharacteristics_chargingCharacteristicsProfile:
+    type: string
+    default: 8
+  dnn1_pdnChargingCharacteristics_chargingCharacteristicsBehavior:
+    type: string
+    default: 0
+  eps5gInterworkIndicator:
+    type: string
+    default: 1
+  dnn2_apn:
+    type: string
+    default: sos
+  dnn2_contextId:
+    type: string
+    default: 5
+  dnn2_type:
+    type: string
+    default: both
+  dnn2_pdnGwDynamicAllocation:
+    type: string
+    default: true
+  dnn2_vplmnAddressAllowed:
+    type: string
+    default: false
+  dnn2_maxBandwidthUp:
+    type: string
+    default: 3000000
+  dnn2_maxBandwidthDown:
+    type: string
+    default: 3000000
+  dnn2_qos:
+    type: string
+    default: SOSSIGNAL
+  dnn2_pdnChargingCharacteristics_chargingCharacteristicsProfile:
+    type: string
+    default: 8
+  dnn2_pdnChargingCharacteristics_chargingCharacteristicsProfile_chargingCharacteristicsBehavior:
+    type: string
+    default: 0
+  dnn3_apn:
+    type: string
+    default: xcap
+  dnn3_contextId:
+    type: string
+    default: 6
+  dnn3_type:
+    type: string
+    default: both
+  dnn3_pdnGwDynamicAllocation:
+    type: string
+    default: true
+  dnn3_vplmnAddressAllowed:
+    type: string
+    default: false
+  dnn3_maxBandwidthUp:
+    type: string
+    default: 10000000
+  dnn3_maxBandwidthDown:
+    type: string
+    default: 10000000
+  dnn3_qos:
+    type: string
+    default: xcapQosEps
+  dnn3_pdnChargingCharacteristics_chargingCharacteristicsProfile:
+    type: string
+    default: 8
+  dnn3_pdnChargingCharacteristics_chargingCharacteristicsBehavio:
+    type: string
+    default: 0
+  hss_subscriptionId:
+    type: string
+    default: 1
+  hss_profileType:
+    type: string
+    default: normal
+  hss_adminBlocked:
+    type: string
+    default: false
+  hss_defaultScscfRequired:
+    type: string
+    default: true
+  hss_maximumPublicIds:
+    type: string
+    default: 15
+  preferredAuthenticationScheme:
+    type: string
+    default: tlsDigestAkaV2
+  refGussDataId:
+    type: string
+    default: 1
+  looseRoutingIndicationRequired:
+    type: string
+    default: false
+  digestRealm:
+    type: string
+    default: ims.mnc340.mcc313.3gppnetwork.org
+  barringIndication:
+    type: string
+    default: false
+  defaultIndication:
+    type: string
+    default: true
+  serviceProfileName:
+    type: string
+    default: SP1
+  irsId:
+    type: string
+    default: IRS1
+  profileName:
+    type: string
+    default: SP1
+  mandatoryCapability:
+    type: string
+    default: 1
+  globalFilterId:
+    type: string
+    default: REG-TAS
+  globalFilterId1:
+    type: string
+    default: INV-ORIG-TAS
+  globalFilterId2:
+    type: string
+    default: INV-TERM-TAS
+  globalFilterId3:
+    type: string
+    default: REG-SCCAS
+  globalFilterId4:
+    type: string
+    default: INV-TERM-SCCAS
+  globalFilterId5:
+    type: string
+    default: INV-CONF-SCCAS
+  sessionReleasePolicy:
+    type: string
+    default: deregisterNoForcedSessionRelease
+  forkingPolicy:
+    type: string
+    default: parallelForking
+  gussDataId:
+    type: string
+    default: 1
+  uiccSecurityType:
+    type: string
+    default: gba
+  keyLifetime:
+    type: string
+    default: 3600
+  ussDataId:
+    type: string
+    default: 1
+  gsld:
+    type: string
+    default: 2
+  activeIndication:
+    type: string
+    default: true
+  ussType:
+    type: string
+    default: 2
+  refNafGroupId:
+    type: string
+    default: NAFG1
+  keySelectionId:
+    type: string
+    default: ME-based
+  udm_path:
+    type: string
+    default: udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo
+  defaultIndication1:
+    type: string
+    default: false
+  interworkingEPSIndication:
+    type: string
+    default: true
+  localBrkOutRoamingAllowed:
+    type: string
+    default: false
+  udm_path1:
+    type: string
+    default: udm5gData/servingPlmnId/provisionedData/sessionManagementSubscriptionData/dnnConfiguration
+  udm5Qi:
+    type: string
+    default: 5
+  dnn1_arp:
+    type: string
+    default: 11|NOT_PREEMPT|PREEMPTABLE
+  dnn1_priorityLevel:
+    type: string
+    default: 11
+  defaultSessionType:
+    type: string
+    default: IPV4V6
+  allowedSessionType:
+    type: string
+    default: IPV4V6
+  sscModes_defaultSscMode:
+    type: string
+    default: SSC_MODE_1
+  allowedSscMode:
+    type: string
+    default: SSC_MODE_1
+  dnn2_arp:
+    type: string
+    default: 7|NOT_PREEMPT|PREEMPTABLE
+  dnn2_priorityLevel:
+    type: string
+    default: 7
+  udm5gQosProfile_udm5Qi:
+    type: string
+    default: 9
+  dnn3_arp:
+    type: string
+    default: 12|NOT_PREEMPT|PREEMPTABLE
+  dnn3_priorityLevel:
+    type: string
+    default: 12
+  pcf_path:
+    type: string
+    default: pcf/smPolicyData/smPolicySnssaiData/smPolicyDnnData
+  allowedServices:
+    type: string
+    default: videocalling
+  subscSpendingLimits:
+    type: string
+    default: true
+  online:
+    type: string
+    default: true
+  hlr_path1:
+    type: string
+    default: hlr/epsPdnContext[@contextId='4']
+  hlr_path2:
+    type: string
+    default: hlr/epsPdnContext[@contextId='5']  
+  hlr_path3:
+    type: string
+    default: hlr/epsPdnContext[@contextId='6']
+  operation1:
+    type: string
+    default: add
+  hss_path1:
+    type: string
+    default: hss
+  tas_callinglineid_restriction:
+    type: string
+  reference_assembly:
+    type: string  
+  alias:
+    type: string
+    default: MSISDN
+  hss_path:
+    type: string
+    default: privateUserId 
+  voicemail_command2:
+    type: string
+    default: Update
+  voicemail_Token:
+    type: string
+    default: QWxhZGluOm9wZW5zaW1zaW0=
+  voicemail_EntityName:
+    type: string
+    default: Subscriber
+  voicemail_Version:
+    type: string
+    default: 1
+  serviceType:
+    type: string
+    default: "Bundle RFS"
+  irsld:
+    type: string
+    default: "IRS1"
+  barringIndication1:
+    type: string
+    default: "true"
+  operation2:
+    type: string
+    default: "remove"
+  ENUM_ChangeRequest_view:
+    type: string
+    default: enum-dns.zones.enum.enumZoneCommon.data
+infrastructure:
+  Openstack: {}
+lifecycle:
+  Install: {}
+  reconfigure: {}
+  Uninstall: {}
+default-driver:
+  ansible:
+    selector:
+      infrastructure-type:
+      - '*'

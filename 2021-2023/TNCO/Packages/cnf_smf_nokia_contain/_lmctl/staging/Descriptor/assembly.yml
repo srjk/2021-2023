@@ -1,0 +1,148 @@
+name: assembly::cnf_smf_nokia_contain::1.0
+description: descriptor for sol_smf
+properties:
+#SolSpecific
+  operation:
+    description: addSliceConfig
+    volatile: true
+    default: Configure
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: DFW
+  resourceManager:
+    type: string
+    default: brent
+  extOrderId:
+    type: string
+  instance_name:
+    description: name of assembly instance
+  smfSlice_sliceInstanceListName:
+    type: string
+  smfSlice_sliceListName:
+    type: string
+  smfSlice_sliceName:
+    type: string
+  smfSlice_sst:
+    type: string
+  smfSlice_sd:
+    type: string
+  smf_dnnName:
+    type: string
+  smfSlice_slice_instance:
+    type: string
+  alm_assembly_name:
+    type: string
+  SMF_IP:
+    type: string
+    default: 100.65.79.24
+    volatile: true
+  SMF_USER:
+    type: string
+    default: smf
+    volatile: true
+  SMF_ENV:
+    type: string
+    default: stub
+    volatile: true
+  SMF_PORT:
+    type: string
+    # default: 2222
+    volatile: true
+    default: 22
+  SMF_terminal:
+    type: string
+    volatile: true
+    default: dish-ssh-amf-8f486b5b8-zpwkz
+  vnfdId:
+#    default: Nokia-amf-1.11.0-v1
+    volatile: true
+    default: Nokia-smf-1.11.0-v1
+  vnfInstanceName:
+    type: string
+    default: nk-smf001c-use1az1n01p1
+  vnfInstanceDescription:
+    type: string
+    default: Deploy Nokia AMF
+  cnfPackageVersionFile:
+    type: string
+    volatile: true
+    default: nk-smf001c-use1az1n01p1
+composition:
+  con:
+    type: resource::con_smf-cnf_smf_nokia_contain::1.0
+    quantity: 1
+    properties:
+      instance_name:
+        value: ${instance.name}
+  smf:
+    type: assembly::cnf_smf_nokia::1.0
+    quantity: 1
+    properties:
+      instance_name:
+        value: ${instance.name}
+      SMF_IP:
+        value: ${SMF_IP}
+      SMF_USER:
+        value: ${SMF_USER}
+      # SMF_PASS:
+        # value: ${SMF_PASS}
+      SMF_PORT:
+        value: ${SMF_PORT}
+      SMF_ENV:
+        value: ${SMF_ENV}
+      SMF_terminal:
+        value: ${SMF_terminal}
+      cnfPackageVersionFile:
+        value: ${cnfPackageVersionFile}
+      # amf_password:
+        # value: ${amf_password}
+      vnfdId:
+        value: ${vnfdId}
+      vnfInstanceName:
+        value: ${vnfInstanceName}
+      vnfInstanceDescription:
+        value: ${vnfInstanceDescription}
+relationships:
+  sol_operation_relationship_smf:
+    properties:
+      smfSlice_sliceInstanceListName:
+        value: ${smfSlice_sliceInstanceListName}
+      smfSlice_sliceListName:
+        value: ${smfSlice_sliceListName}
+      smfSlice_sliceName:
+        value: ${smfSlice_sliceName}
+      smfSlice_sst:
+        value: ${smfSlice_sst}
+      smfSlice_sd:
+        value: ${smfSlice_sd}
+      smf_dnnName:
+        value: ${smf_dnnName}
+      instance_name:
+        value: ${instance_name}
+      extOrderId:
+        value: ${extOrderId}
+      # amfSlice_timeZone:
+      #   value: Default
+      # amfSlice_supportedInAllTacFlag:
+      #   value: true
+      # amfSlice_defaultSnssaiSelection:
+      #   value: LOCAL
+    lifecycle:
+      Create:
+      - source.addSliceConfig
+      Cease:
+      - source.removeSlice
+    source-state: Active
+    source-state-modifier: post
+    target-state: Active
+    target-state-modifier: post
+    source-capabilities:
+    - smf.capability
+    target-requirements:
+    - con.requirement
+operations:
+  addSliceConfig:
+    source-operation: smf.addSliceConfig
+  removeSlice:
+    source-operation: smf.removeSlice

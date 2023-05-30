@@ -1,0 +1,30 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<soapenv:Body>
+		<spml:modifyRequest timestamp="true" requestID="{{ extOrderId }}" xmlns:spml="urn:siemens:names:prov:gw:SPML:2:0" xmlns:sub="urn:siemens:names:prov:gw:SDL_MULTIAPPSUBSCRIBER:1:0">
+			<version>SDL_MULTIAPPSUBSCRIBER_v10</version>
+			<objectclass>Subscriber</objectclass>
+			<identifier alias="imsi">{{ SUPI }}</identifier>
+			<modification name="hlr/bicroam" operation="addorset">
+				<valueObject xsi:type="sub:BICRoam">
+					<basicServiceGroup>TS20-shortMessage</basicServiceGroup>
+					<status>5</status>
+				</valueObject>
+			</modification>
+			<modification name="hlr" operation="addorset">
+				<valueObject xsi:type="sub:HLR">
+					<osb1>true</osb1>
+				</valueObject>
+			</modification>
+			<modification name="udm5gData/servingPlmnId/provisionedData/smsManagementSubscriptionData" operation="set">
+				<valueObject xsi:type="sub:UdmSmsManagementSubscriptionData">
+					<mtSmsBarringRoaming>true</mtSmsBarringRoaming>
+				</valueObject>
+			</modification>
+			<modification name="udm5gData/servingPlmnId/provisionedData/smsManagementSubscriptionData" operation="set">
+				<valueObject xsi:type="sub:UdmSmsManagementSubscriptionData">
+					<moSmsbarringRoaming>true</moSmsbarringRoaming>
+				</valueObject>
+			</modification>
+		</spml:modifyRequest>
+	</soapenv:Body>
+</soapenv:Envelope>

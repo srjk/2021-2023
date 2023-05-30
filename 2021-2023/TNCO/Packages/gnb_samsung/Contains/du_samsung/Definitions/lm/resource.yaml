@@ -1,0 +1,134 @@
+name: resource::du_samsung-gnb_samsung::1.0
+description: descriptor for DU RAN slicing
+properties:
+  operation:
+    description: DU_RAN
+    volatile: true
+    default: Configure
+  instance_name:
+    description: name of assembly instance
+    type: string
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: SUBPROV
+  resourceManager:
+    type: string
+    default: brent
+  vnfInstanceId:
+    type: string
+    volatile: true
+  vnfdId:
+    type: string
+    volatile: true
+  vnfInstanceName:
+    type: string
+  cnfPackageVersionFile:
+    type: string
+    volatile: true
+  vnfInstanceDescription:
+    type: string
+  flavourId:
+    type: string
+  vimType:
+    type: string
+  vim_id:
+    type: string
+  envType:
+    type: string
+    default: dev    
+  nfType:
+    type: string
+    default: CNF
+lifecycle:
+  addSliceConfig: 
+    drivers:
+      ansible:
+        selector:
+          infrastructure-type:
+          - '*'
+  removeSlice: 
+    drivers:
+      ansible:
+        selector:
+          infrastructure-type:
+          - '*'
+  Install: {}
+  Create: {}
+  # Configure: {}
+  reconfigure: {}
+  Uninstall: {}
+  Delete: {}
+# default-driver:
+  # ansible:
+    # selector:
+      # infrastructure-type:
+      # - '*'
+default-driver:
+  sol003:
+    selector:
+      infrastructure-type:
+      - '*'
+operations:
+  addSliceConfig:
+    description: activate new slice parameters
+    properties:
+      gnb_id:
+        type: string
+      du_sst:
+        type: string
+      du_sd:
+        type: string
+      du_snssai:
+        type: string
+      du_mcc:
+        type: string
+      du_mnc:
+        type: string
+      plmn_index:
+        type: string
+      samsung_usm_host:
+        type: string
+      du_id:
+        type: string
+        # entry-schema:
+          # type: string
+      cell_id:
+        type: list
+        entry-schema:
+          type: string
+      extOrderId:
+        type: string
+      instance_name:
+        type: string
+  removeSlice:
+    description: activate new slice parameters
+    properties:
+      gnb_id:
+        type: string
+      du_sst:
+        type: string
+      du_sd:
+        type: string
+      du_snssai:
+        type: string
+      du_mcc:
+        type: string
+      du_mnc:
+        type: string
+      plmn_index:
+        type: string
+      samsung_usm_host:
+        type: string
+      du_id:
+        type: string
+        # entry-schema:
+          # type: string
+      cell_id:
+        type: list
+        entry-schema:
+          type: string
+      extOrderId:
+        type: string
+      instance_name:
+        type: string

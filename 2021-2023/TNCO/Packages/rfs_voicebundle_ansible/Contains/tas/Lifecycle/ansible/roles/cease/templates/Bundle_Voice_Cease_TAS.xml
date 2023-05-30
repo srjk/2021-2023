@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/">
+	<soap-env:Header/>
+	<soap-env:Body>
+		<PlexViewRequest Command="dlt-ngfs-subscriber-v2" ProvisioningGroup="TASProv" RequestId="{{ kami_response.json.extOrderId }}" SessionId="username*password">
+		{% if "VOICE" in  listrequestedServices  %}
+			<SubParty>
+				<PartyId>{{ GPSI }}</PartyId>
+				<PrimaryPUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PrimaryPUID>
+			</SubParty>
+	{% endif %}
+    {% if "VOICE_ROAM" in  listrequestedServices  %}
+			<CallBlocking>
+				<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+				<Assigned>{{ tas_callBlocking_assigned }}</Assigned>
+				<BlockRoamNtwk>{{ tas_callBlocking_blockroamntwk }}</BlockRoamNtwk>
+			</CallBlocking>
+			<CallBarring>
+				<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+				<Assigned>{{ tas_callBarring_assigned }}</Assigned>
+				<RoamNtwk>{{ tas_callBarring_roamntwk }}</RoamNtwk>
+			</CallBarring>			
+	{% endif %}
+    {% if "VOICE_CF" in  listrequestedServices  %}
+			<CallForwardingVari>
+				<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+				<Assigned>{{ tas_CallForwardingVari_assigned1 }}</Assigned>
+			</CallForwardingVari>
+			<CallForwardingBusy>
+				<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+				<Assigned>{{ tas_CallForwardingBusy_assigned1 }}</Assigned>
+			</CallForwardingBusy>
+			<CallForwardingNoAns>
+				<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+				<Assigned>{{ tas_CallForwardingNoAns_assigned1 }}</Assigned>
+			</CallForwardingNoAns>
+			<CallForwardNotReach>
+				<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+				<Assigned>{{ tas_CallForwardNotReach_assigned1 }}</Assigned>
+			</CallForwardNotReach>
+	{% endif %}
+	{% if "VOICE_SPAM" in  listrequestedServices  %}
+			<SelectiveCallRejct>
+				<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+				<Assigned>{{ tas_SelectiveCallRejct_assigned1 }}</Assigned>
+			</SelectiveCallRejct>
+			    {% endif %}
+		</PlexViewRequest>
+	</soap-env:Body>
+</soap-env:Envelope>
+

@@ -1,0 +1,9 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<soapenv:Body>
+		<spml:deleteRequest timestamp="true" requestID="{{ extOrderId }}" xmlns:spml="urn:siemens:names:prov:gw:SPML:2:0" xmlns:dev="urn:siemens:names:prov:gw:EIR_NSR:1:0">
+			<version>EIR_NSR_v30</version>
+			<objectclass>Device</objectclass>
+            <identifier>{{ PEI }}</identifier>
+		</spml:deleteRequest>
+	</soapenv:Body>
+</soapenv:Envelope>

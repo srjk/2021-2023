@@ -1,0 +1,51 @@
+{
+     "serviceType": "Bundle RFS",
+    "serviceName": "Subscriber - Messaging Bundle RFSS",
+    "id": "{{ extOrderId }}",
+    "imsi": "{{ SUPI }}"
+    {% if "SMS" in  listrequestedServices  %}
+       ,
+            "smsRFS": {
+                "hlr": [
+                    {
+                        "path": "hlr/baoc",
+                        "operation": "add",
+                        "valueObject": {
+                            "basicServiceGroup": "TS20-shortMessage",
+                            "status": "4"
+                        }
+                    }
+                ],
+                "udm": [
+                    {
+                        "path": "udm5gData/servingPlmnId/provisionedData/smsSubscriptionData",
+                        "operation": "addorset",
+                        "valueObject": {
+                            "smsSubscribed": "true"
+                        }
+                    }
+                ]
+            }
+	{% endif %}
+	{% if "MMS" in  listrequestedServices  %}    
+            ,
+            "mmsRFS": {
+                "hlr": [
+                    {
+                        "path": "hlr/epsPdnContext[@contextId='3']/pdnContextBlocking",
+                        "operation": "addorset",
+                        "valueObject": {
+                            "flagAPNBlockedOverS6A": false,
+                            "flagAPNBlockedOverSWx": false
+                        }
+                    }
+                ],
+                "udm": [
+                    {
+                        "path": "udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo[@dnnId='{{ dnn7 }}']/dnnBarred",
+                        "operation": "remove"
+                    }
+                ]
+            }
+	{% endif %}
+}

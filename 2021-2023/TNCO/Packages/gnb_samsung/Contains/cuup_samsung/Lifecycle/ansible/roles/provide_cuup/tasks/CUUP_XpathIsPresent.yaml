@@ -1,0 +1,118 @@
+###Call when Slice ID Xpath is present (Slice-Index value already present)
+###CUUP_XpathIsPresent.yaml
+
+- name: Read xml data to calculate the slice-index when Slice ID Xpath is present
+  xml:
+    xmlstring: "{{ lookup('file', '{{ xmlfile }}') }}"
+    namespaces:
+      ns: http://www.samsung.com/global/business/5GvRAN/ns/gnb-cu-up-cnf
+    xpath: /data/ns:managed-element/ns:gnb-cu-up-function/ns:gnb-cu-up-slice-info/ns:slice-index
+    content: 'text'
+  register: xml_result
+
+- name: Print slice-index matches
+  debug:
+    var: xml_result.matches
+
+##find length of Arrray of dict(json)
+- name: Print the length of SliceIndex
+  set_fact:
+    sliceIndex: "{{ xml_result.matches | length }}"
+    # sliceIndex: "{{ xml_result.matches | length | default(0) }}"
+
+##Extract last entry from array in dict(json) format
+- name: Print last SliceIndex entry from array in json(dict) format (key:value pair)
+  set_fact:
+    SliceIdlast: "{{ xml_result.matches[sliceIndex | int -1] }}"
+
+## Extract only key from last SliceIndex entry of array
+- name: Print only key from last SliceIndex entry
+  set_fact:
+    SliceIdlastKeyonly: "{{ SliceIdlast.keys() }}"
+
+## Extract First key from dict of keys
+- name: Print first key from last SliceIndex entry if found multiple
+  set_fact:
+    SliceIdFirstKey: "{{ SliceIdlastKeyonly[0] }}"
+
+- debug:
+    msg: "{{ SliceIdFirstKey }}"
+
+- name: Print slice-Index value of the last entry in list
+  set_fact:
+    sliceIndexFirstKeyvalue: "{{ SliceIdlast[SliceIdFirstKey] }}"
+
+- name: Increment slice-Index to 1 if atleast one slice-index data is found in xml
+  set_fact:
+    sliceIndexvalueIncrement: "{{ sliceIndexFirstKeyvalue |int + 1 }}"
+
+- name: Print sliceIndexvalueIncrement
+  debug:
+    msg: "{{ sliceIndexvalueIncrement }}"
+    
+#----------------> CU_UP Slice Create slice  <--------------
+- name: Call RestAPI to Create CU_UP Slice ID - when Slice ID Xpath is present
+  uri:
+    url: "{{ deployment_location.properties.samsung_usm_host }}/oss/netconf/{{ cuup_id }}"
+    # user: ossuser
+    # password: osspasswd
+    method: POST
+    body: "{{lookup('template', 'create_slice_cu_up.xml')}}"
+    # body_format: json
+    headers:
+      Authorization: Basic b3NzdXNlcjpvc3NwYXNzd2Q=
+      content-type: "application/xml"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: CU_UP_createSlice
+  # ignore_errors: yes
+
+- name: Display response when Slice ID Xpath is present
+  debug:
+    var: CU_UP_createSlice
+
+- name: CU_UP_getSlice info print
+  lineinfile:
+    path: "{{ logsfile }}"
+    line: |
+           __________________________________________________________________________
+           
+           ##### Create Slice for CUUP- when Slice ID Xpath is present
+           
+           URL:
+           {{ CU_UP_createSlice.url }}
+           
+           order_send:
+           {{lookup('template', 'create_slice_cu_up.xml')}}
+           
+           result_return:
+           {{ CU_UP_createSlice.content }}
+           __________________________________________________________________________
+
+- name: Log API request through Log module
+  ibm_cp4na_log_message:
+    message_direction: sent
+    external_request_id: "{{ extOrderId }}"
+    content_type: application/json
+    message_data: |
+     ***********************************
+     ###### Create Slice for CUUP- when Slice ID Xpath is present
+     
+     URL:
+     {{ CU_UP_createSlice.url }}
+     
+     order_send:  
+     {{lookup('template', 'create_slice_cu_up.xml')}}
+     ____________________________________________________
+
+     result_return:
+      {{ CU_UP_createSlice.content }}
+    message_type: sample
+    protocol: http
+
+- fail:
+    msg: "Slice creation failed with error {{ CU_UP_createSlice.content }}"
+  when: '"<rpc-error>" in CU_UP_createSlice.content'

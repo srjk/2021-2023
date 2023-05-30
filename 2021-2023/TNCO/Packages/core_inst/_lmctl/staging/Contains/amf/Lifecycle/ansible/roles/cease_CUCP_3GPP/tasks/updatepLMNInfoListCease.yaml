@@ -1,0 +1,48 @@
+#-------------------> update pLMNInfoList for EACH NRCellCU (Delete new slice)<----------------
+- name: update pLMNInfoList for EACH NRCellCU with new S-NSSAI  (Delete new slice)
+  uri:
+    url: "{{ deployment_location.properties.mcms_host }}/cms-service/webapi/apiservice/ProvMnS/v1/data=1,ManagedElement=1,GNBCUCPFunction=551993000,NRCellCU={{ NRCellCUidcease }},attributes/pLMNInfoList={{ cucp_mcc }}"
+    method: DELETE
+    body: "{{lookup('template', 'modifypLMNInfoListCUCP3GPP.json.j2')}}"
+    # body: 
+      # "gnbId": {{ gnb_id  | int }}
+      # "cnfId": {{ cucp_id | int }}
+      # "version": "{{ cucp_version }}"
+      # "configType": "{{ cucp_3gpp_config }}"
+    body_format: json
+    headers:
+      apiInvokerId: "{{ deployment_location.properties.apiInvokerId }}"
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+      return_content: yes
+      accept: "application/json"
+    validate_certs: no
+    status_code: [200,500]
+    return_content: yes
+  register: cease_updatepLMNInfoList
+  # loop: "{{ mysequenceNRCellCUcease }}"
+  ignore_errors: yes
+  failed_when: "cease_updatepLMNInfoList.status not in [200,500]"
+
+- name: cease_updatepLMNInfoList print for remove slice
+  copy:
+    dest: "/tmp/ansible_log/resp_ceaseCUCP3gpppLMNInfoList.json.j2"
+    content: "{{ cease_updatepLMNInfoList }}"
+
+#-----------------> Print error message when apiInvokerId is Invalid/incorrect/expired <------------
+- name: creating variable and setting value for message error when apiInvokerId is Invalid/incorrect/expired
+  set_fact:
+    target_e: "{{ cease_updatepLMNInfoList.content | regex_search('message') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ cease_updatepLMNInfoList.content | replace('\"','') | replace('{','') | replace('}','') }}. Either apiInvokerId is Invalid/incorrect/expired, please verify the apiInvokerId."
+  when: "target_e=='message'"
+
+#-----------> Print cease_updatepLMNInfoList error message if Add/Delete API calls fails <---------------
+# - name: creating variable and setting value for errorInfo  
+  # set_fact:
+    # target_e1: "{{ cease_updatepLMNInfoList.content | regex_search('error') }}"
+
+# - fail:
+    # msg: "Instance creation failed with error {{ cease_updatepLMNInfoList.content | replace('\"','') | replace('{','') | replace('}','') | replace('error:','') }}"
+  # when: "target_e1=='error'"

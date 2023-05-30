@@ -1,0 +1,6 @@
+---
+- name: addSliceConfig
+  hosts: amf
+  gather_facts: False
+  roles:
+    - role: ../roles/addSliceConfig

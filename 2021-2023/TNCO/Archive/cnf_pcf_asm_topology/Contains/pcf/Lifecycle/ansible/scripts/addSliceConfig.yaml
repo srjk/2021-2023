@@ -1,0 +1,13 @@
+---
+- name: addSliceConfig
+  hosts: localhost
+  connection: local
+  gather_facts: True       
+  roles:
+    # - role: ../roles/provide/tasks/Charging_Data.yml
+    # - role: ../roles/provide/tasks/QoS_Data.yml
+    # - role: ../roles/provide/tasks/PCC_Rule.yml
+    # - role: ../roles/provide/tasks/Qos_Information.yml
+    # - role: ../roles/provide/tasks/Session_Rule.yml
+    # - role: ../roles/provide/tasks/Slice_info.yml 
+    - role: ../roles/addSliceConfig

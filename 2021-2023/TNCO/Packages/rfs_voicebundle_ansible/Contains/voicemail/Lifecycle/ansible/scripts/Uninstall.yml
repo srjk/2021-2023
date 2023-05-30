@@ -1,0 +1,35 @@
+---
+- name: Unistall
+  hosts: localhost
+  # connection: local
+  gather_facts: False
+  pre_tasks:
+    - name: Get token from kami
+      uri:
+        method: POST
+        url: "{{ deployment_location.properties.kami_url }}/KamiCore/oauth/token?grant_type=client_credentials"
+        headers: 
+          content-type: "application/json"
+          Authorization: Basic ZGlzaDpkaXNoMTIzNA==
+        validate_certs: no
+      register: token  
+              
+    - name: Get order id
+      uri:
+        method: GET
+        url: "{{ deployment_location.properties.kami_url }}/KamiCore/getExtOrderId"  
+        return_content: yes
+        body_format: json
+        status_code: 201
+        body: "{ \"almInstanceName\": \"{{ instance_name }}\" }"
+        headers:
+          Returnresult_SMSEnumCeaseType: "FULL"
+          Authorization: Bearer {{ token.json.access_token }}
+        validate_certs: no
+        follow_redirects: yes
+      register: kami_response
+    
+    - set_fact:
+        listrequestedServices: "{{ kami_response.json.requestedServices.split(',') | map('trim') |  list }}"
+  roles:
+      - { role: ../roles/cease, when: "'VOICEMAIL' in listrequestedServices" }

@@ -1,0 +1,19 @@
+#convert ALM properties to json suspend request for South Bound endpoint - Nokia Provisioning GW 
+    
+- name: Call RestAPI of SPML/TAS/ENUM Adapter
+  uri:
+    url:  "http://dish-prov-ada-svc.dish-roks-poc-f5ae0bb7881b3b49feaa20ca32bad577-0000.us-south.containers.appdomain.cloud:30168/enum/suspendRequest"
+    method: POST
+    body: "{{lookup('template', 'nokia_provisioning_gw_enum_suspend_request.json.j2')}}"
+    status_code: 200
+    body_format: json
+    headers:
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+    return_content: yes
+  register: resultEnum
+
+- name: fail instance if there is a failure from SBI
+  fail:
+    msg: Instance creation failed with error code {{ resultEnum.json.errorCode }} and error message {{ resultEnum.json.msg }}
+  when: resultEnum.json.result == "Failure"

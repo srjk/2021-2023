@@ -1,0 +1,17 @@
+- name: Copy Shell Script to Anisble Host.
+  template:
+    src: noi-consumer_request.sh
+    dest: /tmp/noi-consumer_request.sh
+
+- name: Make script executable
+  command: chmod +x /tmp/noi-consumer_request.sh
+
+- script: /tmp/noi-consumer_request.sh "{{ MOID }}"
+  register: result
+
+- debug: var=result.stdout_lines
+
+- name: NE Not Avaialble
+  fail:
+    msg: NE Not Avaialble
+  when: result.stdout_lines[0] == "NE Not Available"

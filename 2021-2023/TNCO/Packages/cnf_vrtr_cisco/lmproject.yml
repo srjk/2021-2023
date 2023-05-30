@@ -1,0 +1,10 @@
+schema: '2.0'
+name: cnf_vrtr_cisco
+version: '1.0'
+type: Assembly
+resource-manager: Brent
+contains:
+- name: vrtr_cisco
+  type: Resource
+  resource-manager: Brent
+  directory: vrtr_cisco

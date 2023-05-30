@@ -1,0 +1,94 @@
+description: descriptor for sim block/unblock
+name1: resource::sim_rfs_spml-rfs_sim_dish_spml::1.0
+properties:
+  instance_name:
+    description: name of assembly instance
+    type: string
+  operation:
+    volatile: true
+  deploymentLocation:
+    description: site specific
+    type: string
+    default: DFW
+  resourceManager:
+    type: string
+    read-only: true
+    default: brent
+  extOrderId:
+    volatile: true    
+  serviceType:
+    type: string
+  SUPI:
+    volatile: true
+  Old_SUPI:
+    volatile: true
+  CurrentSUPI:
+    volatile: true  
+  GPSI:
+    volatile: true
+  #Old_GPSI:
+    #volatile: true
+  href:
+    type: string
+  priority:
+    type: string
+  description:
+    type: string
+  category:
+    type: string
+  state:
+    type: string
+  orderDate: 
+    type: string
+  completionDate: 
+    type: string
+  requestedStartDate: 
+    type: string
+  requestedCompletionDate: 
+    type: string
+  expectedCompletionDate:
+    type: string
+  startDate:
+    type: string  
+  action:
+    type: string
+  OrderSubType: 
+    type: string  
+  CustomerID:  
+    type: string  
+  ICCID:
+    volatile: true
+  Old_ICCID:
+    volatile: true 
+  BlockSIM:
+    volatile: true    
+  ProvisioningType:
+    type: string
+    default: TNCO     
+  # ServiceState:  
+  #   type: string
+  #   default: Active 
+  SubscriberID:    
+    type: string
+  SubscriberType: 
+    type: string  
+    default: Pre-Paid
+  objectClass:
+    type: string
+    default: Subscriber
+  targetVersion:
+    type: string
+    default: SDL_MULTIAPPSUBSCRIBER_v10     
+  reference_assembly:
+    type: string  
+infrastructure:
+  Openstack: {}
+lifecycle:
+  Install: {}
+  Reconfigure: {}
+  Uninstall: {}
+default-driver:
+  spml:
+    selector:
+      infrastructure-type:
+      - '*'

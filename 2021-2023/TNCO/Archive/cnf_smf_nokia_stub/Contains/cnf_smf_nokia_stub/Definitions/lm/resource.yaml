@@ -1,0 +1,166 @@
+name: resource::cnf_smf_nokia_stub-cnf_smf_nokia_stub::1.0
+description: descriptor for nrf
+properties:
+  operation:
+    volatile: true
+    default: Install
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: SOL003   
+  resourceManager:
+    type: string
+    default: brent     
+  vnfdId:
+    type: string
+    default: oracle-nrf-1.11.0-v1
+  vnfInstanceName:
+    read-only: true
+    # default: or-nrf001c-usw2aza001nd
+  vnfInstanceDescription:
+    type: string
+    default: Deploy Oracle NRF
+  vnfInstanceId:
+    type: string    
+  flavourId:
+    type: string
+    default: small
+  vimType:
+    type: string
+    default: ndc
+  vim_id:
+    type: string
+    default: orchestratortest
+  envType:
+    type: string
+    default: dev    
+  nfType:
+    type: string
+    default: CNF
+  vendor:
+    type: string
+    default: or
+  function: 
+    type: string
+    default: nrf
+  nfAppearance:
+    type: string
+    default: 001
+  nfunType:
+    type: string
+    default: c
+  region:
+    type: string
+    default: usw2
+  azId:
+    type: string
+    default: aza
+  dataCenterType:
+    type: string
+    default: 0
+  logicalDCNo: 
+    type: string
+    default: 01n
+  env:
+    type: string
+    default: d  
+lifecycle:          
+  Install: {}
+  Configure: {}
+  Uninstall: {}          
+default-driver:
+  sol003:
+    selector:
+      infrastructure-type:
+      - '*'
+# operations:
+  # addSliceConfig:
+    # description: activate new slice parameters
+    # properties:
+      # nssf_nsiProfileName:
+        # type: string
+      # nssf_nrfUri:
+        # type: string
+      # nssf_nsiId:
+        # type: string
+      # nssf_nrfMgtUri:
+        # type: string
+      # nssf_nrfAccessTokenUri:
+        # type: string
+      # nssf_amfRegionId:
+        # type: string
+      # nssf_amfSetId:
+        # type: string
+      # nssf_amfFqdn:
+        # type: string
+      # nssf_defaultGrantName:
+        # type: string
+      # nssf_mcc:
+        # type: string
+      # nssf_mnc:
+        # type: string
+      # nssf_tai:
+        # type: string
+      # nssf_sst:
+        # type: string
+      # nssf_sd:
+        # type: string
+      # nssf_grant:
+        # type: string
+      # nssf_confNssaiSalience:
+        # type: string
+      # nssf_nssAmfId:
+        # type: string
+      # nssf_nssRuleName:
+        # type: string
+      # nssf_nssRuleSalience:
+        # type: string
+      # nssf_nssRuleAccessType:
+        # type: string
+      # nssf_nssRuleBehaviourSalience:
+        # type: string
+  # removeSlice:
+    # description: removeSlice new slice parameters
+    # properties:
+      # nssf_nsiProfileName:
+        # type: string
+      # nssf_nrfUri:
+        # type: string
+      # nssf_nsiId:
+        # type: string
+      # nssf_nrfMgtUri:
+        # type: string
+      # nssf_nrfAccessTokenUri:
+        # type: string
+      # nssf_amfRegionId:
+        # type: string
+      # nssf_amfSetId:
+        # type: string
+      # nssf_amfFqdn:
+        # type: string
+      # nssf_defaultGrantName:
+        # type: string
+      # nssf_mcc:
+        # type: string
+      # nssf_mnc:
+        # type: string
+      # nssf_tai:
+        # type: string
+      # nssf_sst:
+        # type: string
+      # nssf_sd:
+        # type: string
+      # nssf_grant:
+        # type: string
+      # nssf_confNssaiSalience:
+        # type: string
+      # nssf_nssAmfId:
+        # type: string
+      # nssf_nssRuleName:
+        # type: string
+      # nssf_nssRuleSalience:
+        # type: string
+      # nssf_nssRuleAccessType:
+        # type: string
+      # nssf_nssRuleBehaviourSalience:
+        # type: string

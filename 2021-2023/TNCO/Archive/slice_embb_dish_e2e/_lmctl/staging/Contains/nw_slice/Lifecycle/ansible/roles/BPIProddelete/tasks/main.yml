@@ -1,0 +1,133 @@
+# convert ALM properties to json - deleteBPI
+- name: Creates directory
+  file:
+    path: /tmp/ansible_log
+    state: directory
+    mode: 0775
+
+- name: setting filename
+  set_fact:
+    filename: /tmp/ansible_log/ansible_{{ ansible_date_time.iso8601 }}.log
+
+- shell: "python3 test.py"
+  register: start_time
+  no_log: True
+
+
+- name: TMF Authentication token
+  uri:
+    method: POST
+    url: "{{ ansible_env.BPI_TURL }}/oauth/token?grant_type=password&client_id=tmf-api&username=tmf-api&password={{ ansible_env.BPI_PASS }}&scopes=read%20write&client_secret=secret-to-change"
+    headers:
+      Authorization: Basic dG1mLWFwaTpzZWNyZXQtdG8tY2hhbmdl
+      Host: "{{ ansible_env.BPI_HOST }}"
+    validate_certs: no
+  register: auth_response
+  
+# - name: 
+#   set_fact:
+#     sliceprofileid: "{{ lookup('template', '/tmp/Inventory_nw_sliceprofile_id_{{ instance_name }}.json.j2') }}"
+#     NetworkSliceSubnetid: "{{ lookup('template', '/tmp/Inventory_nw_NetworkSliceSubnet_id_{{ instance_name }}.json.j2') }}"
+#     serviceprofileid: "{{ lookup('template', '/tmp/Inventory_nw_serviceprofile_id_{{ instance_name }}.json.j2') }}"
+#     NetworkSliceid: "{{ lookup('template', '/tmp/Inventory_nw_NetworkSlice_id_{{ instance_name }}.json.j2') }}"
+
+- name: Delete sliceprofileid
+  uri:
+    method: PATCH
+    url: "https://{{ ansible_env.BPI_IP }}/blueplanet-inventory-tmf-api/v1/service/{{ sliceprofileid }}"
+    # body: "{{lookup('template', 'tmp/Inventory_delete_nw_slice.json.j2')}}"
+    body: {"state":"terminated"}
+    status_code: 201
+    body_format: json
+    headers:
+      Accept: "application/json"
+      Authorization: Bearer {{ auth_response.json.access_token }}
+      content-type: "application/merge-patch+json"
+      ReturnResultType: "FULL"
+      Host: "{{ ansible_env.BPI_HOST }}"
+    validate_certs: no
+  register: sliceprofileid
+
+#- copy: content="{{ sliceprofileid.json }}" dest="/tmp/Inventory_nw_sliceprofile_delete_{{ instance_name }}.json.j2"
+
+- name: Delete NetworkSliceSubnetid
+  uri:
+    method: PATCH
+    url: "https://{{ ansible_env.BPI_IP }}/blueplanet-inventory-tmf-api/v1/service/{{ NetworkSliceSubnetid }}"
+    # body: "{{lookup('template', 'tmp/Inventory_delete_nw_slice.json.j2')}}"
+    body: { "state": "terminated" }
+    status_code: 201
+    body_format: json
+    headers:
+      Accept: "application/json"
+      Authorization: Bearer {{ auth_response.json.access_token }}
+      content-type: "application/merge-patch+json"
+      ReturnResultType: "FULL"
+      Host: "{{ ansible_env.BPI_HOST }}"
+    validate_certs: no
+  register: NetworkSliceSubnetid
+
+
+#- copy: content="{{ NetworkSliceSubnetid.json }}" dest="/tmp/Inventory_nw_NetworkSliceSubnet_delete_{{ instance_name }}.json.j2"
+
+- name: Delete serviceprofileid
+  uri:
+    method: PATCH
+    url: "https://{{ ansible_env.BPI_IP }}/blueplanet-inventory-tmf-api/v1/service/{{ serviceprofileid }}"
+    # body: "{{lookup('template', 'tmp/Inventory_delete_nw_slice.json.j2')}}"
+    body: {"state": "terminated" }
+    status_code: 201
+    body_format: json
+    headers:
+      Accept: "application/json"
+      Authorization: Bearer {{ auth_response.json.access_token }}
+      content-type: "application/merge-patch+json"
+      ReturnResultType: "FULL"
+      Host: "{{  ansible_env.BPI_HOST }}"
+    validate_certs: no
+  register: serviceprofileid
+
+#- copy: content="{{ serviceprofileid.json }}" dest="/tmp/Inventory_nw_serviceprofile_delete_{{ instance_name }}.json.j2"
+
+- name: Delete NetworkSliceid
+  uri:
+    method: PATCH
+    url: "https://{{ ansible_env.BPI_IP }}/blueplanet-inventory-tmf-api/v1/service/{{ NetworkSliceid }}"
+    # body: "{{lookup('template', 'tmp/Inventory_delete_nw_slice.json.j2')}}"
+    body: { "state": "terminated" }
+    status_code: 201
+    body_format: json
+    headers:
+      Accept: "application/json"
+      Authorization: Bearer {{ auth_response.json.access_token }}
+      content-type: "application/merge-patch+json"
+      ReturnResultType: "FULL"
+      Host: "{{  ansible_env.BPI_HOST }}"
+    validate_certs: no
+  register: NetworkSliceid
+
+#- copy: content="{{ NetworkSliceid.json }}" dest="/tmp/Inventory_nw_NetworkSlice_delete_{{ instance_name }}.json.j2"
+
+- shell: "python3 test.py"
+  register: end_time
+  no_log: True
+
+# - debug: msg="{{ result.date  }}"
+
+- shell: "python3 diff.py '{{ end_time.stdout }}' '{{ start_time.stdout }}'"
+  register: time_diff
+
+- name: generate log file
+  copy:
+    dest: "{{ filename }}"
+    content: |
+       ***********************************
+       start_time:  {{ start_time.stdout }}
+       end_time:  {{ end_time.stdout }}
+       time_taken:  {{ time_diff.stdout }}
+       ***********************************
+       Delete sliceprofileid:  {{ sliceprofileid }}
+       Delete NetworkSliceSubnetid: {{ NetworkSliceSubnetid }}
+       Delete serviceprofileid: {{ serviceprofileid }}
+       Delete NetworkSliceid: {{ NetworkSliceid }}
+       __________________________________________________

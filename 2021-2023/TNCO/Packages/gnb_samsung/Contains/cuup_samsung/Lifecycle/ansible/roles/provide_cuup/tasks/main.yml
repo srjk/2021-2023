@@ -1,0 +1,105 @@
+- name: Creates directory
+  file:
+    path: /tmp/ansible_log
+    state: directory
+    mode: 0775
+
+- name: setting filename logs for Provide_CUUP
+  set_fact:
+    filename: /tmp/ansible_log/{{ instance_name }}_provide_CUUP_GNB_SAMSUNG.log
+
+- name: setting filename for xml parse
+  set_fact:
+    xmlfilename: /tmp/ansible_log/{{ instance_name }}_provide_CUUP_GNB_SAMSUNG.xml
+
+#----------------> CU_UP Slice retrieval  <--------------
+- name: Call RestAPI to retrieve CU_UP Slice ID
+  uri:
+    url: "{{ deployment_location.properties.samsung_usm_host }}/oss/netconf/{{ cuup_id }}"
+    # user: ossuser
+    # password: osspasswd
+    method: POST
+    body: "{{lookup('template', 'get_slice_cu_up.xml')}}"
+    # body_format: json
+    headers:
+      Authorization: Basic b3NzdXNlcjpvc3NwYXNzd2Q=
+      content-type: "application/xml"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: CU_UP_getSlice
+  # ignore_errors: yes
+
+- name: Display response
+  debug:
+    var: CU_UP_getSlice
+
+- name: CU_UP_getSlice info print
+  copy:
+    dest: "{{ filename }}"
+    content: |
+              __________________________________________________________________________
+              
+              ##### retrieve Slice for CUUP
+              
+              URL:
+              {{ CU_UP_getSlice.url }}
+              
+              order_send:
+              {{lookup('template', 'get_slice_cu_up.xml')}}
+              
+              result_return:
+              {{ CU_UP_getSlice.content }}
+              __________________________________________________________________________
+
+- name: Log API request through Log module
+  ibm_cp4na_log_message:
+    message_direction: sent
+    external_request_id: "{{ extOrderId }}"
+    content_type: application/json
+    message_data: |
+     ***********************************
+     ###### retrieve Slice for CUUP
+     
+     URL:
+     {{ CU_UP_getSlice.url }}
+     
+     order_send:  
+     {{lookup('template', 'get_slice_cu_up.xml')}}
+     ____________________________________________________
+
+     result_return:
+      {{ CU_UP_getSlice.content }}
+    message_type: sample
+    protocol: http
+
+- name: CU_UP_getSlice content print for xml parse
+  copy:
+    dest: "{{ xmlfilename }}"
+    content: |
+              {{ CU_UP_getSlice.content }}
+
+- name: Remove rpc-reply tag
+  lineinfile:
+    dest: "{{ xmlfilename }}"
+    regexp: 'rpc-reply*'
+    backup: no
+    state: absent
+
+- block:
+    - name: Call when Slice ID Xpath is present (Slice-Index value already present)
+      include: CUUP_XpathIsPresent.yaml
+      vars:
+        xmlfile: "{{ xmlfilename }}"
+        logsfile: "{{ filename }}"
+      register: CUUP_XpathIsPresent
+
+  rescue:
+    - name: Call when Slice ID XPath is not present (Create First slice-Index with value 0)
+      include: CUUP_SliceID0.yaml
+      vars:
+        xmlfile: "{{ xmlfilename }}"
+        logsfile: "{{ filename }}"
+      register: CUUP_SliceID0

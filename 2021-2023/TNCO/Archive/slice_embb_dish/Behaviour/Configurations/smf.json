@@ -1,0 +1,12 @@
+{
+  "name": "smf",
+  "projectId": "$lmctl:/descriptor_name",
+  "description": null,
+  "descriptorName": "assembly::smf::1.0",
+  "properties": {
+    "operation": "Install",
+    "deploymentLocation": "DFW"
+  },
+  "createdAt": "2021-07-27T13:53:20.296Z",
+  "lastModifiedAt": "2021-07-28T13:02:23.468Z"
+}

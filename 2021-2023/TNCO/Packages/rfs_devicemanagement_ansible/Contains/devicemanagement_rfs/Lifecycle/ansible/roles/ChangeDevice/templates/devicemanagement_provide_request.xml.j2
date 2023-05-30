@@ -1,0 +1,16 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<soapenv:Body>
+		<spml:modifyRequest timestamp="true" requestID="{{ extOrderId }}" xmlns:spml="urn:siemens:names:prov:gw:SPML:2:0" xmlns:sub="urn:siemens:names:prov:gw:SDL_MULTIAPPSUBSCRIBER:1:0">
+			<version>SDL_MULTIAPPSUBSCRIBER_v10</version>
+			<objectclass>Subscriber</objectclass>
+			<identifier alias="imsi">{{ SUPI }}</identifier>
+			<modification name="hss/repositoryData[@serviceIndId='vowifi_e911_flags']" operation="setoradd">
+				<valueObject xsi:type="sub:RepositoryData">
+					<serviceIndId>vowifi_e911_flags</serviceIndId>
+					<publicUserId>sip:{{ SUPI }}@ims.mnc340.mcc313.3gppnetwork.org</publicUserId>
+					  <asData>&lt;![CDATA[&lt;DM-VoWiFi-Data xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:nokia="http://nokia.com" xmlns="http://nokia.com" xsi:schemaLocation="http://nokia.com DM-VoWiFi-Data.xsd"&gt;&lt;addr_status&gt;true&lt;/addr_status&gt;&lt;tc_status&gt;true&lt;/tc_status&gt;&lt;prov_status&gt;true&lt;/prov_status&gt;&lt;/DM-VoWiFi-Data&gt;]]&gt;</asData>
+				</valueObject>
+			</modification>
+		</spml:modifyRequest>
+	</soapenv:Body>
+</soapenv:Envelope>

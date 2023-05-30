@@ -1,0 +1,29 @@
+
+#-----------------------> Set VMAS URL  <----------------------------
+- name: "##ALM##setting filename"
+  set_fact:
+    vmas_cease_url: "{{ deployment_location.properties.vmas_cease_url2 }}"
+
+
+#-----------------------> Call for VMAS Cease operation for Secondary URL <----------------------------
+- name: "##VMAS##Call Soap of SPML Adapter"
+  environment:
+    SSL_CERT_FILE: "vmascertificate.cert"
+  uri:
+    url: "{{ vmas_cease_url }}"
+    validate_certs: no
+    # user: beuser1
+    # password: mavenir
+    return_content: yes
+    method: POST
+    body: "{{lookup('template', 'Bundle_Voice_Cease_VoiceMail.xml.j2')}}"
+    #status_code: [200,201]
+    headers:
+      content-type: "text/xml"
+      ReturnResultType: "FULL"
+      SOAPAction: ""
+      Authorization: Basic YmV1c2VyMTptYXZlbmly      
+  register: result
+  until: result.status == 200
+  retries: "{{ RETRY_COUNT }}"
+  delay: "{{ RETRY_INTERVAL }}"

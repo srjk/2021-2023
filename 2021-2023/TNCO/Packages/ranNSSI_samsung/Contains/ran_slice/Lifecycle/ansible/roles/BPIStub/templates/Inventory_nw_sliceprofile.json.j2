@@ -1,0 +1,89 @@
+{
+        "category": "RFS",
+        "state": "active",
+        "@baseType": "service",
+        "@type": "SliceProfile",
+        "serviceCharacteristic": [
+            {
+                "name": "sNSSAIList",
+                "valueType": "Object",
+                "value": {
+                    "@type": "JSONSpecification",
+                    "sNSSAIId": [
+                        "{{ slice_snssai }}"
+                    ]
+                }
+            },
+            {
+                "name": "pLMNIdList",
+                "valueType": "Object",
+                "value": {
+                    "@type": "JSONSpecification",
+                    "pLMNId": [
+                        "mcc {{ slice_mcc }}",
+                        "mnc {{ slice_mnc }}"
+                    ]
+                }
+            },
+            {
+                "name": "perfReq",
+                "valueType": "Object",
+                "value": {
+                    "@type": "JSONSpecification",
+                    "eMBBPerfReq": [
+                        "testReq"
+                    ]
+                }
+            },
+            {
+                "name": "dLThptPerSlice",
+                "valueType": "integer",
+                "value": "{{ dLThptPerUE }}"
+            },
+            {
+                "name": "uLThptPerSlice",
+                "valueType": "integer",
+                "value": "{{ uLThptPerUE }}"
+            },
+            {
+                "name": "dLThptPerUE",
+                "value": "{{ dLThptPerUE }}"
+            },
+            {
+                "name": "uLThptPerUE",
+                "value": "{{ uLThptPerUE }}"
+            },
+            {
+              "name": "MMTelSupport",
+              "value": "{{ MMTelSupport }}"
+            },
+            {
+              "name": "latency",
+              "value": "{{ latency }}"
+            },
+            {
+              "name": "IsolatedSlice",
+              "value": "{{ IsolatedSlice }}"
+            },
+            {
+                "name": "maxNumberofUEs",
+                "value": "{{ numberofterminals }}"
+            },
+            {
+                "name": "locationScope",
+                "value": "{{ locationScope }}"
+            }
+        ],
+        "serviceRelationship": [
+          {
+             "relationshipType":"dependsOn",
+             "service":{
+             "id":"{{ NetworkSliceSubnet.json.id }}"
+          }
+       }
+     ],
+        "serviceSpecification": {
+            "id": "349f4b6a-a4e1-4013-be79-a0efd4ea8sss",
+            "version": "1.0.0"
+        }
+    }

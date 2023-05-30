@@ -1,0 +1,57 @@
+#####name: Call when Slice ID XPath is not present (Create First slice-Index with value 0)
+#####include: DU_SliceID0.yaml
+
+# - name: Read xml data to calculate the slice-index
+  # xml:
+    # xmlstring: "{{ lookup('file', '{{ xmlfile }}') }}"
+    # namespaces:
+      # ns: http://www.samsung.com/global/business/5GvRAN/ns/gnbducnf
+    # xpath: /data/ns:managed-element/ns:gnb-du-function
+    # content: 'text'
+  # register: xml_result
+
+# - name: Print slice-index matches
+  # debug:
+    # var: xml_result.matches
+
+#----------------> DU Slice Create slice  <--------------
+- name: Call RestAPI to Create DU for Slice Index =0 
+  uri:
+    url: "{{ du_samsung_usm_host }}/oss/netconf/<<DU-neId>>"
+    # user: ossuser
+    # password: osspasswd
+    method: POST
+    body: "{{lookup('template', 'create_slice_DU_Sliceindex0.xml')}}"
+    # body_format: json
+    headers:
+      Authorization: Basic b3NzdXNlcjpvc3NwYXNzd2Q=
+      content-type: "application/xml"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: DU_createSlice
+  # ignore_errors: yes
+
+- name: Display response
+  debug:
+    var: DU_createSlice
+    
+- name: DU_getSlice info print
+  lineinfile:
+    path: "{{ logsfile }}"
+    line: |
+           __________________________________________________________________________
+           
+           ##### Create Slice for DU
+           
+           URL:  
+           {{ DU_createSlice.url }}
+           
+           order_send:
+           {{lookup('template', 'create_slice_DU_Sliceindex0.xml')}}
+           
+           result_return:
+           {{ DU_createSlice.content }}
+           __________________________________________________________________________

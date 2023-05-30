@@ -1,0 +1,249 @@
+name: resource::nw_slice-slice_embb_dish_asm::1.0
+description: descriptor for nwslice
+properties:
+  operation:
+    description: Install/Configure/Uninstall
+    volatile: true
+    default: Install
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: DFW
+  resourceManager:
+    type: string
+    default: brent  
+  instance_name:
+    description: name of assembly instance
+#CreateVnfRequest
+  instance_desc:
+    description: cnf instance description
+    default: cnf instance description
+  # vnfInstanceName:
+  #   description: cnf_instance_name
+  #   default: cnf_instance_name
+  # vnfdId:
+  #   description: cnf_package_identifier
+  #   default: cnf_package_identifier
+  # vnfPkgId:
+  #   description: cnf_package_identifier
+  #   default: VnfPackage-vMRF
+  # vnfInstanceId:
+  #   type: string
+  smfSlice_sliceListName:
+    type: string
+    default: slicelist    
+  smfSlice_sliceInstanceListName:
+    type: string
+    default: slicelist
+  slice_tai:
+    type: string
+    default: slicelist
+  slice_sst:
+    type: string
+    default: slicelist
+  slice_sd:
+    type: string
+    default: slicelist
+  slice_ratePlan:
+    type: string
+    default: slicelist
+  slice_pcfSessionRuleName:
+    type: string
+    default: slicelist
+  slice_pcfSessionRuleId:
+    type: string
+    default: slicelist
+  slice_pcfQoSInfoName:
+    type: string
+    default: slicelist    
+  slice_pcfQoSInfoId:
+    type: string
+    default: slicelist    
+  slice_pcfQosDataReflectiveQos:
+    type: string
+    default: slicelist    
+  slice_pcfQosDataQnc:
+    type: string
+    default: slicelist
+  slice_pcfQosDataPriorityLevel:
+    type: string
+    default: slicelist
+  slice_pcfQoSDataName:
+    type: string
+    default: slicelist
+  slice_pcfQoSDataMaxBrUl:
+    type: string
+    default: slicelist
+  slice_pcfQoSDataMaxBrDl:
+    type: string
+    default: slicelist
+  slice_pcfQoSDataGbrUl:
+    type: string
+    default: slicelist
+  slice_pcfQoSDataGbrDl:
+    type: string
+    default: slicelist
+  slice_pcfQosDataDefQoSFlowInd:
+    type: string
+    default: slicelist
+  slice_pcfQosDataArpPriority:
+    type: string
+    default: slicelist
+  slice_pcfQosDataArpPreemptVuln:
+    type: string
+    default: slicelist
+  slice_pcfQosDataArpPreemptCap:
+    type: string
+    default: slicelist
+  slice_pcfQoSData5QI:
+    type: string
+    default: slicelist
+  slice_pcfPccRuleUlFlowName:
+    type: string
+    default: slicelist
+  slice_pcfPccRuleUlFlowDirection:
+    type: string
+    default: slicelist
+  slice_pcfPccRuleUlFlowDesc:
+    type: string
+    default: slicelist
+  slice_pcfPccRuleType:
+    type: string
+    default: slicelist
+  slice_pcfPccRulePrecedence:
+    type: string
+    default: slicelist
+  slice_pcfPccRuleName:
+    type: string
+    default: slicelist
+  slice_pcfPccRuleDlFlowName:
+    type: string
+    default: slicelist
+  slice_pcfPccRuleDlFlowDirection:
+    type: string
+    default: slicelist
+  slice_nsiId:
+    type: string
+    default: slicelist
+  slice_nrfMgtUri:
+    type: string
+    default: slicelist
+  slice_nrfAccessTokenUri:
+    type: string
+    default: slicelist
+  slice_mnc:
+    type: string
+    default: 340
+  slice_mcc:
+    type: string
+    default: 313
+  slice_dnnList:
+    type: string
+  slice_chgProfileName:
+    type: string
+    default: 1
+  slice_amfSetId:
+    type: string
+    default: slicelist    
+  slice_amfSet:
+    type: string
+    default: slicelist
+  slice_amfRegionId:
+    type: string
+    default: slicelist
+  slice_amfRegion:
+    type: string
+    default: slicelist
+  slice_pcfPccRuleDlFlowDesc:
+    type: string
+    default: slicelist
+  nssf_nssRuleName:
+    type: string
+    default: slicelist
+  nssf_nssAmfId:
+    type: string
+    default: slicelist
+  nssf_nsiProfileName:
+    type: string
+    default: slicelist
+  nssf_grantName:
+    type: string
+    default: slicelist
+  amfSlice_snssaiToDnnListName:
+    type: string
+    default: slicelist
+  amfSlice_snssaiListName:
+    type: string
+    default: slicelist
+  amfSlice_sliceName:
+    type: string
+    default: slicelist
+  amfSlice_sst:
+    type: string
+    default: slicelist
+  amfSlice_sd:
+    type: string
+    default: slicelist
+  amfSlice_plmnName:
+    type: string
+    default: slicelist
+  slice_amfSetFqdn:
+    type: string
+    default: slicelist
+  slice_snssai:
+    type: string
+    default: slicelist
+  slice_ndc:
+    type: string
+    default: slicelist
+  slice_rdc:
+    type: string
+    default: slicelist
+  amf_assembly_name:
+    type: string
+    default: nk-amf001c-usw2aza001rd
+  smf_assembly_name:
+    type: string
+    default: nk-smf001c-usw2aza001rd
+  nsssf_assembly_name:
+    type: string
+    default: or-nsf001c-usw2aza001nd
+  upf_assembly_name:
+    type: string
+    default: nk-upf001c-usw2aza001bd
+  pcf_assembly_name:
+    type: string
+    default: or-pcf001c-usw2aza001n
+  smfSlice_sliceName:
+    type: string
+    default: slicelist
+  sliceprofileid:
+    type: string
+    default: slicelist    
+  NetworkSliceSubnetid:
+    type: string
+    default: slicelist    
+  serviceprofileid:
+    type: string
+    default: slicelist    
+  NetworkSliceid:
+    type: string
+    default: slicelist    
+lifecycle:
+  Uninstall: 
+    drivers:
+      ansible:
+        selector:
+          infrastructure-type:
+          - '*'
+  Install: 
+default-driver:
+  ansible:
+    selector:
+      infrastructure-type:
+      - '*'
+# default-driver:
+#   sol003:
+#     selector:
+#       infrastructure-type:
+#       - '*'      

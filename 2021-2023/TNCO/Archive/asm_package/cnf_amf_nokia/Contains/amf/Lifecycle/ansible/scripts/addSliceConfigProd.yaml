@@ -1,0 +1,6 @@
+---
+- name: addSliceConfigProd
+  hosts: amf
+  gather_facts: False
+  roles:
+    - role: ../roles/addSliceConfigProd

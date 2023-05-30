@@ -1,0 +1,350 @@
+name: assembly::rfs_voice_dish::1.0
+description: descriptor for provisioning Voice subscriber service 
+properties:
+  operation:
+    volatile: true
+  deploymentLocation:
+    description: site specific
+    type: string
+    default: DFW     
+  resourceManager:
+    type: string
+    read-only: true
+    default: brent    
+  extOrderId:
+    volatile: true
+  serviceType:
+    type: string
+  SUPI:
+    volatile: true
+  GPSI:
+    volatile: true
+  href:
+    type: string
+  priority:
+    type: string
+  description:
+    type: string
+  category:
+    type: string
+  state:
+    type: string
+  orderDate: 
+    type: string
+  completionDate: 
+    type: string
+  requestedStartDate: 
+    type: string
+  requestedCompletionDate: 
+    type: string
+  expectedCompletionDate:
+    type: string
+  startDate:
+    type: string
+  serviceOrderItemId:
+    type: string  
+  action:
+    type: string
+  SubOrderType:
+    type: string
+  tas_callingLineId_assigned:
+    type: string
+  tas_AnonymousCallRejection_assigned:
+    type: string
+  # tas_callBlock_incoming:
+  #   type: string
+  # tas_callBarring_outgoing:
+  #   type: string
+  # tas_callBarring_CntrlCallBarringAll:
+  # #   type: string
+  # tas_callBarring_TollFree:
+  #   type: string
+  # tas_callBarring_IntraLataToll:
+  #   type: string
+  # tas_callBarring_InterLataToll:
+  #   type: string
+  # tas_callWaiting_enabled:
+  #   type: string
+  # tas_callTransfer_enabled:
+  #   type: string
+  tas_msgWaitInd_enabled:
+    type: string
+  tas_conferenceCalling_enabled:
+    type: string
+  # tas_busyredialccbs_enabled:
+  #   type: string
+  # tas_donotdisturb_enabled:
+  #   type: string
+  # tas_speeddialling_enabled:
+  #   type: string
+  tas_automaticcallback_enabled:
+    type: string
+  tas_callinglineid_restriction:
+    type: string
+  reference_assembly:
+    type: string
+composition:
+  prov_base:
+    properties:
+      instance_name:
+        value: ${instance.name}
+      operation:  
+        value: ${operation}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      resourceManager:
+        value: ${resourceManager}
+      extOrderId:
+        value: ${extOrderId}
+      serviceType:
+        value: ${serviceType}
+      SUPI:
+        value: ${SUPI}
+      GPSI:
+        value: ${GPSI}
+      href:
+        value: ${href}
+      priority:
+        value: ${priority}
+      description:
+        value: ${description}
+      category:
+        value: ${category}
+      state:
+        value: ${state}
+      orderDate: 
+        value: ${orderDate}
+      completionDate: 
+        value: ${completionDate}
+      requestedStartDate: 
+        value: ${requestedStartDate}
+      requestedCompletionDate: 
+        value: ${requestedCompletionDate}
+      expectedCompletionDate:
+        value: ${expectedCompletionDate}
+      startDate:
+        value: ${startDate} 
+      serviceOrderItemId:
+        value: ${serviceOrderItemId}    
+      action:
+        value: ${action}
+      SubOrderType:
+        value: ${SubOrderType}
+      tas_callingLineId_assigned:
+        value: ${tas_callingLineId_assigned}
+      tas_AnonymousCallRejection_assigned:
+        value: ${tas_AnonymousCallRejection_assigned}
+      # tas_callBlock_incoming:
+      #   value: ${tas_callBlock_incoming}
+      # tas_callBarring_outgoing:
+      #   value: ${tas_callBarring_outgoing}
+      # tas_callBarring_CntrlCallBarringAll:
+      #   value: ${tas_callBarring_CntrlCallBarringAll}
+      # tas_callBarring_TollFree:
+      #   value: ${tas_callBarring_TollFree}
+      # tas_callBarring_IntraLataToll:
+      #   value: ${tas_callBarring_IntraLataToll}
+      # tas_callBarring_InterLataToll:
+      #   value: ${tas_callBarring_InterLataToll}
+      # tas_callWaiting_enabled:
+      #   value: ${tas_callWaiting_enabled}
+      # tas_callTransfer_enabled:
+      #   value: ${tas_callTransfer_enabled}
+      tas_msgWaitInd_enabled:
+        value: ${tas_msgWaitInd_enabled}
+      tas_conferenceCalling_enabled:
+        value: ${tas_conferenceCalling_enabled}
+      # tas_busyredialccbs_enabled:
+      #   value: ${tas_busyredialccbs_enabled}
+      # tas_donotdisturb_enabled:
+      #   value: ${tas_donotdisturb_enabled}
+      # tas_speeddialling_enabled:
+      #   value: ${tas_speeddialling_enabled}
+      tas_automaticcallback_enabled:
+        value: ${tas_automaticcallback_enabled}
+      tas_callinglineid_restriction:
+        value: ${tas_callinglineid_restriction}
+      reference_assembly:
+        value: ${reference_assembly}
+    type: $lmctl:/contains:/prov_base:/descriptor_name
+    quantity: 1    
+  tas:
+    properties:
+      operation:
+        value: ${operation}
+      instance_name:
+        value: ${instance.name}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      resourceManager:
+        value: ${resourceManager}
+      extOrderId:
+        value: ${extOrderId}
+      serviceType:
+        value: ${serviceType}
+      SUPI:
+        value: ${prov_base.SUPI}
+      GPSI:
+        value: ${GPSI}        
+      href:
+        value: ${href}
+      priority:
+        value: ${priority}
+      description:
+        value: ${description}
+      category:
+        value: ${category}
+      state:
+        value: ${state}
+      orderDate: 
+        value: ${orderDate}
+      SubOrderType:
+        value: ${SubOrderType}
+      completionDate: 
+        value: ${completionDate}
+      requestedStartDate: 
+        value: ${requestedStartDate}
+      requestedCompletionDate: 
+        value: ${requestedCompletionDate}
+      expectedCompletionDate:
+        value: ${expectedCompletionDate}
+      startDate:
+        value: ${startDate} 
+      serviceOrderItemId:
+        value: ${serviceOrderItemId}    
+      action:
+        value: ${action}
+      tas_callingLineId_assigned:
+        value: ${tas_callingLineId_assigned}
+      tas_AnonymousCallRejection_assigned:
+        value: ${tas_AnonymousCallRejection_assigned}
+      # tas_callBlock_incoming:
+      #   value: ${tas_callBlock_incoming}
+      # tas_callBarring_outgoing:
+      #   value: ${tas_callBarring_outgoing}
+      # tas_callBarring_CntrlCallBarringAll:
+      #   value: ${tas_callBarring_CntrlCallBarringAll}
+      # tas_callBarring_TollFree:
+      #   value: ${tas_callBarring_TollFree}
+      # tas_callBarring_IntraLataToll:
+      #   value: ${tas_callBarring_IntraLataToll}
+      # tas_callBarring_InterLataToll:
+      #   value: ${tas_callBarring_InterLataToll}
+      # tas_callWaiting_enabled:
+      #   value: ${tas_callWaiting_enabled}
+      # tas_callTransfer_enabled:
+      #   value: ${tas_callTransfer_enabled}
+      tas_msgWaitInd_enabled:
+        value: ${tas_msgWaitInd_enabled}
+      tas_conferenceCalling_enabled:
+        value: ${tas_conferenceCalling_enabled}
+      # tas_busyredialccbs_enabled:
+      #   value: ${tas_busyredialccbs_enabled}
+      # tas_donotdisturb_enabled:
+      #   value: ${tas_donotdisturb_enabled}
+      # tas_speeddialling_enabled:
+      #   value: ${tas_speeddialling_enabled}
+      tas_automaticcallback_enabled:
+        value: ${tas_automaticcallback_enabled}
+      tas_callinglineid_restriction:
+        value: ${tas_callinglineid_restriction}
+      reference_assembly:
+        value: ${reference_assembly}
+    type: $lmctl:/contains:/tas:/descriptor_name
+    quantity: 1    
+  enum:
+    properties:
+      operation:
+        value: ${operation}
+      instance_name:
+        value: ${instance.name}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      resourceManager:
+        value: ${resourceManager}
+      extOrderId:
+        value: ${extOrderId}
+      serviceType:
+        value: ${serviceType}
+      SUPI:
+        value: ${tas.SUPI}
+      GPSI:
+        value: ${GPSI}
+      href:
+        value: ${href}
+      priority:
+        value: ${priority}
+      description:
+        value: ${description}
+      category:
+        value: ${category}
+      state:
+        value: ${state}
+      orderDate: 
+        value: ${orderDate}
+      completionDate: 
+        value: ${completionDate}
+      requestedStartDate: 
+        value: ${requestedStartDate}
+      SubOrderType:
+        value: ${SubOrderType}
+      requestedCompletionDate: 
+        value: ${requestedCompletionDate}
+      expectedCompletionDate:
+        value: ${expectedCompletionDate}
+      startDate:
+        value: ${startDate} 
+      serviceOrderItemId:
+        value: ${serviceOrderItemId}    
+      action:
+        value: ${action}
+      tas_callingLineId_assigned:
+        value: ${tas_callingLineId_assigned}
+      tas_AnonymousCallRejection_assigned:
+        value: ${tas_AnonymousCallRejection_assigned}
+      # tas_callBlock_incoming:
+      #   value: ${tas_callBlock_incoming}
+      # tas_callBarring_outgoing:
+      #   value: ${tas_callBarring_outgoing}
+      # tas_callBarring_CntrlCallBarringAll:
+      #   value: ${tas_callBarring_CntrlCallBarringAll}
+      # tas_callBarring_TollFree:
+      #   value: ${tas_callBarring_TollFree}
+      # tas_callBarring_IntraLataToll:
+      #   value: ${tas_callBarring_IntraLataToll}
+      # tas_callBarring_InterLataToll:
+      #   value: ${tas_callBarring_InterLataToll}
+      # tas_callWaiting_enabled:
+      #   value: ${tas_callWaiting_enabled}
+      # tas_callTransfer_enabled:
+      #   value: ${tas_callTransfer_enabled}
+      tas_msgWaitInd_enabled:
+        value: ${tas_msgWaitInd_enabled}
+      tas_conferenceCalling_enabled:
+        value: ${tas_conferenceCalling_enabled}
+      # tas_busyredialccbs_enabled:
+      #   value: ${tas_busyredialccbs_enabled}
+      # tas_donotdisturb_enabled:
+      #   value: ${tas_donotdisturb_enabled}
+      # tas_speeddialling_enabled:
+      #   value: ${tas_speeddialling_enabled}
+      tas_automaticcallback_enabled:
+        value: ${tas_automaticcallback_enabled}
+      tas_callinglineid_restriction:
+        value: ${tas_callinglineid_restriction}
+      reference_assembly:
+        value: ${reference_assembly}
+    type: $lmctl:/contains:/enum:/descriptor_name
+    quantity: 1
+references:
+   reference_assembly:  
+    properties:
+      resourceManager:
+        value: ${resourceManager}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      operation:
+        value: ${operation}
+      name:
+        value: ${reference_assembly}         
+    type: assembly::rfs_data_dish::1.0

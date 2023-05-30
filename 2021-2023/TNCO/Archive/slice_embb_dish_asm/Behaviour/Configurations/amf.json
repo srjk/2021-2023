@@ -1,0 +1,12 @@
+{
+  "name": "amf",
+  "projectId": "$lmctl:/descriptor_name",
+  "description": null,
+  "descriptorName": "assembly::amf::1.0",
+  "properties": {
+    "operation": "Install",
+    "deploymentLocation": "DFW"
+  },
+  "createdAt": "2021-07-27T13:53:20.272Z",
+  "lastModifiedAt": "2021-07-28T13:02:23.441Z"
+}

@@ -1,0 +1,72 @@
+{
+    "serviceType": "{{ serviceType }}",
+	"serviceName": "Subscriber - Voice RFSS",
+    "id": "{{ kami_response.json.extOrderId  }}",
+    "imsi": "{{ SUPI }}",
+    "hlr": {
+        "multipleValueObjects": [
+            {
+                "path": "hlr/epsPdnContext[@contextId='4']",
+                "operation": "remove"
+            },
+            {
+                "path": "hlr/epsPdnContext[@contextId='5']",
+                "operation": "remove"
+            },
+            {
+                "path": "hlr/epsPdnContext[@contextId='6']",
+                "operation": "remove"
+            }
+        ]
+    },
+    "hss": {
+        "path": "hss",
+        "operation": "remove"
+    },
+    "udm": {
+        "multipleValueObjects": [
+            {
+                "operation": "remove",
+                "path": "udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo[@dnnId='ims']"
+            },
+            {
+                "operation": "remove",
+                "path": "udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo[@dnnId='sos']"
+            },
+            {
+                "operation": "remove",
+                "path": "udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo[@dnnId='xcap']"
+            },
+            {
+                "operation": "remove",
+                "path": "udm5gData/servingPlmnId/provisionedData/sessionManagementSubscriptionData/dnnConfiguration[@dnnId='ims']"
+            },
+            {
+                "operation": "remove",
+                "path": "udm5gData/servingPlmnId/provisionedData/sessionManagementSubscriptionData/dnnConfiguration[@dnnId='sos']"
+            },
+            {
+                "operation": "remove",
+                "path": "udm5gData/servingPlmnId/provisionedData/sessionManagementSubscriptionData/dnnConfiguration[@dnnId='xcap']"
+            }
+        ]
+    },
+    "pcf": [
+        {
+            "multipleValueObjects": [
+                {
+                    "operation": "remove",
+                    "path": "pcf/smPolicyData/smPolicySnssaiData/smPolicyDnnData[@dnn='ims']"
+                },
+                {
+                    "operation": "remove",
+                    "path": "pcf/smPolicyData/smPolicySnssaiData/smPolicyDnnData[@dnn='sos']"
+                },
+                {
+                    "operation": "remove",
+                    "path": "pcf/smPolicyData/smPolicySnssaiData/smPolicyDnnData[@dnn='xcap']"
+                }
+            ]
+        }
+    ]
+}

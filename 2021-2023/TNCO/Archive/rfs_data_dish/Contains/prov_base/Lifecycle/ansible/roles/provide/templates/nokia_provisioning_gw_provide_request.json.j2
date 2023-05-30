@@ -1,0 +1,244 @@
+{
+    "serviceType": "{{ serviceType }}",
+	"serviceName": "Subscriber - Data RFSS",
+    "id": "{{ extOrderId }}",
+	 "imsi": "{{ SUPI }}",
+    "hlr": {
+        "operation": "add",
+        "ntype": "single",
+        "mobileSubscriberType": "genericSubscriber",
+        "umtsSubscriber": {
+            "accTypeGSM": "true",
+            "accTypeGERAN": "true",
+            "accTypeUTRAN": "true"
+        },
+        "ts11": [
+            {
+                "msisdn": "{{ GPSI }}"
+            }
+        ],
+		"gprs": [
+            {
+                "msisdn": ""
+            }
+        ],
+        "pdpContext": [
+            {
+                "id": 1,
+                "qosProfile": "intHlr",
+                "refPdpContextName": "intrntPdp"
+            },
+            {
+                "id": 2,
+                "qosProfile": "otaHlr",
+                "refPdpContextName": "otaPdp"
+            }
+        ],
+        "roamSubscription": {
+            "roamSubscriptionInfo": "ipv6toipv4"
+        },
+        "eps": {
+            "defaultPdnContextId": 1,
+            "maxBandwidthUp": 2000000000,
+            "maxBandwidthDown": 2000000000,
+            "accessAPNEnabled": "true",
+            "msisdn": "19252223330",
+            "subscribedForSMSInMME": "true",
+            "eps5GSmsDeliveryMode": "false"
+        },
+        "epsPdnContext": [
+            {
+                "apn": "internet",
+                "contextId": 1,
+                "type": "both",
+                "pdnGwDynamicAllocation": "true",
+                "vplmnAddressAllowed": "false",
+                "maxBandwidthUp": 2000000000,
+                "maxBandwidthDown": 2000000000,
+                "qos": "internetQosEps",
+                "pdnChargingCharacteristics": {
+                    "chargingCharacteristicsProfile": 8,
+                    "chargingCharacteristicsBehavior": 0
+                },
+                "eps5gInterworkIndicator": 1
+            },
+            {
+                "apn": "ota",
+                "contextId": 2,
+                "type": "both",
+                "pdnGwDynamicAllocation": "true",
+                "vplmnAddressAllowed": "false",
+                "maxBandwidthUp": 1000000,
+                "maxBandwidthDown": 1000000,
+                "qos": "otaQosEps",
+                "pdnChargingCharacteristics": {
+                    "chargingCharacteristicsProfile": 8,
+                    "chargingCharacteristicsBehavior": 0
+                },
+                "eps5gInterworkIndicator": 1
+            }
+        ],
+        "epsRoamAreaName": "home"
+    },
+    "udm": {
+        "operation": "addorset",
+        "udmImsi": [
+            "{{ SUPI }}"
+        ],
+        "udmMsisdn": [
+            "{{ GPSI }}"
+        ],
+        "authenticationData": {
+            "authenticationMethod": "5G_AKA"
+        },
+        "servingPlmnId": [
+            {
+                "plmnId": 313340,
+                "homePlmnIdIndication": true,
+                "provisionedData": {
+                    "accessAndMobilitySubscriptionData": {
+                        "genPublicSubscriptionIds": [
+                            "msisdn-19252223330"
+                        ],
+                        "rfspIndex": "1",
+                        "subsRegTimer": "3200",
+                        "ueUsageType": "32000",
+                        "localAreaDataNtwInfo": [
+						    "internet"
+					    ],
+                        "mpsPriority": false,
+                        "activeTime": "3200",
+                        "downLinkPktCount": 1000,
+                        "nssai": {
+                            "defaultSingleNssais": [
+							 "{{ slice_nssai }}"
+					        ]
+                        },
+						"ueAmbr": {
+                            "ueAmbrUpLink": "{{ UEAMBRUplink }} bps",						
+                            "ueAmbrDownLink": "{{ UEAMBRDownlink }} bps"
+						}
+                    },
+                    "smfSelectionSubscriptionData": {
+                            "sNssaiInfo": [
+                                {
+                                "nssaiId": "{{ slice_nssai }}",
+                                "dnnInfo": [
+                                    {
+                                        "dnnId": "internet",
+                                        "defaultIndication": true,
+                                        "interworkingEPSIndication": true,
+                                        "localBrkOutRoamingAllowed": false
+                                    },
+                                    {
+                                        "dnnId": "ota",
+                                        "defaultIndication": false,
+                                        "interworkingEPSIndication": true,
+                                        "localBrkOutRoamingAllowed": false
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+					"sessionManagementSubscriptionData": [
+                            {
+                                "singleNssai": "{{ slice_nssai }}",
+                                "dnnConfiguration": [
+                                    {
+                                        "dnnId": "internet",
+                                        "pduSessionTypes": {
+                                            "defaultSessionType": "IPV4V6",
+                                            "allowedSessionType": [
+											    "IPV4V6"
+											]
+                                        },
+                                        "sscModes": {
+                                            "defaultSscMode": "SSC_MODE_1",
+                                            "allowedSscMode": [
+											    "SSC_MODE_1"
+											]
+                                        },
+                                        "interworkingEPSIndication": true,
+                                        "sessionAmbr": "2000000000 bps|2000000000 bps",
+                                        "udm5gQosProfile": {
+                                            "udm5Qi": "9",
+                                            "arp": "12|NOT_PREEMPT|PREEMPTABLE",
+                                            "priorityLevel": 12
+                                        }
+                                    },
+                                    {
+                                        "dnnId": "ota",
+                                        "pduSessionTypes": {
+                                            "defaultSessionType": "IPV4V6",
+                                            "allowedSessionType": [
+											    "IPV4V6"
+											]
+                                        },
+                                        "sscModes": {
+                                            "defaultSscMode": "SSC_MODE_1",
+                                            "allowedSscMode": [
+											    "SSC_MODE_1"
+											]
+                                        },
+                                        "interworkingEPSIndication": true,
+                                        "sessionAmbr": "1000000 bps|1000000 bps",
+                                        "udm5gQosProfile": {
+                                            "udm5Qi": "9",
+                                            "arp": "12|NOT_PREEMPT|PREEMPTABLE",
+                                            "priorityLevel": 12
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+        ]
+    },
+    "pcf": [
+        {
+            "operation": "addorset",
+            "policySubscriptionId": 1,
+            "imsi": [
+                "{{ SUPI }}"
+            ],
+            "smPolicyData": {
+			   "smPolicySnssaiData":
+			   [
+               {
+                    "snssai": {
+                        "sst": "1",
+                        "sd": "ABCDEF"
+                    },
+                    "smPolicyDnnData": [
+                        {
+                            "dnn": "internet",
+                            "subscCats": [
+                                "Platinum",
+                                "Plan1"
+                            ],
+                            "subscSpendingLimits": true,
+                            "online": "true"
+                        },
+                        {
+                            "dnn": "ota",
+                            "subscCats": [
+                                "Platinum",
+                                "Plan1"
+                            ],
+                            "subscSpendingLimits": true,
+                            "online": "true"
+                        }
+                    ]
+                }
+            ]
+			},
+            "amPolicyData": {
+               "subscCats": [
+                    "Platinum",
+                    "Plan1"
+                ]
+            }
+        }
+    ]
+}

@@ -1,0 +1,257 @@
+# - name: Validate the client certificate and verify onboarding is successful or no and get apiInvokerId
+  # uri:
+    # # url:  "{{ ansible_env.PGW_ADA_HOST }}/dish/ProvSpml/api/v1/spmlAdapter/modifyAddRequest"
+    # url: "{{ mcms_host }}/cms-service/webapi/apicore/apiinvokermanagement/v1/onboardedinvokers"
+    # method: POST
+    # body: "{{lookup('template', 'clientCertificate.json.j2')}}"
+    # body_format: json
+    # headers:
+      # content-type: "application/json"
+      # ReturnResultType: "FULL"
+      # return_content: yes
+    # validate_certs: no
+  # register: clientCertificate
+  # # ignore_errors: yes
+
+# - name: Initiate Authentication with apiInvokerId
+  # uri:
+    # # url:  "{{ ansible_env.PGW_ADA_HOST }}/dish/ProvSpml/api/v1/spmlAdapter/modifyAddRequest"
+    # url: "{{ mcms_host }}/cms-service/webapi/apicore/aef-security/v1/check-authentication"
+    # method: POST
+    # body: "{{lookup('template', 'CheckAuthentication.json.j2')}}"
+    # body_format: json
+    # status_code: 200
+    # headers:
+      # content-type: "application/json"
+      # ReturnResultType: "FULL"
+      # return_content: yes
+    # validate_certs: no
+  # register: authentication
+  # # ignore_errors: yes
+
+- name: setting filename logs for cease_CUCP_VENDOR
+  set_fact:
+    filename: /tmp/ansible_log/{{ instance_name }}_Delete_CUCP_VENDOR_GNB_MAVENIR.log
+
+#####--#####--#####-------> Generate Token from Kami  <-------------------------
+- name: "##ALM## Get token from kami"
+  uri:
+    method: POST
+    url: "{{ deployment_location.properties.kami_url }}/KamiCore/oauth/token?grant_type=client_credentials"
+    headers: 
+       content-type: "application/json"
+       Authorization: Basic ZGlzaDpkaXNoMTIzNA==
+    validate_certs: no
+  register: token  
+     
+#####--#####--#####-------> Get order id from Kami  <-------------------------
+- name: "##ALM## Get order id"
+  uri:
+    method: GET
+    url: "{{ deployment_location.properties.kami_url }}/KamiCore/getExtOrderId"  
+    return_content: yes
+    body_format: json
+    status_code: 201
+    body: "{ \"almInstanceName\": \"{{ instance_name }}\" }"
+    headers:
+       ReturnResultType: "FULL"
+       Authorization: Bearer {{ token.json.access_token }}
+    validate_certs: no
+    follow_redirects: yes
+  register: kami_responseCUCPdel
+  ignore_errors: yes
+
+- name: log file for CUCP Mavenir
+  set_fact:
+    extOrderId: "{{ kami_responseCUCPdel.json.extOrderId }}"
+
+#-------------------> CUCP_VENDOR tacSpecificConfig plmnSpecificConfig <------------------------
+- name: Retrieve tacSpecificConfig plmnSpecificConfig attribute
+  uri:
+    url: "{{ deployment_location.properties.mcms_host }}/cms-service/webapi/apiservice/ProvMnS/v1/gnbvs/gnbCuCpConfig={{ cucp_id }}?attributes=tacSpecificConfig"
+    method: GET
+    body: "{{lookup('template', 'getInfoCUCPvendor.json.j2')}}"
+    # body: 
+      # "gnbId": {{ gnb_id  | int }}
+      # "cnfId": {{ cucp_id | int }}
+      # "version": "{{ cucp_version }}"
+      # "configType": "{{ cucp_vendor_config }}"
+    body_format: json
+    headers:
+      apiInvokerId: "{{ deployment_location.properties.apiInvokerId }}"
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: cease_GettacSpecificConfig
+  ignore_errors: yes
+  failed_when: "cease_GettacSpecificConfig.status not in [200]"
+
+- name: GettacSpecificConfig print
+  copy:
+    dest: "{{ filename }}"
+    content: |
+              __________________________________________________________________________
+            
+              ##### GET API call to retrieve GettacSpecificConfig plmnSpecificConfig
+              
+              URL:
+              {{ cease_GettacSpecificConfig.url }}
+              
+              order_send:
+              {{lookup('template', 'getInfoCUCPvendor.json.j2')}}
+              
+              result_return:
+              {{ cease_GettacSpecificConfig.json | to_nice_json }}
+              __________________________________________________________________________
+
+- name: Log API request through Log module
+  ibm_cp4na_log_message:
+    message_direction: sent
+    # external_request_id: "{{ extOrderId }}"
+    external_request_id: "{{ kami_responseCUCPdel.json.extOrderId }}"
+    content_type: application/json
+    message_data: |
+     ***********************************
+     ##### GET API call to retrieve GettacSpecificConfig plmnSpecificConfig
+     
+     URL:
+     {{ cease_GettacSpecificConfig.url }}
+     
+     order_send:
+     {{lookup('template', 'getInfoCUCPvendor.json.j2')}}
+     ____________________________________________________
+
+     result_return:
+      {{ cease_GettacSpecificConfig.json | to_nice_json }}
+    message_type: sample
+    protocol: http
+
+#----------> Print error message when apiInvokerId is Invalid/incorrect/expired <------------
+- name: creating variable and setting value for message error when apiInvokerId is Invalid/incorrect/expired
+  set_fact:
+    target_e: "{{ cease_GettacSpecificConfig.content | regex_search('message') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ cease_GettacSpecificConfig.content | replace('\"','') | replace('{','') | replace('}','') }}. Either apiInvokerId is Invalid/incorrect/expired, please verify the apiInvokerId."
+  when: "target_e=='message'"
+
+#----> Print error message when Invalid location or input data for: <gnbId> or <cnfId> or <version> <-------
+- name: creating variable and setting value for errorInfo when wrong input data of gnbId> or <cnfId> or <version>  or any other errors
+  set_fact:
+    target_e1: "{{ cease_GettacSpecificConfig.content | regex_search('error') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ cease_GettacSpecificConfig.content | replace('\"','') | replace('{','') | replace('}','') | replace('error:','') }}"
+  when: "target_e1=='error'"
+
+# - name: Copy file plmnSpecificConfig length
+  # copy:
+    # dest: "/tmp/ansible_log/cease_plmnSpecificConfiglen.json.j2"
+    # content: "{{ cease_GettacSpecificConfig.json.data[0].tacSpecificConfig.plmnSpecificConfig|length|int -1 }}"
+
+
+- name: Retrieve id value from the tacSpecificConfig 
+  set_fact:
+    type_data: "{{ cease_GettacSpecificConfig.json.data[0].tacSpecificConfig.plmnSpecificConfig }}" 
+    jmsquery: "[?sNSSAI==`{{ cucp_sst | int }}{{ cucp_sd }}`].{MCC: MCC , MNC: MNC, id: id}"
+    query1: "[?MCC==MCC].{id: id}"
+
+- name: Filter id value for tacSpecificConfig
+  set_fact:
+    tacSpecificConfigidDel: "{{ type_data | json_query(jmsquery) | json_query(query1) }}"
+
+
+- name: update tacSpecificConfig to delete new slice for plmnSpecificConfig (Delete new slice)
+  uri:
+    url: "{{ deployment_location.properties.mcms_host }}/cms-service/webapi/apiservice/ProvMnS/v1/gnbvs,gnbCuCpConfig={{ cucp_id }},tacSpecificConfig={{ CUCP_VENDOR_tacID }}/plmnSpecificConfig={{ tacSpecificConfigidDel[0].id }}"
+    method: DELETE
+    body: "{{lookup('template', 'modifyInfoCUCPvendor.json.j2')}}"
+    # body: 
+      # "gnbId": {{ gnb_id  | int }}
+      # "cnfId": {{ cucp_id | int }}
+      # "version": "{{ cucp_version }}"
+      # "configType": "{{ cucp_vendor_config }}"
+    body_format: json
+    headers:
+      apiInvokerId: "{{ deployment_location.properties.apiInvokerId }}"
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: cease_updatetacSpecificConfig
+  ignore_errors: yes
+  failed_when: "cease_updatetacSpecificConfig.status not in [200]"
+  when: "tacSpecificConfigidDel | length >=1"
+
+# - name: updatetacSpecificConfig print for deleted slice
+  # copy:
+    # dest: "/tmp/ansible_log/resp_ceaseCUCPVentacSpecificConfig.json.j2"
+    # content: "{{ cease_updatetacSpecificConfig }}"
+  # when: "tacSpecificConfigidDel | length >=1"
+
+- name: Insert a line at the end of a file updatetacSpecificConfig print for deleted slice.
+  lineinfile:
+    path: "{{ filename }}"
+    line: |
+           __________________________________________________________________________
+           
+           ##### DELETE API call to delete slice tacSpecificConfig for plmnSpecificConfig (delete new slice)
+           
+           URL:  
+           {{ cease_updatetacSpecificConfig.url }}
+           
+           order_send:
+           {{lookup('template', 'modifyInfoCUCPvendor.json.j2')}}
+           
+           result_return: 
+           {{ cease_updatetacSpecificConfig.json | to_nice_json }}
+           __________________________________________________________________________
+  when: "tacSpecificConfigidDel | length >=1"
+
+- name: Log API request through Log module
+  ibm_cp4na_log_message:
+    message_direction: sent
+    # external_request_id: "{{ extOrderId }}"
+    external_request_id: "{{ kami_responseCUCPdel.json.extOrderId }}"
+    content_type: application/json
+    message_data: |
+     ***********************************
+     ##### DELETE API call to delete slice tacSpecificConfig for plmnSpecificConfig (delete new slice)
+     
+     URL:  
+     {{ cease_updatetacSpecificConfig.url }}
+     
+     order_send:
+     {{lookup('template', 'modifyInfoCUCPvendor.json.j2')}}
+     ____________________________________________________
+
+     result_return:
+      {{ cease_updatetacSpecificConfig.json | to_nice_json }}
+    message_type: sample
+    protocol: http
+  when: "tacSpecificConfigidDel | length >=1"
+
+#---------> Print error message when apiInvokerId is Invalid/incorrect/expired <------------
+- name: creating variable and setting value for message error when apiInvokerId is Invalid/incorrect/expired
+  set_fact:
+    target_e: "{{ cease_updatetacSpecificConfig.content | regex_search('message') }}"
+  when: "tacSpecificConfigidDel | length >=1"
+
+- fail:
+    msg: "Instance creation failed with error {{ cease_updatetacSpecificConfig.content | replace('\"','') | replace('{','') | replace('}','') }}. Either apiInvokerId is Invalid/incorrect/expired, please verify the apiInvokerId."
+  when: "target_e=='message' and tacSpecificConfigidDel | length >=1"
+
+#---------> Print cease_updatetacSpecificConfig error message if Add/Delete API calls fails <---------
+- name: creating variable and setting value for errorInfo if Add/Delete API calls fails
+  set_fact:
+    target_e1: "{{ cease_updatetacSpecificConfig.content | regex_search('error') }}"
+  when: "tacSpecificConfigidDel | length >=1"
+
+- fail:
+    msg: "Instance creation failed with error {{ cease_updatetacSpecificConfig.content | replace('\"','') | replace('{','') | replace('}','') | replace('error:','') }}"
+  when: "target_e1=='error' and tacSpecificConfigidDel | length >=1"

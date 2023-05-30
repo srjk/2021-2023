@@ -1,0 +1,27 @@
+#----------------------->Set Enum url    <----------------------------
+- name: "##ALM## setting Enum url"
+  set_fact:
+    enum_cease_url: "{{ deployment_location.properties.enum_cease_url2 }}"
+
+#-----------------------> PGW API call for cease with secondary URL  <----------------------------
+- name: "##ENUM## call Soap of SPML Adapter"
+  environment:
+    SSL_CERT_FILE: "pgwcertificate.cert"
+  uri:
+    url: "{{ enum_cease_url }}"
+    method: POST
+    validate_certs: no
+    return_content: yes
+    body: "{{lookup('template', 'nokia_provisioning_gw_enum_cease_request.xml.j2')}}"
+    #status_code: [200,201]
+    # retry_count: "{{ ansible_env.RETRY_COUNT }}"
+    # retry_interval: "{{ ansible_env.RETRY_INTERVAL }}"
+    headers:
+      content-type: "text/xml"
+      ReturnResultType: "FULL"
+      return_content: yes
+      SOAPAction: ""
+  register: result
+  until: result.status == 200
+  retries: "{{ RETRY_COUNT }}"
+  delay: "{{ RETRY_INTERVAL }}"

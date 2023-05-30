@@ -1,0 +1,81 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<soapenv:Body>
+		<spml:modifyRequest timestamp="true" requestID="{{ extOrderId }}" xmlns:spml="urn:siemens:names:prov:gw:SPML:2:0" xmlns:sub="urn:siemens:names:prov:gw:SDL_MULTIAPPSUBSCRIBER:1:0">
+			<version>SDL_MULTIAPPSUBSCRIBER_v10</version>
+			<objectclass>Subscriber</objectclass>
+			<identifier alias="imsi">{{ SUPI }}</identifier>
+		{% if "SMS" in  listrequestedServices  %}
+				<modification name="{{ path1 }}" operation="{{ operation5 }}">
+					<valueObject xsi:type="sub:TS21">
+						<msisdn>{{ GPSI }}</msisdn>
+					</valueObject>
+				</modification>
+				<modification name="{{ path2 }}" operation="{{ operation5 }}">
+					<valueObject xsi:type="sub:TS22">
+						<msisdn>{{ GPSI }}</msisdn>
+					</valueObject>
+				</modification>
+				<modification name="{{ path3 }}" operation="{{ operation5 }}">
+					<valueObject xsi:type="sub:BICRoam">
+						<basicServiceGroup>{{ basicServiceGroup }}</basicServiceGroup>
+						<status>{{ status }}</status>
+					</valueObject>
+				</modification>
+				<modification name="{{ path15 }}" operation="{{ operation3 }}">
+					<valueObject xsi:type="sub:HLR">
+						<osb1>{{ osb1 }}</osb1>
+					</valueObject>
+				</modification>
+				<modification name="{{ path4 }}" operation="{{ operation3 }}" scope="uniqueTypeMapping">
+									<valueObject xsi:type="sub:HlrSmsSubData">
+													<refPriorityListName>{{ refPriorityListName }}</refPriorityListName>
+									</valueObject>
+						</modification>
+				<modification name="{{ path5 }}" operation="{{ operation5 }}">
+					<valueObject xsi:type="sub:GlobalFilterId">
+						<globalFilterId>{{ globalFilterId }}</globalFilterId>
+					</valueObject>
+				</modification>
+				<modification name="{{ path5 }}" operation="{{ operation5 }}">
+					<valueObject xsi:type="sub:GlobalFilterId">
+						<globalFilterId>{{ globalFilterId1 }}</globalFilterId>
+					</valueObject>
+				</modification>
+				<modification name="{{ path16 }}" operation="{{ operation5 }}">
+					<valueObject xsi:type="sub:UdmSmsSubscriptionData">
+						<smsSubscribed>{{ smsSubscribed }}</smsSubscribed>
+					</valueObject>
+				</modification>
+				<modification name="{{ path6 }}" operation="{{ operation5 }}">
+					<valueObject xsi:type="sub:UdmSmsManagementSubscriptionData">
+						<mtSmsSubscribed>{{ smsSubscribed }}</mtSmsSubscribed>
+						<mtSmsBarringAll>{{ mtSmsBarringAll }}</mtSmsBarringAll>
+						<mtSmsBarringRoaming>{{ mtSmsBarringRoaming }}</mtSmsBarringRoaming>
+						<moSmsSubscribed>{{ moSmsSubscribed }}</moSmsSubscribed>
+						<moSmsBarringAll>{{ moSmsBarringAll }}</moSmsBarringAll>
+						<moSmsbarringRoaming>{{ moSmsbarringRoaming }}</moSmsbarringRoaming>
+					</valueObject>
+				</modification>
+		{% endif %}
+		{% if "SMS_ROAM" in  listrequestedServices  %}
+				<modification name="hlr/bicroam" operation="addorset">
+					<valueObject xsi:type="sub:BICRoam">
+						<basicServiceGroup>TS20-shortMessage</basicServiceGroup>
+						<status>4</status>
+					</valueObject>
+				</modification>
+				<modification name="hlr/osb1" operation="remove"/>
+				<modification name="udm5gData/servingPlmnId/provisionedData/smsManagementSubscriptionData" operation="set">
+					<valueObject xsi:type="sub:UdmSmsManagementSubscriptionData">
+						<mtSmsBarringRoaming>false</mtSmsBarringRoaming>
+					</valueObject>
+				</modification>
+				<modification name="udm5gData/servingPlmnId/provisionedData/smsManagementSubscriptionData" operation="set">
+					<valueObject xsi:type="sub:UdmSmsManagementSubscriptionData">
+						<moSmsbarringRoaming>false</moSmsbarringRoaming>
+					</valueObject>
+				</modification>
+		{% endif %}
+		</spml:modifyRequest>
+	</soapenv:Body>
+</soapenv:Envelope>

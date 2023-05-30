@@ -1,0 +1,162 @@
+# Send Command to South Bound endpoint - Nokia SMF
+- name: Create the list
+  set_fact:   
+    list_smf_dnnName: "{{ smf_dnnName.split(',')| map('trim')| list }}"
+    list_smfSlice_sliceListName: "{{ smfSlice_sliceListName.split(',') | map('trim')| list }}"
+    # list_amfSlice_dnnName: "{{ amfSlice_dnnName.split(',') | list }}" 
+
+- name: Creates directory
+  file:
+    path: /tmp/ansible_log
+    state: directory
+    mode: 0775
+
+- name: setting filename
+  set_fact:
+    filename: /tmp/ansible_log/ansible_{{ ansible_date_time.iso8601 }}.log
+
+- shell: "python3 test.py"
+  register: start_time
+  no_log: true
+
+- fail:
+    msg: "Error: Invalid parameter."
+  when: smfSlice_sst | regex_search("[a-z,A-Z]")
+
+- name: generate SB json and copy it to utility server
+  copy:
+    dest: "/tmp/smf_provide_{{ instance_name }}.sh"
+    content: |
+        #!/usr/bin/expect
+        spawn ssh {{ SMF_USER }}@{{ SMF_IP }} -p {{ SMF_PORT }}
+        expect "password: "
+        send "{{ SMF_PASS }}\r"
+        expect eof
+               
+
+# - name: Insert a line at the end of a file.
+  # lineinfile:
+    # path: "/tmp/smf_provide_{{ instance_name }}.sh"
+    # line: |
+            # expect -re "{{ SMF_terminal }}" { send "configure mobile-gateway profile list slice-list {{ smfSlice_sliceListName }} slice {{ smfSlice_sliceName }} sst {{ smfSlice_sst }} sd {{ smfSlice_sd }} \r" }
+            # 
+            # expect -re "{{ SMF_terminal }}" { send "exit \r" }
+            # 
+            # expect -re "{{ SMF_terminal }}" { send "configure mobile-gateway pdn 1 instance-type control \r" }
+            # 
+
+- name: Insert a line at the end of a file.
+  lineinfile:
+    path: "/tmp/smf_provide_{{ instance_name }}.sh"
+    line: |
+            expect -re "{{ SMF_terminal }}" { send "configure mobile-gateway profile list slice-list {{ item }} slice {{ smfSlice_sliceName }} sst {{ smfSlice_sst }} sd {{ smfSlice_sd }} \r" }
+            
+            expect -re "{{ SMF_terminal }}" { send "exit \r" }
+            
+  loop: "{{ list_smfSlice_sliceListName }}"
+
+- name: Insert a line at the end of a file.
+  lineinfile:
+    path: "/tmp/smf_provide_{{ instance_name }}.sh"
+    line: |
+            expect -re "{{ SMF_terminal }}" { send "configure mobile-gateway pdn 1 instance-type control \r" }
+            
+
+
+
+
+
+# - name: Insert a line at the end of a file.
+  # lineinfile:
+    # path: "/tmp/smf_provide_{{ instance_name }}.sh"
+    # line: |
+       # expect -re "{{ SMF_terminal }}" { send "configure mobile-gateway pdn 1 apn {{ item }} slices slice-list {{ smfSlice_sliceListName }}\r" }
+       # 
+  # loop: "{{ list_smf_dnnName }}"
+  
+  
+  
+  
+  
+- name: Insert a line at the end of a file.
+  lineinfile:
+    path: "/tmp/smf_provide_{{ instance_name }}.sh"
+    line: |
+       expect -re "{{ SMF_terminal }}" { send "configure mobile-gateway pdn 1 apn {{ item }} slices slice-list SliceList_internet_ota\r" }
+       
+  loop: [ internet,ota ]
+  when: "'internet' in list_smf_dnnName"
+
+- name: Insert a line at the end of a file.
+  lineinfile:
+    path: "/tmp/smf_provide_{{ instance_name }}.sh"
+    line: |
+       expect -re "{{ SMF_terminal }}" { send "configure mobile-gateway pdn 1 apn {{ item }} slices slice-list SliceList_ims_sos_xcap\r" }
+       
+  loop: [ ims,sos,xcap ]
+  when: "'ims' in list_smf_dnnName"
+
+- name: Insert a line at the end of a file.
+  lineinfile:
+    path: "/tmp/smf_provide_{{ instance_name }}.sh"
+    line: |
+       expect -re "{{ SMF_terminal }}" { send "configure mobile-gateway pdn 1 apn hotspot slices slice-list SliceList_hotspot\r" }
+       
+  when: "'hotspot' in list_smf_dnnName"
+  
+  
+
+- name: Insert a line at the end of a file.
+  lineinfile:
+    path: "/tmp/smf_provide_{{ instance_name }}.sh"
+    line: |
+       expect -re "{{ SMF_terminal }}" { send "exit all\r" }
+       send "logout\r"
+       expect eof
+# - name: Insert a line at the end of a file.
+#   lineinfile:
+#     path: "/tmp/smf_provide_{{ instance_name }}.sh"
+#     line: expect eof
+
+# - name: Insert a line at the end of a file.
+#   lineinfile:
+#     path: "/tmp/smf_{{ instance_name }}.sh"
+#     line: exit all
+# - name: Insert a line at the end of a file.
+  # lineinfile:
+    # path: "/tmp/smf.txt"
+    # line: slice-instance-list "{{ smfSlice_sliceInstanceListName}}"
+
+#- name: shell command
+#  shell: "sh /home/smf2.sh > smf_log.txt "
+   #    args:
+#    executable: /bin/bash
+
+# - name: running script
+  # command: chmod 775 smf_{{ instance_name }}.sh
+# - name: running script
+  # command: ./smf_{{ instance_name }}.sh
+  # register: result
+
+# - debug: var=result
+
+- shell: "python3 test.py"
+  register: end_time
+  no_log: True
+
+# - debug: msg="{{ result.date  }}"
+
+- shell: "python3 diff.py '{{ end_time.stdout }}' '{{ start_time.stdout }}'"
+  register: time_diff
+
+- name: generate SB json and copy       
+  copy:
+    dest: "{{ filename }}"
+    content: |
+       ***********************************
+       start_time:  {{ start_time.stdout }}
+       end_time:  {{ end_time.stdout }}
+       time_taken:  {{ time_diff.stdout }}
+       ***********************************
+       order_send:  {{lookup('file', '/tmp/smf_provide_{{ instance_name }}.sh')}}
+       ____________________________________________________

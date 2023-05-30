@@ -1,0 +1,1327 @@
+name: assembly::rfs_voicebundle_dish::1.0
+description: descriptor for provisioning Voice subscriber service 
+properties:
+  operation:
+    description: Provide/Cease/Suspend/Resume
+    default: Provide
+    volatile: true
+  deploymentLocation:
+    description: site specific
+    type: string
+    default: DFW
+  resourceManager:
+    type: string
+    read-only: true
+    default: brent
+  loop_back:
+    type: string
+    default: OFF
+    volatile: true
+  extOrderId:
+    volatile: true
+  PEI:
+    volatile: true
+  requestedServices:
+    type: string
+    volatile: true
+  Version:
+    type: string
+  SUPI:
+    volatile: true
+  GPSI:
+    volatile: true
+  Old_GPSI:
+    volatile: true  
+  dnn1:
+    type: string
+  dnn1_sessionAmbr:
+    type: string
+  dnn2:
+    type: string
+  dnn2_sessionAmbr:
+    type: string
+  dnn3:
+    type: string
+  dnn3_sessionAmbr:
+    type: string
+  subscCats1:
+    type: string
+  subscCats2:
+    type: string
+  href:
+    type: string
+  priority:
+    type: string
+  description:
+    type: string
+  category:
+    type: string
+  state:
+    type: string
+  orderDate: 
+    type: string
+  completionDate: 
+    type: string
+  requestedStartDate: 
+    type: string
+  requestedCompletionDate: 
+    type: string
+  expectedCompletionDate:
+    type: string
+  startDate:
+    type: string
+  serviceOrderItemId:
+    type: string
+  action:
+    type: string
+  SubOrderType:
+    type: string
+  Token:
+    type: string
+    default: "Aladin:opensimsim"
+  tas_callinglineid_restriction:
+    type: string
+  reference_assembly:
+    type: string
+  serviceType:
+    type: string
+    default: "Bundle RFS"
+  serviceName:
+    type: string
+    default: Subscriber - Voice Bundle RFSS
+  tas_SubParty_Category:
+    type: string
+    default: "RESIDENTIALSUBSCRIBER_R2"
+  tas_SubParty_PrimaryPUIDCPEProfileNumber:
+    type: string
+    default: "200"
+  tas_SubParty_CsdFlavor:
+    type: string
+    default: "TAS_CSD_ALU_P2"
+  tas_SubParty_CsdDynamic:
+    type: string
+    default: "true"
+  tas_SubParty_CallLimit:
+    type: string
+    default: "6"
+  tas_SubParty_ServiceSuspension:
+    type: string
+    default: "false"
+  tas_SubParty_ServiceSuspension1:
+    type: string
+    default: "true"    
+  tas_DialingPlan:
+    type: string
+    default: "true"
+  tas_DialingPlan_PrefixandFeatureCode:
+    type: string
+    default: "1000"
+  tas_DialingPlan_E164NormAndCodeConv:
+    type: string
+    default: "1001"
+  tas_CallingLineId:
+    type: string
+    default: "true"
+  tas_callinglineid_CLIREditAllowed:
+    type: string
+    default: "true"
+  tas_CallingLineId_CallingLineIdPresentation:
+    type: string
+    default: "true"
+  tas_CallingLineId_CallingNamePresentation:
+    type: string
+    default: "true"
+  tas_CallForwardDefault:
+    type: string
+    default: "true"
+  tas_CallForwardDefault_ForwardToType:
+    type: string
+    default: "FORWARD_TO_VM"
+  tas_CallForwardDefault_CfdMode:
+    type: string
+    default: "BUSY_NOANSWER"
+  tas_CallForwardDefault_EditPermission:
+    type: string
+    default: "EDIT_NONE"
+  tas_CallForwardDefault_EditPermissionsNoAnswer:
+    type: string
+    default: "EDIT_NONE"
+  tas_CallForwardDefault_NoAnswerTimeout:
+    type: string
+    default: "20"
+  tas_CallForwardDefault_Activated:
+    type: string
+    default: "true"
+  tas_CallForwardDefault_BusyActive:
+    type: string
+    default: "true"
+  tas_CallForwardDefault_NoAnsActive:
+    type: string
+    default: "true"
+  tas_CallForwardingVari:
+    type: string
+    default: "true"
+  tas_CallForwardingVari_ReceiveNotify:
+    type: string
+    default: "true"
+  tas_CallForwardingBusy:
+    type: string
+    default: "true"
+  tas_CallForwardingBusy_ReceiveNotify:
+    type: string
+    default: "true"
+  tas_CallForwardingNoAns:
+    type: string
+    default: "true"
+  tas_CallForwardingNoAns_NoAnswerTimeout:
+    type: string
+    default: "20"
+  tas_CallForwardNotReach:
+    type: string
+    default: "true"
+  tas_SelectiveCallRejct:
+    type: string
+    default: "true"
+  tas_AnonymousCallRej:
+    type: string
+    default: "true"
+  tas_MsgWaitingInd:
+    type: string
+    default: "true"
+  tas_MsgWaitingInd_MWINotify:
+    type: string
+    default: "true"
+  tas_MsgWaitingInd_Activated:
+    type: string
+    default: "true"
+  tas_VoiceMail:
+    type: string
+    default: "true"
+  tas_VoiceMail_ForwardToDN:
+    type: string
+    default: "+18883778734@vmas.dish5g.net"
+  tas_AdvancedConference:
+    type: string
+    default: "true"
+  tas_AdvancedConference_MaxConfLegs:
+    type: string
+    default: "6"
+  tas_AdvancedConference_SendNotify:
+    type: string
+    default: "true"
+  tas_AutomaticCallBack:
+    type: string
+    default: "true"
+  tas_OnlineCharging:
+    type: string
+    default: "true"
+  tas_OnlineCharging_SessionBasedOption:
+    type: string
+    default: "ORIG_TERM"
+  tas_DialingPlan_assigned:
+    type: string
+    default: "true"
+  tas_CallingLineId_assigned:
+    type: string
+    default: "true"
+  tas_CallForwardDefault_Assigned:
+    type: string
+    default: "true"
+  tas_CallForwardingVari_assigned:
+    type: string
+    default: "true"
+  tas_CallForwardingBusy_assigned:
+    type: string
+    default: "true"
+  tas_CallForwardingNoAns_assigned:
+    type: string
+    default: "true"
+  tas_CallForwardNotReach_assigned:
+    type: string
+    default: "true"
+  tas_SelectiveCallRejct_assigned:
+    type: string
+    default: "true"
+  tas_AnonymousCallRej_assigned:
+    type: string
+    default: "true"
+  tas_callBlocking_assigned:
+    type: string
+    default: "true"
+  tas_callBlocking_blockroamntwk:
+    type: string
+    default: "true"
+  tas_callBarring_assigned:
+    type: string
+    default: "true"
+  tas_callBarring_roamntwk:
+    type: string
+    default: "true"
+  tas_MsgWaitingInd_assigned:
+    type: string
+    default: "true"
+  tas_VoiceMail_assigned:
+    type: string
+    default: "true"
+  tas_AdvancedConference_assigned:
+    type: string
+    default: "true"
+  tas_AutomaticCallBack_assigned:
+    type: string
+    default: "true"
+  tas_OnlineCharging_assigned:
+    type: string
+    default: "true"
+  tas_callBlocking_assigned1:
+    type: string
+    default: "false"
+  tas_callBarring_assigned1:
+    type: string
+    default: "false"
+  tas_CallForwardingVari_assigned1:
+    type: string
+    default: "false"
+  tas_CallForwardingBusy_assigned1:
+    type: string
+    default: "false"
+  tas_CallForwardingNoAns_assigned1:
+    type: string
+    default: "false"
+  tas_CallForwardNotReach_assigned1:
+    type: string
+    default: "false"
+  tas_SelectiveCallRejct_assigned1:
+    type: string
+    default: "false"
+  #pgw default parameter
+  hlr_path:
+    type: string
+    default: "hlr/epsPdnContext"
+  operation_pgw:
+    type: string
+    default: "add"
+  dnn1_contextId:
+    type: Integer
+    default: 4
+  dnn1_type:
+    type: string
+    default: "both"
+  dnn1_pdnGwDynamicAllocation:
+    type: string
+    default: "true"
+  dnn1_vplmnAddressAllowed:
+    type: string
+    default: "false"
+  dnn1_maxBandwidthUp:
+    type: integer
+    default: 16000000
+  dnn1_maxBandwidthDown:
+    type: integer
+    default: 16000000
+  dnn1_qos:
+    type: string
+    default: "IMSSIGNAL"
+  dnn1_pdnChargingCharacteristics_chargingCharacteristicsProfile:
+    type: integer
+    default: 8
+  dnn1_pdnChargingCharacteristics_chargingCharacteristicsBehavior:
+    type: integer
+    default: 0
+  eps5gInterworkIndicator:
+    type: integer
+    default: 1
+  dnn2_apn:
+    type: string
+    default: "sos"
+  dnn2_contextId:
+    type: integer
+    default: 5
+  dnn2_type:
+    type: string
+    default: "both"
+  dnn2_pdnGwDynamicAllocation:
+    type: string
+    default: "true"
+  dnn2_vplmnAddressAllowed:
+    type: string
+    default: "false"
+  dnn2_maxBandwidthUp:
+    type: integer
+    default: 3000000
+  dnn2_maxBandwidthDown:
+    type: integer
+    default: 3000000
+  dnn2_qos:
+    type: string
+    default: "SOSSIGNAL"
+  dnn2_pdnChargingCharacteristics_chargingCharacteristicsProfile:
+    type: integer
+    default: 8
+  dnn2_pdnChargingCharacteristics_chargingCharacteristicsProfile_chargingCharacteristicsBehavior:
+    type: integer
+    default: 0
+  dnn3_apn:
+    type: string
+    default: "xcap"
+  dnn3_contextId:
+    type: integer
+    default: 6
+  dnn3_type:
+    type: string
+    default: "both"
+  dnn3_pdnGwDynamicAllocation:
+    type: string
+    default: "true"
+  dnn3_vplmnAddressAllowed:
+    type: string
+    default: "false"
+  dnn3_maxBandwidthUp:
+    type: integer
+    default: 10000000
+  dnn3_maxBandwidthDown:
+    type: integer
+    default: 10000000
+  dnn3_qos:
+    type: string
+    default: "xcapQosEps"
+  dnn3_pdnChargingCharacteristics_chargingCharacteristicsProfile:
+    type: integer
+    default: 8
+  dnn3_pdnChargingCharacteristics_chargingCharacteristicsBehavio:
+    type: integer
+    default: 0
+  hss_subscriptionId:
+    type: string
+    default: "1"
+  hss_profileType:
+    type: string
+    default: "normal"
+  hss_adminBlocked:
+    type: string
+    default: "false"
+  hss_defaultScscfRequired:
+    type: string
+    default: "true"
+  hss_maximumPublicIds:
+    type: string
+    default: "15"
+  preferredAuthenticationScheme:
+    type: string
+    default: "tlsDigestAkaV2"
+  refGussDataId:
+    type: string
+    default: "1"
+  looseRoutingIndicationRequired:
+    type: string
+    default: "false"
+  digestRealm:
+    type: string
+    default: "ims.mnc340.mcc313.3gppnetwork.org"
+  barringIndication:
+    type: string
+    default: "false"
+  defaultIndication:
+    type: string
+    default: "true"
+  serviceProfileName:
+    type: string
+    default: "SP1"
+  irsId:
+    type: string
+    default: "IRS1"
+  profileName:
+    type: string
+    default: "SP1"
+  mandatoryCapability:
+    type: string
+    default: "1"
+  globalFilterId:
+    type: string
+    default: "REG-TAS"
+  globalFilterId1:
+    type: string
+    default: "INV-ORIG-TAS"
+  globalFilterId2:
+    type: string
+    default: "INV-TERM-TAS"
+  globalFilterId3:
+    type: string
+    default: "REG-SCCAS"
+  globalFilterId4:
+    type: string
+    default: "INV-TERM-SCCAS"
+  globalFilterId5:
+    type: string
+    default: "INV-CONF-SCCAS"
+  sessionReleasePolicy:
+    type: string
+    default: "deregisterNoForcedSessionRelease"
+  forkingPolicy:
+    type: string
+    default: "parallelForking"
+  gussDataId:
+    type: string
+    default: "1"
+  uiccSecurityType:
+    type: string
+    default: "gba"
+  keyLifetime:
+    type: string
+    default: "3600"
+  ussDataId:
+    type: string
+    default: "1"
+  gsld:
+    type: string
+    default: "2"
+  activeIndication:
+    type: string
+    default: "true"
+  ussType:
+    type: string
+    default: "2"
+  refNafGroupId:
+    type: string
+    default: "NAFG1"
+  keySelectionId:
+    type: string
+    default: "ME-based"
+  udm_path:
+    type: string
+    default: "udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo"
+  defaultIndication1:
+    type: string
+    default: "false"
+  interworkingEPSIndication:
+    type: string
+    default: "true"
+  localBrkOutRoamingAllowed:
+    type: string
+    default: "false"
+  udm_path1:
+    type: string
+    default: "udm5gData/servingPlmnId/provisionedData/sessionManagementSubscriptionData/dnnConfiguration"
+  udm5Qi:
+    type: string
+    default: "5"
+  dnn1_arp:
+    type: string
+    default: "11|NOT_PREEMPT|PREEMPTABLE"
+  dnn1_priorityLevel:
+    type: Integer
+    default: 11
+  defaultSessionType:
+    type: string
+    default: "IPV4V6"
+  allowedSessionType:
+    type: string
+    default: "IPV4V6"
+  sscModes_defaultSscMode:
+    type: string
+    default: "SSC_MODE_1"
+  allowedSscMode:
+    type: string
+    default: "SSC_MODE_1"
+  dnn2_arp:
+    type: string
+    default: "7|NOT_PREEMPT|PREEMPTABLE"
+  dnn2_priorityLevel:
+    type: integer
+    default: 7
+  udm5gQosProfile_udm5Qi:
+    type: string
+    default: "9"
+  dnn3_arp:
+    type: string
+    default: "12|NOT_PREEMPT|PREEMPTABLE"
+  dnn3_priorityLevel:
+    type: Integer
+    default: 12
+  pcf_path:
+    type: string
+    default: "pcf/smPolicyData/smPolicySnssaiData/smPolicyDnnData"
+  allowedServices:
+    type: string
+    default: "videocalling"
+  subscSpendingLimits:
+    type: boolean
+    default: true
+  online:
+    type: boolean
+    default: true
+  hlr_path1:
+    type: string
+    default: "hlr/epsPdnContext[@contextId='4']"
+  hlr_path2:
+    type: string
+    default: "hlr/epsPdnContext[@contextId='5']"  
+  hlr_path3:
+    type: string
+    default: "hlr/epsPdnContext[@contextId='6']"
+  operation1:
+    type: string
+    default: "add"
+  irsld:
+    type: string
+    default: "IRS1"
+  barringIndication1:
+    type: string
+    default: "true"
+  operation2:
+    type: string
+    default: "remove"
+  hss_path1:
+    type: string
+    default: "hss"
+  # alias:
+  #   type: string
+  #   default: "MSISDN"
+  # hss_path:
+  #   type: string
+  #   default: "privateUserId"
+  #enum default paramter
+  ENUM_ChangeRequest_view:
+    type: string
+    default: enum-dns.zones.enum.enumZoneCommon.data
+  ENUM_rrid:
+    type: string
+    default: "0"
+  ENUM_rridType:
+    type: string
+    default: "NAPTR"
+  ENUM_ttl:
+    type: string
+    default: "900"
+  ENUM_order:
+    type: string
+    default: "50"
+  ENUM_preference:
+    type: string
+    default: "50"
+  ENUM_flags:
+    type: string
+    default: "u"
+  ENUM_service:
+    type: string
+    default: "E2U+sip"
+  ENUM_replacement:
+    type: string
+    default: "[]"
+  ENUM_ChangeRequest_view1:
+    type: string
+    default: "example-enum-view"
+  #voicemail default values 
+  voicemail_command:
+    type: string
+    default: "Create"
+  voicemail_Version:
+    type: string
+    default: "1"
+  voicemail_hostreference:
+    type: string
+    default: "IO"
+  voicemail_EntityName:
+    type: string
+    default: "Subscriber"
+  voicemail_LanguageFlavor:
+    type: string
+    default: "rogers-rwi"
+  voicemail_SubscriberCosName:
+    type: string
+    default: "COS_37_UCC"
+  voicemail_GuestLanguageFlavour:
+    type: string
+    default: "rogers-rwi"
+  voicemail_GlobalLanguageId:
+    type: string
+    default: "en-CA"
+  voicemail_GuestLanguage:
+    type: string
+    default: "en-CA"
+  voicemail_SubscriberDomainName:
+    type: string
+    default: "RWI"
+  voicemail_Timezone:
+    type: string
+    default: "Canada/Eastern"
+  voicemail_NotificationTextLanguage:
+    type: string
+    default: "en-CA"
+  voicemail_VmFamilyMailboxStatus:
+    type: string
+    default: "Main"
+  voicemail_MWIEnabled:
+    type: string
+    default: "1"
+  voicemail_Token:
+    type: string
+    default: "QWxhZGluOm9wZW5zaW1zaW0="
+  voicemail_Token1:
+    type: string
+    default: "123456ABCDE"
+  voicemail_command1:
+    type: string
+    default: "Delete"
+  voicemail_command2:
+    type: string
+    default: "Update"
+  cos:
+    type: string
+    default: 50
+composition:
+  prov_base:
+    properties:
+      instance_name:
+        value: ${instance.name}
+      requestedServices:
+        value: ${requestedServices}
+      operation:  
+        value: ${operation}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      resourceManager:
+        value: ${resourceManager}
+      loop_back:
+        value: ${loop_back}
+      extOrderId:
+        value: ${extOrderId}
+      serviceType:
+        value: ${serviceType}
+      serviceName:
+        value: ${serviceName}
+      SUPI:
+        value: ${SUPI}
+      GPSI:
+        value: ${GPSI}
+      Old_GPSI:
+        value: ${Old_GPSI}
+      dnn1:
+        value: ${dnn1}
+      dnn1_sessionAmbr:
+        value: ${dnn1_sessionAmbr}
+      dnn2:
+        value: ${dnn2}
+      dnn2_sessionAmbr:
+        value: ${dnn2_sessionAmbr}
+      dnn3:
+        value: ${dnn3}
+      dnn3_sessionAmbr:
+        value: ${dnn3_sessionAmbr}
+      subscCats1:
+        value: ${subscCats1}
+      subscCats2:
+        value: ${subscCats2}
+      href:
+        value: ${href}
+      priority:
+        value: ${priority}
+      description:
+        value: ${description}
+      category:
+        value: ${category}
+      state:
+        value: ${state}
+      orderDate: 
+        value: ${orderDate}
+      completionDate:
+        value: ${completionDate}
+      requestedStartDate:
+        value: ${requestedStartDate}
+      requestedCompletionDate:
+        value: ${requestedCompletionDate}
+      expectedCompletionDate:
+        value: ${expectedCompletionDate}
+      startDate:
+        value: ${startDate}
+      serviceOrderItemId:
+        value: ${serviceOrderItemId}
+      action:
+        value: ${action}
+      SubOrderType:
+        value: ${SubOrderType}
+      tas_callinglineid_restriction:
+        value: ${tas_callinglineid_restriction}
+      reference_assembly:
+        value: ${reference_assembly}
+      hlr_path:
+        value: ${hlr_path}
+      dnn1_contextId:
+        value: ${dnn1_contextId}
+      dnn1_type:
+        value: ${dnn1_type}
+      dnn1_pdnGwDynamicAllocation:
+        value: ${dnn1_pdnGwDynamicAllocation}
+      dnn1_vplmnAddressAllowed:
+        value: ${dnn1_vplmnAddressAllowed}
+      dnn1_maxBandwidthUp:
+        value: ${dnn1_maxBandwidthUp}
+      dnn1_maxBandwidthDown:
+        value: ${dnn1_maxBandwidthDown}
+      dnn1_qos:
+        value: ${dnn1_qos}
+      dnn1_pdnChargingCharacteristics_chargingCharacteristicsProfile:
+        value: ${dnn1_pdnChargingCharacteristics_chargingCharacteristicsProfile}
+      dnn1_pdnChargingCharacteristics_chargingCharacteristicsBehavior:
+        value: ${dnn1_pdnChargingCharacteristics_chargingCharacteristicsBehavior}
+      eps5gInterworkIndicator:
+        value: ${eps5gInterworkIndicator}
+      dnn2_apn:
+        value: ${dnn2_apn}
+      dnn2_contextId:
+        value: ${dnn2_contextId}
+      dnn2_type:
+        value: ${dnn2_type}
+      dnn2_pdnGwDynamicAllocation:
+        value: ${dnn2_pdnGwDynamicAllocation}
+      dnn2_vplmnAddressAllowed:
+        value: ${dnn2_vplmnAddressAllowed}
+      dnn2_maxBandwidthUp:
+        value: ${dnn2_maxBandwidthUp}
+      dnn2_maxBandwidthDown:
+        value: ${dnn2_maxBandwidthDown}
+      dnn2_qos:
+        value: ${dnn2_qos}
+      dnn2_pdnChargingCharacteristics_chargingCharacteristicsProfile:
+        value: ${dnn2_pdnChargingCharacteristics_chargingCharacteristicsProfile}
+      dnn2_pdnChargingCharacteristics_chargingCharacteristicsProfile_chargingCharacteristicsBehavior:
+        value: ${dnn2_pdnChargingCharacteristics_chargingCharacteristicsProfile_chargingCharacteristicsBehavior}
+      dnn3_apn:
+        value: ${dnn3_apn}
+      dnn3_contextId:
+        value: ${dnn3_contextId}
+      dnn3_type:
+        value: ${dnn3_type}
+      dnn3_pdnGwDynamicAllocation:
+        value: ${dnn3_pdnGwDynamicAllocation}
+      dnn3_vplmnAddressAllowed:
+        value: ${dnn3_vplmnAddressAllowed}
+      dnn3_maxBandwidthUp:
+        value: ${dnn3_maxBandwidthUp}
+      dnn3_maxBandwidthDown:
+        value: ${dnn3_maxBandwidthDown}
+      dnn3_qos:
+        value: ${dnn3_qos}
+      dnn3_pdnChargingCharacteristics_chargingCharacteristicsProfile:
+        value: ${dnn3_pdnChargingCharacteristics_chargingCharacteristicsProfile}
+      dnn3_pdnChargingCharacteristics_chargingCharacteristicsBehavio:
+        value: ${dnn3_pdnChargingCharacteristics_chargingCharacteristicsBehavio}
+      hss_subscriptionId:
+        value: ${hss_subscriptionId}
+      hss_profileType:
+        value: ${hss_profileType}
+      hss_adminBlocked:
+        value: ${hss_adminBlocked}
+      hss_defaultScscfRequired:
+        value: ${hss_defaultScscfRequired}
+      hss_maximumPublicIds:
+        value: ${hss_maximumPublicIds}
+      preferredAuthenticationScheme:
+        value: ${preferredAuthenticationScheme}
+      refGussDataId:
+        value: ${refGussDataId}
+      looseRoutingIndicationRequired:
+        value: ${looseRoutingIndicationRequired}
+      digestRealm:
+        value: ${digestRealm}
+      barringIndication:
+        value: ${barringIndication}
+      defaultIndication:
+        value: ${defaultIndication}
+      serviceProfileName:
+        value: ${serviceProfileName}
+      irsId:
+        value: ${irsId}
+      profileName:
+        value: ${profileName}
+      mandatoryCapability:
+        value: ${mandatoryCapability}
+      globalFilterId:
+        value: ${globalFilterId}
+      globalFilterId1:
+        value: ${globalFilterId1}
+      globalFilterId2:
+        value: ${globalFilterId2}
+      globalFilterId3:
+        value: ${globalFilterId3}
+      globalFilterId4:
+        value: ${globalFilterId4}
+      globalFilterId5:
+        value: ${globalFilterId5}
+      sessionReleasePolicy:
+        value: ${sessionReleasePolicy}
+      forkingPolicy:
+        value: ${forkingPolicy}
+      gussDataId:
+        value: ${gussDataId}
+      uiccSecurityType:
+        value: ${uiccSecurityType}
+      keyLifetime:
+        value: ${keyLifetime}
+      ussDataId:
+        value: ${ussDataId}
+      gsld:
+        value: ${gsld}
+      activeIndication:
+        value: ${activeIndication}
+      ussType:
+        value: ${ussType}
+      refNafGroupId:
+        value: ${refNafGroupId}
+      keySelectionId:
+        value: ${keySelectionId}
+      operation_pgw:
+        value: ${operation_pgw}
+      udm_path:
+        value: ${udm_path}
+      defaultIndication1:
+        value: ${defaultIndication1}
+      localBrkOutRoamingAllowed:
+        value: ${localBrkOutRoamingAllowed}
+      udm_path1:
+        value: ${udm_path1}
+      interworkingEPSIndication:
+        value: ${interworkingEPSIndication}
+      udm5Qi:
+        value: ${udm5Qi}
+      dnn1_arp:
+        value: ${dnn1_arp}
+      dnn1_priorityLevel:
+        value: ${dnn1_priorityLevel}
+      defaultSessionType:
+        value: ${defaultSessionType}
+      allowedSessionType:
+        value: ${allowedSessionType}
+      sscModes_defaultSscMode:
+        value: ${sscModes_defaultSscMode}
+      allowedSscMode:
+        value: ${allowedSscMode}
+      dnn2_arp:
+        value: ${dnn2_arp}
+      dnn2_priorityLevel:
+        value: ${dnn2_priorityLevel}
+      udm5gQosProfile_udm5Qi:
+        value: ${udm5gQosProfile_udm5Qi}
+      dnn3_arp:
+        value: ${dnn3_arp}
+      dnn3_priorityLevel:
+        value: ${dnn3_priorityLevel}
+      pcf_path:
+        value: ${pcf_path}
+      allowedServices:
+        value: ${allowedServices}
+      subscSpendingLimits:
+        value: ${subscSpendingLimits}
+      online:
+        value: ${online}
+      hlr_path1:
+        value: ${hlr_path1}
+      hlr_path2:
+        value: ${hlr_path2}
+      hlr_path3:
+        value: ${hlr_path3}
+      operation1:
+        value: ${operation1}
+      irsld:
+        value: ${irsld}
+      barringIndication1:
+        value: ${barringIndication1}
+      hss_path1:
+        value: ${hss_path1}
+      # alias:
+      #   value: ${alias}
+      # hss_path:
+      #   value: ${hss_path}
+      # voicemail_command2:
+      #   value: ${voicemail_command2}
+      # voicemail_Token:
+      #   value: ${voicemail_Token}
+      # voicemail_EntityName:
+      #   value: ${voicemail_EntityName}
+      # voicemail_Version:
+      #   value: ${voicemail_Version}
+    type: resource::prov_base-rfs_voicebundle_dish::1.0
+    quantity: 1    
+  tas:
+    properties:
+      operation:
+        value: ${operation}
+      requestedServices:
+        value: ${requestedServices}
+      instance_name:
+        value: ${instance.name}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      resourceManager:
+        value: ${resourceManager}
+      extOrderId:
+        value: ${extOrderId}
+      # serviceType:
+        # value: ${serviceType}
+      loop_back:
+        value: ${loop_back}
+      SUPI:
+        value: ${SUPI}
+      GPSI:
+        value: ${GPSI}
+      Old_GPSI:
+        value: ${Old_GPSI}        
+      href:
+        value: ${href}
+      priority:
+        value: ${priority}
+      description:
+        value: ${description}
+      category:
+        value: ${category}
+      state:
+        value: ${state}
+      orderDate: 
+        value: ${orderDate}
+      SubOrderType:
+        value: ${SubOrderType}
+      completionDate: 
+        value: ${completionDate}
+      requestedStartDate: 
+        value: ${requestedStartDate}
+      requestedCompletionDate: 
+        value: ${requestedCompletionDate}
+      expectedCompletionDate:
+        value: ${expectedCompletionDate}
+      startDate:
+        value: ${startDate} 
+      serviceOrderItemId:
+        value: ${serviceOrderItemId}    
+      action:
+        value: ${action}
+      tas_callinglineid_restriction:
+        value: ${tas_callinglineid_restriction}
+      reference_assembly:
+        value: ${reference_assembly}
+      serviceType:
+        value: ${serviceType}
+      serviceName:
+        value: ${serviceName}
+      tas_SubParty_Category:
+        value: ${tas_SubParty_Category}
+      tas_SubParty_PrimaryPUIDCPEProfileNumber:
+        value: ${tas_SubParty_PrimaryPUIDCPEProfileNumber}
+      tas_SubParty_CsdFlavor:
+        value: ${tas_SubParty_CsdFlavor}
+      tas_SubParty_CsdDynamic:
+        value: ${tas_SubParty_CsdDynamic}
+      tas_SubParty_CallLimit:
+        value: ${tas_SubParty_CallLimit}
+      tas_SubParty_ServiceSuspension:
+        value: ${tas_SubParty_ServiceSuspension}
+      tas_DialingPlan:
+        value: ${tas_DialingPlan}
+      tas_DialingPlan_PrefixandFeatureCode:
+        value: ${tas_DialingPlan_PrefixandFeatureCode}
+      tas_DialingPlan_E164NormAndCodeConv:
+        value: ${tas_DialingPlan_E164NormAndCodeConv}
+      tas_CallingLineId:
+        value: ${tas_CallingLineId}
+      tas_callinglineid_CLIREditAllowed:
+        value: ${tas_callinglineid_CLIREditAllowed}
+      tas_CallingLineId_CallingLineIdPresentation:
+        value: ${tas_CallingLineId_CallingLineIdPresentation}
+      tas_CallingLineId_CallingNamePresentation:
+        value: ${tas_CallingLineId_CallingNamePresentation}
+      tas_CallForwardDefault:
+        value: ${tas_CallForwardDefault}
+      tas_CallForwardDefault_ForwardToType:
+        value: ${tas_CallForwardDefault_ForwardToType}
+      tas_CallForwardDefault_CfdMode:
+        value: ${tas_CallForwardDefault_CfdMode}
+      tas_CallForwardDefault_EditPermission:
+        value: ${tas_CallForwardDefault_EditPermission}
+      tas_CallForwardDefault_EditPermissionsNoAnswer:
+        value: ${tas_CallForwardDefault_EditPermissionsNoAnswer}
+      tas_CallForwardDefault_NoAnswerTimeout:
+        value: ${tas_CallForwardDefault_NoAnswerTimeout}
+      tas_CallForwardDefault_Activated:
+        value: ${tas_CallForwardDefault_Activated}
+      tas_CallForwardDefault_BusyActive:
+        value: ${tas_CallForwardDefault_BusyActive}
+      tas_CallForwardDefault_NoAnsActive:
+        value: ${tas_CallForwardDefault_NoAnsActive}
+      tas_CallForwardingVari:
+        value: ${tas_CallForwardingVari}
+      tas_CallForwardingVari_ReceiveNotify:
+        value: ${tas_CallForwardingVari_ReceiveNotify}
+      tas_CallForwardingBusy:
+        value: ${tas_CallForwardingBusy}
+      tas_CallForwardingBusy_ReceiveNotify:
+        value: ${tas_CallForwardingBusy_ReceiveNotify}
+      tas_CallForwardingNoAns:
+        value: ${tas_CallForwardingNoAns}
+      tas_CallForwardingNoAns_NoAnswerTimeout:
+        value: ${tas_CallForwardingNoAns_NoAnswerTimeout}
+      tas_CallForwardNotReach:
+        value: ${tas_CallForwardNotReach}
+      tas_SelectiveCallRejct:
+        value: ${tas_SelectiveCallRejct}
+      tas_AnonymousCallRej:
+        value: ${tas_AnonymousCallRej}
+      tas_MsgWaitingInd:
+        value: ${tas_MsgWaitingInd}
+      tas_MsgWaitingInd_MWINotify:
+        value: ${tas_MsgWaitingInd_MWINotify}
+      tas_MsgWaitingInd_Activated:
+        value: ${tas_MsgWaitingInd_Activated}
+      tas_VoiceMail:
+        value: ${tas_VoiceMail}
+      tas_VoiceMail_ForwardToDN:
+        value: ${tas_VoiceMail_ForwardToDN}
+      tas_AdvancedConference:
+        value: ${tas_AdvancedConference}
+      tas_AdvancedConference_MaxConfLegs:
+        value: ${tas_AdvancedConference_MaxConfLegs}
+      tas_AdvancedConference_SendNotify:
+        value: ${tas_AdvancedConference_SendNotify}
+      tas_AutomaticCallBack:
+        value: ${tas_AutomaticCallBack}
+      tas_OnlineCharging:
+        value: ${tas_OnlineCharging}
+      tas_OnlineCharging_SessionBasedOption:
+        value: ${tas_OnlineCharging_SessionBasedOption}
+      tas_SubParty_ServiceSuspension1:
+        value: ${tas_SubParty_ServiceSuspension1}
+      tas_DialingPlan_assigned:
+        value: ${tas_DialingPlan_assigned}
+      tas_CallingLineId_assigned:
+        value: ${tas_CallingLineId_assigned}
+      tas_CallForwardDefault_Assigned:
+        value: ${tas_CallForwardDefault_Assigned}
+      tas_CallForwardingVari_assigned:
+        value: ${tas_CallForwardingVari_assigned}
+      tas_CallForwardingBusy_assigned:
+        value: ${tas_CallForwardingBusy_assigned}
+      tas_CallForwardingNoAns_assigned:
+        value: ${tas_CallForwardingNoAns_assigned}
+      tas_CallForwardNotReach_assigned:
+        value: ${tas_CallForwardNotReach_assigned}
+      tas_SelectiveCallRejct_assigned:
+        value: ${tas_SelectiveCallRejct_assigned}
+      tas_AnonymousCallRej_assigned:
+        value: ${tas_AnonymousCallRej_assigned}
+      tas_callBlocking_assigned:
+        value: ${tas_callBlocking_assigned}
+      tas_callBlocking_blockroamntwk:
+        value: ${tas_callBlocking_blockroamntwk}
+      tas_callBarring_assigned:
+        value: ${tas_callBarring_assigned}
+      tas_callBarring_roamntwk:
+        value: ${tas_callBarring_roamntwk}
+      tas_MsgWaitingInd_assigned:
+        value: ${tas_MsgWaitingInd_assigned}
+      tas_VoiceMail_assigned:
+        value: ${tas_VoiceMail_assigned}
+      tas_AdvancedConference_assigned:
+        value: ${tas_AdvancedConference_assigned}
+      tas_AutomaticCallBack_assigned:
+        value: ${tas_AutomaticCallBack_assigned}
+      tas_OnlineCharging_assigned:
+        value: ${tas_OnlineCharging_assigned}
+      tas_callBlocking_assigned1:
+        value: ${tas_callBlocking_assigned1}
+      tas_callBarring_assigned1:
+        value: ${tas_callBarring_assigned1}
+      tas_CallForwardingVari_assigned1:
+        value: ${tas_CallForwardingVari_assigned1}
+      tas_CallForwardingBusy_assigned1:
+        value: ${tas_CallForwardingBusy_assigned1}
+      tas_CallForwardingNoAns_assigned1:
+        value: ${tas_CallForwardingNoAns_assigned1}
+      tas_CallForwardNotReach_assigned1:
+        value: ${tas_CallForwardNotReach_assigned1}
+      tas_SelectiveCallRejct_assigned1:
+        value: ${tas_SelectiveCallRejct_assigned1}
+      operation2:
+        value: ${operation2}
+    type: resource::tas-rfs_voicebundle_dish::1.0
+    quantity: 1    
+  enum:
+    properties:
+      operation:
+        value: ${operation}
+      instance_name:
+        value: ${instance.name}
+      requestedServices:
+        value: ${requestedServices}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      resourceManager:
+        value: ${resourceManager}
+      extOrderId:
+        value: ${extOrderId}
+      serviceType:
+        value: ${serviceType}
+      serviceName:
+        value: ${serviceName}
+      loop_back:
+        value: ${loop_back}
+      SUPI:
+        value: ${SUPI}
+      GPSI:
+        value: ${GPSI}
+      Old_GPSI:
+        value: ${Old_GPSI}
+      href:
+        value: ${href}
+      priority:
+        value: ${priority}
+      description:
+        value: ${description}
+      category:
+        value: ${category}
+      state:
+        value: ${state}
+      orderDate: 
+        value: ${orderDate}
+      completionDate: 
+        value: ${completionDate}
+      requestedStartDate: 
+        value: ${requestedStartDate}
+      SubOrderType:
+        value: ${SubOrderType}
+      requestedCompletionDate: 
+        value: ${requestedCompletionDate}
+      expectedCompletionDate:
+        value: ${expectedCompletionDate}
+      startDate:
+        value: ${startDate} 
+      serviceOrderItemId:
+        value: ${serviceOrderItemId}    
+      action:
+        value: ${action}
+      reference_assembly:
+        value: ${reference_assembly}
+      ENUM_ChangeRequest_view:
+        value: ${ENUM_ChangeRequest_view}
+      ENUM_rrid:
+        value: ${ENUM_rrid}
+      ENUM_rridType:
+        value: ${ENUM_rridType}
+      ENUM_ttl:
+        value: ${ENUM_ttl}
+      ENUM_order:
+        value: ${ENUM_order}
+      ENUM_preference:
+        value: ${ENUM_preference}
+      ENUM_flags:
+        value: ${ENUM_flags}
+      ENUM_service:
+        value: ${ENUM_service}
+      ENUM_replacement:
+        value: ${ENUM_replacement}
+      ENUM_ChangeRequest_view1:
+        value: ${ENUM_ChangeRequest_view1}
+    type: resource::enum-rfs_voicebundle_dish::1.0
+    quantity: 1
+  voicemail:  
+    properties:
+      operation:
+        value: ${operation}
+      instance_name:
+        value: ${instance.name}
+      requestedServices:
+        value: ${requestedServices}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      resourceManager:
+        value: ${resourceManager}
+      extOrderId:
+        value: ${extOrderId}
+      serviceType:
+        value: ${serviceType}
+      loop_back:
+        value: ${loop_back}
+      SUPI:
+        value: ${SUPI}
+      GPSI:
+        value: ${GPSI}
+      Old_GPSI:
+        value: ${Old_GPSI}
+      href:
+        value: ${href}
+      priority:
+        value: ${priority}
+      description:
+        value: ${description}
+      category:
+        value: ${category}
+      state:
+        value: ${state}
+      orderDate: 
+        value: ${orderDate}
+      completionDate: 
+        value: ${completionDate}
+      requestedStartDate: 
+        value: ${requestedStartDate}
+      SubOrderType:
+        value: ${SubOrderType}
+      requestedCompletionDate: 
+        value: ${requestedCompletionDate}
+      expectedCompletionDate:
+        value: ${expectedCompletionDate}
+      startDate:
+        value: ${startDate} 
+      serviceOrderItemId:
+        value: ${serviceOrderItemId}    
+      action:
+        value: ${action}
+      Version:
+        value: ${Version}
+      Token:
+        value: ${Token}
+      voicemail_command:
+        value: ${voicemail_command}
+      voicemail_Version:
+        value: ${voicemail_Version}
+      voicemail_hostreference:
+        value: ${voicemail_hostreference}
+      voicemail_EntityName:
+        value: ${voicemail_EntityName}
+      voicemail_LanguageFlavor:
+        value: ${voicemail_LanguageFlavor}
+      voicemail_SubscriberCosName:
+        value: ${voicemail_SubscriberCosName}
+      voicemail_GuestLanguageFlavour:
+        value: ${voicemail_GuestLanguageFlavour}
+      voicemail_GlobalLanguageId:
+        value: ${voicemail_GlobalLanguageId}
+      voicemail_GuestLanguage:
+        value: ${voicemail_GuestLanguage}
+      voicemail_SubscriberDomainName:
+        value: ${voicemail_SubscriberDomainName}
+      voicemail_Timezone:
+        value: ${voicemail_Timezone}
+      voicemail_NotificationTextLanguage:
+        value: ${voicemail_NotificationTextLanguage}
+      voicemail_VmFamilyMailboxStatus:
+        value: ${voicemail_VmFamilyMailboxStatus}
+      voicemail_MWIEnabled:
+        value: ${voicemail_MWIEnabled}
+      voicemail_Token:
+        value: ${voicemail_Token}
+      voicemail_Token1:
+        value: ${voicemail_Token1}
+      voicemail_command1:
+        value: ${voicemail_command1}
+      cos:
+        value: ${cos}
+    type: resource::voicemail-rfs_voicebundle_dish::1.0
+    quantity: 1
+references:
+   reference_assembly:  
+    properties:
+      resourceManager:
+        value: ${resourceManager}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      operation:
+        value: ${operation}
+      name:
+        value: ${reference_assembly}         
+    type: assembly::rfs_databundle_dish::1.0

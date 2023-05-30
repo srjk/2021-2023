@@ -1,0 +1,173 @@
+name: assembly::cnf_smf_nokia::1.0
+description: descriptor for sol_smf
+properties:
+#SolSpecific
+  operation:
+    description: addSliceConfig
+    volatile: true
+    default: Configure
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: SOL003
+  resourceManager:
+    type: string
+    default: brent
+  SMF_IP:
+    type: string
+    # default: 172.16.128.242
+    volatile: true
+  nameSpace:
+    type: string
+  SMF_USER:
+    type: string
+    # default: user
+    volatile: true
+  # SMF_PASS:
+    # type: string
+    # default: password
+    # volatile: true
+  SMF_PORT:
+    type: string
+    # default: 2222
+    volatile: true
+  SMF_terminal:
+    type: string
+    volatile: true
+  vnfdId:
+#    default: Nokia-smf-1.11.0-v1
+    volatile: true
+  vnfInstanceName:
+    #readonly: true
+    type: string
+    #value: ${vendor}-${function}${nfAppearance}${nfunType}-${region}${azId}${dataCenterType}${logicalDCNo}${env}${envId}
+    # default: or-nrf001c-usw2aza001nd
+  vnfInstanceDescription:
+    type: string
+    default: Deploy Nokia SMF
+  vnfInstanceId:
+    value: ${smf.vnfInstanceId}
+    volatile: true  
+  flavourId:
+    type: string
+#    default: small
+  vimType:
+    type: string
+#    default: ndc
+  vim_id:
+    type: string
+#    default: orchestratortest
+  envType:
+    type: string
+#    default: dev    
+  nfType:
+    type: string
+#    default: CNF
+  vendor:
+    type: string
+#    default: nk
+  function: 
+    type: string
+#    default: smf
+  nfAppearance:
+    type: string
+#    default: 001
+  nfunType:
+    type: string
+#    default: c
+  region:
+    type: string
+#    default: use1
+  azId:
+    type: string
+#    default: az1
+  dataCenterType:
+    type: string
+#    default: n
+  logicalDCNo: 
+    type: string
+#    default: 01
+  env:
+    type: string
+#    default: p
+  envId:
+    type: string
+#    default: 1
+  SMF_ENV:
+    type: string
+    volatile: true
+  cnfPackageVersionFile:
+    type: string
+    volatile: true  
+composition:
+  smf:
+    type: $lmctl:/contains:/smf:/descriptor_name
+    quantity: 1
+    properties:
+      operation:
+        value: ${operation}    
+      deploymentLocation:
+        value: ${deploymentLocation}
+      resourceManager:
+        value: ${resourceManager}
+      instance_name:
+        value: ${instance.name}
+      nameSpace:
+        value: ${nameSpace}
+      SMF_IP:
+        value: ${SMF_IP}
+      SMF_USER:
+        value: ${SMF_USER}
+      # SMF_PASS:
+        # value: ${SMF_PASS}
+      SMF_PORT:
+        value: ${SMF_PORT}
+      dataCenterType:
+        value: ${dataCenterType}
+      vnfdId:
+        value: ${vnfdId}
+      vnfInstanceName:
+        value: ${vnfInstanceName}
+      vnfInstanceDescription:
+        value: ${vnfInstanceDescription}
+      vnfInstanceId:
+        value: ${vnfInstanceId}
+      flavourId:
+        value: ${flavourId}
+      vimType:
+        value: ${vimType}
+      vim_id:
+        value: ${vim_id}
+      envType:
+        value: ${envType}
+      nfType:
+        value: ${nfType}
+      vendor:
+        value: ${vendor}
+      function:
+        value: ${function}
+      SMF_terminal:
+        value: ${SMF_terminal}
+      nfAppearance:
+        value: ${nfAppearance}
+      nfunType:
+        value: ${nfunType}
+      region:
+        value: ${region}
+      azId:
+        value: ${azId}
+      logicalDCNo:
+        value: ${logicalDCNo}
+      env:
+        value: ${env}
+      envId:
+        value: ${envId}
+      SMF_ENV:
+        value: ${SMF_ENV}
+      cnfPackageVersionFile:
+        value: ${cnfPackageVersionFile} 
+operations:
+  addSliceConfig:
+    source-operation: smf.addSliceConfig
+  removeSlice:
+    source-operation: smf.removeSlice 

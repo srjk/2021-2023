@@ -1,0 +1,22 @@
+# convert ALM properties to json suspend request for South Bound endpoint - Nokia Provisioning GW 
+# - name: generate SB json and copy it to utility server
+  # template:
+    # src: nokia_provisioning_gw_suspend_request.json.j2
+    # dest: /home/ansible/sb_requests/nokia_provisioning_gw_suspend_request_{{ instance_name }}_{{ ansible_date_time.epoch|int }}.json
+    
+- name: Call RestAPI of SPML Adapter
+  uri:
+    url:  "http://dish-prov-ada-svc.dish-roks-poc-f5ae0bb7881b3b49feaa20ca32bad577-0000.us-south.containers.appdomain.cloud:31456/api/v1/spmlAdapter/suspendRequest"
+    method: POST
+    body: "{{lookup('template', 'nokia_provisioning_gw_suspend_request.json.j2')}}"
+    status_code: 200
+    body_format: json
+    headers:
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+  register: result
+
+- name: fail instance if there is a failure from SBI
+  fail:
+    msg: Instance creation failed with error code {{ result.json.errorcode }} and error message {{ result.json.errormessage }}
+  when: result.json.result == "failure"

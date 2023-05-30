@@ -1,0 +1,6 @@
+---
+- name: removeSliceProd
+  hosts: amf
+  gather_facts: false
+  roles:
+    - role: ../roles/removeSliceProd

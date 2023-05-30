@@ -1,0 +1,11 @@
+---
+- name: run the removeSliceProd yaml file
+  import_playbook: removeSliceProd.yaml
+  when: env == 'Prod'
+  
+
+- name: run the removeSliceStub yaml file
+  import_playbook: removeSliceStub.yaml
+  when: env == 'Stub'
+
+    

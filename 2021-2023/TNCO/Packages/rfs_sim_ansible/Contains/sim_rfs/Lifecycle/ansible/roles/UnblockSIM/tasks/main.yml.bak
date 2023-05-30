@@ -1,0 +1,38 @@
+- name: Get timestamp from the system
+  shell: "date +%Y-%m-%d%H:%M:%S.%5N"
+  register: stime
+
+- name: Start time
+  debug: msg="{{ stime }}"
+
+- name: setting filename
+  set_fact:
+    filename: /tmp/ansible_log/ansible_{{ extOrderId }}.log
+
+# - name: generate Ub SB json and copy it to utility server
+#   template:
+#     src: nokia_provisioning_gw_unblock_sim_provide_request.json.j2
+#     dest: /tmp/nokia_provisioning_gw_unblock_sim_request_{{ instance_name }}.json
+
+- name: Call RestAPI
+  environment:
+    SSL_CERT_FILE: "pgwcertificate.cert"
+  uri:
+    url: "{{ deployment_location.properties.pgw_url }}"
+    method: POST
+    body: "{{lookup('template', 'nokia_provisioning_gw_unblock_sim_provide_request.json.j2')}}"
+    #status_code: [200,201]
+    # body_format: json
+    headers:
+      content-type: "text/xml"
+      Returnresult_UnblockSIMType: "FULL"
+      return_content: yes      
+  register: result_UnblockSIM
+#  ignore_errors: yes
+
+- name: Get timestamp from the system
+  shell: "date +%Y-%m-%d%H:%M:%S.%5N"
+  register: etime
+
+- name: end time
+  debug: msg="{{ etime }}"

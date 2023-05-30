@@ -1,0 +1,167 @@
+{
+   "RequestId":"{{ extOrderId }}",
+   "serviceName": "Subscriber - Messaging SMS RFSS",
+      "SubParty":{
+         "PartyId":"{{ tas_partyId }}",
+         "DisplayName":"{{ tas_displayName }}",
+         "Category":"{{ tas_category }}",
+         "PrimaryPUID":"{{ tas_primaryPUID }}",
+         "PrimaryPUIDCPEProfileNumber":"{{ tas_primaryPUIDProfile }}",
+         "CsdFlavor":"{{ tas_cscdFlavor }}",
+         "CsdDynamic":"{{ tas_csdDynamic }}",
+         "CallLimit":"{{ tas_callLimit }}"
+      },
+      "DialingPlan":{
+         "PublicUID":"{{ tas_primaryPUID }}",	  
+         "Assigned":"{{ tas_dialingPlan_assigned }}",
+         "PrefixandFeatureCode":"{{ tas_dialingPlan_prefix }}",
+         "E164NormAndCodeConv":"{{ tas_dialingPlan_E164Norm}}"
+      },
+      "CallingLineId":{
+         "PublicUID":"{{ tas_primaryPUID }}",	  
+	     "Assigned":"{{ tas_callingLineId_assigned }}",
+         "CallingLineIdRestriction":"{{ tas_callingLineId_CallingLineIdRestriction }}",
+         "CLIREditAllowed":"{{ tas_callingLineId_CLIREditAllowed }}"
+      },
+      "CallForwardingVari":{
+         "PublicUID":"{{ tas_primaryPUID }}",	  
+         "Assigned":"{{ tas_callForwardingVari_assigned }}",
+         "ReceiveNotify":"{{ tas_callForwardingVari_ReceiveNotify }}"
+      },
+      "SelectiveCallFwd":{
+         "PublicUID":"{{ tas_primaryPUID }}",	  
+         "Assigned":"{{ tas_selectiveCallFwd_assigned }}",
+         "NoAnswerTimeout":"{{ tas_selectiveCallFwd_NoAnswerTimeout }}"
+      },
+      "CallForwardingBusy":{
+         "PublicUID":"{{ tas_primaryPUID }}",		  
+         "Assigned":"{{ tas_callForwardingBusy_assigned }}",
+         "ReceiveNotify":"{{ tas_callForwardingBusy_ReceiveNotify }}"
+      },
+      "CallForwardingNoAns":{
+         "PublicUID":"{{ tas_primaryPUID }}",	  
+         "Assigned":"{{ tas_callForwardingNoAns_assigned }}",
+         "NoAnswerTimeout":"{{ tas_callForwardingNoAns_NoAnswerTimeout }}"
+      },
+      "CallForwardNotReach":{
+         "PublicUID":"{{ tas_primaryPUID }}",	  
+         "Assigned":"{{ tas_callForwardNotReach_assigned }}",
+         "PlayAnnouncement":"{{ tas_callForwardNotReach_PlayAnnouncement }}"
+      },
+      "CallForwardDefault":{
+         "PublicUID":"{{ tas_primaryPUID }}",	  
+         "Assigned":"{{ tas_callForwardDefault_assigned }}",
+         "ForwardToType":"{{ tas_callForwardDefault_ForwardToType }}",
+         "CfdMode":"{{ tas_callForwardDefault_CfdMode }}",
+         "EditPermission":"{{ tas_callForwardDefault_EditPermission }}",
+         "EditPermissionsNoAnswer":"{{ tas_callForwardDefault_EditPermissionsNoAnswer }}",
+         "NoAnswerTimeout":"{{ tas_callForwardDefault_NoAnswerTimeout }}",
+         "Activated":"{{ tas_callForwardDefault_Activated }}",
+         "BusyActive":"{{ tas_callForwardDefault_BusyActive }}",
+         "NoAnsActive":"{{ tas_callForwardDefault_NoAnsActive }}"
+      },
+      "CallForwardingUnreg":{
+         "PublicUID":"{{ tas_primaryPUID }}",	  
+         "Assigned":"{{ tas_callForwardUnreg_assigned }}",
+         "PlayAnnouncement":"{{ tas_callForwardUnreg_PlayAnnouncement }}",
+         "SendNotify":"{{ tas_callForwardUnreg_SendNotify }}"
+      },
+      "CallForwardingLocal":{
+         "PublicUID":"{{ tas_primaryPUID }}",	  
+         "Assigned":"{{ tas_callForwardLocal_assigned }}"
+      },
+      "InhibitIncomingFwd":{
+         "PublicUID":"{{ tas_primaryPUID }}",	  
+         "Assigned":"{{ tas_InhibitIncomingFwd_assigned }}",
+         "InhibitVoiceFwd":"{{ tas_InhibitIncomingFwd_InhibitVoiceFwd }}",
+         "InhibitDataFwd":"{{ tas_InhibitIncomingFwd_InhibitDataFwd }}"
+      },
+      "BearerBasedCallFwd":{
+         "PublicUID":"{{ tas_primaryPUID }}",	  
+         "Assigned":"{{ tas_bearerBasedCallFwd_assigned }}"
+      },
+      "CallDeflection":{
+         "PublicUID":"{{ tas_primaryPUID }}",	  
+         "Assigned":"{{ tas_callDeflection_assigned }}",
+         "PlayAnnouncement":"{{ tas_callDeflection_PlayAnnouncement }}"
+      },
+      "CallTransfer":{
+         "PublicUID":"{{ tas_primaryPUID }}",	  
+         "Assigned":"{{ tas_callTransfer_assigned }}",
+         "Consultation":"{{ tas_callTransfer_Consultation }}"
+      },
+      "SelectiveCallReject":{
+         "#text":" -- to provision selective call rejection",	  
+         "PublicUID":"{{ tas_primaryPUID }}",	  
+         "Assigned":"{{ tas_selectiveCallReject_assigned }}"
+      },
+      "AnonymousCallReject":{
+         "#text":"   -- to provision anonymous call reject",	  
+         "PublicUID":"{{ tas_primaryPUID }}",	  
+         "Assigned":"{{ tas_anonymousCallReject_assigned }}"
+      },
+      "CallBlocking":{
+         "PublicUID":"{{ tas_primaryPUID }}",	  
+         "Assigned":"{{ tas_callBlocking_assigned }}",
+         "UserCtrlAll":"{{ tas_callBlocking_UserCtrlAll }}"
+      },
+      "CallBarring":{
+         "PublicUID":"{{ tas_primaryPUID }}",	  
+         "Assigned":"{{ tas_callBarring_assigned }}",
+         "CntrlCallBarringAll":"{{ tas_callBarring_CntrlCallBarringAll }}",
+         "TollFree":"{{ tas_callBarring_TollFree }}"
+      },
+      "CallWaiting":{
+         "PublicUID":"{{ tas_primaryPUID }}",	  
+         "Assigned":"{{ tas_callWaiting_assigned }}",
+         "PlayAnnouncement":"{{ tas_callWaiting_PlayAnnouncement }}",
+         "Activated":"{{ tas_callWaiting_Activated }}"
+      },
+      "MsgWaitingInd":{
+         "PublicUID":"{{ tas_primaryPUID }}",	  
+         "Assigned":"{{ tas_msgWaitInd_assigned }}",
+         "MWINotify":"{{ tas_msgWaitInd_MWINotify }}",
+         "Activated":"{{ tas_msgWaitInd_Activated }}"
+      },
+      "ConferenceCalling":{
+         "PublicUID":"{{ tas_primaryPUID }}",	  
+         "Assigned":"{{ tas_conferenceCalling_assigned }}",
+         "ConfSize":"{{ tas_conferenceCalling_ConfSize }}",
+         "Transfer":"{{ tas_conferenceCalling_Transfer }}"
+      },	  
+      "VoiceMail":{
+         "PublicUID":"{{ tas_primaryPUID }}",	  
+         "Assigned":"{{ tas_voiceMail_assigned }}",
+         "ForwardToDN":"{{ tas_voiceMail_ForwardToDN }}"
+      },
+      "AdvancedConference":{
+         "PublicUID":"{{ tas_primaryPUID }}",	  
+         "Assigned":"{{ tas_advancedConference_assigned }}",
+         "MaxConfLegs":"{{ tas_advancedConference_MaxConfLegs }}",
+         "SendNotify":"{{ tas_advancedConference_SendNotify }}",
+		 "PlayGreeting":"{{ tas_advancedConference_PlayGreeting }}",
+         "BeepTone":"{{ tas_advancedConference_BeepTone }}"
+      },
+      "CCBS":{
+         "PublicUID":"{{ tas_primaryPUID }}",	  
+         "Assigned":"{{ tas_ccbs_assigned }}"
+      },
+      "DoNotDisturb":{
+         "PublicUID":"{{ tas_primaryPUID }}",	  
+         "Assigned":"{{ tas_doNotDisturb_assigned }}",
+         "ReceiveNotify":"{{ tas_doNotDisturb_ReceiveNotify }}"
+      },
+      "OneDigitSpeedDial":{
+         "PublicUID":"{{ tas_primaryPUID }}",	  
+         "Assigned":"{{ tas_oneDigitSpeedDial_assigned }}"
+      },
+      "TwoDigitSpeedDial":{
+         "PublicUID":"{{ tas_primaryPUID }}",	  
+         "Assigned":"{{ tas_twoDigitSpeedDial_assigned }}"
+      },
+      "AutomaticCallBack":{
+         "#text":" -- (*69) for call back -- to redial the last dialled number",	  
+         "PublicUID":"{{ tas_primaryPUID }}",	  
+         "Assigned":"{{ tas_automaticCallBack_assigned }}"
+      }
+}

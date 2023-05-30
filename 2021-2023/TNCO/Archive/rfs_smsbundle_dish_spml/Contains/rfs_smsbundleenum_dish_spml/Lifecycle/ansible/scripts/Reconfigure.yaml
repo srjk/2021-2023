@@ -1,0 +1,30 @@
+---
+- name: Stop
+  hosts: localhost
+  connection: local
+  gather_facts: True
+  roles:
+    # - { role: ../roles/suspend, when: operation == 'Suspend' }
+    # - { role: ../roles/resume, when: operation == 'Resume' }
+    # - { role: ../roles/BlockSIM, when: operation == 'BlockSIM' }
+    # - { role: ../roles/UnblockSIM, when: operation == 'UnblockSIM' }
+    # - { role: ../roles/ChangeSIM, when: operation == 'ChangeSIM' }
+    # - { role: ../roles/ChangeDevice, when: operation == 'ChangeDevice' }
+    # -
+      # role: ../roles/ceaseenum
+      # when: "operation == 'CleanupMsisdn,ChangeMsisdn'"
+    -
+      role: ../roles/ceasemms
+      when: "operation == 'CleanupMsisdn,ChangeMsisdn'"
+    # -
+      # role: ../roles/changeMSISDN
+      # when: "operation == 'CleanupMsisdn,ChangeMsisdn'"
+    # -
+      # role: ../roles/cleanupMSISDN
+      # when: "operation == 'CleanupMsisdn,ChangeMsisdn'"
+    -
+      role: ../roles/createmms
+      when: "operation == 'CleanupMsisdn,ChangeMsisdn'"
+    # -
+      # role: ../roles/createenum
+      # when: "operation == 'CleanupMsisdn,ChangeMsisdn'"

@@ -1,0 +1,10 @@
+schema: '2.0'
+name: cnf_nrf_oracle
+version: '1.0'
+type: Assembly
+resource-manager: Brent
+contains:
+- name: nrf
+  type: Resource
+  resource-manager: Brent
+  directory: nrf

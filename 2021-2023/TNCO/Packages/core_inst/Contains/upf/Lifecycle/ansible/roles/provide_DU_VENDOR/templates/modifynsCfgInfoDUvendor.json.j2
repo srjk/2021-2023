@@ -1,0 +1,21 @@
+{
+	  "gnbId": {{ gnb_id | int }},
+	  "cnfId": {{ du_id | int }},
+	  "version": "{{ du_version }}",
+	  "configType": "{{ du_vendor_config }}",
+	  "attributeListIn": {
+				"numDlUePerTti": {{ numDlUePerTti | int }},
+				"resType": "{{ resType }}",
+				"numUlUePerTti": {{ numUlUePerTti | int  }},
+				"nsResId": {{ nsResId | int }},
+				"nsiCellResCfg": {
+				"numDlPrb": {{ numDlPrb | int }},
+				"numUlPrb": {{ numUlPrb | int }}
+				},
+				"nsiId": {{ idnsAddInfoDUVendor }},
+				"sNSSAI": {{ du_sst | int }}{{ du_sd }},
+				"dlSlaTargetRate": {{ dlSlaTargetRate | int }},
+				"ulSlaTargetRate": {{ ulSlaTargetRate | int }}
+		}
+}
+	

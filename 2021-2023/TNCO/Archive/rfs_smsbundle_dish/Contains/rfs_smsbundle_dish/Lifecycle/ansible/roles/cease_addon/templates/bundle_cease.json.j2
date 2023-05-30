@@ -1,0 +1,45 @@
+{
+    "serviceType": "Bundle RFS",
+    "serviceName": "Subscriber - Messaging Bundle RFSS",
+    "id": "{{ kami_response.json.extOrderId }}",
+    "imsi": "{{ SUPI }}",
+			"smsRoamingRFS": {
+				"hlr": {
+					"multipleValueObjects": [
+						{
+							"path": "hlr/bicroam",
+							"operation": "addorset",
+							"valueObject": {
+								"basicServiceGroup": "TS20-shortMessage",
+								"status": "5"
+							}
+						},
+						{
+							"path": "hlr",
+							"operation": "addorset",
+							"valueObject": {
+								"osb1": "true"
+							}
+						}
+					]
+				},
+				"udm": {
+					"multipleValueObjects": [
+						{
+							"path": "udm5gData/servingPlmnId/provisionedData/smsManagementSubscriptionData/mtSmsBarringRoaming='false'",
+							"operation": "set",
+							"valueObject": {
+								"mtSmsBarringRoaming": "true"
+							}
+						},
+						{
+							"path": "udm5gData/servingPlmnId/provisionedData/smsManagementSubscriptionData/moSmsbarringRoaming='false'",
+							"operation": "set",
+							"valueObject": {
+								"moSmsbarringRoaming": "true"
+							}
+						}
+					]
+				}
+			}
+}

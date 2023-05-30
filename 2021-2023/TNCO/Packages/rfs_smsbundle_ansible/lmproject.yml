@@ -1,0 +1,14 @@
+schema: '2.0'
+name: rfs_smsbundle_ansible
+version: '1.0'
+type: Assembly
+resource-manager: Brent
+contains:
+- name: rfs_smsbundle_ansible
+  type: Resource
+  resource-manager: Brent
+  directory: rfs_smsbundle_ansible
+- name: rfs_smsbundleenum_ansible
+  type: Resource
+  resource-manager: Brent
+  directory: rfs_smsbundleenum_ansible

@@ -1,0 +1,182 @@
+# convert ALM properties to json cease request for South Bound endpoint - Nokia Provisioning GW
+- name: Create the list
+  set_fact:
+    list_nssf_amfRegionId: "{{ nssf_amfRegionId.split(',') | list }}"
+    list_nssf_amfSetId: "{{ nssf_amfSetId.split(',') | list }}"
+    list_nssf_amfFqdn: "{{ nssf_amfFqdn.split(',') | list }}"
+    list_nssf_defaultGrantName: "{{ nssf_defaultGrantName.split(',') | list }}"
+    list_nssf_tai: "{{ nssf_tai.split(',') | list }}"
+    list_nssf_nssRuleName: "{{ nssf_nssRuleName.split(',') | list }}"
+
+
+- name: populate combined var
+  set_fact:
+    combined_var: "{{ combined_var|default([]) +[{ 'regionID': item.0, 'setID': item.1, 'setFqdn': item.2 }] }}"
+  loop: "{{ data[0]|zip(*data[1:])|list }}"
+  vars:
+    data:
+        -  "{{ list_nssf_amfRegionId }}"
+        -  "{{ list_nssf_amfSetId }}"
+        -  "{{ list_nssf_amfFqdn }}"
+
+- name: generate new file NSI profile
+  copy: 
+    dest: "/tmp/nsiprofiles_request.json.j2"
+    content: |
+       {
+          "name": "{{ nssf_nsiProfileName }}",
+          "nrfUri": "{{ nssf_nrfUri }}", 
+          "nsiId": "{{ nssf_nsiId }}",
+          "nrfNfMgtUri": "{{ nssf_nrfMgtUri }}",
+          "nrfAccessTokenUri": "{{ nssf_nrfAccessTokenUri }}",
+          "targetAmfSets": {{ combined_var }}
+          }
+
+- name:  create nssaiauth_request
+  copy: 
+    dest: "/tmp/{{ item.0 }}_nssaiauth_request.json.j2"
+    content: |
+       {
+          "name": "{{ item.0 }}",
+          "plmnId":{
+              "mcc":"{{ nssf_mcc }}",
+               "mnc":"{{ nssf_mnc }}"
+              },
+           "tac":"{{ item.1 }}",
+           "snssai":{
+               "sst":"{{ nssf_sst }}",
+                 "sd":"{{ nssf_sd }}"
+              },
+                 "grant":"{{ nssf_grant }}"
+         }
+  loop: "{{ data[0]|zip(*data[1:])|list }}"
+  vars:
+    data:
+        -  "{{ list_nssf_defaultGrantName }}"
+        -  "{{ list_nssf_tai }}"
+
+- name:  create nssaiauth_request
+  copy: 
+    dest: "/tmp/{{ item }}_configuredsnssais_request.json.j2"
+    content: |
+       {
+            "plmn":{
+             "mcc":"{{ nssf_mcc }}",
+                "mnc":"{{ nssf_mnc }}"
+           },
+            "tac":"{{ item }}",
+           "salience":"{{ nssf_confNssaiSalience }}",
+           "nssai":[
+              {
+               "sst":"{{ nssf_sst }}",
+                  "sd":"{{ nssf_sd }}"
+               }
+                ]
+         }
+  loop: "{{ list_nssf_tai }}"
+
+- name:  create nssaiauth_request
+  copy: 
+    dest: "/tmp/{{ item.0 }}_nssrules_request.json.j2"
+    content: |
+       {
+         "name":"{{ item.0 }}",
+         "amfId":"{{ nssf_nssAmfId }}",
+         "plmnId":{
+         "mcc":"{{ nssf_mcc }}",
+         "mnc":"{{ nssf_mnc }}"
+          },
+         "tac":"{{ item.1 }}",
+         "snssai":{
+           "sst":"{{ nssf_sst }}",
+          "sd":"{{ nssf_sd }}"
+           },
+          "salience":"{{ nssf_nssRuleSalience }}",
+          "behavior":{
+            "accessType":"{{ nssf_nssRuleAccessType }}",
+              "nsiProfiles":[
+                  {
+              "name":"{{ nssf_nsiProfileName }}",
+              "salience": "{{ nssf_nssRuleBehaviourSalience }}"
+            }
+          ]
+          }
+             }
+  loop: "{{ data[0]|zip(*data[1:])|list }}"
+  vars:
+    data:
+        -  "{{ list_nssf_nssRuleName }}"
+        -  "{{ list_nssf_tai }}"
+
+- name: Configure NSI profile
+  uri:
+    url:  "http://acb9412dc15104e988c43d6afeac6124-986749247.us-east-2.elb.amazonaws.com/nssfStub/nnssf-configuration/v1/nsiprofiles"
+    method: POST
+    body: "{{lookup('template', '/tmp/nsiprofiles_request.json.j2')}}"
+    status_code: 200
+    body_format: json
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    return_content: yes
+  register: result
+
+
+- name: Set Default Grants
+  uri:
+    url:  "http://acb9412dc15104e988c43d6afeac6124-986749247.us-east-2.elb.amazonaws.com/nssfStub/nnssf-configuration/v1/nssaiauth"
+    method: POST
+    body: "{{lookup('template', '/tmp/{{ item }}_nssaiauth_request.json.j2')}}"
+    status_code: 200
+    body_format: json
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    return_content: yes
+  loop: "{{ list_nssf_defaultGrantName }}"
+  register: result
+      
+
+- name: Set Configured NSSAIs
+  uri:
+    url:  "http://acb9412dc15104e988c43d6afeac6124-986749247.us-east-2.elb.amazonaws.com/nssfStub/nnssf-configuration/v1/configuredsnssais"
+    method: POST
+    body: "{{lookup('template', '/tmp/{{ item }}_configuredsnssais_request.json.j2')}}"
+    status_code: 200
+    body_format: json
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    return_content: yes
+  loop: "{{ list_nssf_tai }}"
+  register: result
+
+
+- name: Configure AMF Sets
+  uri:
+    url:  "http://acb9412dc15104e988c43d6afeac6124-986749247.us-east-2.elb.amazonaws.com/nssfStub/nnssf-configuration/v1/amfresolutions"
+    method: POST
+    body: "{{lookup('template', 'nokia_provisioning_amfresolutions_request.json.j2')}}"
+    status_code: 200
+    body_format: json
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache" 
+    return_content: yes
+  register: result
+
+
+- name: Configure Network Slice Selection Rule
+  uri:
+    url:  "http://acb9412dc15104e988c43d6afeac6124-986749247.us-east-2.elb.amazonaws.com/nssfStub/nnssf-configuration/v1/nssrules"
+    method: POST
+    body: "{{lookup('template', '/tmp/{{ item }}_nssrules_request.json.j2')}}"
+    status_code: 200
+    body_format: json
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    return_content: yes
+  loop: "{{ list_nssf_nssRuleName }}"
+  register: result
+    

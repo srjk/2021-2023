@@ -1,0 +1,197 @@
+# - name: Validate the client certificate and verify onboarding is successful or no and get apiInvokerId
+  # uri:
+    # # url:  "{{ ansible_env.PGW_ADA_HOST }}/dish/ProvSpml/api/v1/spmlAdapter/modifyAddRequest"
+    # url: "{{ mcms_host }}/cms-service/webapi/apicore/apiinvokermanagement/v1/onboardedinvokers"
+    # method: POST
+    # body: "{{lookup('template', 'clientCertificate.json.j2')}}"
+    # body_format: json
+    # headers:
+      # content-type: "application/json"
+      # ReturnResultType: "FULL"
+      # return_content: yes
+    # validate_certs: no
+  # register: clientCertificate
+  # # ignore_errors: yes
+
+# - name: clientCertificate print
+  # copy:
+    # dest: "/tmp/proCUCPVenclientCertificate.json.j2"
+    # content: "{{ clientCertificate }}"
+
+# - name: Initiate Authentication with apiInvokerId
+  # uri:
+    # url: "{{ mcms_host }}/cms-service/webapi/apicore/aef-security/v1/check-authentication"
+    # method: POST
+    # body: "{{lookup('template', 'CheckAuthentication.json.j2')}}"
+    # body_format: json
+    # status_code: 200
+    # headers:
+      # content-type: "application/json"
+      # ReturnResultType: "FULL"
+      # return_content: yes
+    # validate_certs: no
+  # register: authentication
+  # # ignore_errors: yes
+
+# - name: authentication print
+  # copy:
+    # dest: "/tmp/proCUCPVenauthentication.json.j2"
+    # content: "{{ authentication }}"
+
+- name: setting filename logs for Provide_CUCP_VENDOR
+  set_fact:
+    filename: /tmp/ansible_log/{{ instance_name }}_Create_CUCP_VENDOR_GNB_MAVENIR.log
+
+#-------------------> CUCP_VENDOR tacSpecificConfig plmnSpecificConfig <------------------------
+- name: Retrieve tacSpecificConfig plmnSpecificConfig attribute
+  uri:
+    url: "{{ deployment_location.properties.mcms_host }}/cms-service/webapi/apiservice/ProvMnS/v1/gnbvs/gnbCuCpConfig={{ cucp_id }}?attributes=tacSpecificConfig"
+    method: GET
+    body: "{{lookup('template', 'getInfoCUCPvendor.json.j2')}}"
+    # body: 
+      # "gnbId": {{ gnb_id  | int }}
+      # "cnfId": {{ cucp_id | int }}
+      # "version": "{{ cucp_version }}"
+      # "configType": "{{ cucp_vendor_config }}"    
+    body_format: json
+    headers:
+      apiInvokerId: "{{ deployment_location.properties.apiInvokerId }}"
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: GettacSpecificConfig
+  ignore_errors: yes      
+  failed_when: "GettacSpecificConfig.status not in [200]"
+
+- name: GettacSpecificConfig print
+  copy:
+    dest: "{{ filename }}"
+    content: |
+              __________________________________________________________________________
+            
+              ##### GET API call to retrieve GettacSpecificConfig plmnSpecificConfig
+              
+              URL:
+              {{ GettacSpecificConfig.url }}
+              
+              order_send:
+              {{lookup('template', 'getInfoCUCPvendor.json.j2')}}
+              
+              result_return:
+              {{ GettacSpecificConfig.json | to_nice_json }}
+              __________________________________________________________________________
+
+#----------> Print error message when apiInvokerId is Invalid/incorrect/expired <------------
+- name: creating variable and setting value for message error when apiInvokerId is Invalid/incorrect/expired
+  set_fact:
+    target_e: "{{ GettacSpecificConfig.content | regex_search('message') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ GettacSpecificConfig.content | replace('\"','') | replace('{','') | replace('}','') }}. Either apiInvokerId is Invalid/incorrect/expired, please verify the apiInvokerId."
+  when: "target_e=='message'"
+
+#----> Print error message when Invalid location or input data for: <gnbId> or <cnfId> or <version> <-------
+- name: creating variable and setting value for errorInfo when wrong input data of gnbId> or <cnfId> or <version>  or any other errors
+  set_fact:
+    target_e1: "{{ GettacSpecificConfig.content | regex_search('error') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ GettacSpecificConfig.content | replace('\"','') | replace('{','') | replace('}','') | replace('error:','') }}"
+  when: "target_e1=='error'"
+
+# - name: Copy file plmnSpecificConfig length
+  # copy:
+    # dest: "/tmp/ansible_log/plmnSpecificConfiglen.json.j2"
+    # content: "{{ GettacSpecificConfig.json.data[0].tacSpecificConfig.plmnSpecificConfig|length|int -1 }}"
+
+- name: print plmnSpecificConfig length
+  set_fact:
+    plmnSpecificConfiglen: "{{ GettacSpecificConfig.json.data[0].tacSpecificConfig.plmnSpecificConfig|length|int -1 }}"
+
+- name: print number of plmnSpecificConfig
+  debug:
+    msg: "{{ plmnSpecificConfiglen }}"
+
+- name: Generate sequence for plmnSpecificConfig id's
+  set_fact:
+    mysequenceTAC: "{{ mysequenceTAC | default([]) + [GettacSpecificConfig.json.data[0].tacSpecificConfig.plmnSpecificConfig[item|int].id|int] }}"
+  with_sequence: start=0 end={{ plmnSpecificConfiglen }}
+
+- name: print number of plmnSpecificConfig id's
+  debug:
+    msg: "{{ mysequenceTAC }}"
+
+
+- name: Assign the id value of CUCP_Vendor for plmnSpecificConfig id's and same id is used for cease 
+  set_fact:
+    idplmnSpecificConfigCUCPVendor: "{{ mysequenceTAC|max +1 }}"
+    
+# - name: Set the id value of CUCP_Vendor for plmnSpecificConfig id's and same id is used for cease 
+  # set_fact:
+    # output__idplmnSpecificConfigCUCPVendor: "{{ idplmnSpecificConfigCUCPVendor }}"
+
+# - name: Increment to 1 from the maximum number of plmnSpecificConfig id's
+  # debug:
+    # msg: "{{ mysequenceTAC|max +1 }}"
+
+- name: update tacSpecificConfig to add new slice for plmnSpecificConfig (add new slice)
+  uri:
+    url: "{{ deployment_location.properties.mcms_host }}/cms-service/webapi/apiservice/ProvMnS/v1/gnbvs,gnbCuCpConfig={{ cucp_id }},tacSpecificConfig=55199/plmnSpecificConfig"
+    method: PUT
+    body: "{{lookup('template', 'modifyInfoCUCPvendor.json.j2')}}"
+    body_format: json
+    headers:
+      apiInvokerId: "{{ deployment_location.properties.apiInvokerId }}"
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 201
+    return_content: yes
+  register: updatetacSpecificConfig
+  ignore_errors: yes
+  failed_when: "updatetacSpecificConfig.status not in [201]"
+
+# - name: updatetacSpecificConfig print
+  # copy:
+    # dest: "/tmp/ansible_log/resp_proCUCPVenAddtacSpecificConfig.json.j2"
+    # content: "{{ updatetacSpecificConfig }}"
+
+- name: Insert a line at the end of a file to print updatetacSpecificConfig.
+  lineinfile:
+    path: "{{ filename }}"
+    line: |
+           __________________________________________________________________________
+           
+           ##### PUT API call to update tacSpecificConfig for plmnSpecificConfig (add new slice)
+           
+           URL:  
+           {{ updatetacSpecificConfig.url }}
+           
+           order_send:
+           {{lookup('template', 'modifyInfoCUCPvendor.json.j2')}}
+           
+           result_return: 
+           {{ updatetacSpecificConfig.json | to_nice_json }}
+           __________________________________________________________________________
+
+#-----------------> Print error message when apiInvokerId is Invalid/incorrect/expired <------------
+- name: creating variable and setting value for message error when apiInvokerId is Invalid/incorrect/expired
+  set_fact:
+    target_e: "{{ updatetacSpecificConfig.content | regex_search('message') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ updatetacSpecificConfig.content | replace('\"','') | replace('{','') | replace('}','') }}. Either apiInvokerId is Invalid/incorrect/expired, please verify the apiInvokerId."
+  when: "target_e=='message'"
+
+#-----------> Print updatetacSpecificConfig error message if Add/Delete API calls fails <---------------
+- name: creating variable and setting value for errorInfo  
+  set_fact:
+    target_e1: "{{ updatetacSpecificConfig.content | regex_search('error') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ updatetacSpecificConfig.content | replace('\"','') | replace('{','') | replace('}','') | replace('error:','') }}"
+  when: "target_e1=='error'"

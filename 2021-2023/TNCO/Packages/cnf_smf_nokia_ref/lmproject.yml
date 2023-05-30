@@ -1,0 +1,9 @@
+schema: '2.0'
+name: cnf_smf_nokia_ref
+version: '1.0'
+type: Assembly
+contains:
+- name: ref
+  type: Resource
+  resource-manager: Brent
+  directory: ref

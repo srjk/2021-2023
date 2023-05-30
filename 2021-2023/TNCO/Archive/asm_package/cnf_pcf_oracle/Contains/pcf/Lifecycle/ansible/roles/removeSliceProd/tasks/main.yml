@@ -1,0 +1,135 @@
+- name: Create the list
+  set_fact:
+    list_pcf_qosData_Name: "{{ pcf_qosData_Name.split(',') | map('trim') | list }}"
+    list_pcf_pccRule_Name: "{{ pcf_pccRule_Name.split(',') | map('trim')| list }}"
+    list_pcf_qosInfo_name: "{{ pcf_qosInfo_name.split(',') | map('trim')| list }}"
+    list_pcf_sessionRule_Name: "{{ pcf_sessionRule_Name.split(',') | map('trim')| list }}"
+
+- name: Gettting Policy table data 
+  uri:
+    url:  "{{ PCF_HOST }}/oc-cnpolicy-configuration/v1/policydata/common/policytables/export"
+    method: GET
+    status_code: 200
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    return_content: yes
+  register: auth_response
+
+# - name: TMF Authentication token
+#   uri:
+#     method: GET
+#     url: "http://{{ pcf_host }}/pcfStub/oc-cnpolicyconfiguration/v1/policydata/common/policytables/export"
+#     body_format: json
+#     headers:
+#       Accept: "application/json"
+#       content-type: "application/json"
+#     return_content: yes
+#   register: auth_response
+
+# # - debug: var=len_array
+
+- name: write var to file
+  copy: 
+    content: "{{ auth_response.content | trim }}" 
+    dest: /tmp/test_file.json
+
+# # - name: ruuning python file
+#   # shell: "{{ auth_response.json.exportData[0].rows }}"  > /tmp/test_file.json
+- name: Create the list
+  set_fact:
+    list_pcf_policyTable_dnn: "{{ pcf_policyTable_dnn.split(',') | map('trim')| list  }}"
+
+- name: Create the list
+  set_fact:
+    list_pcf_policyTable_dnn: ['internet','ota','ims','ims','ims','sos','xcap']
+  when: "'ims' in  pcf_policyTable_dnn"
+
+- name: ruuning python file
+  shell: |
+    python3 delete.py "{{ pcf_policyTable_sst }}" "{{ pcf_policyTable_sd }}" "{{ item.0 }}"  "{{ pcf_policyTable_ratePlan }}" "{{ item.1  }}" "{{ item.2 }}"
+  loop: "{{ data[0]|zip(*data[1:])|list }}"
+  vars:
+    data:
+        -  "{{ list_pcf_policyTable_dnn  }}"
+        -  "{{ pcf_policyTable_sessionRule.split(',') | map('trim')| list  }}"
+        -  "{{ pcf_policyTable_pccRuleList.split(',') | map('trim')| list  }}"  
+  register: response 
+
+
+# - name: Create a PCC Rule
+#   uri:
+#     url:  "http://{{ pcf_host }}/pcfStub/oc-cnpolicyconfiguration/v1/policydata/common/policytables/import"
+#     method: POST
+#     body: "{{lookup('file', '/tmp/test_file.json')}}"
+#     status_code: 200
+#     body_format: json
+#     headers:
+#       content-type: "application/json"
+#       cache-control: "no-cache"
+#     return_content: yes
+#   register: result
+
+
+- name: Update PolicyTable
+  uri:
+    url:  "{{ PCF_HOST }}/oc-cnpolicy-configuration/v1/policydata/common/policytables/import?action=replace"
+    method: POST
+    body: "{{lookup('template', '/tmp/test_file.json')}}"
+    status_code: 201
+    body_format: json
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    return_content: yes
+  register: result
+
+
+- name: Delete session Rule
+  uri:
+    url:  "{{ PCF_HOST }}/oc-cnpolicy-configuration/v1/policydata/pcfsm/sessionrules/{{ item }}"
+    method: DELETE
+    status_code: 204
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    return_content: yes
+  loop: "{{ list_pcf_sessionRule_Name }}"
+  register: result
+
+- name: Delete Qos information
+  uri:
+    url:  "{{ PCF_HOST }}/oc-cnpolicy-configuration/v1/policydata/pcfsm/qosinformation/{{ item }}"
+    method: DELETE
+    status_code: 204
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    return_content: yes
+  loop: "{{ list_pcf_qosInfo_name }}"
+  register: result
+
+- name: Delete Pcc rule
+  uri:
+    url:  "{{ PCF_HOST }}/oc-cnpolicy-configuration/v1/policydata/pcfsm/pccrules/{{ item }}"
+    method: DELETE
+    status_code: 204
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    return_content: yes
+  loop: "{{ list_pcf_pccRule_Name }}"
+  register: result
+
+- name: Delete Qos data
+  uri:
+    url:  "{{ PCF_HOST }}/oc-cnpolicy-configuration/v1/policydata/pcfsm/qosdata/{{ item }}"
+    method: DELETE
+    status_code: 204
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    return_content: yes
+  loop: "{{ list_pcf_qosData_Name }}"
+  register: result
+

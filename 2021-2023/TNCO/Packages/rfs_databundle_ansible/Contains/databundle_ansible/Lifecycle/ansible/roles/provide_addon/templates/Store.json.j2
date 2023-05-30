@@ -1,0 +1,16 @@
+{
+        "alm_instance_name": "{{ instance_name }}",
+        "assembly_name": "rfs_databundle_ansible",
+        "external_order_id": "{{ extOrderId }}",
+        "target_system": "Nokia PGW",
+        "target_system_url": "{{ pgw_url }}",
+        "execution_start_time": "{{ stime.start }}",
+        "execution_end_time": "{{ etime.end }}",
+        "request": "{{lookup('template', 'bundle.xml.j2') | replace('\"','\\"') | replace('\n','') }}",
+        "response": "{{ result.content | replace('\"','\\"') | replace('\n','') }}",
+		{% if target=="error" %}
+           "status": "Failure"
+		{% else %}
+		   "status": "Success"
+		{% endif %}
+}

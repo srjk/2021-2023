@@ -1,0 +1,71 @@
+---
+- name: Unstall
+  hosts: localhost
+  connection: local
+  gather_facts: True
+  tasks:
+######--------#-----> Start time from system  <----------------------------
+    - name: "##ALM## Get timestamp from the system"
+      shell: "date +%Y-%m-%d%H:%M:%S.%5N"
+      register: stime
+
+######--------#-----> Run playbook for Cease DU  <----------------------------
+    - name: "##ALM## Run playbook for Cease DU_3GPP"
+      include_role:
+        name: ../roles/cease_DU_3GPP
+    
+    - name: "##ALM## Run playbook for Cease DU_VENDOR"
+      include_role:
+        name: ../roles/cease_DU_VENDOR
+
+######--------#-----> End time from system  <----------------------------
+    - name: "##ALM## Get timestamp from the system"
+      shell: "date +%Y-%m-%d%H:%M:%S.%5N"
+      register: etime
+    
+######--------#-----> Generate Token from Kami  <----------------------------
+    - name: "##ALM## Get token from kami"
+      uri:
+        method: POST
+        url: "{{ deployment_location.properties.kami_url }}/KamiCore/oauth/token?grant_type=client_credentials"
+        headers: 
+           content-type: "application/json"
+           Authorization: Basic ZGlzaDpkaXNoMTIzNA==
+        validate_certs: no
+      register: token  
+     
+######--------#-----> Get order id from Kami  <----------------------------
+    - name: "##ALM## Get order id"
+      uri:
+        method: GET
+        url: "{{ deployment_location.properties.kami_url }}/KamiCore/getExtOrderId"  
+        return_content: yes
+        body_format: json
+        status_code: 201
+        body: "{ \"almInstanceName\": \"{{ instance_name }}\" }"
+        headers:
+           ReturnResultType: "FULL"
+           Authorization: Bearer {{ token.json.access_token }}
+        validate_certs: no
+        follow_redirects: yes
+      register: kami_responseDUdel
+      ignore_errors: yes
+
+    - name: log file for DU Mavenir
+      set_fact:
+        extOrderId: "{{ kami_responseDUdel.json.extOrderId }}"
+
+######--------#-----> Store request/response Logs in Eventlogger  <----------------------------
+    - name: "##ALM## Store request and response in DB"
+      uri:
+        url: "{{ deployment_location.properties.eventlogger_url }}"
+        method: POST
+        body: "{{lookup('template', 'Store_delete.json.j2')}}"
+        return_content: yes
+        body_format: json
+        status_code: 200
+        validate_certs: no
+        headers:
+          content-type: "application/json"
+          ReturnResultType: "FULL"
+      register: resultStoreDUdel

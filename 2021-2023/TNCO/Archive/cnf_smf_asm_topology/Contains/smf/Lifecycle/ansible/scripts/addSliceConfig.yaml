@@ -1,0 +1,6 @@
+---
+- name: addSliceConfig
+  hosts: smf
+  gather_facts: True
+  roles:
+    - role: ../roles/addSliceConfig

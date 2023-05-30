@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Provisioning xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <Request>
+      <Header>
+         <Command>{{ voicemail_command }}</Command>
+         <Version>{{ voicemail_Version }}</Version>
+         <RequestID>{{ extOrderId }}</RequestID>
+         <EntityIdentifiers>
+          <Identifier Type='TelephoneNumber' Value= '{{ GPSI }}'/> 
+         </EntityIdentifiers>
+         <HostReference>{{ voicemail_hostreference }}</HostReference>
+         <EntityName>{{ voicemail_EntityName }}</EntityName>
+      </Header>
+      <Data>
+         <Subscriber>
+            <LanguageFlavor>{{ voicemail_LanguageFlavor }}</LanguageFlavor>
+            <SubscriberCosName>{{ voicemail_SubscriberCosName }}</SubscriberCosName>
+            <GuestLanguageFlavour>{{ voicemail_GuestLanguageFlavour }}</GuestLanguageFlavour>
+            <GlobalLanguageId>{{ voicemail_GlobalLanguageId }}</GlobalLanguageId>
+            <GuestLanguage>{{ voicemail_GuestLanguage }}</GuestLanguage>
+            <SubscriberDomainName>{{ voicemail_SubscriberDomainName }}</SubscriberDomainName>
+            <TuiPassword> </TuiPassword>
+            <Timezone>{{ voicemail_Timezone }}</Timezone>
+           <NotificationTextLanguage>{{ voicemail_NotificationTextLanguage }}</NotificationTextLanguage>
+            <VmFamilyMailboxStatus>{{ voicemail_VmFamilyMailboxStatus }}</VmFamilyMailboxStatus>
+            <MWIEnabled>{{ voicemail_MWIEnabled }}</MWIEnabled>
+         </Subscriber>
+      </Data>
+   </Request>
+</Provisioning>

@@ -1,0 +1,60 @@
+#----------------> DU_VENDOR Add slice in nsaddInfo for each gnbCellDuVsConfig <--------------
+- name: Add slice for nsAddInfo for each gnbCellDuVsConfig(add new slice)
+  uri:
+    url: "{{ deployment_location.properties.mcms_host }}/cms-service/webapi/apiservice/ProvMnS/v1/gnbvs,gnbDuConfig={{ du_id }},gnbCellDuVsConfig={{ gnbCellDuVsConfigId }},nsCfgInfo/nsAddInfo"
+    method: PUT
+    body: "{{lookup('template', 'modifynsCfgInfoDUvendor.json.j2')}}"
+    body_format: json
+    headers:
+      apiInvokerId: "{{ deployment_location.properties.apiInvokerId }}"
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no 
+    status_code: [201]
+    return_content: yes        
+  register: updatensCfgInfonsAddInfo
+  # loop: "{{ mysequencegnbCellDuVsConfig }}"  
+  ignore_errors: yes
+  failed_when: "updatensCfgInfonsAddInfo.status not in [201]"
+
+# - name: updatensCfgInfo nsAddInfo print
+  # copy:
+    # dest: "/tmp/ansible_log/proDUVenAddnsCfgInfonsAddInfo.json.j2"
+    # content: "{{ updatensCfgInfonsAddInfo }}"
+
+- name: Insert a line at the end of a file to print updatepLMNInfoList.
+  lineinfile:
+    path: "{{ filen }}"
+    line: |
+           __________________________________________________________________________
+           
+           ##### PUT API call to Add slice for nsAddInfo for each gnbCellDuVsConfig(add new slice)
+           
+           URL:  
+           {{ updatensCfgInfonsAddInfo.url }}
+           
+           order_send:
+           {{lookup('template', 'modifynsCfgInfoDUvendor.json.j2')}}
+           
+           result_return: 
+           {{ updatensCfgInfonsAddInfo.json | to_nice_json }}
+           __________________________________________________________________________
+
+#-----------------> Print error message when apiInvokerId is Invalid/incorrect/expired <------------
+- name: creating variable and setting value for message error when apiInvokerId is Invalid/incorrect/expired
+  set_fact:
+    target_e: "{{ updatensCfgInfonsAddInfo.content | regex_search('message') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ updatensCfgInfonsAddInfo.content | replace('\"','') | replace('{','') | replace('}','') }}. Either apiInvokerId is Invalid/incorrect/expired, please verify the apiInvokerId."
+  when: "target_e=='message'"
+
+#-----------> Print updatensCfgInfonsAddInfo error message if Add/Delete API calls fails <---------------
+- name: creating variable and setting value for errorInfo  
+  set_fact:
+    target_e1: "{{ updatensCfgInfonsAddInfo.content | regex_search('error') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ updatensCfgInfonsAddInfo.content | replace('\"','') | replace('{','') | replace('}','') | replace('error:','') }}"
+  when: "target_e1=='error'"

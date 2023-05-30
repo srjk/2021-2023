@@ -1,0 +1,12 @@
+<ProvRequest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.mavenir.com/provisioning/services/subscriber">
+      <Header>
+         <Command>{{ voicemail_command1 }}</Command>
+         <Version>{{ voicemail_Version }}</Version>
+         <RequestID>{{ kami_response.json.extOrderId }}</RequestID>
+         <HostReference>{{ voicemail_hostreference }}</HostReference>
+         <EntityName>{{ voicemail_EntityName }}</EntityName>
+         <Key>
+             <TelephoneNumber>{{ GPSI }}</TelephoneNumber>
+         </Key>
+      </Header>
+</ProvRequest>

@@ -1,0 +1,170 @@
+name: assembly::rfs_sim_ansible::1.0
+description: descriptor for sim
+properties:
+  operation:
+    volatile: true
+    description: Provide/Cease/Suspend/Resume
+    default: Provide
+  deploymentLocation:
+    description: site specific
+    type: string
+    default: SUBPROV
+  resourceManager:
+    type: string
+    read-only: true
+    default: brent
+  extOrderId:
+    volatile: true
+  loop_back:
+    type: string
+    volatile: true
+    default: OFF    
+  serviceType:
+    type: string
+  # PGW_ADA_HOST:
+    # type: string
+    # default: "http://dish-network-stub-svc:8184"    
+  SUPI:
+    volatile: true
+  Old_SUPI:
+    volatile: true
+  CurrentSUPI:
+    volatile: true
+  GPSI:
+    volatile: true
+  #Old_GPSI:
+    #volatile: true
+  href:
+    type: string
+  priority:
+    type: string
+  description:
+    type: string
+  category:
+    type: string
+  state:
+    type: string
+  orderDate: 
+    type: string
+  completionDate:
+    type: string
+  requestedStartDate:
+    type: string
+  requestedCompletionDate:
+    type: string
+  expectedCompletionDate:
+    type: string
+  startDate:
+    type: string
+  action:
+    type: string
+  OrderSubType:
+    type: string
+  CustomerID:
+    type: string
+  ICCID:
+    volatile: true
+  Old_ICCID:
+    volatile: true 
+  BlockSIM:
+    volatile: true
+  ProvisioningType:
+    type: string
+    default: TNCO
+  # ServiceState:
+  #   type: string
+  #   default: Active
+  SubscriberID:
+    type: string
+  SubscriberType:
+    type: string
+    default: Pre-Paid 
+  reference_assembly:
+    type: string
+composition:
+  sim:
+    properties:
+      instance_name:
+        value: ${instance.name}
+      operation:
+        value: ${operation}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      resourceManager:
+        value: ${resourceManager}
+      extOrderId:
+        value: ${extOrderId}
+      loop_back:
+        value: ${loop_back}        
+      serviceType:
+        value: ${serviceType}
+      # PGW_ADA_HOST:
+       # value: ${PGW_ADA_HOST}
+      SUPI:
+        value: ${SUPI}
+      Old_SUPI:
+        value: ${Old_SUPI}
+      CurrentSUPI:
+        value: ${CurrentSUPI}
+      GPSI:
+        value: ${GPSI}
+      #Old_GPSI:
+        #value: ${Old_GPSI}
+      href:
+        value: ${href}
+      priority:
+        value: ${priority}
+      description:
+        value: ${description}
+      category:
+        value: ${category}
+      state:
+        value: ${state}
+      orderDate: 
+        value: ${orderDate}
+      completionDate: 
+        value: ${completionDate}
+      requestedStartDate: 
+        value: ${requestedStartDate}
+      requestedCompletionDate: 
+        value: ${requestedCompletionDate}
+      expectedCompletionDate:
+        value: ${expectedCompletionDate}
+      startDate:
+        value: ${startDate} 
+      action:
+        value: ${action}
+      OrderSubType:
+        value: ${OrderSubType}
+      CustomerID:  
+        value: ${CustomerID}
+      ICCID:
+        value: ${ICCID} 
+      Old_ICCID:
+        value: ${Old_ICCID}
+      BlockSIM:
+        value: ${BlockSIM}
+      ProvisioningType:
+        value: ${ProvisioningType}
+      # ServiceState:  
+      #   value: ${ServiceState}
+      SubscriberID:    
+        value: ${SubscriberID}
+      SubscriberType: 
+        value: ${SubscriberType} 
+      reference_assembly:
+        value: ${reference_assembly}
+    type: $lmctl:/contains:/sim_rfs:/descriptor_name
+    quantity: 1
+references:
+   reference_assembly:
+    properties:
+      resourceManager:
+        value: ${resourceManager}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      operation:
+        value: ${operation}
+      name:
+        value: ${reference_assembly}
+    type: assembly::rfs_databundle_ansible::1.0

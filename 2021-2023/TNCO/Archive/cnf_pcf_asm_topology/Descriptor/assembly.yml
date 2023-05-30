@@ -1,0 +1,60 @@
+name: assembly::cnf_pcf_asm_topology::1.0
+description: descriptor for provisioning PCF 
+properties:
+  operation:
+    description: addSliceConfig
+    volatile: true
+    default: Configure
+  deploymentLocation:
+    description: site specific
+    type: string
+    default: DFW
+  resourceManager:
+    type: string
+    read-only: true
+    default: brent
+  instance_name:
+    description: name of assembly instance
+    type: string
+    default: "or-nsf001c-usw2aza001rd-5466c9578-4sh6w"
+  nameSpace:
+    type: string
+    default: "usw2-ns-or-pcf-001"      
+  # vnfInstanceName:
+  #   description: cnf_instance_name
+  #   default: cnf_instance_name
+  # vnfdId:
+  #   description: cnf_package_identifier
+  #   default: cnf_package_identifier
+  # vnfPkgId:
+  #   description: cnf_package_identifier
+  #   default: VnfPackage-vMRF
+  # vnfInstanceId:
+  #   type: string
+composition:
+  pcf:
+    properties:
+      operation:
+        value: ${operation}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      resourceManager:
+        value: ${resourceManager}
+      nameSpace:
+        value: ${nameSpace}
+      instance_name:
+        value: ${instance.name}      
+        
+      # vnfdId:
+      #   value: ${vnfdId}
+      # vnfInstanceName:
+      #   value: ${vnfInstanceName}    
+      # vnfPkgId:
+      #   value: ${vnfPkgId}
+      # vnfInstanceId:
+      #   value: ${vnfInstanceId}
+    type: $lmctl:/contains:/pcf:/descriptor_name
+    quantity: 1
+operations:
+  addSliceConfig:
+    source-operation: pcf.addSliceConfig

@@ -1,0 +1,25 @@
+#----------------------->Set Enum url    <----------------------------
+- name: "##ALM## setting Enum url"
+  set_fact:
+    enum_cease_url: "{{ deployment_location.properties.enum_cease_url2 }}"
+
+
+#---------------------> SOAP call for TAS/ENUM Cease operation for Secondary URL <--------------------------
+- name: "##ENUM##Call RestAPI of SPML/TAS/ENUM Adapter"
+  environment:
+    SSL_CERT_FILE: "pgwcertificate.cert"
+  uri:
+    url: "{{ enum_cease_url }}"
+    method: POST
+    body: "{{lookup('template', 'nokia_provisioning_gw_enum_cease_request.xml.j2')}}"
+    #status_code: [200,201]
+    # body_format: json
+    return_content: yes    
+    headers:
+      content-type: "text/xml"
+      ReturnResultType: "FULL"
+  register: result
+  until: result.status == 200
+  retries: "{{ RETRY_COUNT }}"
+  delay: "{{ RETRY_INTERVAL }}"
+  # ignore_errors: yes

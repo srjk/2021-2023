@@ -1,0 +1,153 @@
+<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/">
+	<soap-env:Header/>
+	<soap-env:Body>
+		<PlexViewRequest Command="ent-ngfs-subscriber-v2" ProvisioningGroup="TASProv" RequestId="{{ extOrderId }}" SessionId="somuser*Passw0rd12345!">
+		{% if "VOICE" in  listrequestedServices  %}
+			<SubParty>
+				<PartyId>{{ GPSI }}</PartyId>
+				<DisplayName>{{ GPSI }}</DisplayName>
+				<Category>{{ tas_SubParty_Category }}</Category>
+				<PrimaryPUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PrimaryPUID>
+				<PrimaryPUIDCPEProfileNumber>{{ tas_SubParty_PrimaryPUIDCPEProfileNumber }}</PrimaryPUIDCPEProfileNumber>
+				<CsdFlavor>{{ tas_SubParty_CsdFlavor }}</CsdFlavor>
+				<CsdDynamic>{{ tas_SubParty_CsdDynamic }}</CsdDynamic>
+				<CallLimit>{{ tas_SubParty_CallLimit }}</CallLimit>
+				<ServiceSuspension>false</ServiceSuspension>
+			</SubParty>
+			<DialingPlan>
+				<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+				<Assigned>{{ tas_DialingPlan_assigned }}</Assigned>
+				<PrefixandFeatureCode>{{ tas_DialingPlan_PrefixandFeatureCode }}</PrefixandFeatureCode>
+				<E164NormAndCodeConv>{{ tas_DialingPlan_E164NormAndCodeConv }}</E164NormAndCodeConv>
+			</DialingPlan>
+			<CallingLineId>
+				<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+				<Assigned>{{ tas_CallingLineId_assigned }}</Assigned>
+				<CallingLineIdRestriction>PUBLIC</CallingLineIdRestriction>
+				<CLIREditAllowed>{{ tas_callinglineid_CLIREditAllowed }}</CLIREditAllowed>
+				<CallingLineIdPresentation>{{ tas_CallingLineId_CallingLineIdPresentation }}</CallingLineIdPresentation>
+				<CallingNamePresentation>{{ tas_CallingLineId_CallingNamePresentation }}</CallingNamePresentation>
+			</CallingLineId>
+			<CallForwardDefault>
+				<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+				<Assigned>{{ tas_CallForwardDefault_Assigned }}</Assigned>
+				<ForwardToType>{{ tas_CallForwardDefault_ForwardToType }}</ForwardToType>
+				<CfdMode>{{ tas_CallForwardDefault_CfdMode }}</CfdMode>
+				<EditPermission>{{ tas_CallForwardDefault_EditPermission }}</EditPermission>
+				<EditPermissionsNoAnswer>{{ tas_CallForwardDefault_EditPermissionsNoAnswer }}</EditPermissionsNoAnswer>
+				<NoAnswerTimeout>{{ tas_CallForwardDefault_NoAnswerTimeout }}</NoAnswerTimeout>
+				<Activated>{{ tas_CallForwardDefault_Activated }}</Activated>
+				<BusyActive>{{ tas_CallForwardDefault_BusyActive }}</BusyActive>
+				<NoAnsActive>{{ tas_CallForwardDefault_NoAnsActive }}</NoAnsActive>
+			</CallForwardDefault>
+			{% if "VOICE_CF" not in  listrequestedServices  %}
+				<CallForwardingVari>
+					<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+					<Assigned>{{ tas_CallForwardingVari_assigned }}</Assigned>
+					<ReceiveNotify>{{ tas_CallForwardingVari_ReceiveNotify }}</ReceiveNotify>
+				</CallForwardingVari>
+				<CallForwardingBusy>
+					<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+					<Assigned>{{ tas_CallForwardingBusy_assigned }}</Assigned>
+					<ReceiveNotify>{{ tas_CallForwardingBusy_ReceiveNotify }}</ReceiveNotify>
+				</CallForwardingBusy>
+				<CallForwardingNoAns>
+					<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+					<Assigned>{{ tas_CallForwardingNoAns_assigned }}</Assigned>
+					<NoAnswerTimeout>{{ tas_CallForwardingNoAns_NoAnswerTimeout }}</NoAnswerTimeout>
+				</CallForwardingNoAns>
+				<CallForwardNotReach>
+					<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+					<Assigned>{{ tas_CallForwardNotReach_assigned }}</Assigned>
+				</CallForwardNotReach>
+			{% endif %}
+            {% if "VOICE_SPAM" not in  listrequestedServices  %}
+				<SelectiveCallRejct>
+					<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+					<Assigned>{{ tas_SelectiveCallRejct_assigned }}</Assigned>
+				</SelectiveCallRejct>
+			{% endif %}
+				<AnonymousCallRej>
+					<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+					<Assigned>{{ tas_AnonymousCallRej_assigned }}</Assigned>
+				</AnonymousCallRej> 
+			{% if "VOICE_ROAM" not  in  listrequestedServices  %}
+					<CallBlocking>
+						<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org"</PublicUID>
+						<Assigned>{{ tas_callBlocking_assigned }}</Assigned>
+						<BlockRoamNtwk>{{ tas_callBlocking_blockroamntwk }}</BlockRoamNtwk>				
+					</CallBlocking>
+					<CallBarring>
+						<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+						<Assigned>{{ tas_callBarring_assigned }}</Assigned>
+						<RoamNtwk>{{ tas_callBarring_roamntwk }}</RoamNtwk>
+					</CallBarring>
+			{% endif %}
+				<MsgWaitingInd>
+					<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+					<Assigned>{{ tas_MsgWaitingInd_assigned }}</Assigned>  
+					<MWINotify>{{ tas_MsgWaitingInd_MWINotify }}</MWINotify>
+					<Activated>{{ tas_MsgWaitingInd_Activated }}</Activated>
+				</MsgWaitingInd>
+				<VoiceMail>
+					<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+					<Assigned>{{ tas_VoiceMail_assigned }}</Assigned>
+					<ForwardToDN>{{ tas_VoiceMail_ForwardToDN }}</ForwardToDN>
+				</VoiceMail>
+				<AdvancedConference>
+					<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+					<Assigned>{{ tas_AdvancedConference_assigned }}</Assigned>
+					<MaxConfLegs>{{ tas_AdvancedConference_MaxConfLegs }}</MaxConfLegs>
+					<SendNotify>{{ tas_AdvancedConference_SendNotify }}</SendNotify>
+				</AdvancedConference>
+				<AutomaticCallBack>
+					<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+					<Assigned>{{ tas_AutomaticCallBack_assigned }}</Assigned>
+				</AutomaticCallBack>
+				<OnlineCharging>
+						<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+							<Assigned>{{ tas_OnlineCharging_assigned }}</Assigned>
+							<SessionBasedOption>{{ tas_OnlineCharging_SessionBasedOption }}</SessionBasedOption>
+				</OnlineCharging>
+		{% endif %}
+		{% if "VOICE_ROAM" in  listrequestedServices  %}
+			<CallBlocking>
+				<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+				<Assigned>{{ tas_callBlocking_assigned1 }}</Assigned>
+			</CallBlocking>
+			<CallBarring>
+				<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+				<Assigned>{{ tas_callBarring_assigned1 }}</Assigned>
+			</CallBarring>
+		{% endif %}
+		{% if "VOICE_CF" in  listrequestedServices  %}			
+			<CallForwardingVari>
+				<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+				<Assigned>{{ tas_CallForwardingVari_assigned }}</Assigned>
+				<ReceiveNotify>{{ tas_CallForwardingVari_ReceiveNotify }}</ReceiveNotify>
+			</CallForwardingVari>
+			<CallForwardingBusy>
+				<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+				<Assigned>{{ tas_CallForwardingBusy_assigned }}</Assigned>
+				<ReceiveNotify>{{ tas_CallForwardingBusy_ReceiveNotify }}</ReceiveNotify>
+			</CallForwardingBusy>
+			<CallForwardingNoAns>
+				<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+				<Assigned>{{ tas_CallForwardingNoAns_assigned }}</Assigned>
+				<NoAnswerTimeout>{{ tas_CallForwardingNoAns_NoAnswerTimeout }}</NoAnswerTimeout>
+			</CallForwardingNoAns>
+			<CallForwardNotReach>
+				<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+				<Assigned>{{ tas_CallForwardNotReach_assigned }}</Assigned>
+			</CallForwardNotReach>
+		{% endif %}
+		{% if "VOICE_SPAM" in  listrequestedServices  %}
+			<SelectiveCallRejct>
+				<PublicUID>+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PublicUID>
+				<Assigned>{{ tas_SelectiveCallRejct_assigned }}</Assigned>
+			</SelectiveCallRejct>
+		{% endif %}
+		</PlexViewRequest>
+	</soap-env:Body>
+</soap-env:Envelope>
+

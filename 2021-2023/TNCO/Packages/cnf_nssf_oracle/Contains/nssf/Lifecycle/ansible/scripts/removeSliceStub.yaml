@@ -1,0 +1,7 @@
+---
+- name: removeSliceStub
+  hosts: localhost
+  connection: local
+  gather_facts: True
+  roles:
+    - role: ../roles/removeSliceStub

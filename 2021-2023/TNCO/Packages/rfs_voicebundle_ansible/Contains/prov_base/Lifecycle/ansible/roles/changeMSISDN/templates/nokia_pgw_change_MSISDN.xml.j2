@@ -1,0 +1,10 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+              <soapenv:Body>
+                             <spml:changeIdRequest timestamp="true" requestID="{{ extOrderId }}" xmlns:spml="urn:siemens:names:prov:gw:SPML:2:0" xmlns:subscriber="urn:siemens:names:prov:gw:SDL_MULTIAPPSUBSCRIBER:1:0">
+                                           <version>SDL_MULTIAPPSUBSCRIBER_v10</version> 
+                                           <objectclass>Subscriber</objectclass> 
+                                           <oldId alias="msisdn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="subscriber:SubscriberSwapIdentifier">{{ Old_GPSI }}</oldId> 
+                                           <newId alias="msisdn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="subscriber:SubscriberSwapIdentifier">{{ GPSI }}</newId>
+                             </spml:changeIdRequest>
+              </soapenv:Body>
+</soapenv:Envelope>

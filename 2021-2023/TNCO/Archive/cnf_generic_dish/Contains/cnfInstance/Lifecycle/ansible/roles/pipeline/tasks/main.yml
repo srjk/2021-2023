@@ -1,0 +1,30 @@
+- name: copy
+  copy:
+    dest: "/tmp/test"
+    content: |
+      {{ cnfInstance }}
+- set_fact:
+    filename: "/tmp/{{ instance_name }}"
+- get_url:
+    url: "http://ib-orc-nexus3-001:8081/nexus3/repository/nflcm/{{ cnfInstance.config_context.site_bucket_tar }}"
+    username: admin
+    password: Dish@123
+    dest: "/tmp/{{ instance_name }}.tar"
+    validate_certs: no
+
+
+- name: trigger python
+  shell: "python3 test_status.py {{ filename }} {{ role }} {{ session }} {{ region_name }} {{ kafka_pod }} {{ kafka_topic }}"
+  register: result
+# - set_fact:
+#     test_result: "{{ result.stdout }}"
+
+# - set_fact:
+#     output__commitId: "{{ test_result['commitId'] }}"
+#     output__pipeline_id: "{{ test_result['pipeline_id'] }}"
+#     output__response_status: "{{ test_result['response_status'] }}"
+- set_fact:
+    output__response_status: "{{ result.stdout }}"
+- fail:
+    msg: "pipeline {{ result.stdout }}"
+  when: "result.stdout != 'Succeeded'"

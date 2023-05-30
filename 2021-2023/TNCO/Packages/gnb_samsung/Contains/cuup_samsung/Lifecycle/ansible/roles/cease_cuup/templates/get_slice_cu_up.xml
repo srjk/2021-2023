@@ -1,0 +1,16 @@
+<nc:rpc xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0">
+  <nc:get>
+    <nc:filter nc:type="subtree">
+      <gnbcuupcnf:managed-element xmlns:gnbcuupcnf="http://www.samsung.com/global/business/5GvRAN/ns/gnb-cu-up-cnf">
+        <gnbcuupcnf:gnb-cu-up-function>
+          <gnbcuupcnf:gnb-cu-up-slice-info>
+            <gnbcuupcnf:slice-index/>
+            <gnbcuupcnf:sst>{{ cuup_sst }}</gnbcuupcnf:sst>
+            <gnbcuupcnf:sd>{{ cuup_sd }}</gnbcuupcnf:sd>
+            <gnbcuupcnf:plmn-index/>
+          </gnbcuupcnf:gnb-cu-up-slice-info>
+        </gnbcuupcnf:gnb-cu-up-function>
+      </gnbcuupcnf:managed-element>
+    </nc:filter>
+  </nc:get>
+</nc:rpc>

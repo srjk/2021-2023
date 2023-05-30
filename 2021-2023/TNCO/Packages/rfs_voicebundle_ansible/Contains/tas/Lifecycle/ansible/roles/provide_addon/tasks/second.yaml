@@ -1,0 +1,26 @@
+
+#-----------------------> Set TAS URL  <----------------------------
+- name: "##ALM##setting filename"
+  set_fact:
+    tas_provide_url: "{{ deployment_location.properties.tas_provide_url2 }}"
+
+
+
+#-----------------------> Call for TAS provide_addon operation for Secondary URL <----------------------------
+- name: "##TAS##Call Soap of SPML Adapter"
+  environment:
+    SSL_CERT_FILE: "tascertfile.cert"
+  uri:
+    url: "{{ tas_provide_url }}"
+    method: POST
+    body: "{{lookup('template', 'Bundle_Voice_Provide_TAS.xml.j2')}}"
+    #status_code: [200,201]
+    return_content: yes    
+    headers:
+      content-type: "text/xml"
+      ReturnResultType: "FULL"
+      return_content: yes
+  register: result
+  until: result.status == 200
+  retries: "{{ RETRY_COUNT }}"
+  delay: "{{ RETRY_INTERVAL }}"

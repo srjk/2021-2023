@@ -1,0 +1,22 @@
+<nc:rpc xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0">
+  <nc:edit-config>
+    <nc:target>
+      <nc:running/>
+    </nc:target>
+    <nc:default-operation>none</nc:default-operation>
+    <nc:config>
+      <uducnf:managed-element xmlns:uducnf="http://www.samsung.com/global/business/5GvRAN/ns/gnbducnf">
+        <uducnf:gnb-du-function>
+          <uducnf:gutran-du-cell>
+            <uducnf:gutran-du-cell-entries>
+              <uducnf:cell-identity>{{ DUCellIdentity_Item_delete }}</uducnf:cell-identity>
+              <uducnf:cell-slice-group-cac-info nc:operation="merge">
+                <uducnf:slice-cac-usage>not-use</uducnf:slice-cac-usage>
+              </uducnf:cell-slice-group-cac-info>
+            </uducnf:gutran-du-cell-entries>
+          </uducnf:gutran-du-cell>
+        </uducnf:gnb-du-function>
+      </uducnf:managed-element>
+    </nc:config>
+  </nc:edit-config>
+</nc:rpc>

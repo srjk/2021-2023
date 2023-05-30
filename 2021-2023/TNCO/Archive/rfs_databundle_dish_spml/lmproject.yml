@@ -1,0 +1,10 @@
+schema: '2.0'
+name: rfs_databundle_dish_spml
+version: '1.0'
+type: Assembly
+resource-manager: Brent
+contains:
+- name: databundle_rfs_spml
+  type: Resource
+  resource-manager: Brent
+  directory: databundle_rfs_spml

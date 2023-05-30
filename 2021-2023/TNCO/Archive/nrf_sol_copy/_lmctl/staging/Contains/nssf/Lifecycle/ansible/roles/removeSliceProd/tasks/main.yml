@@ -1,0 +1,55 @@
+- name: Create the list
+  set_fact:
+    list_nssf_defaultGrantName: "{{ nssf_defaultGrantName.split(',')| map('trim')| list }}"
+    list_nssf_nssRuleName: "{{ nssf_nssRuleName.split(',')| map('trim')| list }}"
+    list_nssf_tai: "{{ nssf_tai.split(',')| map('trim')| list }}"
+
+
+
+- name: Delete network slicee slection rule
+  uri:
+    url:  "http://dish-nssf-stub-svc:8190/nssfStub/nnssf-configuration/v1/nssrules/{{ item }}"
+    method: DELETE
+    status_code: 204
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+   # return_content: yes
+  loop: "{{ list_nssf_nssRuleName }}"
+  register: result
+
+- name: Delete Configured NSSAIs
+  uri:
+    url: "http://dish-nssf-stub-svc:8190/nssfStub/nnssf-configuration/v1/configuredsnssais/{{ nssf_amfSetId }}/{{ nssf_mcc }}/{{ nssf_mnc }}/{{ item }}/{{ nssf_sst }}/{{ nssf_sd }}"
+    method: DELETE
+    status_code: 204
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    #return_content: yes
+  loop: "{{ list_nssf_tai }}"
+  register: resultnssi
+
+- name: Delete Default Grants
+  uri:
+    url: "http://dish-nssf-stub-svc:8190/nssfStub/nnssf-configuration/v1/nssaiauth/{{ item }}"
+    method: DELETE
+    status_code: 204
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    #return_content: yes
+  loop: "{{ list_nssf_defaultGrantName }}"
+  register: result
+
+- name: Delete NSI Profile
+  uri:
+    url: "http://dish-nssf-stub-svc:8190/nssfStub/nnssf-configuration/v1/nsiprofiles/{{ nssf_nsiProfileName }}"
+    method: DELETE
+    status_code: 204
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+   # return_content: yes
+  #loop: "{{ list_nssf_nsiProfileName }}"
+  register: result

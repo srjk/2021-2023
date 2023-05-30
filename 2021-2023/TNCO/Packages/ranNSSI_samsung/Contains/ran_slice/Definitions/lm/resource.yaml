@@ -1,0 +1,92 @@
+name: resource::ran_slice-ranNSSI_samsung::1.0
+description: Resource for nwslice
+properties:
+  operation:
+    description: Install/Configure/Uninstall
+    volatile: true
+    default: Install
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: DFW
+  resourceManager:
+    type: string
+    default: brent
+  gnb_id:
+    type: string
+    # # default: 88
+  slice_sst:
+    type: string
+  slice_sd:
+    type: string
+  # slice_snssai:
+    # type: string
+    # default: 01000022
+  # slice_mcc:
+  #   type: string
+  #   default: 313
+  # slice_mnc:
+  #   type: string
+  #   default: 340
+  plmn_index:
+    type: string
+    default: 0
+  cucp_id:
+    type: list
+    entry-schema:
+      type: string
+  cuup_id:
+    type: list
+    entry-schema:
+      type: string
+  du_id:
+    type: list
+    entry-schema:
+      type: string
+  cell_id:
+    type: list
+    entry-schema:
+      type: string
+  # samsung_usm_host:
+    # type: string
+    # default: https://172.24.59.21:7443
+    # default: https://internal-k8s-use2az1n-iborcna4-8117d3b43e-1665733297.us-east-2.elb.amazonaws.com/samsungstub
+  gnb_info:
+    type: list    
+  bpi_eMBBNetworkSlice_name:
+    type: string
+    default: RRR
+  bpi_eMBBNetworkSlice_id:
+    type: string
+    default: RRR
+  bpi_ServiceProfile_name:
+    type: string
+    default: RRR
+  bpi_ServiceProfile_id:
+    type: string
+    default: RRR
+  bpi_ranNetworkSliceSubnet_name:
+    type: string
+    default: RRR
+  bpi_ranNetworkSliceSubnet_id:
+    type: string
+    default: RRR
+  bpi_SliceProfile_name:
+    type: string
+    default: Samsung
+  bpi_SliceProfile_id:
+    type: string
+    default: USM
+lifecycle:
+  Uninstall: 
+    drivers:
+      ansible:
+        selector:
+          infrastructure-type:
+          - '*'
+  Install: {}
+default-driver:
+  ansible:
+    selector:
+      infrastructure-type:
+      - '*'

@@ -1,0 +1,9 @@
+schema: '2.0'
+name: ranNSSI
+version: '1.0'
+type: Assembly
+contains:
+- name: ran_slice
+  type: Resource
+  resource-manager: Brent
+  directory: ran_slice

@@ -1,0 +1,645 @@
+#-----------------------> Start time from system  <----------------------------
+- name: "##ALM## Get timestamp from the system"
+  shell: "date +%Y-%m-%d%H:%M:%S.%5N"
+  register: stime
+
+
+
+
+# convert ALM properties to json provide request for South Bound endpoint
+- name: Create the list
+  set_fact:
+    loopback: "false"
+    list_pcf_qosData_Id: "{{ pcf_qosData_Id.split(',') | map('trim') |  list }}"
+    list_pcf_qosData_Name: "{{ pcf_qosData_Name.split(',') | map('trim') | list }}"
+    list_pcf_qosData_5Qi: "{{ pcf_qosData_5Qi.split(',')| map('trim') | list }}"
+    list_pcf_qosData_MaxBrUl: "{{ pcf_qosData_MaxBrUl.split(',')| map('trim') | list }}"
+    list_pcf_qosData_MaxBrDl: "{{ pcf_qosData_MaxBrDl.split(',')| map('trim') | list }}"
+    list_pcf_qosData_GbrUl: "{{ pcf_qosData_GbrUl.split(',')| map('trim') | list }}"
+    list_pcf_qosData_GbrDl: "{{ pcf_qosData_GbrDl.split(',')| map('trim') | list }}"
+    list_pcf_qosData_Qnc: "{{ pcf_qosData_Qnc.split(',') | map('trim')| list }}"
+    list_pcf_qosData_ReflectiveQoS: "{{ pcf_qosData_ReflectiveQoS.split(',') | map('trim')| list }}"
+    list_pcf_qosData_PriorityLevel: "{{ pcf_qosData_PriorityLevel.split(',') | map('trim')| list }}"
+    list_pcf_qosData_DefQoSFlowInd: "{{ pcf_qosData_DefQoSFlowInd.split(',') | map('trim')| list }}"
+    list_pcf_qosData_ArpPriority: "{{ pcf_qosData_ArpPriority.split(',') | map('trim')| list }}"
+    list_pcf_qosData_ArpPreemptCap: "{{ pcf_qosData_ArpPreemptCap.split(',') | map('trim')| list }}"
+    list_pcf_qosData_ArpPreemptVuln: "{{ pcf_qosData_ArpPreemptVuln.split(',') | map('trim')| list }}"
+    list_pcf_pccRule_Id: "{{ pcf_pccRule_Id.split(',') | map('trim')| list }}"
+    list_pcf_pccRule_Name: "{{ pcf_pccRule_Name.split(',') | map('trim')| list }}"
+    list_pcf_pccRule_Type: "{{ pcf_pccRule_Type.split(',') | map('trim')| list }}"
+    list_pcf_pccRule_DLFlowName: "{{ pcf_pccRule_DLFlowName.split(',') | map('trim')| list }}"
+    list_pcf_pccRule_DLFlowDirection: "{{ pcf_pccRule_DLFlowDirection.split(',') | map('trim')| list }}"
+    list_pcf_pccRule_DLFlowDesc: "{{ pcf_pccRule_DLFlowDesc.split(',') | map('trim')| list }}"
+    list_pcf_pccRule_ULFlowName: "{{ pcf_pccRule_ULFlowName.split(',') | map('trim')| list }}"
+    list_pcf_pccRule_ULFlowDirection: "{{ pcf_pccRule_ULFlowDirection.split(',')| map('trim') | list }}"
+    list_pcf_pccRule_ULFlowDesc: "{{ pcf_pccRule_ULFlowDesc.split(',') | map('trim')| list }}"
+    list_pcf_pccRule_precedence: "{{ pcf_pccRule_precedence.split(',') | map('trim')| list }}"
+    list_pcf_pccRule_refQoSData:  "{{ pcf_pccRule_refQoSData.split(',') | map('trim')| list }}"
+    list_pcf_qosInfo_Id: "{{ pcf_qosInfo_Id.split(',') | map('trim')| list }}"
+    list_pcf_qosInfo_name: "{{ pcf_qosInfo_name.split(',') | map('trim')| list }}"
+    list_pcf_qosInfo_desc:   "{{ pcf_qosInfo_desc.split(',') | map('trim')| list }}"
+    list_pcf_qosInfo_5Qi:  "{{ pcf_qosInfo_5Qi.split(',') | map('trim')| list }}"
+    list_pcf_qosInfo_priorityLevel:  "{{ pcf_qosInfo_priorityLevel.split(',') | map('trim')| list }}"
+    list_pcf_qosInfo_preemptCap:   "{{ pcf_qosInfo_preemptCap.split(',') | map('trim')| list }}"
+    list_pcf_qosInfo_preemptVuln:  "{{ pcf_qosInfo_preemptVuln.split(',') | map('trim')| list }}"
+    list_pcf_sessionRule_Id: "{{ pcf_sessionRule_Id.split(',') | map('trim')| list }}"
+    list_pcf_sessionRule_Name: "{{ pcf_sessionRule_Name.split(',') | map('trim')| list }}"
+    list_pcf_sessionRule_Ambr_Ul: "{{ pcf_sessionRule_Ambr_Ul.split(',') | map('trim')| list }}"
+    list_pcf_sessionRule_Ambr_Dl: "{{ pcf_sessionRule_Ambr_Dl.split(',') | map('trim')| list }}"
+    list_pcf_sessionRule_QosId: "{{ pcf_sessionRule_QosId.split(',') | map('trim')| list }}"
+    list_pcf_policyTable_throttledBw: "{{ pcf_policyTable_throttledBw.split(',') | map('trim')| list }}"
+
+- name: Creates directory
+  file:
+    path: /tmp/ansible_log
+    state: directory
+    mode: 0775
+
+- name: setting filename
+  set_fact:
+    filename: /tmp/ansible_log/{{ instance_name }}_Create_PCF.log
+    policyTable: /tmp/policytable_{{ ansible_date_time.iso8601 }}.json
+- shell: "python3 test.py"
+  register: start_time
+  no_log: True
+
+- name: generate SB json and copy       
+  copy:
+    dest: "{{ filename }}"
+    content: |
+       ***********************************
+       start_time:  {{ start_time.stdout }}
+
+- name: generate new file
+  copy: 
+    dest: "/tmp/{{ instance_name }}.json.j2"
+    content: |
+      {
+         "afChargingIdentifier": "{{ pcf_chgData_afChargingIdentifier }}"
+         "appSvcProvId":  "{{ pcf_chgData_appSvcProvId }}",
+          "chgId": "{{ pcf_chgData_chgId }}",
+          "meteringMethod": "{{ pcf_chgData_meteringMethod }}",
+          "name": "{{ pcf_chgData_profileName }}",
+          "offline": "{{ pcf_chgData_offline }}",
+          "online": "{{ pcf_chgData_online }}",
+          "ratingGroup": "{{ pcf_chgData_ratingGroup }}",
+           "reportingLevel": "{{ pcf_chgData_reportingLevel }}",
+           "sdfHandl": "{{ pcf_chgData_sdfHand }}",
+           "servicexId": "{{ pcf_chgData_serviceId }}",
+           "sponsorId": "{{ pcf_chgData_sponsorId }}"
+         }
+
+- name:  create Qos data
+  copy: 
+    dest: "/tmp/{{ item.0 }}_Qos_data.json.j2"
+    content: |
+      {
+        "qosId": "{{ item.0 }}",
+        "name": "{{ item.1 }}",
+        "5qi": "{{ item.2 }}",
+        "maxbrUl": "{{ item.3 }}",
+        "maxbrDl": "{{ item.4 }}",
+        "gbrUl": "{{ item.5 }}",
+        "gbrDl": "{{ item.6 }}",
+        "qnc": "{{ item.7 }}",
+        "reflectiveQos": "{{ item.8 }}",
+        "priorityLevel": "{{ item.9 }}",
+        "defQosFlowIndication": "{{ item.10 }}",
+        "arp": {
+            "priorityLevel": "{{ item.11 }}",
+            "preemptCap": "{{ item.12 }}",
+            "preemptVuln": "{{ item.13 }}"
+                }
+        }
+  loop: "{{ data[0]|zip(*data[1:])|list }}"
+  vars:
+    data:
+        -  "{{ list_pcf_qosData_Id }}"
+        -  "{{ list_pcf_qosData_Name }}"
+        -  "{{ list_pcf_qosData_5Qi }}"
+        -  "{{ list_pcf_qosData_MaxBrUl }}"
+        -  "{{ list_pcf_qosData_MaxBrDl }}"
+        -  "{{ list_pcf_qosData_GbrUl }}"
+        -  "{{ list_pcf_qosData_GbrDl }}"
+        -  "{{ list_pcf_qosData_Qnc }}"
+        -  "{{ list_pcf_qosData_ReflectiveQoS }}"
+        -  "{{ list_pcf_qosData_PriorityLevel }}"
+        -  "{{ list_pcf_qosData_DefQoSFlowInd }}"
+        -  "{{ list_pcf_qosData_ArpPriority }}"
+        -  "{{ list_pcf_qosData_ArpPreemptCap }}"
+        -  "{{ list_pcf_qosData_ArpPreemptVuln }}"
+
+- name:  create pcc rule
+  copy: 
+    dest: "/tmp/{{ item.0 }}_pcc_rule.json.j2"
+    content: |
+      {
+          "pccRuleId": "{{ item.0 }}",
+          "name": "{{ item.1 }}",
+          "type": "{{ item.2 }}",
+          "flowInfos": [
+          {
+            "name": "{{ item.3 }}",
+            "flowDirection": "{{ item.4 }}",
+            "flowDescription": "{{ item.5 }}"
+          },
+          {
+          "name": "{{ item.6 }}",
+          "flowDirection": "{{ item.7 }}",
+          "flowDescription": "{{ item.8 }}"
+          }
+        ],
+        "precedence": "{{ item.9 }}",
+        "refQosData": [
+        "{{ item.10 }}"
+         ]
+        }
+  loop: "{{ data[0]|zip(*data[1:])|list }}"
+  vars:
+    data:
+        -  "{{ list_pcf_pccRule_Id }}"
+        -  "{{ list_pcf_pccRule_Name }}"
+        -  "{{ list_pcf_pccRule_Type }}"
+        -  "{{ list_pcf_pccRule_DLFlowName }}"
+        -  "{{ list_pcf_pccRule_DLFlowDirection }}"
+        -  "{{ list_pcf_pccRule_DLFlowDesc }}"
+        -  "{{ list_pcf_pccRule_ULFlowName }}"
+        -  "{{ list_pcf_pccRule_ULFlowDirection }}"
+        -  "{{ list_pcf_pccRule_ULFlowDesc }}"
+        -  "{{ list_pcf_pccRule_precedence }}"
+        -  "{{ list_pcf_pccRule_refQoSData }}"
+
+- name:  create  qos info
+  copy: 
+    dest: "/tmp/{{ item.0 }}_Qos_info.json.j2"
+    content: |
+      {
+         "name": "{{ item.1 }}",
+         "description": "{{ item.2 }}",
+         "5qi": "{{ item.3 }}",
+         "arp": {
+           "priorityLevel": "{{ item.4 }}",
+           "preemptCap": "{{ item.5 }}",
+          "preemptVuln": "{{ item.6 }}"
+        }
+        }
+  loop: "{{ data[0]|zip(*data[1:])|list }}"
+  vars:
+    data:
+        -  "{{ list_pcf_qosInfo_Id }}"
+        -  "{{ list_pcf_qosInfo_name }}"
+        -  "{{ list_pcf_qosInfo_desc }}"
+        -  "{{ list_pcf_qosInfo_5Qi }}"
+        -  "{{ list_pcf_qosInfo_priorityLevel }}"
+        -  "{{ list_pcf_qosInfo_preemptCap }}"
+        -  "{{  list_pcf_qosInfo_preemptVuln }}"
+        
+- name:  create session info
+  copy: 
+    dest: "/tmp/{{ item.0 }}_session_info.json.j2"
+    content: |
+      {
+         "sessRuleId": "{{ item.0 }}",
+         "name": "{{ item.1 }}",
+         "authSessAmbr": {
+          "uplink": "{{ item.2 }}",
+            "downlink": "{{ item.3 }}"
+          },
+          "authDefQosId": "{{ item.4 }}"
+         }
+  loop: "{{ data[0]|zip(*data[1:])|list }}"
+  vars:
+    data:
+        -  "{{ list_pcf_sessionRule_Id}}"
+        -  "{{ list_pcf_sessionRule_Name}}"
+        -  "{{ list_pcf_sessionRule_Ambr_Ul }}"
+        -  "{{ list_pcf_sessionRule_Ambr_Dl }}"
+        -  "{{ list_pcf_sessionRule_QosId }}"
+        
+# - name: generate policy table
+#   copy: 
+#     dest: "/tmp/policy_table.json.j2"
+#     content: |
+#        {
+#           "SST": "{{ pcf_policyTable_sst }}",
+#           "SD": "{{ pcf_policyTable_sd }}",
+#           "dnn": "{{ pcf_policyTable_dnn }}",
+#           "Rate-plans": "{{ pcf_policyTable_ratePlan }}",
+#           "SessionRule": "{{ pcf_policyTable_sessionRule }}",
+#           "PccRuleList": [
+#             "{{ pcf_policyTable_pccRuleList }}"
+#           ]
+#         }
+
+# - name: generate SB json and copy it to utility server
+#   template:
+#     src: oracle_provisioning_qos_data_request.json.j2
+#     dest: /tmp/oracle_provisioning_qos_data_request.json
+
+
+# - name: Create QoS Data
+#   uri:
+#     url: "{{ ansible_env.PCF_HOST }}/oc-cnpolicy-configuration/v1/policydata/pcfsm/qosdata"
+#     method: POST
+#     body: "{{lookup('template', '/tmp/{{ item }}_Qos_data.json.j2')}}"
+#     status_code: 201
+#     body_format: json
+#     headers:
+#       content-type: "application/json"
+#       cache-control: "no-cache"
+#     return_content: yes
+#   loop: "{{ list_pcf_qosData_Id }}"
+#   register: shubham
+
+
+- include: qosdata.yaml
+  vars:
+    qosdata: "{{ item }}"
+    filen: "{{ filename }}"
+  loop: "{{ list_pcf_qosData_Id }}"
+  register: result
+
+- debug: msg="{{ list_pcf_qosData_Id }}"
+- debug: msg="{{ loopback }}"
+  
+- name: Delete Qos data
+  uri:
+    url:  "{{ PCF_HOST }}/oc-cnpolicy-configuration/v1/policydata/pcfsm/qosdata/{{ item }}"
+    method: DELETE
+    status_code: [204,404]
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    return_content: yes
+  loop: "{{ list_pcf_qosData_Id }}"
+  register: result
+  when: "loopback == true"
+
+- fail:
+    msg: "{{ fail_content }}"
+  when: "loopback == true"
+
+# - name: generate SB json and copy it to utility server
+#   template:
+#     src: oracle_provisioning_pcc_rule_request.json.j2
+#     dest: /tmp/oracle_provisioning_pcc_rule_request.json      
+
+
+# - name: Create a PCC Rule
+  # uri:
+    # url:  "{{ ansible_env.PCF_HOST }}/oc-cnpolicy-configuration/v1/policydata/pcfsm/pccrules"
+    # method: POST
+    # body: "{{lookup('template', '/tmp/{{ item }}_pcc_rule.json.j2')}}"
+    # status_code: 201
+    # body_format: json
+    # headers:
+      # content-type: "application/json"
+      # cache-control: "no-cache"
+    # return_content: yes
+  # loop: "{{ list_pcf_pccRule_Id }}"
+  # register: result
+  
+  
+- include: PCCrule.yaml
+  vars:
+    pccrules: "{{ item }}"
+    filen: "{{ filename }}"
+  loop: "{{ list_pcf_pccRule_Id }}"
+  register: result  
+  when: 
+    - "loopback == false"
+  
+- debug: msg="{{ list_pcf_pccRule_Id }}"
+- debug: msg="{{ loopback }}"
+
+- name: Delete Pcc rule
+  uri:
+    url:  "{{ PCF_HOST }}/oc-cnpolicy-configuration/v1/policydata/pcfsm/pccrules/{{ item }}"
+    method: DELETE
+    status_code: [204,404]
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    return_content: yes
+  loop: "{{ list_pcf_pccRule_Id }}"
+  register: result
+  when: "loopback == true"
+  
+
+- name: Delete Qos data
+  uri:
+    url:  "{{ PCF_HOST }}/oc-cnpolicy-configuration/v1/policydata/pcfsm/qosdata/{{ item }}"
+    method: DELETE
+    status_code: [204,404]
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    return_content: yes
+  loop: "{{ list_pcf_qosData_Id }}"
+  register: result
+  when: "loopback == true"
+
+- fail:
+    msg: "{{ fail_content }}"
+  when: "loopback == true" 
+
+# - name: generate SB json and copy it to utility server
+#   template:
+#     src: oracle_provisioning_qos_information_request.json.j2
+#     dest: /tmp/oracle_provisioning_qos_information_request.json
+
+# - name: Create QoS Information
+  # uri:
+    # url:  "{{ ansible_env.PCF_HOST }}/oc-cnpolicy-configuration/v1/policydata/pcfsm/qosinformation"
+    # method: POST
+    # body: "{{lookup('template', '/tmp/{{ item }}_Qos_info.json.j2')}}"
+    # status_code: 201
+    # body_format: json
+    # headers:
+      # content-type: "application/json"
+      # cache-control: "no-cache"
+    # return_content: yes
+  # loop: "{{ list_pcf_qosInfo_Id }}"
+  # register: result
+  
+- include: qosinfo.yaml
+  vars:
+    qosinfo: "{{ item }}"
+    filen: "{{ filename }}"
+  loop: "{{ list_pcf_qosInfo_Id }}"
+  register: result 
+  when: 
+    - "loopback == false"
+
+- debug: msg="{{ list_pcf_qosInfo_Id }}"
+- debug: msg="{{ loopback }}"
+  
+- name: Delete Qos information
+  uri:
+    url:  "{{ PCF_HOST }}/oc-cnpolicy-configuration/v1/policydata/pcfsm/qosinformation/{{ item }}"
+    method: DELETE
+    status_code: [204,404]
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    return_content: yes
+  loop: "{{ list_pcf_qosInfo_Id }}"
+  register: result
+  when: "loopback == true"
+  
+- name: Delete Pcc rule
+  uri:
+    url:  "{{ PCF_HOST }}/oc-cnpolicy-configuration/v1/policydata/pcfsm/pccrules/{{ item }}"
+    method: DELETE
+    status_code: [204,404]
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    return_content: yes
+  loop: "{{ list_pcf_pccRule_Id }}"
+  register: result
+  when: "loopback == true"
+  
+
+- name: Delete Qos data
+  uri:
+    url:  "{{ PCF_HOST }}/oc-cnpolicy-configuration/v1/policydata/pcfsm/qosdata/{{ item }}"
+    method: DELETE
+    status_code: [204,404]
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    return_content: yes
+  loop: "{{ list_pcf_qosData_Id }}"
+  register: result
+  when: "loopback == true"
+
+- fail:
+    msg: "{{ fail_content }}"
+  when: "loopback == true" 
+
+# - name: generate SB json and copy it to utility server
+#   template:
+#     src: oracle_provisioning_session_rule_request.json.j2
+#     dest: /tmp/oracle_provisioning_session_rule_request.json  
+
+# - name: Create Session Rule
+  # uri:
+    # url:  "{{ ansible_env.PCF_HOST }}/oc-cnpolicy-configuration/v1/policydata/pcfsm/sessionrules"
+    # method: POST
+    # body: "{{lookup('template', '/tmp/{{ item }}_session_info.json.j2')}}"
+    # status_code: 201
+    # body_format: json
+    # headers:
+      # content-type: "application/json"
+      # cache-control: "no-cache"
+    # return_content: yes
+  # loop: "{{ list_pcf_sessionRule_Id}}"
+  # register: result
+  
+  
+- include: sessionrule.yaml
+  vars:
+    sessionRule: "{{ item }}"
+    filen: "{{ filename }}"
+  loop: "{{ list_pcf_sessionRule_Id }}"
+  register: shubham 
+  when: 
+    - "loopback == false"
+
+- debug: msg="{{ list_pcf_sessionRule_Id }}"
+- debug: msg="{{ loopback }}"
+
+- name: Delete session Rule
+  uri:
+    url:  "{{ PCF_HOST }}/oc-cnpolicy-configuration/v1/policydata/pcfsm/sessionrules/{{ item }}"
+    method: DELETE
+    status_code: [204,404]
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    return_content: yes
+  loop: "{{ list_pcf_sessionRule_Id }}"
+  register: result
+  when: "loopback == true"
+
+- name: Delete Qos information
+  uri:
+    url:  "{{ PCF_HOST }}/oc-cnpolicy-configuration/v1/policydata/pcfsm/qosinformation/{{ item }}"
+    method: DELETE
+    status_code: [204,404]
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    return_content: yes
+  loop: "{{ list_pcf_qosInfo_Id }}"
+  register: result
+  when: "loopback == true"
+  
+- name: Delete Pcc rule
+  uri:
+    url:  "{{ PCF_HOST }}/oc-cnpolicy-configuration/v1/policydata/pcfsm/pccrules/{{ item }}"
+    method: DELETE
+    status_code: [204,404]
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    return_content: yes
+  loop: "{{ list_pcf_pccRule_Id }}"
+  register: result
+  when: "loopback == true"
+  
+
+- name: Delete Qos data
+  uri:
+    url:  "{{ PCF_HOST }}/oc-cnpolicy-configuration/v1/policydata/pcfsm/qosdata/{{ item }}"
+    method: DELETE
+    status_code: [204,404]
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    return_content: yes
+  loop: "{{ list_pcf_qosData_Id }}"
+  register: result
+  when: "loopback == true"
+  
+- fail:
+    msg: "{{ fail_content }}"
+  when: "loopback == true" 
+
+# - name: generate SB json and copy it to utility server
+#   template:
+#     src: oracle_provisioning_update_policy_request.json.j2
+#     dest: /tmp/oracle_provisioning_update_policy_request.json
+
+- name: exporting the policy table 
+  uri:
+    url:  "{{ PCF_HOST }}/oc-cnpolicy-configuration/v1/policydata/common/policytables?policyTableName=DefaultPCCRule&serviceName=pcf-sm"
+    method: GET
+    status_code: 200
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    return_content: yes
+  register: auth_response
+
+#convert ALM properties to json provide request for South Bound endpoint - Nokia Provisioning GW  
+# - name: TMF Authentication token
+#   uri:
+#     method: GET
+#     url: "{{ PCF_HOST }}/oc-cnpolicy-configuration/v1/policydata/common/policytables/export"
+#     body_format: json
+#     headers:
+#       Accept: "application/json"
+#       content-type: "application/json"
+#     return_content: yes
+#   register: auth_response
+
+# # - debug: var=len_array
+
+- name: write var to file
+  copy: 
+    content: "{{ auth_response.content | trim }}" 
+    dest: "{{ policyTable }}"
+
+# # - name: ruuning python file
+#   # shell: "{{ auth_response.json.exportData[0].rows }}"  > /tmp/test_file.json
+- name: Create the list
+  set_fact:
+    list_pcf_policyTable_dnn: "{{ pcf_policyTable_dnn.split(',') | map('trim')| list  }}"
+
+# - name: Create the list
+#   set_fact:
+#     list_pcf_policyTable_dnn: ['internet','ota','ims','ims','ims','sos','xcap']
+#   when: "'ims' in  pcf_policyTable_dnn"
+
+
+- name: runing python file
+  shell: |
+    python3 run_1.py "{{ pcf_policyTable_sst }}" "{{ pcf_policyTable_sd }}" "{{ item.0 }}"  "{{ pcf_policyTable_ratePlan }}" "{{ item.1  }}" "{{ item.2 }}" "{{ item.3 }}" "{{ policyTable }}" "{{ slice_planType }}"
+  loop: "{{ data[0]|zip(*data[1:])|list }}"
+  vars:
+    data:
+        -  "{{ list_pcf_policyTable_dnn  }}"
+        -  "{{ pcf_policyTable_sessionRule.split(',') | map('trim')| list  }}"
+        -  "{{ pcf_policyTable_pccRuleList.split(',') | map('trim')| list  }}"
+        -  "{{ list_pcf_policyTable_throttledBw }}"
+  register: response 
+
+
+- name: Create a PCC Rule
+  uri:
+    url:  "{{ PCF_HOST }}/oc-cnpolicy-configuration/v1/policydata/common/policytables/import?action=replace"
+    method: POST
+    body: "{{lookup('file', '{{ policyTable }}')}}"
+    status_code: 201
+    body_format: json
+    headers:
+      content-type: "application/json"
+      cache-control: "no-cache"
+    return_content: yes
+  register: result
+
+- name: Insert a line at the end of a file.
+  lineinfile:
+    path: "{{ filename }}"
+    line: |
+           order_send:  {{lookup('file', '{{ policyTable }}')}}
+           __________________________________________________________________________
+           
+           result_return: {{ result }}
+           
+           __________________________________________________________________________
+
+
+- shell: "python3 test.py"
+  register: end_time
+  no_log: True
+
+- shell: "python3 diff.py '{{ end_time.stdout }}' '{{ start_time.stdout }}'"
+  register: time_diff
+
+- name: Insert a line at the end of a file.
+  lineinfile:
+    path: "{{ filename }}"
+    line: |
+           end_time:  {{ end_time.stdout }}
+           time_taken:  {{ time_diff.stdout }}
+
+
+- name: Log API request through Log module
+  ibm_cp4na_log_message:
+    message_direction: sent
+    external_request_id: "{{ extOrderId }}"
+    content_type: application/json
+    message_data: |
+     ***********************************
+     order_send:  
+     {{lookup('template', '{{ filename }}')}}
+      
+     ************************************ 
+    message_type: sample
+    protocol: http
+
+
+#-----------------------> End time from system  <----------------------------
+- name: "##ALM## Get timestamp from the system"
+  shell: "date +%Y-%m-%d%H:%M:%S.%5N"
+  register: etime
+
+
+#-----------------------> Store request/response Logs in Eventlogger  <----------------------------
+- name: "##ALM## Store request and response in DB"
+  connection: local
+  uri:
+    url: "{{ deployment_location.properties.eventlogger_url }}"
+    method: POST
+    body: "{{lookup('template', 'Store.json.j2')}}"
+    return_content: yes
+    body_format: json
+    status_code: 200
+    validate_certs: no
+    headers:
+      content-type: "application/json"
+      ReturnResultType: "FULL" 
+  register: resultStore

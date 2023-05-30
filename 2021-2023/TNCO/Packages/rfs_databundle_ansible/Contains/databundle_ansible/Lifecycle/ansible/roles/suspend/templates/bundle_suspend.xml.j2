@@ -1,0 +1,55 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<soapenv:Body>
+		<spml:modifyRequest timestamp="true" requestID="{{ extOrderId }}" xmlns:spml="urn:siemens:names:prov:gw:SPML:2:0" xmlns:sub="urn:siemens:names:prov:gw:SDL_MULTIAPPSUBSCRIBER:1:0">
+			<version>SDL_MULTIAPPSUBSCRIBER_v10</version>
+			<objectclass>Subscriber</objectclass>
+			<identifier alias="imsi">{{ SUPI }}</identifier>
+			{% if "DATA" in  listrequestedServices  %}
+				<modification name="{{ hlr_path1 }}" operation="{{ operation2 }}">
+					<valueObject xsi:type="sub:HLR">
+						<odbgprs>{{ hlr_odbgprs }}</odbgprs>
+					</valueObject>
+				</modification>
+				<modification name="{{ hlr_path2 }}" operation="{{ operation2 }}">
+					<valueObject xsi:type="sub:EPS">
+						<defaultPdnContextId>{{ hlr_defaultPdnContextId }}</defaultPdnContextId>
+					</valueObject>
+				</modification>
+				<modification name="{{ hlr_path3 }}" operation="{{ operation1 }}">
+					<valueObject xsi:type="sub:PdnContextBlocking">
+						<flagAPNBlockedOverS6a>{{ hlr_flagAPNBlockedOverS6A }}</flagAPNBlockedOverS6a>
+						<flagAPNBlockedOverSWx>{{ hlr_flagAPNBlockedOverSWx }}</flagAPNBlockedOverSWx>
+					</valueObject>
+				</modification>
+				<modification name="udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo[@dnnId='{{ dnn5 }}']" operation="{{ operation2 }}">
+					<valueObject xsi:type="sub:UdmDnnInfo">
+						<defaultIndication>{{ dnn5_defaultIndication1 }}</defaultIndication>
+					</valueObject>
+				</modification>
+				<modification name="udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo[@dnnId='{{ dnn4 }}']" operation="{{ operation2 }}">
+					<valueObject xsi:type="sub:UdmDnnInfo">
+						<defaultIndication>{{ dnn4_defaultIndication1 }}</defaultIndication>
+					</valueObject>
+				</modification>
+				<modification name="udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo[@dnnId='{{ dnn4 }}']/dnnBarred='true'" operation="{{ operation3 }}">
+					<valueObject xsi:type="sub:UdmDnnInfo">
+						<dnnBarred>{{ dnn4_dnnBarred }}</dnnBarred>
+					</valueObject>
+				</modification>
+			{% endif %}
+		{% if "HOTSPOT" in  listrequestedServices  %}
+			<modification name="{{ hlr_path4 }}" operation="{{ operation1 }}">
+				<valueObject xsi:type="sub:PdnContextBlocking">
+					<flagAPNBlockedOverS6a>{{ hlr_flagAPNBlockedOverS6A }}</flagAPNBlockedOverS6a>
+					<flagAPNBlockedOverSWx>{{ hlr_flagAPNBlockedOverSWx }}</flagAPNBlockedOverSWx>
+				</valueObject>
+			</modification>
+			<modification name="udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo[@dnnId='{{ dnn6 }}']/dnnBarred='true'" operation="{{ operation3 }}">
+				<valueObject xsi:type="sub:UdmDnnInfo">
+					<dnnBarred>{{ dnn6_dnnBarred }}</dnnBarred>
+				</valueObject>
+			</modification>	
+		{% endif %}
+		</spml:modifyRequest>
+	</soapenv:Body>
+</soapenv:Envelope>

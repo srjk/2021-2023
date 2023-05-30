@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+	<SOAP-ENV:Header/>
+	<SOAP-ENV:Body>
+		<PlexViewRequest Command="ed-ngfs-subscriber-v2" SwitchName="host-name" RequestId="{{ extOrderId }}" SessionId="LOGIN*PASSWORD">
+			<SubParty>
+				<PartyId>{{ Old_GPSI }}</PartyId>
+				<PrimaryPUID>+{{ Old_GPSI }}@ims.mnc340.mcc313.3gppnetwork.org</PrimaryPUID>
+				<ServiceSuspension>true</ServiceSuspension>
+			</SubParty>
+		</PlexViewRequest>
+	</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

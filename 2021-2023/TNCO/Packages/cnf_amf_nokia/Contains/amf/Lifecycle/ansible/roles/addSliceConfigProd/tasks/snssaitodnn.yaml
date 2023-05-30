@@ -1,0 +1,20 @@
+- name: Create snssaiToDnn.
+  raw: cmm snssaiToDnn create --dataNetworkName {{ dnnName }} --snssaiToDnnListName {{ snssaiToDnnListName }} --snssaiName {{ amfSlice_sliceName }}
+  register: result_snssaiToDnn1
+  failed_when: "result_snssaiToDnn1.rc not in [0,1]"
+#  ignore_errors: yes
+
+- name: Insert a line at the end of a file.
+  connection: local
+  lineinfile:
+    path: "{{ Logs }}"
+    line: |
+          input: cmm snssaiToDnn create --dataNetworkName {{ dnnName }} --snssaiToDnnListName {{ snssaiToDnnListName }} --snssaiName {{ amfSlice_sliceName }}
+          output: {{ result_snssaiToDnn1.stdout }}
+  delegate_to: 127.0.0.1
+
+- fail:
+    msg: "{{ result_snssaiToDnn1.stdout | regex_search('ERROR.*') }}"
+  when:
+    - '"The relevant data content already exists" not in result_snssaiToDnn1.stdout'
+    - '"Field" not in result_snssaiToDnn1.stdout'

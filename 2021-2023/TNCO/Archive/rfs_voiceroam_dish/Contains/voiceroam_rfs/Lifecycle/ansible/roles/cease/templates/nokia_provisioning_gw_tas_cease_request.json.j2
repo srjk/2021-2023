@@ -1,0 +1,20 @@
+{
+  "serviceType":"{{ serviceType }}",
+  "serviceName": "Subscriber - Voice Roaming RFSS",
+  "RequestId":"{{ kami_response.json.extOrderId }}",
+  "SubParty":{
+    "PartyId":"{{ GPSI }}",
+    "PrimaryPUID":"+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+    "ServiceSuspension":"false"
+  },
+  "CallBlocking":{
+    "PublicUID":"+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+    "Assigned":"true",
+    "BlockRoamNtwk":"true"
+  },
+  "CallBarring":{
+    "PublicUID":"+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+    "Assigned":"true",
+    "RoamNtwk":"true"
+  }
+}

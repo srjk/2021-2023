@@ -1,0 +1,245 @@
+name: resource::nssf-cnf_nssf_oracle::1.0
+description: descriptor for nssf
+properties:
+  operation:
+    description: addSliceConfig
+    volatile: true
+    default: Install
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: SOL003
+  resourceManager:
+    type: string
+    default: brent
+  instance_name:
+    description: name of assembly instance
+    type: string
+  nameSpace:
+    type: string
+  cnfPackageVersionFile:
+    type: string
+    volatile: true
+  vnfInstanceName:
+    type: string
+  # nssf_host:
+  #   type: string
+  #   default: "dish-nssf-stub-svc:8190"
+#CreateVnfRequest
+#   vnfInstanceName:
+#     description: cnf_instance_name
+#     default: cnf_instance_name
+#   vnfdId:
+#     description: cnf_package_identifier
+#     default: cnf_package_identifier
+#   vnfPkgId:
+#     description: cnf_package_identifier
+#     default: VnfPackage-vMRF
+#   vnfInstanceId:
+#     type: string
+# #NSSF 
+  nssf_grant:
+    type: string
+    default: ALLOWED
+  nssf_confNssaiSalience:
+    type: string
+    default: 0
+  nssf_nssRuleSalience:
+    type: string
+    default: 10
+  nssf_nssRuleAccessType:
+    type: string
+    default: 3GPP_ACCESS
+  nssf_nssRuleBehaviourSalience:
+    type: string
+    default: 10
+  nssf_nssAmfId:
+    type: string
+    # default: cys001r-cnf-nk-amf101-002
+  vnfdId:
+    volatile: true
+  vnfInstanceDescription:
+    type: string
+    default: Deploy Oracle NSSF
+  vnfInstanceId:
+    type: string
+    volatile: true    
+  flavourId:
+    type: string
+#    default: small
+  vimType:
+    type: string
+#    default: ndc
+  vim_id:
+    type: string
+#    default: orchestratortest
+  envType:
+    type: string
+#    default: dev    
+  nfType:
+    type: string
+#    default: CNF
+  vendor:
+    type: string
+#    default: or
+  function: 
+    type: string
+#    default: nssf
+  nfAppearance:
+    type: string
+#    default: 001
+  nfunType:
+    type: string
+#    default: c
+  region:
+    type: string
+#    default: use1
+  azId:
+    type: string
+#    default: az1
+  dataCenterType:
+    type: string
+#    default: n
+  logicalDCNo: 
+    type: string
+#    default: 01
+  env:
+    type: string
+#    default: p
+  envId:
+    type: string
+#    default: 1
+  NSSF_ENV:
+    type: string
+    volatile: true
+  NSSF_HOST:
+    type: string
+    volatile: true    
+lifecycle:
+  addSliceConfig: 
+    drivers:
+      ansible:
+        selector:
+          infrastructure-type:
+          - '*'
+  removeSlice: 
+    drivers:
+      ansible:
+        selector:
+          infrastructure-type:
+          - '*'
+  Install: {}
+  Create: {}
+  reconfigure: {}
+  # Configure: {}
+  Uninstall: {}
+  Delete: {}
+# default-driver:
+#   ansible:
+#     selector:
+#       infrastructure-type:
+#       - '*'
+default-driver:
+  sol003:
+    selector:
+      infrastructure-type:
+      - '*'
+operations:
+  addSliceConfig:
+    description: activate new slice parameters
+    properties:
+      nssf_nsiProfileName:
+        type: string
+      nssf_nrfUri:
+        type: string
+      nssf_nsiId:
+        type: string
+      nssf_nrfMgtUri:
+        type: string
+      nssf_nrfAccessTokenUri:
+        type: string
+      nssf_amfRegionId:
+        type: string
+      nssf_amfSetId:
+        type: string
+      nssf_amfFqdn:
+        type: string
+      nssf_defaultGrantName:
+        type: string
+      nssf_mcc:
+        type: string
+      nssf_mnc:
+        type: string
+      nssf_tai:
+        type: string
+      nssf_sst:
+        type: string
+      nssf_sd:
+        type: string
+      nssf_grant:
+        type: string
+      nssf_confNssaiSalience:
+        type: string
+      nssf_nssAmfId:
+        type: string
+      nssf_nssRuleName:
+        type: string
+      nssf_nssRuleSalience:
+        type: string
+      nssf_nssRuleAccessType:
+        type: string
+      nssf_nssRuleBehaviourSalience:
+        type: string
+      extOrderId:
+        type: string
+      instance_name:
+        type: string
+  removeSlice:
+    description: removeSlice new slice parameters
+    properties:
+      nssf_nsiProfileName:
+        type: string
+      nssf_nrfUri:
+        type: string
+      nssf_nsiId:
+        type: string
+      nssf_nrfMgtUri:
+        type: string
+      nssf_nrfAccessTokenUri:
+        type: string
+      nssf_amfRegionId:
+        type: string
+      nssf_amfSetId:
+        type: string
+      nssf_amfFqdn:
+        type: string
+      nssf_defaultGrantName:
+        type: string
+      nssf_mcc:
+        type: string
+      nssf_mnc:
+        type: string
+      nssf_tai:
+        type: string
+      nssf_sst:
+        type: string
+      nssf_sd:
+        type: string
+      nssf_grant:
+        type: string
+      nssf_confNssaiSalience:
+        type: string
+      nssf_nssAmfId:
+        type: string
+      nssf_nssRuleName:
+        type: string
+      nssf_nssRuleSalience:
+        type: string
+      nssf_nssRuleAccessType:
+        type: string
+      nssf_nssRuleBehaviourSalience:
+        type: string
+      extOrderId:
+        type: string
+      instance_name:
+        type: string

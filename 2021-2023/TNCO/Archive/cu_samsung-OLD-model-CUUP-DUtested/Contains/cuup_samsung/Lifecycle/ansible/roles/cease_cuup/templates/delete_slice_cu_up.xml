@@ -1,0 +1,17 @@
+<nc:rpc xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0">
+  <nc:edit-config>
+    <nc:target>
+      <nc:running/>
+    </nc:target>
+    <nc:default-operation>none</nc:default-operation>
+    <nc:config>
+      <gnbcuupcnf:managed-element xmlns:gnbcuupcnf="http://www.samsung.com/global/business/5GvRAN/ns/gnb-cu-up-cnf">
+        <gnbcuupcnf:gnb-cu-up-function>
+          <gnbcuupcnf:gnb-cu-up-slice-info nc:operation="delete">
+            <gnbcuupcnf:slice-index>{{ CUUPsliceIndexvalueIncrement }}</gnbcuupcnf:slice-index>
+          </gnbcuupcnf:gnb-cu-up-slice-info>
+        </gnbcuupcnf:gnb-cu-up-function>
+      </gnbcuupcnf:managed-element>
+    </nc:config>
+  </nc:edit-config>
+</nc:rpc>

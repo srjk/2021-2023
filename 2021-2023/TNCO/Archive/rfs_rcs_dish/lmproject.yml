@@ -1,0 +1,10 @@
+schema: '2.0'
+name: rfs_rcs_dish
+version: '1.0'
+type: Assembly
+resource-manager: Brent
+contains:
+- name: rcs_rfs
+  type: Resource
+  resource-manager: Brent
+  directory: rcs_rfs

@@ -1,0 +1,26 @@
+---
+# - hosts: localhost
+#   connection: local
+#   gather_facts: true
+#   tasks:
+#     - name: seting variable
+#       set_fact:
+#         SMF_ENV: "{{ ansible_env.SMF_ENV }}" 
+
+# - name: run the Togglestub yaml file
+#   import_playbook: addSliceConfigProd.yaml
+#   when: lookup('env','SMF_ENV') == 'prod'
+
+      
+
+# - name: run the ToggleProd yaml file
+#   import_playbook: addSliceConfigStub.yaml
+#   when: lookup('env','SMF_ENV') == 'stub'
+
+- name: run the Togglestub yaml file
+  import_playbook: addSliceConfigProd.yaml
+  when: UPF_ENV  == 'prod'
+      
+- name: run the ToggleProd yaml file
+  import_playbook: addSliceConfigStub.yaml
+  when:  UPF_ENV  == 'stub'

@@ -1,0 +1,130 @@
+qdescription: descriptor for Nokia voicemail resource
+name: resource::voicemail-rfs_voicebundle_dish::1.0
+properties:
+  instance_name:
+    description: name of assembly instance
+  operation:
+    volatile: true
+  deploymentLocation:
+    description: site specific
+    type: string
+    default: DFW
+  resourceManager:
+    type: string
+    read-only: true
+    default: brent
+  requestedServices:
+    type: string
+    volatile: true
+  loop_back:
+    type: string
+    volatile: true
+#    default: OFF
+  extOrderId:
+    volatile: true
+  serviceType:
+    type: string
+  cos:
+    type: string
+    default: 50
+  Version:
+    type: string
+  GPSI:
+    volatile: true
+  Old_GPSI:
+    volatile: true    
+  href:
+    type: string
+  priority:
+    type: string
+  description:
+    type: string
+  category:
+    type: string
+  state:
+    type: string
+  orderDate: 
+    type: string
+  completionDate: 
+    type: string
+  requestedStartDate: 
+    type: string
+  requestedCompletionDate: 
+    type: string
+  expectedCompletionDate:
+    type: string
+  startDate:
+    type: string
+  serviceOrderItemId:
+    type: string  
+  action:
+    type: string
+  reference_assembly:
+    type: string
+  SubOrederType:
+    type: string
+  Token:
+    type: string
+    default: "Aladin:opensimsim"
+  voicemail_command:
+    type: string
+    default: "Create"
+  voicemail_Version:
+    type: string
+    default: "1"
+  voicemail_hostreference:
+    type: string
+    default: "IO"
+  voicemail_EntityName:
+    type: string
+    default: "Subscriber"
+  voicemail_LanguageFlavor:
+    type: string
+    default: "rogers-rwi"
+  voicemail_SubscriberCosName:
+    type: string
+    default: "COS_37_UCC"
+  voicemail_GuestLanguageFlavour:
+    type: string
+    default: "rogers-rwi"
+  voicemail_GlobalLanguageId:
+    type: string
+    default: "en-CA"
+  voicemail_GuestLanguage:
+    type: string
+    default: "en-CA"
+  voicemail_SubscriberDomainName:
+    type: string
+    default: "RWI"
+  voicemail_Timezone:
+    type: string
+    default: "Canada/Eastern"
+  voicemail_NotificationTextLanguage:
+    type: string
+    default: "en-CA"
+  voicemail_VmFamilyMailboxStatus:
+    type: string
+    default: "Main"
+  voicemail_MWIEnabled:
+    type: string
+    default: "1"
+  voicemail_Token:
+    type: string
+    default: "QWxhZGluOm9wZW5zaW1zaW0="
+  voicemail_Token1:
+    type: string
+    default: "123456ABCDE"
+  voicemail_command1:
+    type: string
+    default: "Delete"
+infrastructure:
+  Openstack: {}
+lifecycle:
+  Install: {}
+  reconfigure: {}
+  Uninstall: {}
+default-driver:
+  ansible:
+    selector:
+      infrastructure-type:
+      - '*'

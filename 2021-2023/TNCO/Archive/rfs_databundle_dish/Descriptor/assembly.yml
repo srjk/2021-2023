@@ -1,0 +1,802 @@
+name: assembly::rfs_databundle_dish::1.0
+description: descriptor for bundle rfs
+properties:
+  operation:
+    volatile: true
+    description: Provide/Cease/Suspend/Resume 
+    default: Provide
+  deploymentLocation:
+    description: site specific
+    type: string
+    default: DFW     
+  resourceManager:
+    type: string
+    read-only: true
+    default: brent  
+  extOrderId:
+    volatile: true
+  requestedServices:
+    type: string
+    volatile: true
+  serviceType:
+    type: string
+    default: "Bundle RFS"
+  serviceName:
+    type: string
+    default: "Subscriber - Data Bundle RFSS"
+  loop_back:
+    type: string
+    default: OFF
+    volatile: true
+  ntype:
+    type: string
+    default: single
+  mobileSubscriberType:
+    type: string
+    default: genericSubscriber
+  umtsSubscriber_accTypeGSM:
+    type: string
+    default: true
+  umtsSubscriber_accTypeGERAN:
+    type: string
+    default: true
+  umtsSubscriber_accTypeUTRAN:
+    type: string
+    default: true
+  pdpContext_1_id:
+    type: string
+    default: 1
+  pdpContext_1_qosProfile:
+    type: string
+    default: intHlr
+  pdpContext_1_refPdpContextName:
+    type: string
+    default: intrntPdp
+  pdpContext_2_id:
+    type: string
+    default: 2
+  pdpContext_2_qosProfile:
+    type: string
+    default: otaHlr
+  pdpContext_2_refPdpContextName:
+    type: string
+    default: otaPdp
+  roamSubscriptionInfo:
+    type: string
+    default: ipv6toipv4
+  eps_defaultPdnContextId:
+    type: string
+    default: 1
+  eps_maxBandwidthUp:
+    type: string
+    default: 2000000000
+  eps_maxBandwidthDown:
+    type: string
+    default: 2000000000
+  eps_accessAPNEnabled:
+    type: string
+    default: true
+  eps_subscribedForSMSInMME:
+    type: string
+    default: true
+  eps_eps5GSmsDeliveryMode:
+    type: string
+    default: false
+  dnn4_contextId:
+    type: string
+    default: 1
+  dnn4_type:
+    type: string
+    default: both
+  dnn4_pdnGwDynamicAllocation:
+    type: string
+    default: true
+  dnn4_vplmnAddressAllowed:
+    type: string
+    default: false
+  dnn4_maxBandwidthUp:
+    type: string
+    default: 2000000000
+  dnn4_maxBandwidthDown:
+    type: string
+    default: 2000000000
+  dnn4_qos:
+    type: string
+    default: internetQosEps
+  dnn4_chargingCharacteristicsProfile:
+    type: string
+    default: 8
+  dnn4_chargingCharacteristicsBehavior:
+    type: string
+    default: 0
+  dnn4_eps5gInterworkIndicator:
+    type: string
+    default: 1
+  dnn5_contextId:
+    type: string
+    default: 2
+  dnn5_type:
+    type: string
+    default: both
+  dnn5_pdnGwDynamicAllocation:
+    type: string
+    default: true
+  dnn5_vplmnAddressAllowed:
+    type: string
+    default: false
+  dnn5_maxBandwidthUp:
+    type: string
+    default: 1000000
+  dnn5_maxBandwidthDown:
+    type: string
+    default: 1000000
+  dnn5_qos:
+    type: string
+    default: otaQosEps
+  dnn5_chargingCharacteristicsProfile:
+    type: string
+    default: 8
+  dnn5_chargingCharacteristicsBehavior:
+    type: string
+    default: 0
+  dnn5_eps5gInterworkIndicator:
+    type: string
+    default: 1    
+  epsRoamAreaName:
+    type: string
+    default: home
+  authenticationmethod:
+    type: string
+    default: 5G_AKA
+  plmnId:
+    type: string    
+    default: 313340
+  homePlmnIdIndication:
+    type: string    
+    default: true
+  udm_rfspIndex:
+    type: string    
+    default: 1
+  udm_subsRegTimer:
+    type: string    
+    default: 3200
+  udm_ueUsageType:
+    type: string    
+    default: 32000
+  localAreaDataNtwInfo:
+    type: string    
+    default: dnn4
+  udm_mpsPriority:
+    type: string    
+    default: false
+  udm_activeTime:
+    type: string    
+    default: 3200
+  udm_downLinkPktCount:
+    type: string    
+    default: 1000
+  dnn4_defaultIndication:
+    type: string    
+    default: true
+  dnn4_interworkingEPSIndication:
+    type: string    
+    default: true
+  dnn4_localBrkOutRoamingAllowed:
+    type: string
+    default: false
+  dnn5_interworkingEPSIndication:
+    type: string    
+    default: true
+  dnn5_localBrkOutRoamingAllowed:
+    type: string       
+    default: false
+  dnn4_defaultSessionType:
+    type: string    
+    default: IPV4V6
+  dnn4_allowedSessionType:
+    type: string    
+    default: IPV4V6
+  dnn4_defaultSscMode:
+    type: string    
+    default: SSC_MODE_1
+  dnn4_allowedSscMode:
+    type: string    
+    default: SSC_MODE_1
+  interworkingEPSIndication4:
+    type: string    
+    default: true
+  dnn4_udm5Qi:
+    type: string    
+    default: 9
+  dnn4_arp:
+    type: string    
+    default: "12|NOT_PREEMPT|PREEMPTABLE"
+  dnn4_priorityLevel:
+    type: string    
+    default: 12
+  dnn5_defaultSessionType:
+    type: string    
+    default: IPV4V6
+  dnn5_allowedSessionType:
+    type: string    
+    default: IPV4V6
+  dnn5_defaultSscMode:
+    type: string    
+    default: SSC_MODE_1
+  dnn5_allowedSscMode:
+    type: string    
+    default: SSC_MODE_1
+  interworkingEPSIndication5:
+    type: string    
+    default: true
+  dnn5_udm5Qi:
+    type: string    
+    default: 9
+  dnn5_arp:
+    type: string    
+    default: "12|NOT_PREEMPT|PREEMPTABLE" 
+  dnn5_priorityLevel:
+    type: string    
+    default: 12
+  pcf_policySubscriptionId:
+    type: string    
+    default: 1
+  pcf_dnn4_subscSpendingLimits:
+    type: string    
+    default: true
+  pcf_dnn4_online:
+    type: string    
+    default: true
+  pcf_dnn5_subscSpendingLimits:
+    type: string    
+    default: true
+  pcf_dnn5_online:
+    type: string    
+    default: true    
+  hlr_dnn6_path:
+    type: string    
+    default: hlr/epsPdnContext
+  dnn6_contextId:
+    type: string
+    default: 7
+  dnn6_type:
+    type: string
+    default: both
+  dnn6_pdnGwDynamicAllocation:
+    type: string
+    default: true
+  dnn6_vplmnAddressAllowed:
+    type: string
+    default: false
+  dnn6_maxBandwidthUp:
+    type: string
+    default: 2000000000
+  dnn6_maxBandwidthDown:
+    type: string
+    default: 2000000000
+  dnn6_qos:
+    type: string
+    default: internetQosEps
+  dnn6_chargingCharacteristicsProfile:
+    type: string
+    default: 8
+  dnn6_chargingCharacteristicsBehavior:
+    type: string
+    default: 0
+  dnn6_eps5gInterworkIndicator:
+    type: string
+    default: 1    
+  udm_path:
+    type: string    
+    default: "udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo"
+  udm_dnn6_defaultIndication:
+    type: string    
+    default: false
+  udm_dnn6_interworkingEPSIndication:
+    type: string    
+    default: true
+  udm_dnn6_localBrkOutRoamingAllowed:
+    type: string    
+    default: false
+  udm_dnn6_path:
+    type: string    
+    default: udm5gData/servingPlmnId/provisionedData/sessionManagementSubscriptionData/dnnConfiguration
+  udm_dnn6_interworkingEPSIndication1:
+    type: string    
+    default: true
+  udm_dnn6_udm5Qi:
+    type: string    
+    default: 9
+  udm_dnn6_arp:
+    type: string    
+    default: 12|NOT_PREEMPT|PREEMPTABLE
+  udm_dnn6_priorityLevel:
+    type: string    
+    default: 12
+  dnn6_defaultSessionType:
+    type: string    
+    default: IPV4V6
+  dnn6_allowedSessionType:
+    type: string    
+    default: IPV4V6
+  dnn6_defaultSscMode:
+    type: string    
+    default: SSC_MODE_1
+  dnn6_allowedSscMode:
+    type: string    
+    default: SSC_MODE_1
+  pcf_path:
+    type: string    
+    default: pcf/smPolicyData/smPolicySnssaiData/smPolicyDnnData 
+  dnn6_subscSpendingLimits:
+    type: string    
+    default: true
+  dnn6_online:
+    type: string    
+    default: true
+  hlr_path1:
+    type: string    
+    default: hlr
+  hlr_odbgprs:
+    type: string    
+    default: 2
+  hlr_path2:
+    type: string    
+    default: hlr/eps
+  hlr_defaultPdnContextId:
+    type: string    
+    default: 2
+  hlr_path3:
+    type: string    
+    default: "hlr/epsPdnContext[@contextId='1']/pdnContextBlocking"
+  hlr_flagAPNBlockedOverS6A:
+    type: string    
+    default: true
+  hlr_flagAPNBlockedOverSWx:
+    type: string    
+    default: true
+  hlr1_flagAPNBlockedOverS6A:
+    type: string    
+    default: false
+  hlr1_flagAPNBlockedOverSWx:
+    type: string    
+    default: false
+  dnn5_defaultIndication:
+    type: string    
+    default: false
+  dnn5_defaultIndication1:
+    type: string    
+    default: true
+  dnn4_dnnBarred:
+    type: string    
+    default: true
+  hlr_path4:
+    type: string    
+    default: hlr/epsPdnContext[@contextId='7']/pdnContextBlocking
+  hlr_operation4:
+    type: string    
+    default: addorset    
+  dnn6_operation:
+    type: string    
+    default: setoradd 
+  dnn6_dnnBarred:
+    type: string    
+    default: true 
+  hlr_odbgprs1:
+    type: string    
+    default: 0 
+  hlr1_defaultPdnContextId:
+    type: string    
+    default: 1 
+  dnn4_operation2:
+    type: string    
+    default: remove 
+  dnn4_defaultIndication1:
+    type: string    
+    default: false 
+  hss_path:
+    type: string    
+    default: hss
+  hss_operation:
+    type: string    
+    default: remove
+  udm_path2:
+    type: string    
+    default: udm5gData
+  pcf_path2:
+    type: string    
+    default: pcf
+  hlr_epsRoamAreaName:
+    type: string    
+    default: home
+  RoamingPartner:
+    type: string
+    volatile: true
+  hlr_path6:
+    type: string    
+    default: hlr/epsPdnContext[@contextId='7']
+  operation1:
+    type: string
+    default: addorset
+  operation2:
+    type: string    
+    default: set
+  operation3:
+    type: string    
+    default: setoradd   
+  operation4:
+    type: string    
+    default: remove    
+  operation5:
+    type: string
+    default: add 
+  dnn6_dnnBarred1:
+    type: string    
+    default: false     
+  # name:
+    # type: string    
+    # default: true      
+  # name:
+  #   type: string 
+  dnn4:
+    type: string 
+  dnn4_sessionAmbr:
+    type: string
+  dnn5:
+    type: string
+  dnn5_sessionAmbr:
+    type: string
+  dnn6:
+    type: string
+    volatile: true
+  dnn6_sessionAmbr:
+    type: string
+    volatile: true
+  SUPI:
+    volatile: true
+  GPSI:
+    volatile: true
+  # Old_GPSI:
+    # volatile: true
+  UEAMBRDownlink:
+    type: string
+  UEAMBRUplink:
+    type: string
+  subscCats1:
+    type: string
+  subscCats2:
+    type: string
+  slice_nssai:
+    type: string
+  slice_sst:
+    type: string
+  slice_sd:
+    type: string
+composition:
+  bundle:
+    properties:
+      instance_name:
+        value: ${instance.name}
+      operation:
+        value: ${operation}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      resourceManager:
+        value: ${resourceManager}
+      extOrderId:
+        value: ${extOrderId}
+      RoamingPartner:
+        value: ${RoamingPartner}
+      # name:
+      #  value: ${name} 
+      dnn4:
+        value: ${dnn4}
+      loop_back:
+        value: ${loop_back}
+      dnn4_sessionAmbr:
+        value: ${dnn4_sessionAmbr}
+      dnn5:
+        value: ${dnn5}
+      dnn5_sessionAmbr:
+        value: ${dnn5_sessionAmbr}
+      requestedServices:
+        value: ${requestedServices}
+      dnn6:
+        value: ${dnn6}
+      dnn6_sessionAmbr:
+        value: ${dnn6_sessionAmbr}
+      SUPI:
+        value: ${SUPI}
+      GPSI:
+        value: ${GPSI}
+      # Old_GPSI:
+        # value: ${Old_GPSI}
+      UEAMBRDownlink:
+        value: ${UEAMBRDownlink}
+      UEAMBRUplink:
+        value: ${UEAMBRUplink}
+      subscCats1:
+        value: ${subscCats1}
+      subscCats2:
+        value: ${subscCats2}
+      slice_nssai:
+        value: ${slice_nssai}
+      slice_sst:
+        value: ${slice_sst}
+      slice_sd:
+        value: ${slice_sd}
+      serviceType:
+        value: ${serviceType}
+      serviceName:
+        value: ${serviceName}
+      ntype:
+        value: ${ntype}
+      mobileSubscriberType:
+        value: ${mobileSubscriberType}
+      umtsSubscriber_accTypeGSM:
+        value: ${umtsSubscriber_accTypeGSM}
+      umtsSubscriber_accTypeGERAN:
+        value: ${umtsSubscriber_accTypeGERAN}
+      umtsSubscriber_accTypeUTRAN:
+        value: ${umtsSubscriber_accTypeUTRAN}
+      pdpContext_1_id:
+        value: ${pdpContext_1_id}
+      pdpContext_1_qosProfile:
+        value: ${pdpContext_1_qosProfile}
+      pdpContext_1_refPdpContextName:
+        value: ${pdpContext_1_refPdpContextName}
+      pdpContext_2_id:
+        value: ${pdpContext_2_id}
+      pdpContext_2_qosProfile:
+        value: ${pdpContext_2_qosProfile}
+      pdpContext_2_refPdpContextName:
+        value: ${pdpContext_2_refPdpContextName}
+      roamSubscriptionInfo:
+        value: ${roamSubscriptionInfo}
+      eps_defaultPdnContextId:
+        value: ${eps_defaultPdnContextId}
+      eps_maxBandwidthUp:
+        value: ${eps_maxBandwidthUp}
+      eps_maxBandwidthDown:
+        value: ${eps_maxBandwidthDown}
+      eps_accessAPNEnabled:
+        value: ${eps_accessAPNEnabled}
+      eps_subscribedForSMSInMME:
+        value: ${eps_subscribedForSMSInMME}
+      eps_eps5GSmsDeliveryMode:
+        value: ${eps_eps5GSmsDeliveryMode}
+      dnn4_contextId:
+        value: ${dnn4_contextId}
+      dnn4_type:
+        value: ${dnn4_type}
+      dnn4_pdnGwDynamicAllocation:
+        value: ${dnn4_pdnGwDynamicAllocation}
+      dnn4_vplmnAddressAllowed:
+        value: ${dnn4_vplmnAddressAllowed}
+      dnn4_maxBandwidthUp:
+        value: ${dnn4_maxBandwidthUp}
+      dnn4_maxBandwidthDown:
+        value: ${dnn4_maxBandwidthDown}
+      dnn4_qos:
+        value: ${dnn4_qos}
+      dnn4_chargingCharacteristicsProfile:
+        value: ${dnn4_chargingCharacteristicsProfile}
+      dnn4_chargingCharacteristicsBehavior:
+        value: ${dnn4_chargingCharacteristicsBehavior}
+      dnn4_eps5gInterworkIndicator:
+        value: ${dnn4_eps5gInterworkIndicator}
+      dnn5_contextId:
+        value: ${dnn5_contextId}
+      dnn5_type:
+        value: ${dnn5_type}
+      dnn5_pdnGwDynamicAllocation:
+        value: ${dnn5_pdnGwDynamicAllocation}
+      dnn5_vplmnAddressAllowed:
+        value: ${dnn5_vplmnAddressAllowed}
+      dnn5_maxBandwidthUp:
+        value: ${dnn5_maxBandwidthUp}
+      dnn5_maxBandwidthDown:
+        value: ${dnn5_maxBandwidthDown}
+      dnn5_qos:
+        value: ${dnn5_qos}
+      dnn5_chargingCharacteristicsProfile:
+        value: ${dnn5_chargingCharacteristicsProfile}
+      dnn5_chargingCharacteristicsBehavior:
+        value: ${dnn5_chargingCharacteristicsBehavior}
+      dnn5_eps5gInterworkIndicator:
+        value: ${dnn5_eps5gInterworkIndicator} 
+      epsRoamAreaName:
+        value: ${epsRoamAreaName}
+      authenticationmethod:
+        value: ${authenticationmethod}
+      plmnId:
+        value: ${plmnId}
+      homePlmnIdIndication:
+        value: ${homePlmnIdIndication}
+      udm_rfspIndex:
+        value: ${udm_rfspIndex}
+      udm_subsRegTimer:
+        value: ${udm_subsRegTimer}
+      udm_ueUsageType:
+        value: ${udm_ueUsageType}
+      localAreaDataNtwInfo:
+        value: ${localAreaDataNtwInfo}
+      udm_mpsPriority:
+        value: ${udm_mpsPriority}
+      udm_activeTime:
+        value: ${udm_activeTime}
+      udm_downLinkPktCount:
+        value: ${udm_downLinkPktCount}
+      dnn4_defaultIndication:
+        value: ${dnn4_defaultIndication}
+      dnn4_interworkingEPSIndication:
+        value: ${dnn4_interworkingEPSIndication}
+      dnn4_localBrkOutRoamingAllowed:
+        value: ${dnn4_localBrkOutRoamingAllowed}
+      dnn5_interworkingEPSIndication:
+        value: ${dnn5_interworkingEPSIndication}
+      dnn5_localBrkOutRoamingAllowed:
+        value: ${dnn5_localBrkOutRoamingAllowed}
+      dnn4_defaultSessionType:
+        value: ${dnn4_defaultSessionType}
+      dnn4_allowedSessionType:
+        value: ${dnn4_allowedSessionType}
+      dnn4_defaultSscMode:
+        value: ${dnn4_defaultSscMode}
+      dnn4_allowedSscMode:
+        value: ${dnn4_allowedSscMode}
+      interworkingEPSIndication4:
+        value: ${interworkingEPSIndication4}
+      dnn4_udm5Qi:
+        value: ${dnn4_udm5Qi}
+      dnn4_arp:
+        value: ${dnn4_arp}
+      dnn4_priorityLevel:
+        value: ${dnn4_priorityLevel}
+      dnn5_defaultSessionType:
+        value: ${dnn5_defaultSessionType}
+      dnn5_allowedSessionType:
+        value: ${dnn5_allowedSessionType}
+      dnn5_defaultSscMode:
+        value: ${dnn5_defaultSscMode}
+      dnn5_allowedSscMode:
+        value: ${dnn5_allowedSscMode}
+      interworkingEPSIndication5:
+        value: ${interworkingEPSIndication5}
+      dnn5_udm5Qi:
+        value: ${dnn5_udm5Qi}
+      dnn5_arp:
+        value: ${dnn5_arp} 
+      dnn5_priorityLevel:
+        value: ${dnn5_priorityLevel}
+      pcf_policySubscriptionId:
+        value: ${pcf_policySubscriptionId}
+      pcf_dnn4_subscSpendingLimits:
+        value: ${pcf_dnn4_subscSpendingLimits}
+      pcf_dnn4_online:
+        value: ${pcf_dnn4_online}
+      pcf_dnn5_subscSpendingLimits:
+        value: ${pcf_dnn5_subscSpendingLimits}
+      pcf_dnn5_online:
+        value: ${pcf_dnn5_online}   
+      hlr_dnn6_path:
+        value: ${hlr_dnn6_path}
+      dnn6_contextId:
+        value: ${dnn6_contextId}
+      dnn6_type:
+        value: ${dnn6_type}
+      dnn6_pdnGwDynamicAllocation:
+        value: ${dnn6_pdnGwDynamicAllocation}
+      dnn6_vplmnAddressAllowed:
+        value: ${dnn6_vplmnAddressAllowed}
+      dnn6_maxBandwidthUp:
+        value: ${dnn6_maxBandwidthUp}
+      dnn6_maxBandwidthDown:
+        value: ${dnn6_maxBandwidthDown}
+      dnn6_qos:
+        value: ${dnn6_qos}
+      dnn6_chargingCharacteristicsProfile:
+        value: ${dnn6_chargingCharacteristicsProfile}
+      dnn6_chargingCharacteristicsBehavior:
+        value: ${dnn6_chargingCharacteristicsBehavior}
+      dnn6_eps5gInterworkIndicator:
+        value: ${dnn6_eps5gInterworkIndicator}  
+      udm_path:
+        value: ${udm_path}
+      udm_dnn6_defaultIndication:
+        value: ${udm_dnn6_defaultIndication}
+      udm_dnn6_interworkingEPSIndication:
+        value: ${udm_dnn6_interworkingEPSIndication}
+      udm_dnn6_localBrkOutRoamingAllowed:
+        value: ${udm_dnn6_localBrkOutRoamingAllowed}
+      udm_dnn6_path:
+        value: ${udm_dnn6_path}
+      udm_dnn6_interworkingEPSIndication1:
+        value: ${udm_dnn6_interworkingEPSIndication1}
+      udm_dnn6_udm5Qi:
+        value: ${udm_dnn6_udm5Qi}
+      udm_dnn6_arp:
+        value: ${udm_dnn6_arp}
+      udm_dnn6_priorityLevel:
+        value: ${udm_dnn6_priorityLevel}
+      dnn6_defaultSessionType:
+        value: ${dnn6_defaultSessionType}
+      dnn6_allowedSessionType:
+        value: ${dnn6_allowedSessionType}
+      dnn6_defaultSscMode:
+        value: ${dnn6_defaultSscMode}
+      dnn6_allowedSscMode:
+        value: ${dnn6_allowedSscMode}
+      pcf_path:
+        value: ${pcf_path}
+      dnn6_subscSpendingLimits:
+        value: ${dnn6_subscSpendingLimits}
+      dnn6_online:
+        value: ${dnn6_online}
+      hlr_path1:
+        value: ${hlr_path1}
+      hlr_odbgprs:
+        value: ${hlr_odbgprs}
+      hlr_path2:
+        value: ${hlr_path2}
+      hlr_defaultPdnContextId:
+        value: ${hlr_defaultPdnContextId}
+      hlr_path3:
+        value: ${hlr_path3}
+      dnn5_defaultIndication:
+        value: ${dnn5_defaultIndication}
+      dnn5_defaultIndication1:
+        value: ${dnn5_defaultIndication1}        
+      dnn4_dnnBarred:
+        value: ${dnn4_dnnBarred}
+      hlr_path4:
+        value: ${hlr_path4}
+      hlr_operation4:
+        value: ${hlr_operation4}  
+      hlr_flagAPNBlockedOverS6A:
+        value: ${hlr_flagAPNBlockedOverS6A}
+      hlr_flagAPNBlockedOverSWx:
+        value: ${hlr_flagAPNBlockedOverSWx}
+      hlr1_flagAPNBlockedOverS6A:
+        value: ${hlr1_flagAPNBlockedOverS6A}
+      hlr1_flagAPNBlockedOverSWx:
+        value: ${hlr1_flagAPNBlockedOverSWx}
+      dnn6_operation:
+        value: ${dnn6_operation}
+      dnn6_dnnBarred:
+        value: ${dnn6_dnnBarred}
+      dnn6_dnnBarred1:
+        value: ${dnn6_dnnBarred1}
+      hlr_odbgprs1:
+        value: ${hlr_odbgprs1}
+      hlr1_defaultPdnContextId:
+        value: ${hlr1_defaultPdnContextId}
+      dnn4_operation2:
+        value: ${hlr1_defaultPdnContextId}
+      dnn4_defaultIndication1:
+        value: ${dnn4_defaultIndication1}
+      hss_path:
+        value: ${hss_path}
+      hss_operation:
+        value: ${hss_operation}
+      udm_path2:
+        value: ${udm_path2}
+      pcf_path2:
+        value: ${pcf_path2}
+      hlr_epsRoamAreaName:
+        value: ${hlr_epsRoamAreaName}
+      hlr_path6:
+        value: ${hlr_path6}
+      operation1:
+        value: ${operation1}
+      operation2:
+        value: ${operation2}
+      operation3:
+        value: ${operation3}   
+      operation4:
+        value: ${operation4}    
+      operation5:
+        value: ${operation5}
+    type: $lmctl:/contains:/databundle_rfs:/descriptor_name
+    quantity: 1
+      

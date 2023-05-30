@@ -1,0 +1,116 @@
+name: assembly::cnf_amf_asm_topology::1.0
+description: descriptor for sol_amf
+properties:
+#SolSpecific
+  operation:
+    description: addSliceConfig
+    volatile: true
+    default: Configure
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: DFW
+  resourceManager:
+    type: string
+    default: brent
+  instance_name:
+    description: name of assembly instance
+    type: string
+    default: "nk-amf001c-usw2aza001rd-5d66679fb8-f5k5t"
+  nameSpace:
+    type: string
+    default: "usw2-ns-nk-amf-001"    
+  # amfSlice_plmnName:
+  #   type: string
+  # amfSlice_tai:
+  #   type: string
+  # amfSlice_timeZone:
+  #   type: string
+  #   default: PST
+  # amfSlice_snssaiListName:
+  #   type: string
+  # amfSlice_sliceName:
+  #   type: string
+  # amfSlice_sst:
+  #   type: string
+  # amfSlice_sd:
+  #   type: string
+  # amfSlice_supportedInAllTacFlag:
+  #   type: string
+  #   default: true
+  # amfSlice_amfRegionId:
+  #   type: string
+  # amfSlice_amfSetId:
+  #   type: string
+  # amfSlice_snssaiToDnnListName:
+  #   type: string
+  # amfSlice_dnnName:
+  #   type: string
+  # amfSlice_defaultSnssaiSelection:
+  #   type: string
+  #   default: true 
+  # vnfInstanceName:
+  #   description: cnf_instance_name
+  #   default: cnf_instance_name
+  # vnfdId:
+  #   description: cnf_package_identifier
+  #   default: cnf_package_identifier
+  # vnfPkgId:
+  #   description: cnf_package_identifier
+  #   default: VnfPackage-vMRF
+  # vnfInstanceId:
+  #   type: string
+composition:
+  amf:
+    type: $lmctl:/contains:/amf:/descriptor_name
+    quantity: 1    
+    properties:
+#SolSpecific
+      operation:
+        value: ${operation}    
+      deploymentLocation:
+        value: ${deploymentLocation}
+      resourceManager:
+        value: ${resourceManager}
+      instance_name:
+        value: ${instance.name}
+      nameSpace:
+        value: ${nameSpace}      
+      # amfSlice_plmnName:
+      #   value: ${amfSlice_plmnName}
+      # amfSlice_tai:
+      #   value: ${amfSlice_tai}
+      # amfSlice_timeZone:
+      #   value: ${amfSlice_timeZone}
+      # amfSlice_snssaiListName:
+      #   value: ${amfSlice_snssaiListName}
+      # amfSlice_sliceName:
+      #   value: ${amfSlice_sliceName}
+      # amfSlice_supportedInAllTacFlag:
+      #   value: ${amfSlice_supportedInAllTacFlag}
+      # amfSlice_sst:
+      #   value: ${amfSlice_sst}
+      # amfSlice_sd:
+      #   value: ${amfSlice_sd}
+      # amfSlice_amfRegionId:
+      #   value: ${amfSlice_amfRegionId}
+      # amfSlice_amfSetId:
+      #   value: ${amfSlice_amfSetId}
+      # amfSlice_snssaiToDnnListName:
+      #   value: ${amfSlice_snssaiToDnnListName}  
+      # amfSlice_dnnName:
+      #   value: ${amfSlice_dnnName}
+      # vnfdId:
+      #   value: ${vnfdId}
+      # vnfInstanceName:
+      #   value: ${vnfInstanceName}    
+      # vnfPkgId:
+      #   value: ${vnfPkgId}
+      # vnfInstanceId:
+      #   value: ${vnfInstanceId}  
+operations:
+  addSliceConfig:
+    source-operation: amf.addSliceConfig        
+  removeSlice:
+    source-operation: amf.removeSlice        
+

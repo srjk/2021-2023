@@ -1,0 +1,204 @@
+
+#-----------------------> Start time from system  <----------------------------
+- name: "##ALM## Get timestamp from the system"
+  shell: "date +%Y-%m-%d%H:%M:%S.%5N"
+  register: stime
+- name: Creates directory
+  file:
+    path: /tmp/ansible_log
+    state: directory
+    mode: 0775
+#-----------------------> Print Start time  <----------------------------
+- name: "##ALM## Start time"
+  debug: msg="{{ stime }}"
+
+- name: Get Ticket.
+  uri:
+    url: "{{ deployment_location.properties.cnc_host1 }}/crosswork/sso/v1/tickets"
+    method: POST
+    headers:
+      content-type: "application/x-www-form-urlencoded"
+      ReturnResultType: "FULL"
+      return_content: yes
+      Accept: text/plain
+    validate_certs: no
+    status_code: 201
+    return_content: yes
+    body:
+      username: "{{ username }}"
+      password: "{{ password }}"
+    body_format: form-urlencoded
+  register: ticket
+  # ignore_errors: yes
+
+- name: ticket print.
+  debug:
+    msg: "{{ ticket.location }}"
+
+- name: Get Token.
+  uri:
+    url: "{{ deployment_location.properties.cnc_host1 }}/crosswork/sso/v1/tickets/{{ ticket.location | regex_search('tickets/.*') | replace('tickets/','') }}"
+    method: POST
+    headers:
+      content-type: "application/x-www-form-urlencoded"
+      ReturnResultType: "FULL"
+    return_content: yes
+    validate_certs: no
+    status_code: 200
+    body:
+      service: "https://10.194.132.78:30603/app-dashboard"
+    body_format: form-urlencoded
+  register: token
+  # ignore_errors: yes
+  
+  
+- name: token print.
+  debug:
+    msg: "{{ token.content }}"
+
+- name: Set Tmp Filename
+  set_fact:
+    filename_tmp: /tmp/{{ instance_name }}_Cisco_Slice_Provide_{{ ansible_date_time.iso8601 }}.j2
+
+- name: Insert a line at the start of a file.
+  copy:
+    dest: "{{ filename_tmp }}"
+    content: |
+              <{{ cnc_slice_type }}>
+                <nssi>{{ slice_snssai }}</nssi>
+                    <l3>
+                        <auto-rt/>
+                        <as-number>{{ cnc_as_number }}</as-number>
+
+- name: Payload in loop.
+  lineinfile:
+    path: "{{ filename_tmp }}"
+    line: |
+        <endpoint>
+          <pe>{{ item.0 }}</pe>
+          <interface>
+            <if-type>{{ item.1 }}</if-type>
+            <if-id>{{ item.2 }}</if-id>
+            <pe-ip-addr>{{ item.3 }}</pe-ip-addr>
+            <ce-pe-prot>
+              <{{ item.4 }}>
+                <neighbor-ipv4>{{ item.5 }}</neighbor-ipv4>
+                <remote-as-ipv4>{{ item.6 }}</remote-as-ipv4>
+              </{{ item.7 }}>
+            </ce-pe-prot>
+          </interface>
+        </endpoint>
+  loop: "{{ data[0]|zip(*data[1:])|list }}"
+  vars:
+    data:
+        -  "{{ pe_name }}"
+        -  "{{ if_type }}"
+        -  "{{ if_id }}"
+        -  "{{ pe_ip_addr }}"
+        -  "{{ ce_pe_prot }}"
+        -  "{{ ce_pe_remoteAsIp }}"
+        -  "{{ ce_pe_remoteAs }}"
+        -  "{{ ce_pe_prot }}"
+
+- name: Insert a line at the end of a file.
+  lineinfile:
+    path: "{{ filename_tmp }}"
+    line: |
+            </l3>
+                <nsst>{{  cnc_nsst  }}</nsst>
+                </{{ cnc_slice_type }}>
+
+- name: Create Slice.
+  uri:
+    url: "{{ deployment_location.properties.cnc_host1 }}/crosswork/proxy/nso/restconf/data/cisco-5g-transport-cfp:transport-slice"
+    method: POST
+    body: "{{lookup('template', '{{ filename_tmp }}')}}"
+    # body_format: json
+    status_code: [201,400]
+    headers:
+      content-type: "application/yang-data+xml"
+      Authorization: "Bearer {{ token.content }}"
+      ReturnResultType: "FULL"
+    return_content: yes
+    validate_certs: no
+  register: result
+  # ignore_errors: yes
+
+
+- name: Set Logs Filename
+  set_fact:
+   filename: /tmp/ansible_log/{{ instance_name }}_Create_CISCO.log
+
+
+- name: Generate SB json and copy       
+  copy:
+   dest: "{{ filename }}"
+   content: |
+     ***********************************
+     order_send:  
+     {{lookup('template', '{{ filename_tmp }}')}}
+     ____________________________________________________
+
+     result_return:
+      {{ result }}
+
+- name: Log API request through Log module
+  ibm_cp4na_log_message:
+    message_direction: sent
+    external_request_id: "{{ extOrderId }}"
+    content_type: application/json
+    message_data: |
+     ***********************************
+     order_send:  
+     {{lookup('template', '{{ filename_tmp }}')}}
+     ____________________________________________________
+
+     result_return:
+      {{ result }}
+    message_type: sample
+    protocol: http
+
+
+
+- name: Remove tmp files 
+  file:
+   path: "{{ filename_tmp }}"
+   state: absent
+
+#-----------------------> search error from result content  <-------------------------
+- name: "##ALM## Print Error message"
+  set_fact:
+    target: "{{ result.content | regex_search('error') }}"
+
+
+#-----------------------> End time from system  <----------------------------
+- name: "##ALM## Get timestamp from the system"
+  shell: "date +%Y-%m-%d%H:%M:%S.%5N"
+  register: etime
+
+#-----------------------> Print End time  <----------------------------
+- name: "##ALM## end time"
+  debug: msg="{{ etime }}"
+  
+  
+#-----------------------> Store request/response Logs in Eventlogger  <----------------------------
+- name: "##ALM## Store request and response in DB"
+  uri:
+    url: "{{ deployment_location.properties.eventlogger_url }}"
+    method: POST
+    body: "{{lookup('template', 'Store-Provide.json.j2')}}"
+    return_content: yes
+    body_format: json
+    status_code: 200
+    validate_certs: no
+    headers:
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+  register: resultStore
+
+    
+#-----------------------> Print error message for Failure case  <----------------------------
+- fail:
+    msg: "Instance creation failed with {{ result.content | regex_search('<error-message>.*</error-message>') | replace('<error-message>','') | replace('{','/') | replace('}','/') |replace('</error-message>','') }}"
+  when: "target=='error'" 
+ 

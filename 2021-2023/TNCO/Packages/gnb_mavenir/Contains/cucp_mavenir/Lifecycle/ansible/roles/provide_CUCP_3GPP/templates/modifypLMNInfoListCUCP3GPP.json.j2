@@ -1,0 +1,11 @@
+{
+  "gnbId": {{ gnb_id  | int }},
+  "cnfId": {{ cucp_id | int }},
+  "version": "{{ cucp_version }}",
+  "configType": "{{ cucp_3gpp_config }}",
+  "attributeListIn": {
+                "mcc": {{ cucp_mcc }},
+                "mnc": {{ cucp_mnc }},
+                "sNssai": "{{ cucp_sst | int }}{{ cucp_sd }}"
+                }
+}

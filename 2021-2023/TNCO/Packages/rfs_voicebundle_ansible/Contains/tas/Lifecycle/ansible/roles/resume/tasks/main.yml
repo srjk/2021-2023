@@ -1,0 +1,98 @@
+- name: "##ALM##certificate store"
+  template:
+    src: "tascertfile.cert"
+    dest: "tascertfile.cert"
+#-----------------------> Start time from system  <----------------------------
+- name: "##ALM##Get timestamp from the system"
+  shell: "date +%Y-%m-%d%H:%M:%S.%5N"
+  register: stime
+
+#-----------------------> Print Start time  <----------------------------
+- name: "##ALM##Start time"
+  debug: msg="{{ stime }}"
+
+#-----------------------> List requested services  <----------------------------
+- name: "##ALM##setting filename"
+  set_fact:
+    # filename: /tmp/ansible_log/ansible_{{ extOrderId }}.log
+    listrequestedServices: "{{ requestedServices.split(',') | map('trim') |  list }}"
+    tas_resume_url: "{{ deployment_location.properties.tas_resume_url }}"
+
+#-----------------------> SOAP call for TAS resume operation for Primary URL <----------------------------
+- name: "##TAS##Call Soap of SPML Adapter"
+  environment:
+    SSL_CERT_FILE: "tascertfile.cert"
+  uri:
+    url: "{{ tas_resume_url }}"
+    method: POST
+    user: somuser
+    password: Passw0rd12345!
+    return_content: yes
+    body: "{{lookup('template', 'Bundle_Voice_Resume_TAS.xml.j2')}}"
+    # body_format: "got:xml"
+    # retry_count: "{{ ansible_env.RETRY_COUNT }}"
+    # retry_interval: "{{ ansible_env.RETRY_INTERVAL }}"
+    headers:
+      content-type: "text/xml"
+      ReturnResultType: "FULL"
+      return_content: yes
+      SOAPAction: ""
+  register: result
+  until: result.status == 200
+  retries: "{{ RETRY_COUNT }}"
+  delay: "{{ RETRY_INTERVAL }}"
+  failed_when: "result.status not in [-1,200]"
+
+#-----------------------> SOAP call for TAS resume operation for Primary URL <----------------------------
+- name: "##ALM## Call for TAS resume operation for Secondary URL"
+  include_tasks: second.yaml
+  when: result.status == -1
+
+#-----------------------> End time from system  <----------------------------  
+- name: "##ALM##Get timestamp from the system"
+  shell: "date +%Y-%m-%d%H:%M:%S.%5N"
+  register: etime
+
+#-----------------------> Print End time  <----------------------------
+- name: "##ALM##end time"
+  debug: msg="{{ etime }}"
+  
+# - name: setting filename
+  # set_fact:
+    # filename: /tmp/ansible_log/ansible_{{ extOrderId }}_tas_resume.log
+
+# - name: generate SB json and copy       
+  # copy:
+    # dest: "{{ filename }}"
+    # content: |
+       # ***********************************
+       # start_time:  {{ stime.start }}
+       # end_time:  {{ etime.end }}
+       # ***********************************
+       # order_send:  {{lookup('template', 'Bundle_Voice_Resume_TAS.xml.j2')}}
+       # ____________________________________________________
+       # result_return: {{ result }}
+
+- set_fact:
+    target: "{{ result.content | regex_search('FailureReason') }}"
+
+#-----------------------> Store request/response Logs in Eventlogger  <----------------------------
+- name: "##ALM##Store request and response in DB"
+  uri:
+    url: "{{ deployment_location.properties.eventlogger_url }}"
+    method: POST
+    body: "{{lookup('template', 'Store.json.j2')}}"
+    return_content: yes
+    body_format: json
+    status_code: 200
+    validate_certs: no
+    headers:
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+  register: resultStore
+
+#-----------------------> Print error message for Failure case  <----------------------------
+
+- fail:
+    msg: "Instance creation failed with error code {{ result.content | regex_search('FailureCode=[^ ]+([0-9])') | replace('\"','') |replace('FailureCode=','') }} and error message {'tas': '{{ result.content | regex_search('FailureReason=.*Failure') | replace('FailureReason=','') | replace('Failure','') | replace('\"','') }}'}"
+  when: "target=='FailureReason'"

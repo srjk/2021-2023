@@ -1,0 +1,108 @@
+###Call when Slice ID Xpath is present (Slice-Index value already present)
+###CUUP_XpathIsPresent.yaml
+
+- name: Read xml data to calculate the slice-index
+  xml:
+    xmlstring: "{{ lookup('file', '{{ xmlfile }}') }}"
+    namespaces:
+      ns: http://www.samsung.com/global/business/5GvRAN/ns/gnb-cu-up-cnf
+    xpath: /data/ns:managed-element/ns:gnb-cu-up-function/ns:gnb-cu-up-slice-info/ns:slice-index
+    content: 'text'
+  register: xml_result
+
+- name: Print slice-index matches
+  debug:
+    var: xml_result.matches
+
+
+###find length of Arrray of dict(json)
+#- name: Print the length of SliceIndex
+#  set_fact:
+#    sliceIndex: "{{ xml_result.matches | length }}"
+#    # sliceIndex: "{{ xml_result.matches | length | default(0) }}"
+#
+###Extract last entry from array in dict(json) format
+#- name: Print last SliceIndex entry from array in json(dict) format (key:value pair)
+#  set_fact:
+#    SliceIdlast: "{{ xml_result.matches[sliceIndex | int -1] }}"
+#  # when: "sliceIndex!=0"
+#
+### Extract only key from last SliceIndex entry of array
+#- name: Print only key from last SliceIndex entry
+#  set_fact:
+#    SliceIdlastKeyonly: "{{ SliceIdlast.keys() }}"
+#
+### Extract First key from dict of keys
+#- name: Print first key from last SliceIndex entry if found multiple
+#  set_fact:
+#    SliceIdFirstKey: "{{ SliceIdlastKeyonly[0] }}"
+#  # when: "sliceIndex!=0"
+#
+#- debug:
+#    msg: "{{ SliceIdFirstKey }}"
+#
+#- name: Print slice-Index value of the last entry in list
+#  set_fact:
+#    sliceIndexFirstKeyvalue: "{{ SliceIdlast[SliceIdFirstKey] }}"
+#  # when: "sliceIndex!=0"
+#
+#- name: Increment slice-Index to 1 if atleast one slice-index data is found in xml
+#  set_fact:
+#    sliceIndexvalueIncrement: "{{ sliceIndexFirstKeyvalue |int + 1 }}"
+#    # sd: "14445"
+#  # when: "sliceIndex!=0"
+#
+## - name: Set slice-Index to 1 if no slice-index data is found in result output xml
+#  # set_fact:
+#    # sliceIndexvalueIncrement: 1
+#  # when: "sliceIndex==0"
+#
+#- name: Print sliceIndexvalueIncrement
+#  debug:
+#    msg: "{{ sliceIndexvalueIncrement }}"
+#    
+#- name: Set the CUUP Slice ID and use the same during Cease operation 
+#  set_fact:
+#    output__CUUPsliceIndexvalueIncrement: "{{ sliceIndexvalueIncrement }}"
+
+#----------------> CU_UP delete slice  <--------------
+- name: Call RestAPI to delete CU_UP Slice ID
+  uri:
+    url: "{{ cuup_samsung_usm_host }}/oss/netconf/AUPF_25155100"
+    # user: ossuser
+    # password: osspasswd
+    method: POST
+    body: "{{lookup('template', 'delete_slice_cu_up.xml')}}"
+    # body_format: json
+    headers:
+      Authorization: Basic b3NzdXNlcjpvc3NwYXNzd2Q=
+      content-type: "application/xml"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: CU_UP_deleteSlice
+  # ignore_errors: yes
+
+- name: Display response
+  debug:
+    var: CU_UP_deleteSlice
+
+- name: CU_UP_getSlice info print
+  lineinfile:
+    path: "{{ logsfile }}"
+    line: |
+           __________________________________________________________________________
+           
+           ##### Create Slice for CUUP
+           
+           URL:
+           {{ CU_UP_deleteSlice.url }}
+           
+           order_send:
+           {{lookup('template', 'delete_slice_cu_up.xml')}}
+           
+           result_return:
+           {{ CU_UP_deleteSlice.content }}
+           __________________________________________________________________________

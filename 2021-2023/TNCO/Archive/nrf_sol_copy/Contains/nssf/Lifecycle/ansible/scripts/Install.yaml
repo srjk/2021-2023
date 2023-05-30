@@ -1,0 +1,117 @@
+---
+- name: uri module demo
+  hosts: localhost
+  # connection: local 
+  become: false
+  gather_facts: False
+  # vars:
+  #   server: "https://reqres.in"
+  #   endpoint: "/api/users"
+  tasks:
+    - name: Pause for 5 minutes to build app cache
+      ansible.builtin.pause:
+        seconds: 45
+    - name: log api request
+      ibm_cp4na_log_message:
+        message_direction: sent
+        external_request_id: 5d1cd9ca-shubham
+        content_type: application/json
+        message_data: |
+          "<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+             <soapenv:Body><spml:modifyRequest timestamp="true" requestID="" xmlns:spml="urn:siemens:names:prov:gw:SPML:2:0" xmlns:sub="urn:siemens:names:prov:gw:SDL_MULTIAPPSUBSCRIBER:1:0"> 
+              <version>SDL_MULTIAPPSUBSCRIBER_v10</version>
+              <objectclass>Subscriber</objectclass>
+              <identifier alias="imsi">
+              </identifier>"
+        message_type: sample
+        protocol: http
+    # - name: generate SB json and copy       
+    #   copy:
+    #     dest: "/tmp/certificate"
+    #     content: |
+    #       ***********************************
+    #       start_time:  {{ deployment_location.properties }}
+    # - name: Get ALM Token
+    #   uri:
+    #     method: POST
+    #     url: https://ib-orc-230-ishtar-001:8280/oauth/token?grant_type=client_credentials
+    #     headers:
+    #       Authorization: Basic QWRtaW46azlGSFZjNXd0N2tWRTNNZ3hValRrUkc0bWJDWGRmWlA=
+    #     validate_certs: no
+    #   register: auth_response
+    # - debug: var=auth_response
+    # - set_fact:
+    #     prop: "{{ deployment_location.properties | from_json | removekey('SMF_PASS') | combine({'SMF_PASS': 'shubham_pass' }) }}"
+    # - debug: var=prop
+    # - name: Get Assembly Status
+    #   uri:
+    #     method: GET
+    #     url: "https://ib-orc-230-ishtar-001:8280/api/deploymentLocations/{{ deploymentLocation }}"
+    #     # body: "{{ deployment_location.properties }}"
+    #     body_format: json
+    # #environment:
+    # #  SSL_CERT_FILE:
+    #     headers:
+    #       Authorization: Bearer {{ auth_response.json.access_token }}
+    #       content-type: "application/json"
+    #     validate_certs: no
+    #   register: alm_response1
+    # - name: populate combined var
+    #   set_fact:
+    #      combined_var: "{{ alm_response1.json | combine({'infrastructureSpecificProperties': prop }) }}"
+    # - name: generate SB json and copy       
+    #   copy:
+    #     dest: "/tmp/properties"
+    #     content: |
+    #        {{ combined_var }}
+    # - name: Get Assembly Status
+    #   uri:
+    #     method: PUT
+    #     url: "https://ib-orc-230-ishtar-001:8280/api/deploymentLocations/{{ alm_response1.json.id }}"
+    #     body: "{{lookup('template', '/tmp/properties')}}"
+    #     body_format: json
+    # #environment:
+    # #  SSL_CERT_FILE:
+    #     headers:
+    #       Authorization: Bearer {{ auth_response.json.access_token }}
+    #       content-type: "application/json"
+    #     validate_certs: no
+    #   register: alm_response1
+    # - name: generate SB json and copy       
+    #   copy:
+    #     dest: "/tmp/update_certificate"
+    #     content: |
+    #       ***********************************
+    #       start_time:  {{ deployment_location.properties }}  
+  #   - name: log api request
+  #     ibm_cp4na_log_message:
+  #       message_direction: request
+  #       external_request_id: 5d1cd9ca-shubham
+  #       content_type: application/json
+  #       message_data: |
+  #         "<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  #            <soapenv:Body><spml:modifyRequest timestamp="true" requestID="" xmlns:spml="urn:siemens:names:prov:gw:SPML:2:0" xmlns:sub="urn:siemens:names:prov:gw:SDL_MULTIAPPSUBSCRIBER:1:0"> 
+  #             <version>SDL_MULTIAPPSUBSCRIBER_v10</version>
+  #             <objectclass>Subscriber</objectclass>
+  #             <identifier alias="imsi">
+  #             </identifier>"
+
+  #   - name: cp4na api call
+  #     ansible.builtin.uri:
+  #       url: "{{ server }}{{ endpoint }}"
+  #       method: POST
+  #       return_content: yes
+  #       body: {"name": "thanks for joining", "job": "leader"}
+  #       body_format: json
+  #       headers:
+  #         Content-Type: application/json
+  #       status_code: 201
+  #       timeout: 30
+  #     register: testout
+
+  #   - name: log api response
+  #     ibm_cp4na_log_message:
+  #       message_direction: response
+  #       external_request_id: 5d1cd9ca-shubham
+  #       content_type: application/json
+  #       message_data: "{{ testout.json }}"

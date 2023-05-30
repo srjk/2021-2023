@@ -1,0 +1,96 @@
+{
+	"RequestId": "{{ extOrderId }}",
+	"imsi": "{{ SUPI }}",
+	"serviceType": "Bundle RFS",
+	"serviceName": "{{ serviceName }}",
+	"SubParty": {
+		"PartyId": "{{ GPSI }}",
+		"DisplayName": "{{ GPSI }}",
+		"Category": "RESIDENTIALSUBSCRIBER_R2",
+		"PrimaryPUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+		"PrimaryPUIDCPEProfileNumber": "200",
+		"CsdFlavor": "TAS_CSD_ALU_P2",
+		"CsdDynamic": "true",
+		"CallLimit": "6",
+		"ServiceSuspension": "false"
+	},
+	"DialingPlan": {
+		"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+		"Assigned": "true",
+		"PrefixandFeatureCode": "1000",
+		"E164NormAndCodeConv": "1001"
+	},
+	"CallingLineId": {
+		"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+		"Assigned": "true",
+		"CallingLineIdRestriction": "{{ tas_callinglineid_restriction }}",
+		"CLIREditAllowed": "true",
+		"CallingLineIdPresentation": "true",
+		"CallingNamePresentation": "true"
+	},
+	"CallForwardDefault": {
+		"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+		"Assigned": "true",
+		"ForwardToType": "FORWARD_TO_VM",
+		"CfdMode": "BUSY_NOANSWER",
+		"EditPermission": "EDIT_NONE",
+		"EditPermissionsNoAnswer": "EDIT_NONE",
+		"NoAnswerTimeout": "20",
+		"Activated": "true",
+		"BusyActive": "true",
+		"NoAnsActive": "true"
+	},
+	"CallForwardingVari": {
+		"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+		"Assigned": "true",
+		"ReceiveNotify": "true"
+	},
+	"CallForwardingBusy": {
+		"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+		"Assigned": "true",
+		"ReceiveNotify": "true"
+	},
+	"CallForwardingNoAns": {
+		"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+		"Assigned": "true",
+		"NoAnswerTimeout": "20"
+	},
+	"CallForwardNotReach": {
+		"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+		"Assigned": "true"
+	},
+	"SelectiveCallRejct": {
+		"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+		"Assigned": "true"
+	},
+	"AnonymousCallRej": {
+		"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+		"Assigned": "true"
+	},
+	"MsgWaitingInd": {
+		"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+		"Assigned": "true",
+		"MWINotify": "true",
+		"Activated": "true"
+	},
+	"VoiceMail": {
+		"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+		"Assigned": "true",
+		"ForwardToDN": "+18883778734@vmas.dish5g.net"
+	},
+	"AdvancedConference": {
+		"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+		"Assigned": "true",
+		"MaxConfLegs": "6",
+		"SendNotify": "true"
+	},
+	"AutomaticCallBack": {
+		"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+		"Assigned": "true"
+	},
+	"OnlineCharging": {
+		"PublicUID": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+		"Assigned": "true",
+		"SessionBasedOption": "ORIG_TERM"
+	}
+}

@@ -1,0 +1,10 @@
+---
+- name: Install
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  # roles: 
+   # - { role: ../roles/NOIProd, when: ansible_env.NOI_ENV == 'prod' }
+   # - { role: ../roles/NOI/tasks/NOIStub.yml, when: ansible_env.AMF_ENV == 'Stub' }
+   # - { role: ../roles/BPIStub, when: ansible_env.BPI_ENV == 'stub' }
+   # - { role: ../roles/BPIProd, when: ansible_env.BPI_ENV == 'prod' }

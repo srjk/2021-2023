@@ -1,0 +1,66 @@
+- name: Create the list
+  set_fact:
+    list_nssf_defaultGrantName: "{{ nssf_defaultGrantName.split(',')| map('trim')| list }}"
+    list_nssf_nssRuleName: "{{ nssf_nssRuleName.split(',')| map('trim')| list }}"
+    list_nssf_tai: "{{ nssf_tai.split(',')| map('trim')| list }}"
+
+- name: Creates directory
+  file:
+    path: /tmp/ansible_log
+    state: directory
+    mode: 0775
+
+- name: setting filename
+  set_fact:
+    filename: /tmp/ansible_log/ansible_{{ ansible_date_time.iso8601 }}.log
+- shell: "python3 test.py"
+  register: start_time
+  no_log: True
+
+- name: generate SB json and copy       
+  copy:
+    dest: "{{ filename }}"
+    content: |
+       ***********************************
+       start_time:  {{ start_time.stdout }}
+
+- name: delete nsi rule 
+  shell: "curl --location --request DELETE '{{ NSSF_HOST }}/nnssf-configuration/v1/nssrules/{{ item }}' --http2-prior-knowledge --header 'Accept: application/json' --header 'Content-Type: application/json'"
+  loop: "{{ list_nssf_nssRuleName }}"
+  register: result_profile
+
+- include: myremov.yaml
+  vars:
+    myvar: "{{ item }}"
+    mcc: "{{ nssf_mcc }}"
+    mnc: "{{ nssf_mnc }}"
+    amfid: "12345678-abcd-efAB-CDEF-123456789012"
+    sd: "{{ nssf_sd  }}"
+    sst: "{{ nssf_sst }}"
+  loop: "{{ list_nssf_tai }}"
+  register: result_profile
+
+- name: delete nsi auth
+  shell: "curl --location --request DELETE '{{ NSSF_HOST }}/nnssf-configuration/v1/nssaiauth/{{ item }}' --http2-prior-knowledge --header 'Accept: application/json' --header 'Content-Type: application/json'"
+  loop: "{{ list_nssf_defaultGrantName }}"
+  register: result_profile
+
+
+
+# - name: Configure NSI profile
+#   shell: "curl --location --request DELETE 'http://10.223.195.14/nnssf-configuration/v1/nsiprofiles/{{ nssf_nsiProfileName }}' --header 'Accept: application/json' --header 'Content-Type: application/json'"
+#   register: result_profile
+
+- shell: "python3 test.py"
+  register: end_time
+  no_log: True
+
+- shell: "python3 diff.py '{{ end_time.stdout }}' '{{ start_time.stdout }}'"
+  register: time_diff
+
+- name: Insert a line at the end of a file.
+  lineinfile:
+    path: "{{ filename }}"
+    line: |
+           end_time:  {{ end_time.stdout }}
+           time_taken:  {{ time_diff.stdout }}

@@ -1,0 +1,23 @@
+---
+- name: Install
+  hosts: localhost
+  # connection: local
+  gather_facts: False
+  pre_tasks:
+    - name: setting filename
+      set_fact:
+        listrequestedServices: "{{ requestedServices.split(',') | map('trim') |  list }}"
+
+  tasks:
+
+    - name: VoiceBundle Provide Role
+      include_role:
+        name: ../roles/provide
+      when: "'SUSPEND_DATA' not in listrequestedServices and (loop_back == 'OFF' or loop_back == 'false')"
+
+
+    - name: VoiceOnly Provide Role
+      include_role:
+        name: ../roles/provide_VoiceOnly
+      when: "'SUSPEND_DATA' in listrequestedServices and (loop_back == 'OFF' or loop_back == 'false')"
+

@@ -1,0 +1,22 @@
+schema: '2.0'
+name: rfs_voicebundle_dish_spml
+version: '1.0'
+type: Assembly
+resource-manager: Brent
+contains:
+- name: tas_spml
+  type: Resource
+  resource-manager: Brent
+  directory: tas_spml
+- name: enum_spml
+  type: Resource
+  resource-manager: Brent
+  directory: enum_spml
+- name: prov_base_spml
+  type: Resource
+  resource-manager: Brent
+  directory: prov_base_spml
+- name: voicemail_spml
+  type: Resource
+  resource-manager: Brent
+  directory: voicemail_spml

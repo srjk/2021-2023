@@ -1,0 +1,27 @@
+---
+- name: Reconfigure
+  hosts: localhost
+  # connection: local  
+  gather_facts: False
+  tasks:
+    - name: Conditional role
+      include_role:
+        name: ../roles/ChangeSIM
+      when: "operation == 'ChangeSIM'"
+    - name: Conditional role
+      include_role:
+        name: ../roles/BlockSIM
+      when: "operation == 'BlockSIM'"
+    - name: Conditional role
+      include_role:
+        name: ../roles/UnblockSIM
+      when: "operation == 'UnblockSIM'" 
+  # roles:
+  #   - { role: ../roles/suspend, when: operation == 'Suspend' }
+  #   - { role: ../roles/resume, when: operation == 'Resume' }
+  #   - { role: ../roles/BlockSIM, when: operation == 'BlockSIM' }
+  #   - { role: ../roles/UnblockSIM, when: operation == 'UnblockSIM' }
+  #   - { role: ../roles/ChangeSIM, when: operation == 'ChangeSIM' }
+  #   - { role: ../roles/ChangeDevice, when: operation == 'ChangeDevice' }
+  #   - { role: ../roles/changeMSISDN, when: operation == 'ChangeNumber' }
+  #   - { role: ../roles/cleanupMSISDN, when: operation == 'ChangeNumber' }

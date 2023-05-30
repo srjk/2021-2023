@@ -1,0 +1,195 @@
+#-----------------------> Start time from system  <----------------------------
+- name: "##ALM## Get timestamp from the system"
+  connection: local
+  shell: "date +%Y-%m-%d%H:%M:%S.%5N"
+  delegate_to: 127.0.0.1
+  register: stime
+- name: Creates directory
+  file:
+    path: /tmp/ansible_log
+    state: directory
+    mode: 0775
+  delegate_to: 127.0.0.1
+# convert ALM properties to json provide request for South Bound endpoint - Nokia Provisioning GW 
+- name: Create the list
+  set_fact:   
+    list_amfTac: "{{ amfSlice_tai.split(',') | list }}" 
+    list_amfSlice_dnnName: "{{ amfSlice_dnnName.split(',') | list }}"
+    list_amfSlice_snssaiToDnnListName: "{{ amfSlice_snssaiToDnnListName.split(',') | list }}"
+        
+- name: Insert a line at the end of a file.
+  raw: export USER=root
+
+# - name: Insert a line at the end of a file.
+#   raw: ./cmmamfTai create --plmnName {{ amfSlice_plmnName }} --amfTac {{ item }}  --timeZoneName {{ amfSlice_timeZone}}
+#   loop: "{{ list_amfTac }}"
+#   register: result
+#   failed_when:
+#     - '"The relevant data content already exists" not in result.stdout'
+#     - '"Field" not in result.stdout'
+
+
+# - name: Insert a line at the end of a file.
+#   raw: ./cmmsnssaiList create --name {{ amfSlice_snssaiListName }} 
+#   register: result
+# #  ignore_errors: yes
+
+# - fail:
+#     msg: "{{ result.stdout | regex_search('ERROR.*') }}"
+#   when:
+#     - '"The relevant data content already exists" not in result.stdout'
+#     - '"Field" not in result.stdout'
+- name: log file for AMF
+  set_fact:
+    Logs: /tmp/ansible_log/{{ instance_name }}_Create_AMF.log
+
+- name: Insert a line at the end of a file.
+  raw: "./cmm snssai create --name {{ amfSlice_sliceName }} --sliceServiceType {{ amfSlice_sst }} --sliceDifferentiator {{ amfSlice_sd | upper }}"
+  register: result
+  failed_when: "result.rc not in [1,0]"
+#  ignore_errors: yes
+# - name: Add a host alias that we reach through a tunnel (Ansible 2.0 and newer)
+#   add_host:
+#     hostname: '127.0.0.1'
+
+- name: copy
+  connection: local
+  copy:
+    dest: "{{ Logs }}"
+    content: | 
+          input: cmm snssai create --name {{ amfSlice_sliceName }} --sliceServiceType {{ amfSlice_sst }} --sliceDifferentiator {{ amfSlice_sd | upper }}
+          output: {{ result.stdout }}
+  delegate_to: 127.0.0.1
+
+- fail:
+    msg: "{{ result.stdout_lines[0] }}"
+  when:
+    - 'result.rc == 1'
+
+- name: run the command
+  raw: ./cmm amfSetSnssai list | grep {{ amfSlice_plmnName }}~{{ amfSlice_amfRegionId }}~{{ amfSlice_amfSetId }}
+  register: snssai_output
+
+- name: Insert a line at the end of a file.
+  connection: local
+  lineinfile:
+    path: "{{ Logs }}"
+    line: |
+      input: cmm amfSetSnssai list | grep {{ amfSlice_plmnName }}~{{ amfSlice_amfRegionId }}~{{ amfSlice_amfSetId }}
+      output: {{ snssai_output.stdout }}
+  delegate_to: 127.0.0.1
+
+- name: setting filename
+  set_fact:
+    filename: "{{ snssai_output.stdout | regex_search('(?<=\\s)(.*?)(?=\\s)') }}"
+
+- name: run the command
+  raw: ./cmm amfSetSnssai show {{ filename }} | grep snssaiListName
+  register: snssaiListName_output
+
+- name: Insert a line at the end of a file.
+  connection: local
+  lineinfile:
+    path: "{{ Logs }}"
+    line: |
+      input: cmm amfSetSnssai show {{ filename }} | grep snssaiListName
+      output: {{ snssaiListName_output.stdout }}
+  delegate_to: 127.0.0.1
+      
+- name: setting filename
+  set_fact:
+    snssailist: "{{ snssaiListName_output.stdout_lines[0] | replace('| snssaiListName* | ','') | replace (' ','') | replace('|','')  }}"
+
+- name: Insert a line at the end of a file.
+  raw: ./cmm snssaiListItem create --snssaiListName {{ snssailist }} --snssaiName {{ amfSlice_sliceName }} 
+  register: result
+ 
+- name: Insert a line at the end of a .
+  connection: local
+  lineinfile:
+    path: "{{ Logs }}"
+    line: |
+          input: cmm snssaiListItem create --snssaiListName {{ snssailist }} --snssaiName {{ amfSlice_sliceName }}
+          output: {{ result.stdout }}
+  delegate_to: 127.0.0.1
+#  ignore_errors: yes
+
+# - fail:
+#     msg: "{{ result.stdout | regex_search('ERROR.*') }}"
+#   when:
+#     - '"The relevant data content already exists" not in result.stdout'
+#     - '"Field" not in result.stdout'
+# - name: Insert a line at the end of a file.
+#   raw: ./cmmamfSetSnssai create --plmnName {{ amfSlice_plmnName }} --amfRegionId {{ amfSlice_amfRegionId}} --amfSetId {{ amfSlice_amfSetId }} --snssaiListName {{ amfSlice_snssaiListName }}
+#   register: result
+#   failed_when:
+#     - '"The relevant data content already exists" not in result.stdout'
+#     - '"Field" not in result.stdout'
+#     - '"Only 1 plmnName, amfRegionId, and amfSetId record can be provisioned" not in result.stdout'
+
+- include: snssaitodnnList.yaml
+  vars:
+    item: "{{ item }}"
+    filename: "{{ Logs }}"
+  loop: "{{ list_amfSlice_snssaiToDnnListName }}"
+  register: result
+  
+# - name: Insert a line at the end of a file.
+  # lineinfile:
+    # path: "{{ Logs }}"
+    # line: |
+      # {{ result.stdout }}
+  # delegate_to: 127.0.0.1
+
+- include: snssaitodnn.yaml
+  vars:
+    data:
+        -  "{{ list_amfSlice_dnnName }}"
+        -  "{{ list_amfSlice_snssaiToDnnListName }}"
+    dnnName: "{{ item.0 }}"
+    snssaiToDnnListName: "{{ item.1 }}"
+    filename: "{{ Logs }}"
+  loop: "{{ data[0]|zip(*data[1:])|list }}"
+
+
+- name: Log API request through Log module
+  ibm_cp4na_log_message:
+    message_direction: sent
+    external_request_id: "{{ extOrderId }}"
+    content_type: application/json
+    message_data: |
+     ***********************************
+     order_send:  
+     {{lookup('template', '{{ Logs }}')}}
+     
+     
+     ************************************ 
+    message_type: sample
+    protocol: http   
+
+
+
+
+#-----------------------> End time from system  <----------------------------
+- name: "##ALM## Get timestamp from the system"
+  connection: local
+  shell: "date +%Y-%m-%d%H:%M:%S.%5N"
+  delegate_to: 127.0.0.1   
+  register: etime
+
+#-----------------------> Store request/response Logs in Eventlogger  <----------------------------
+- name: "##ALM## Store request and response in DB"
+  connection: local
+  uri:
+    url: "{{ deployment_location.properties.eventlogger_url }}"
+    method: POST
+    body: "{{lookup('template', 'Store.json.j2')}}"
+    return_content: yes
+    body_format: json
+    status_code: 200
+    validate_certs: no
+    headers:
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+  delegate_to: 127.0.0.1      
+  register: resultStore

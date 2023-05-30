@@ -1,0 +1,198 @@
+
+#-----------------------> Start time from system  <----------------------------
+- name: "##ALM## Get timestamp from the system"
+  shell: "date +%Y-%m-%d%H:%M:%S.%5N"
+  register: stime
+
+#-----------------------> Print Start time  <----------------------------
+- name: "##ALM## Start time"
+  debug: msg="{{ stime }}"
+
+
+
+- name: Declare the Mandotary parameters
+  set_fact:
+#     template_param: {"IP_ADDRESS_LOOPBACK_1": "172.31.6.80","IP_ADDRESS_LOOPBACK_2": "172.31.6.86","IP_ADDRESS_LOOPBACK_3": "", "IP_ADDRESS_1": ""}
+#     template_name: "upf-n3"
+    amf: ["TENGIG_INTF_5GC-OAM","TENGIG_INTF_5GC-SIGNALING","TENGIG_INTF_5GC-N2","TENGIG_INTF_LI","PHYS_IP_5GC-OAM_PRI","PHYS_IP_5GC-OAM_PRI_MASK","PHYS_IP_5GC-OAM_SEC","PHYS_IP_5GC-OAM_SEC_MASK","PHYS_IP_5GC-SIGNALING_PRI","PHYS_IP_5GC-SIGNALING_PRI_MASK","PHYS_IP_5GC-SIGNALING_SEC","PHYS_IP_5GC-SIGNALING_SEC_MASK","PHYS_IP_5GC-N2_PRI","PHYS_IP_5GC-N2_PRI_MASK","PHYS_IP_5GC-N2_SEC","PHYS_IP_5GC-N2_SEC_MASK","PHYS_IP_LI_PRI","PHYS_IP_LI_PRI_MASK","PHYS_IP_LI_SEC","PHYS_IP_LI_SEC_MASK"]
+    smf: ["LO_INTF_5GC-OAM","LO_INTF_LI","LO_INTF_5GC-SIGNALING","LO_IP_5GC-OAM","LO_IP_5GC-OAM_MASK","LO_IP_LI","LO_IP_LI_MASK","LO_IP_5GC-SIGNALING","LO_IP_5GC-SIGNALING_MASK","TENGIG_INTF_5GC-OAM_1","TENGIG_INTF_5GC-OAM_2","TENGIG_INTF_5GC-SIGNALING_1","TENGIG_INTF_5GC-SIGNALING_2","TENGIG_INTF_LI_1","TENGIG_INTF_LI_2","PHYS_IP_5GC-OAM_1","PHYS_IP_5GC-OAM_1_MASK","PHYS_IP_5GC-OAM_2","PHYS_IP_5GC-OAM_2_MASK","PHYS_IP_5GC-SIGNALING_1","PHYS_IP_5GC-SIGNALING_1_MASK","PHYS_IP_5GC-SIGNALING_2","PHYS_IP_5GC-SIGNALING_2_MASK","PHYS_IP_LI_1","PHYS_IP_LI_1_MASK","PHYS_IP_LI_2","PHYS_IP_LI_2_MASK","ROUTE_NETWORK_5GC-OAM_1","ROUTE_NEXTHOP_5GC-OAM_1","ROUTE_NETWORK_5GC-OAM_2","ROUTE_NEXTHOP_5GC-OAM_2","ROUTE_NETWORK_5GC-SIGNALING_1","ROUTE_NEXTHOP_5GC-SIGNALING_1","ROUTE_NETWORK_5GC-SIGNALING_2","ROUTE_NEXTHOP_5GC-SIGNALING_2","ROUTE_NETWORK_LI_1","ROUTE_NEXTHOP_LI_1","ROUTE_NETWORK_LI_2","ROUTE_NEXTHOP_LI_2","BGP_REMOTE_AS_5GC-OAM","BGP_NEIGHBOR_5GC-OAM","BGP_PASSWORD_HASH_5GC-OAM","BGP_REMOTE_AS_5GC-SIGNALING","BGP_NEIGHBOR_5GC-SIGNALING","BGP_PASSWORD_HASH_5GC-SIGNALING","BGP_REMOTE_AS_LI","BGP_NEIGHBOR_LI","BGP_PASSWORD_HASH_LI"]
+    upf_n3: ["LO_INTF_5GC-OAM","LO_IP_5GC-OAM","LO_IP_5GC-OAM_MASK","LO_INTF_5GC-N3","LO_IP_5GC-N3","LO_IP_5GC-N3_MASK","LO_INTF_5GC-4G","LO_IP_5GC-4G","LO_IP_5GC-4G_MASK","LO_INTF_LI","LO_IP_LI","LO_IP_LI_MASK","LO_INTF_5GC-SIGNALING","LO_IP_5GC-SIGNALING","LO_IP_5GC-SIGNALING_MASK","TENGIG_INTF_5GC-OAM","PHYS_IP_5GC-OAM_PRI","PHYS_IP_5GC-OAM_PRI_MASK","PHYS_IP_5GC-OAM_SEC","PHYS_IP_5GC-OAM_SEC_MASK","TENGIG_INTF_5GC-OAM_1","PHYS_IP_5GC-OAM_1","PHYS_IP_5GC-OAM_1_MASK","TENGIG_INTF_5GC-OAM_2","PHYS_IP_5GC-OAM_2","PHYS_IP_5GC-OAM_2_MASK","TENGIG_INTF_5GC-SIGNALING_1","PHYS_IP_5GC-SIGNALING_1","PHYS_IP_5GC-SIGNALING_1_MASK","TENGIG_INTF_5GC-SIGNALING_2","PHYS_IP_5GC-SIGNALING_2","PHYS_IP_5GC-SIGNALING_2_MASK","TENGIG_INTF_LI_1","PHYS_IP_LI_1","PHYS_IP_LI_1_MASK","TENGIG_INTF_LI_2","PHYS_IP_LI_2","PHYS_IP_LI_2_MASK","TENGIG_INTF_5GC-4G_1","PHYS_IP_5GC-4G_1","PHYS_IP_5GC-4G_1_MASK","TENGIG_INTF_5GC-4G_2","PHYS_IP_5GC-4G_2","PHYS_IP_5GC-4G_2_MASK","TENGIG_INTF_5GC-N3_1","PHYS_IP_5GC-N3_1","PHYS_IP_5GC-N3_1_MASK","TENGIG_INTF_5GC-N3_2","PHYS_IP_5GC-N3_2","PHYS_IP_5GC-N3_2_MASK","ROUTE_NETWORK_5GC-4G_1","ROUTE_NEXTHOP_5GC-4G_1","ROUTE_NETWORK_5GC-4G_2","ROUTE_NEXTHOP_5GC-4G_2","ROUTE_NETWORK_5GC-4G_3","ROUTE_NEXTHOP_5GC-4G_3","ROUTE_NETWORK_5GC-4G_4","ROUTE_NEXTHOP_5GC-4G_4","ROUTE_NETWORK_5GC-4G_5","ROUTE_NEXTHOP_5GC-4G_5","ROUTE_NETWORK_5GC-4G_6","ROUTE_NEXTHOP_5GC-4G_6","ROUTE_NETWORK_5GC-N3_1","ROUTE_NEXTHOP_5GC-N3_1","ROUTE_NETWORK_5GC-N3_2","ROUTE_NEXTHOP_5GC-N3_2","ROUTE_NETWORK_5GC-N3_3","ROUTE_NEXTHOP_5GC-N3_3","ROUTE_NETWORK_5GC-N3_4","ROUTE_NEXTHOP_5GC-N3_4","ROUTE_NETWORK_5GC-N3_5","ROUTE_NEXTHOP_5GC-N3_5","ROUTE_NETWORK_5GC-N3_6","ROUTE_NEXTHOP_5GC-N3_6","ROUTE_NETWORK_5GC-OAM_1","ROUTE_NEXTHOP_5GC-OAM_1","ROUTE_NETWORK_5GC-OAM_2","ROUTE_NEXTHOP_5GC-OAM_2","ROUTE_NETWORK_5GC-SIGNALING_1","ROUTE_NEXTHOP_5GC-SIGNALING_1","ROUTE_NETWORK_5GC-SIGNALING_2","ROUTE_NEXTHOP_5GC-SIGNALING_2","ROUTE_NETWORK_LI_1","ROUTE_NEXTHOP_LI_1","ROUTE_NETWORK_LI_2","ROUTE_NEXTHOP_LI_2","BGP_NEIGHBOR_5GC-4G","BGP_REMOTE_AS_5GC-4G","BGP_PASSWORD_HASH_5GC-4G","BGP_NEIGHBOR_5GC-N3","BGP_REMOTE_AS_5GC-N3","BGP_PASSWORD_HASH_5GC-N3","BGP_NEIGHBOR_5GC-OAM","BGP_REMOTE_AS_5GC-OAM","BGP_PASSWORD_HASH_5GC-OAM","BGP_NEIGHBOR_5GC-SIGNALING","BGP_REMOTE_AS_5GC-SIGNALING","BGP_PASSWORD_HASH_5GC-SIGNALING","BGP_NEIGHBOR_LI","BGP_REMOTE_AS_LI","BGP_PASSWORD_HASH_LI"]
+    upf_n6: ["LO_INTF_5GC-N6_1","LO_IP_5GC-N6_1","LO_IP_5GC-N6_1_MASK","LO_INTF_5GC-N6_2","LO_IP_5GC-N6_2","LO_IP_5GC-N6_2_MASK","TENGIG_INTF_5GC-N6_1","PHYS_IP_5GC-N6_1","PHYS_IP_5GC-N6_1_MASK","TENGIG_INTF_5GC-N6_2","PHYS_IP_5GC-N6_2","PHYS_IP_5GC-N6_2_MASK","TENGIG_INTF_5GC-N6_3","PHYS_IP_5GC-N6_3","PHYS_IP_5GC-N6_3_MASK","PHYS_IP_5GC-N6_3_SEC","PHYS_IP_5GC-N6_3_SEC_MASK","ROUTE_NETWORK_5GC-N6_1","ROUTE_NEXTHOP_5GC-N6_1","ROUTE_NETWORK_5GC-N6_2","ROUTE_NEXTHOP_5GC-N6_2","ROUTE_NETWORK_5GC-N6_3","ROUTE_NEXTHOP_5GC-N6_3","ROUTE_NETWORK_5GC-N6_4","ROUTE_NEXTHOP_5GC-N6_4","ROUTE_NETWORK_5GC-N6_5","ROUTE_NEXTHOP_5GC-N6_5","ROUTE_NETWORK_5GC-N6_6","ROUTE_NEXTHOP_5GC-N6_6","ROUTE_NETWORK_5GC-N6_7","ROUTE_NEXTHOP_5GC-N6_7","BGP_NEIGHBOR_5GC-N6_1","BGP_REMOTE_AS_5GC-N6_1","BGP_PASSWORD_HASH_5GC-N6_1","BGP_NEIGHBOR_5GC-N6_2","BGP_REMOTE_AS_5GC-N6_2","BGP_PASSWORD_HASH_5GC-N6_2","BGP_NEIGHBOR_5GC-N6_3","BGP_REMOTE_AS_5GC-N6_3","BGP_PASSWORD_HASH_5GC-N6_3","BGP_NEIGHBOR_5GC-N6_4","BGP_REMOTE_AS_5GC-N6_4","BGP_PASSWORD_HASH_5GC-N6_4"]
+
+- name: Extract keys from map
+  set_fact:
+    key_list: "{{ template_param.keys()|list }}"
+
+- name: Call to include amf validation
+  include: amf.yaml
+  vars:
+    amfloop: "{{ item }}"
+    keyitem: "{{ key_list }}"
+  when: "template_name == 'ct-bootstrap-amf'"
+  loop: "{{ amf }}"
+
+- name: Call to include smf validation
+  include: smf.yaml
+  vars:
+    smfloop: "{{ item }}"
+    keyitem: "{{ key_list }}"        
+  when: "template_name == 'ct-bootstrap-smf'"
+  loop: "{{ smf }}"    
+
+- name: Call to include upf_n3 validation
+  include: upfn3.yaml
+  vars:
+    upfn3loop: "{{ item }}"
+    keyitem: "{{ key_list }}"        
+  when: "template_name == 'ct-bootstrap-upf-n3'"
+  loop: "{{ upf_n3 }}"    
+
+- name: Call to include upf_n6 validation
+  include: upfn6.yaml
+  vars:
+    upfn6loop: "{{ item }}"
+    keyitem: "{{ key_list }}"
+  when: "template_name == 'ct-bootstrap-upf-n6'"
+  loop: "{{ upf_n6 }}"        
+
+#---------------------->  Template store  <----------------------------
+- name: "##ALM##template store"
+  template:
+      src: provide.xml.j2
+      dest: "/tmp/provide.txt"
+
+
+#----------------------> Get ticket ID  <----------------------------
+- name: Get Ticket.
+  uri:
+    url: "{{ deployment_location.properties.cnc_host1 }}/crosswork/sso/v1/tickets"
+    method: POST
+    headers:
+      content-type: "application/x-www-form-urlencoded"
+      ReturnResultType: "FULL"
+      return_content: yes
+      Accept: text/plain
+    validate_certs: no
+    status_code: 201
+    return_content: yes
+    body:
+      username: "{{ username }}"
+      password: "{{ password }}"
+    body_format: form-urlencoded
+  register: ticket
+  # ignore_errors: yes
+
+- name: ticket print.
+  debug:
+    msg: "{{ ticket.location }}"
+
+- name: Get Token.
+  uri:
+    url: "{{ deployment_location.properties.cnc_host1 }}/crosswork/sso/v1/tickets/{{ ticket.location | regex_search('tickets/.*') | replace('tickets/','') }}"
+    method: POST
+    headers:
+      content-type: "application/x-www-form-urlencoded"
+      ReturnResultType: "FULL"
+    return_content: yes
+    validate_certs: no
+    status_code: 200
+    body:
+      service: "https://10.194.132.78:30603/app-dashboard"
+    body_format: form-urlencoded
+  register: token
+  # ignore_errors: yes
+  
+  
+- name: token print.
+  debug:
+    msg: "{{ token.content }}"
+
+
+- name: Create vRouter Config using template.
+  uri:
+    url: "{{ deployment_location.properties.cnc_host1 }}/crosswork/proxy/nso/restconf/operations/tailf-ncs:devices/device={{ device_name }}/apply-template"
+    method: POST
+    body: "{{lookup('template', 'provide.xml.j2')}}"
+    # body_format: json
+    status_code: [200]
+    headers:
+      content-type: "application/yang-data+xml"
+      Authorization: "Bearer {{ token.content }}"
+      ReturnResultType: "FULL"
+    return_content: yes
+    validate_certs: no
+  register: result
+  # ignore_errors: yes
+
+
+- name: Set Logs Filename
+  set_fact:
+   filename: /tmp/ansible_log/{{ instance_name }}_Create_vRouter.log
+
+
+- name: Generate SB json and copy       
+  copy:
+   dest: "{{ filename }}"
+   content: |
+     ***********************************
+     order_send:  
+     {{lookup('template', 'provide.xml.j2')}}
+     ____________________________________________________
+
+     result_return:
+      {{ result }}
+
+- name: Log API request through Log module
+  ibm_cp4na_log_message:
+    message_direction: sent
+    external_request_id: "{{ extOrderId }}"
+    content_type: application/json
+    message_data: |
+     ***********************************
+     order_send:  
+     {{lookup('template', 'provide.xml.j2')}}
+     ____________________________________________________
+
+     result_return:
+      {{ result }}
+    message_type: sample
+    protocol: http
+
+
+#-----------------------> search error from result content  <-------------------------
+- name: "##ALM## Print Error message"
+  set_fact:
+    target: "{{ result.content | regex_search('error') }}"
+
+
+#-----------------------> End time from system  <----------------------------
+- name: "##ALM## Get timestamp from the system"
+  shell: "date +%Y-%m-%d%H:%M:%S.%5N"
+  register: etime
+
+#-----------------------> Print End time  <----------------------------
+- name: "##ALM## end time"
+  debug: msg="{{ etime }}"
+  
+  
+##-----------------------> Store request/response Logs in Eventlogger  <----------------------------
+#- name: "##ALM## Store request and response in DB"
+#  uri:
+#    url: "{{ deployment_location.properties.eventlogger_url }}"
+#    method: POST
+#    body: "{{lookup('template', 'Store-Provide.json.j2')}}"
+#    return_content: yes
+#    body_format: json
+#    status_code: 200
+#    validate_certs: no
+#    headers:
+#      content-type: "application/json"
+#      ReturnResultType: "FULL"
+#  register: resultStore
+#
+#    
+##-----------------------> Print error message for Failure case  <----------------------------
+#- fail:
+#    msg: "Instance creation failed with {{ result.content | regex_search('<error-message>.*</#error-message>') | replace('<error-message>','') | replace('{','/') | replace('}','/') |replace('</#error-message>','') }}"
+#  when: "target=='error'" 
+ 

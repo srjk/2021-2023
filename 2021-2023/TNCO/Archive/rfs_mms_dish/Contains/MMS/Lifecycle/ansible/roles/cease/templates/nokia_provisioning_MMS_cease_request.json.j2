@@ -1,0 +1,32 @@
+{
+  "serviceType": "{{ serviceType }}",
+  "serviceName": "Subscriber - Messaging MMS RFSS",
+  "id": "{{ kami_response.json.extOrderId }}",
+  "imsi": "{{ SUPI }}",
+  "hlr": {
+    "multipleValueObjects": [
+      {
+        "path": "hlr/epsPdnContext[@contextId='3']",
+        "operation": "remove"
+      }
+    ]
+  },
+  "udm": {
+    "multipleValueObjects": [
+      {
+        "path": "udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo[@dnnId='mms']",
+        "operation": "remove"
+      },
+      {
+        "path": "udm5gData/servingPlmnId/provisionedData/sessionManagementSubscriptionData/dnnConfiguration[@dnnId='mms']",
+        "operation": "remove"
+      }
+    ]
+  },
+  "pcf": [
+    {
+      "path": "pcf/smPolicyData/smPolicySnssaiData/smPolicyDnnData[@dnn='mms']",
+      "operation": "remove"
+    }
+  ]
+}

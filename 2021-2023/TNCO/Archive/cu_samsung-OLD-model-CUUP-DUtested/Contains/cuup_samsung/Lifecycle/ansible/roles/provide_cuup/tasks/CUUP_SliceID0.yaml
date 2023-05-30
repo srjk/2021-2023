@@ -1,0 +1,57 @@
+#####name: Call when Slice ID XPath is not present (Create First slice-Index with value 0)
+#####include: CUUP_SliceID0.yaml
+
+# - name: Read xml data to calculate the slice-index
+  # xml:
+    # xmlstring: "{{ lookup('file', '{{ xmlfile }}') }}"
+    # namespaces:
+      # ns: http://www.samsung.com/global/business/5GvRAN/ns/gnb-cu-up-cnf
+    # xpath: /data/ns:managed-element/ns:gnb-cu-up-function
+    # content: 'text'
+  # register: xml_result
+
+# - name: Print slice-index matches
+  # debug:
+    # var: xml_result.matches
+
+#----------------> CU_UP Slice Create slice  <--------------
+- name: Call RestAPI to Create CU_UP for Slice Index =0 
+  uri:
+    url: "{{ cuup_samsung_usm_host }}/oss/netconf/AUPF_25155100"
+    # user: ossuser
+    # password: osspasswd
+    method: POST
+    body: "{{lookup('template', 'create_slice_CUUP_Sliceindex0.xml')}}"
+    # body_format: json
+    headers:
+      Authorization: Basic b3NzdXNlcjpvc3NwYXNzd2Q=
+      content-type: "application/xml"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: CU_UP_createSlice
+  # ignore_errors: yes
+
+- name: Display response
+  debug:
+    var: CU_UP_createSlice
+    
+- name: CU_UP_getSlice info print
+  lineinfile:
+    path: "{{ logsfile }}"
+    line: |
+           __________________________________________________________________________
+           
+           ##### Create Slice for CUUP
+           
+           URL:  
+           {{ CU_UP_createSlice.url }}
+           
+           order_send:
+           {{lookup('template', 'create_slice_CUUP_Sliceindex0.xml')}}
+           
+           result_return:
+           {{ CU_UP_createSlice.content }}
+           __________________________________________________________________________

@@ -1,0 +1,92 @@
+name: resource::upf-cnf_upf_asm_topology::1.0
+description: descriptor for sol_upf
+properties:
+#SolSpecific
+  operation:
+    description: addSliceConfig
+    volatile: true
+    default: Configure
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: DFW
+  resourceManager:
+    type: string
+    default: brent  
+  instance_name:
+    description: name of assembly instance
+    type: string
+    default: nk-upf001c-usw2aza001rd-7fc6dff88b-wkzs4
+  nameSpace:
+    type: string
+    default: usw2-ns-nk-upf-001
+  upfSlice_slice_instance:
+    description: name of upfSlice_slice_instance
+    type: string  
+    default: dish-slice-instance
+  # vnfInstanceName:
+  #   description: cnf_instance_name
+  #   default: cnf_instance_name
+  # vnfdId:
+  #   description: cnf_package_identifier
+  #   default: cnf_package_identifier
+  # vnfPkgId:
+  #   description: cnf_package_identifier
+  #   default: VnfPackage-vMRF
+  # vnfInstanceId:
+  #   type: string
+lifecycle:
+  addSliceConfig:  
+    drivers:
+      ansible:
+        selector:
+          infrastructure-type:
+          - '*'
+  Install: {}
+  Uninstall: {}   
+  removeSlice: {}
+default-driver:
+  ansible:
+    selector:
+      infrastructure-type:
+      - '*'
+# default-driver:
+#   sol003:
+#     selector:
+#       infrastructure-type:
+#       - '*'
+operations:
+  addSliceConfig:
+    description: activate new slice parameters
+    properties:
+      upfSlice_sliceInstanceListName:
+        type: string
+      upfSlice_sliceListName:
+        type: string
+      upfSlice_sliceName:
+        type: string
+      upfSlice_sst:
+        type: string
+      upfSlice_sd:
+        type: string
+      upf_dnnName:
+        type: string
+      upfSlice_slice_instance:
+        type: string
+  removeSlice:
+    description: activate new slice parameters
+    properties:
+      upfSlice_sliceInstanceListName:
+        type: string
+      upfSlice_sliceListName:
+        type: string
+      upfSlice_sliceName:
+        type: string
+      upfSlice_sst:
+        type: string
+      upfSlice_sd:
+        type: string
+      upf_dnnName:
+        type: string
+      upfSlice_slice_instance:
+        type: string

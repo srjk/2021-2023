@@ -1,0 +1,67 @@
+name: resource::smf-core_inst::1.0
+description: descriptor for sol_smf
+properties:
+  operation:
+    description: Configure
+    volatile: true
+    default: Configure
+  instance_name:
+    description: name of assembly instance
+    type: string
+  deploymentLocation:
+    description: site specific
+    type: string
+    default: SOL003
+  # nameSpace:
+    # type: string
+  resourceManager:
+    type: string
+    read-only: true
+    default: brent
+  vnfInstanceId:
+    type: string
+    volatile: true
+  vnfdId:
+    type: string
+    volatile: true
+  vnfInstanceName:
+    type: string
+  cnfPackageVersionFile:
+    type: string
+    volatile: true
+  vnfInstanceDescription:
+    type: string
+  flavourId:
+    type: string
+  vimType:
+    type: string
+  vim_id:
+    type: string
+  envType:
+    type: string
+    default: dev
+  nfType:
+    type: string
+    default: CNF
+  smf_cnfname:
+    type: string
+    volatile: true
+  smf_chartkey:
+    type: string
+    volatile: true
+lifecycle:
+  Create: {}
+  Install: {}
+  reconfigure: {}
+  Configure: {}
+  Uninstall: {}
+default-driver:
+  ansible:
+    selector:
+      infrastructure-type:
+      - '*'
+# default-driver:
+#   sol003:
+#     selector:
+#       infrastructure-type:
+#       - '*'

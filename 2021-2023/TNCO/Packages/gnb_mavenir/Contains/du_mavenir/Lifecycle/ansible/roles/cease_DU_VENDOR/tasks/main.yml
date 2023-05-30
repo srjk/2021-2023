@@ -1,0 +1,446 @@
+- name: Creates directory
+  file:
+    path: /tmp/ansible_log
+    state: directory
+    mode: 0775
+
+- name: setting filename logs for Cease_DU_VENDOR
+  set_fact:
+    filename: /tmp/ansible_log/{{ instance_name }}_Delete_DU_VENDOR_GNB_MAVENIR.log
+
+######--------#-----> Generate Token from Kami  <----------------------------
+- name: "##ALM## Get token from kami"
+  uri:
+    method: POST
+    url: "{{ deployment_location.properties.kami_url }}/KamiCore/oauth/token?grant_type=client_credentials"
+    headers: 
+       content-type: "application/json"
+       Authorization: Basic ZGlzaDpkaXNoMTIzNA==
+    validate_certs: no
+  register: token  
+     
+######--------#-----> Get order id from Kami  <----------------------------
+- name: "##ALM## Get order id"
+  uri:
+    method: GET
+    url: "{{ deployment_location.properties.kami_url }}/KamiCore/getExtOrderId"  
+    return_content: yes
+    body_format: json
+    status_code: 201
+    body: "{ \"almInstanceName\": \"{{ instance_name }}\" }"
+    headers:
+       ReturnResultType: "FULL"
+       Authorization: Bearer {{ token.json.access_token }}
+    validate_certs: no
+    follow_redirects: yes
+  register: kami_responseDUdel
+  ignore_errors: yes
+
+- name: log file for DU Mavenir
+  set_fact:
+    extOrderId: "{{ kami_responseDUdel.json.extOrderId }}"
+
+# - name: Validate the client certificate and verify onboarding is successful or no and get apiInvokerId
+  # uri:
+    # # url:  "{{ ansible_env.PGW_ADA_HOST }}/dish/ProvSpml/api/v1/spmlAdapter/modifyAddRequest"
+    # url: "{{ mcms_host }}/cms-service/webapi/apicore/apiinvokermanagement/v1/onboardedinvokers"
+    # method: POST
+    # body: "{{lookup('template', 'clientCertificate.json.j2')}}"
+    # body_format: json
+    # headers:
+      # content-type: "application/json"
+      # ReturnResultType: "FULL"
+      # return_content: yes
+    # validate_certs: no
+  # register: clientCertificate
+  # # ignore_errors: yes
+
+# - name: Initiate Authentication with apiInvokerId
+  # uri:
+    # url: "{{ mcms_host }}/cms-service/webapi/apicore/aef-security/v1/check-authentication"
+    # method: POST
+    # body: "{{lookup('template', 'CheckAuthentication.json.j2')}}"
+    # body_format: json
+    # status_code: 200
+    # headers:
+      # content-type: "application/json"
+      # ReturnResultType: "FULL"
+      # return_content: yes
+    # validate_certs: no
+  # register: authentication
+  # # ignore_errors: yes
+
+#----------------> DU_VENDOR retrieve nsaddInfo for each gnbCellDuVsConfig <--------------
+- name: Call RestAPI to Retrieve only nsAddInfo of each gnbCellDuVsConfig
+  uri:
+    url: "{{ deployment_location.properties.mcms_host }}/cms-service/webapi/apiservice/ProvMnS/v1/gnbvs,gnbDuConfig={{ du_id }},gnbCellDuVsConfig,nsCfgInfo/nsAddInfo"
+    method: GET
+    body: "{{lookup('template', 'getInfoDUvendor.json.j2')}}"
+    # body: 
+      # "gnbId": {{ gnb_id  | int }}
+      # "cnfId": {{ du_id | int }}
+      # "version": "{{ du_version }}"
+      # "configType": "{{ du_vendor_config }}"
+    body_format: json
+    headers:
+      apiInvokerId: "{{ deployment_location.properties.apiInvokerId }}"
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: cease_GetgnbCellDuVsConfig
+  ignore_errors: yes
+  failed_when: "cease_GetgnbCellDuVsConfig.status not in [200]"
+
+# - name: retrieveAllInfo gnbCellDuVsConfig info print
+  # copy:
+    # dest: "/tmp/resp_ceaseDUVenGetgnbCellDuVsConfig.json.j2"
+    # content: "{{ cease_GetgnbCellDuVsConfig }}"  
+
+# - name: cease_GetgnbCellDuVsConfig content result print all
+  # set_fact:
+    # target: "{{ cease_GetgnbCellDuVsConfig.content }}"
+
+- name: nsAddInfo for each gnbCellDuVsConfig info print
+  copy:
+    dest: "{{ filename }}"
+    content: |
+              __________________________________________________________________________
+            
+              ##### GET API call to Retrieve only nsAddInfo of each gnbCellDuVsConfig
+              
+              URL:
+              {{ cease_GetgnbCellDuVsConfig.url }}
+              
+              order_send:
+              {{lookup('template', 'getInfoDUvendor.json.j2')}}
+              
+              result_return:
+              {{ cease_GetgnbCellDuVsConfig.json | to_nice_json }}
+              __________________________________________________________________________
+
+- name: Log API request through Log module
+  ibm_cp4na_log_message:
+    message_direction: sent
+    # external_request_id: "{{ extOrderId }}"
+    external_request_id: "{{ kami_responseDUdel.json.extOrderId }}"
+    content_type: application/json
+    message_data: |
+     ***********************************
+     ##### GET API call to Retrieve only nsAddInfo of each gnbCellDuVsConfig
+     
+     URL:
+     {{ cease_GetgnbCellDuVsConfig.url }}
+     
+     order_send:
+     {{lookup('template', 'getInfoDUvendor.json.j2')}}
+     ____________________________________________________
+
+     result_return:
+      {{ cease_GetgnbCellDuVsConfig.json | to_nice_json }}
+    message_type: sample
+    protocol: http
+
+#----------> Print error message when apiInvokerId is Invalid/incorrect/expired <------------
+- name: creating variable and setting value for message error when apiInvokerId is Invalid/incorrect/expired
+  set_fact:
+    target_e: "{{ cease_GetgnbCellDuVsConfig.content | regex_search('message') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ cease_GetgnbCellDuVsConfig.content | replace('\"','') | replace('{','') | replace('}','') }}. Either apiInvokerId is Invalid/incorrect/expired, please verify the apiInvokerId."
+  when: "target_e=='message'"
+
+#----> Print error message when Invalid location or input data for: <gnbId> or <cnfId> or <version> <-------
+- name: creating variable and setting value for errorInfo when wrong input data of gnbId> or <cnfId> or <version>  or any other errors
+  set_fact:
+    target_e1: "{{ cease_GetgnbCellDuVsConfig.content | regex_search('error') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ cease_GetgnbCellDuVsConfig.content | replace('\"','') | replace('{','') | replace('}','') | replace('error:','') }}"
+  when: "target_e1=='error'"
+
+#----------> DU_VENDOR retrieveAll data of gnbDuConfig Info and servedPlmnList sliceList  (lengthy response data) <------------
+- name: Call RestAPI to Retrieve All data of gnbDuConfig
+  uri:
+    url: "{{ deployment_location.properties.mcms_host }}/cms-service/webapi/apiservice/ProvMnS/v1/gnbvs/gnbDuConfig"
+    method: GET
+    body: "{{lookup('template', 'getInfoDUvendor.json.j2')}}"
+    # body: 
+      # "gnbId": {{ gnb_id  | int }}
+      # "cnfId": {{ du_id | int }}
+      # "version": "{{ du_version }}"
+      # "configType": "{{ du_vendor_config }}"
+    body_format: json
+    headers:
+      apiInvokerId: "{{ deployment_location.properties.apiInvokerId }}"
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: cease_GetAllgnbDuConfig
+  ignore_errors: yes
+  failed_when: "cease_GetAllgnbDuConfig.status not in [200]"
+
+# - name: retrieveAllInfo gnbDuConfig info print
+  # copy:
+    # dest: "/tmp/resp_ceaseDUVenGetAllgnbDuConfig.json.j2"
+    # content: "{{ cease_GetAllgnbDuConfig }}"
+
+- name: cease_GetAllgnbDuConfig content result print all
+  set_fact:
+    target: "{{ cease_GetAllgnbDuConfig.content }}"
+
+#----------> Print error message when apiInvokerId is Invalid/incorrect/expired <------------
+- name: creating variable and setting value for message error when apiInvokerId is Invalid/incorrect/expired
+  set_fact:
+    target_e: "{{ cease_GetAllgnbDuConfig.content | regex_search('message') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ cease_GetAllgnbDuConfig.content | replace('\"','') | replace('{','') | replace('}','') }}. Either apiInvokerId is Invalid/incorrect/expired, please verify the apiInvokerId."
+  when: "target_e=='message'"
+
+#----> Print error message when Invalid location or input data for: <gnbId> or <cnfId> or <version> <-------
+- name: creating variable and setting value for errorInfo when wrong input data of gnbId> or <cnfId> or <version>  or any other errors
+  set_fact:
+    target_e1: "{{ cease_GetAllgnbDuConfig.content | regex_search('error') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ cease_GetAllgnbDuConfig.content | replace('\"','') | replace('{','') | replace('}','') | replace('error:','') }}"
+  when: "target_e1=='error'"
+
+#-----------------------> Count of each gnbCellDuVsConfig length <------------------
+# - name: gnbCellDuVsConfig count print from gnbDuConfig data
+  # copy:
+    # dest: "/tmp/getgnbCellDuVsConfigLen.json.j2"
+    # content: "{{ cease_GetAllgnbDuConfig.json.data[0].gnbDuConfig.gnbCellDuVsConfig|length|int -1 }}"
+
+- name: print gnbCellDuVsConfig length
+  set_fact:
+    ceasegnbCellDuVsConfigLen: "{{ cease_GetAllgnbDuConfig.json.data[0].gnbDuConfig.gnbCellDuVsConfig|length|int -1 }}"
+
+- name: Generate sequence for gnbCellDuVsConfig id's
+  set_fact:
+    mysequencegnbCellDuVsConfigcease: "{{ mysequencegnbCellDuVsConfigcease | default([]) + [cease_GetAllgnbDuConfig.json.data[0].gnbDuConfig.gnbCellDuVsConfig[item|int].id|int] }}"
+  with_sequence: start=0 end={{ ceasegnbCellDuVsConfigLen }}
+
+- name: print number of gnbCellDuVsConfig IDs
+  debug:
+    msg: "{{ mysequencegnbCellDuVsConfigcease }}"
+
+
+- name: Retrieve nsiId value from the nsCfgInfo nsAddInfo of each gnbCellDuVsConfig
+  set_fact:
+    type_data: "{{ cease_GetAllgnbDuConfig.json.data[0].gnbDuConfig.gnbCellDuVsConfig[item|int].nsCfgInfo.nsAddInfo }}" 
+    jmsquery: "[?sNSSAI==`{{ du_sst | int }}{{ du_sd }}`].{nsResId: nsResId , sNSSAI: sNSSAI, nsiId: nsiId}"
+    query1: "[?sNSSAI==`{{ du_sst | int }}{{ du_sd }}`].{nsiId: nsiId}"
+  loop: "{{ mysequencegnbCellDuVsConfigcease }}"
+
+
+- name: Filter nsiId value for nsAddInfo
+  set_fact:
+    nsiIdDel: "{{ type_data | json_query(jmsquery) | json_query(query1) }}"
+
+
+- name: Call to include Delete slice for nsAddInfo for each gnbCellDuVsConfig(add new slice)
+  include: updatensAddInfocease.yaml
+  vars:
+    data:
+        -  "{{ mysequencegnbCellDuVsConfigcease }}"
+    gnbCellDuVsConfigIdcease: "{{ item }}"
+    nsiId_cease : "{{ nsiIdDel[0].nsiId }}"
+    filen: "{{ filename }}"
+  loop: "{{ mysequencegnbCellDuVsConfigcease }}"
+  when: "nsiIdDel | length >=1"
+  
+
+
+#---------->
+#---------->
+#---------->
+#----------> DU_VENDOR retrieve servedPlmnList sliceList for each gnbCellDuVsConfig <-----------
+- name: Call RestAPI to Retrieve only servedPlmnList sliceList for each gnbCellDuVsConfig
+  uri:
+    url: "{{ deployment_location.properties.mcms_host }}/cms-service/webapi/apiservice/ProvMnS/v1/gnbvs,gnbDuConfig={{ du_id }},gnbCellDuVsConfig,servedPlmnList=1/sliceList"
+    method: GET
+    body: "{{lookup('template', 'getInfoDUvendor.json.j2')}}"
+    # body: 
+      # "gnbId": {{ gnb_id  | int }}
+      # "cnfId": {{ du_id | int }}
+      # "version": "{{ du_version }}"
+      # "configType": "{{ du_vendor_config }}"
+    body_format: json
+    headers:
+      apiInvokerId: "{{ deployment_location.properties.apiInvokerId }}"
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: cease_GetsliceList
+  ignore_errors: yes
+  failed_when: "cease_GetsliceList.status not in [200]"
+
+# - name: retrieveAllInfo gnbCellDuVsConfig info print
+  # copy:
+    # dest: "/tmp/ansible_log/resp_ceaseDUVenGetsliceList.json.j2"
+    # content: "{{ cease_GetsliceList }}"
+    
+- name: retrieve servedPlmnList sliceList for each gnbCellDuVsConfig print
+  lineinfile:
+    path: "{{ filename }}"
+    line: |
+              __________________________________________________________________________
+            
+              ##### GET API call to Retrieve only servedPlmnList sliceList for each gnbCellDuVsConfig print
+              
+              URL:
+              {{ cease_GetsliceList.url }}
+              
+              order_send:
+              {{lookup('template', 'getInfoDUvendor.json.j2')}}
+              
+              result_return:
+              {{ cease_GetsliceList.json | to_nice_json }}
+              __________________________________________________________________________
+
+- name: Log API request through Log module
+  ibm_cp4na_log_message:
+    message_direction: sent
+    # external_request_id: "{{ extOrderId }}"
+    external_request_id: "{{ kami_responseDUdel.json.extOrderId }}"
+    content_type: application/json
+    message_data: |
+     ***********************************
+     ##### GET API call to Retrieve only servedPlmnList sliceList for each gnbCellDuVsConfig print
+     
+     URL:
+     {{ cease_GetsliceList.url }}
+     
+     order_send:
+     {{lookup('template', 'getInfoDUvendor.json.j2')}}
+     ____________________________________________________
+
+     result_return:
+      {{ cease_GetsliceList.json | to_nice_json }}
+    message_type: sample
+    protocol: http
+
+#----------> Print error message when apiInvokerId is Invalid/incorrect/expired <------------
+- name: creating variable and setting value for message error when apiInvokerId is Invalid/incorrect/expired
+  set_fact:
+    target_e: "{{ cease_GetsliceList.content | regex_search('message') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ cease_GetsliceList.content | replace('\"','') | replace('{','') | replace('}','') }}. Either apiInvokerId is Invalid/incorrect/expired, please verify the apiInvokerId."
+  when: "target_e=='message'"
+
+#----> Print error message when Invalid location or input data for: <gnbId> or <cnfId> or <version> <-------
+- name: creating variable and setting value for errorInfo when wrong input data of gnbId> or <cnfId> or <version>  or any other errors
+  set_fact:
+    target_e1: "{{ cease_GetsliceList.content | regex_search('error') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ cease_GetsliceList.content | replace('\"','') | replace('{','') | replace('}','') | replace('error:','') }}"
+  when: "target_e1=='error'"
+
+
+#----------> DU_VENDOR retrieveAll data of gnbDuConfig Info and servedPlmnList sliceList  (lengthy response data) <------------
+- name: Call RestAPI to Retrieve All data of gnbDuConfig
+  uri:
+    url: "{{ deployment_location.properties.mcms_host }}/cms-service/webapi/apiservice/ProvMnS/v1/gnbvs/gnbDuConfig"
+    method: GET
+    body: "{{lookup('template', 'getInfoDUvendor.json.j2')}}"
+    # body: 
+      # "gnbId": {{ gnb_id  | int }}
+      # "cnfId": {{ du_id | int }}
+      # "version": "{{ du_version }}"
+      # "configType": "{{ du_vendor_config }}"
+    body_format: json
+    headers:
+      apiInvokerId: "{{ deployment_location.properties.apiInvokerId }}"
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: cease_GetAllgnbDuConfigsliceList
+  ignore_errors: yes
+  failed_when: "cease_GetAllgnbDuConfigsliceList.status not in [200]"
+
+# - name: retrieveAllInfo gnbDuConfig info print
+  # copy:
+    # dest: "/tmp/resp_ceaseDUVenGetAllgnbDuConfigsliceList.json.j2"
+    # content: "{{ cease_GetAllgnbDuConfigsliceList }}"
+
+- name: cease_GetAllgnbDuConfigsliceList content result print all
+  set_fact:
+    target: "{{ cease_GetAllgnbDuConfigsliceList.content }}"
+
+#----------> Print error message when apiInvokerId is Invalid/incorrect/expired <------------
+- name: creating variable and setting value for message error when apiInvokerId is Invalid/incorrect/expired
+  set_fact:
+    target_e: "{{ cease_GetAllgnbDuConfigsliceList.content | regex_search('message') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ cease_GetAllgnbDuConfigsliceList.content | replace('\"','') | replace('{','') | replace('}','') }}. Either apiInvokerId is Invalid/incorrect/expired, please verify the apiInvokerId."
+  when: "target_e=='message'"
+
+#----> Print error message when Invalid location or input data for: <gnbId> or <cnfId> or <version> <-------
+- name: creating variable and setting value for errorInfo when wrong input data of gnbId> or <cnfId> or <version>  or any other errors
+  set_fact:
+    target_e1: "{{ cease_GetAllgnbDuConfigsliceList.content | regex_search('error') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ cease_GetAllgnbDuConfigsliceList.content | replace('\"','') | replace('{','') | replace('}','') | replace('error:','') }}"
+  when: "target_e1=='error'"
+
+#-----------------------> Count of each gnbCellDuVsConfig length <------------------
+# - name: gnbCellDuVsConfig count print from gnbDuConfig data
+  # copy:
+    # dest: "/tmp/ceasegetgnbCellDuVsConfigLensliceList.json.j2"
+    # content: "{{ cease_GetAllgnbDuConfigsliceList.json.data[0].gnbDuConfig.gnbCellDuVsConfig|length|int -1 }}"
+
+- name: print gnbCellDuVsConfig length
+  set_fact:
+    ceasegnbCellDuVsConfigsliceListLen: "{{ cease_GetAllgnbDuConfigsliceList.json.data[0].gnbDuConfig.gnbCellDuVsConfig|length|int -1 }}"
+
+- name: Generate sequence for gnbCellDuVsConfig id's
+  set_fact:
+    mysequencegnbCellDuVsConfigsliceListcease: "{{ mysequencegnbCellDuVsConfigsliceListcease | default([]) + [cease_GetAllgnbDuConfigsliceList.json.data[0].gnbDuConfig.gnbCellDuVsConfig[item|int].id|int] }}"
+  with_sequence: start=0 end={{ ceasegnbCellDuVsConfigsliceListLen }}
+
+- name: print number of gnbCellDuVsConfig IDs
+  debug:
+    msg: "{{ mysequencegnbCellDuVsConfigsliceListcease }}"
+
+
+
+- name: Retrieve sliceIndex value from the sliceList of each gnbCellDuVsConfig
+  set_fact:
+    type_data: "{{ cease_GetAllgnbDuConfigsliceList.json.data[0].gnbDuConfig.gnbCellDuVsConfig[item|int].servedPlmnList.sliceList }}" 
+    jmsquery: "[?sd==`{{ du_sd }}`].{sd: sd , sst: sst, sliceIndex: sliceIndex}"
+    query1: "[?sd==`{{ du_sd }}`].{sliceIndex: sliceIndex}"
+  loop: "{{ mysequencegnbCellDuVsConfigsliceListcease }}"
+
+
+- name: Filter sliceIndex value from the sliceList
+  set_fact:
+    sliceIndexDel: "{{ type_data | json_query(jmsquery) | json_query(query1) }}"
+
+- name: Call to include Delete slice in sliceList for each gnbCellDuVsConfig(add new slice)
+  include: updatesliceListcease.yaml
+  vars:
+    data:
+        -  "{{ mysequencegnbCellDuVsConfigsliceListcease }}"
+    gnbCellDuVsConfigsliceListCeaseId: "{{ item }}"
+    sliceIndex_cease: "{{ sliceIndexDel[0].sliceIndex }}"
+    filen: "{{ filename }}"
+  loop: "{{ mysequencegnbCellDuVsConfigsliceListcease }}"
+  when: "sliceIndexDel | length >=1"
+  

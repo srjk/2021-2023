@@ -1,0 +1,13 @@
+{
+  "gnbId": {{ gnb_id  | int }},
+  "cnfId": {{ cucp_id | int }},
+  "version": "{{ cucp_version }}",
+  "configType": "{{ cucp_vendor_config }}",
+  "attributeListIn":
+                {
+                "id":"{{ idplmnSpecificConfigCUCPVendor }}",				
+                "MCC":{{ cucp_mcc }},
+                "MNC":{{ cucp_mnc }},
+                "sNSSAI": {{ cucp_sst | int }}{{ cucp_sd }}
+                }
+}

@@ -1,0 +1,55 @@
+{
+  "name": "demo",
+  "projectId": "assembly::slice_embb_dish::1.0",
+  "description": "for testing nw_slice",
+  "stages": [],
+  "assemblyActors": [
+    {
+      "instanceName": "dish_amf",
+      "initialState": "Active",
+      "uninstallOnExit": false,
+      "provided": false,
+      "providedConfiguration": false,
+      "baseConfigurationId": null,
+      "assemblyConfigurationRef": "amf"
+    },
+    {
+      "instanceName": "dish_smf",
+      "initialState": "Active",
+      "uninstallOnExit": false,
+      "provided": false,
+      "providedConfiguration": false,
+      "baseConfigurationId": null,
+      "assemblyConfigurationRef": "smf"
+    },
+    {
+      "instanceName": "dish_pcf",
+      "initialState": "Active",
+      "uninstallOnExit": false,
+      "provided": false,
+      "providedConfiguration": false,
+      "baseConfigurationId": null,
+      "assemblyConfigurationRef": "pcf"
+    },
+    {
+      "instanceName": "dish_nsssf",
+      "initialState": "Active",
+      "uninstallOnExit": false,
+      "provided": false,
+      "providedConfiguration": false,
+      "baseConfigurationId": null,
+      "assemblyConfigurationRef": "nssf"
+    },
+    {
+      "instanceName": "nw_slice_bt_1",
+      "initialState": "Active",
+      "uninstallOnExit": false,
+      "provided": false,
+      "providedConfiguration": false,
+      "baseConfigurationId": null,
+      "assemblyConfigurationRef": "test"
+    }
+  ],
+  "createdAt": "2021-07-27T13:53:20.399Z",
+  "lastModifiedAt": "2021-07-28T13:02:23.591Z"
+}

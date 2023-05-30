@@ -1,0 +1,86 @@
+description: descriptor for rfs_smsbundle_dish
+name: resource::rfs_smsbundleenum_dish-rfs_smsbundle_dish::1.0
+properties:
+  operation:
+    volatile: true
+    description: Provide/Cease/Suspend/Resume
+    default: Provide
+  instance_name:
+    description: name of assembly instance
+    type: string
+  deploymentLocation:
+    description: site specific
+    type: string
+    default: DFW
+  resourceManager:
+    type: string
+    read-only: true
+    default: brent
+  serviceType:
+    type: string
+  loop_back:
+    type: string
+    volatile: true
+    default: OFF
+  extOrderId:
+    volatile: true
+  SUPI:
+    volatile: true
+  GPSI:
+    volatile: true
+  #Old_GPSI:
+    #volatile: true    
+  dnn7:
+    type: string
+    volatile: true
+  dnn7_sessionAmbr:
+    type: string
+    volatile: true
+  subscCats1:
+    type: string
+    volatile: true
+  subscCats2:
+    type: string
+    volatile: true
+  ENUM_rrid:
+    type: string
+    default: 1
+  ENUM_rrid1:
+    type: string
+    default: 1    
+  ENUM_rridType:
+    type: string
+    default: NAPTR
+  ENUM_ttl:
+    type: string
+    default: 3600
+  ENUM_order:
+    type: string
+    default: 50
+  ENUM_preference:
+    type: string
+    default: 50
+  ENUM_flags:
+    type: string
+    default: u
+  ENUM_service:
+    type: string
+    default: E2U+mms
+  ENUM_replacement:
+    type: string
+    default: []
+  ENUM_ChangeRequest_view:
+    type: string
+    default: "enum-dns.zones.enum.enumZoneCommon.data"
+  requestedServices:
+    type: string
+    volatile: true
+lifecycle:
+  Install: {}
+  Reconfigure: {}
+  Uninstall: {}
+default-driver:
+  ansible:
+    selector:
+      infrastructure-type:
+      - '*'

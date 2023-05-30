@@ -1,0 +1,214 @@
+- name: Creates directory
+  file:
+    path: /tmp/ansible_log
+    state: directory
+    mode: 0775
+
+- name: setting filename logs for Cease_DU
+  set_fact:
+    filename: /tmp/ansible_log/{{ instance_name }}_cease_DU_GNB_SAMSUNG.log
+
+- name: setting filename for xml parse
+  set_fact:
+    xmlfilename: /tmp/ansible_log/{{ instance_name }}_cease_DU_GNB_SAMSUNG.xml
+
+#----------------> DU Slice retrieval - For cease <--------------
+- name: Call RestAPI to retrieve DU Slice ID- cease_DU_getSlice 
+  uri:
+    url: "{{ deployment_location.properties.samsung_usm_host }}/oss/netconf/{{ du_id }}"
+    # user: ossuser
+    # password: osspasswd
+    method: POST
+    body: "{{lookup('template', 'get_slice_du.xml')}}"
+    # body_format: json
+    headers:
+      Authorization: Basic b3NzdXNlcjpvc3NwYXNzd2Q=
+      content-type: "application/xml"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: cease_DU_getSlice
+  # ignore_errors: yes
+
+- name: Display response cease_DU_getSlice
+  debug:
+    var: cease_DU_getSlice
+
+- name: cease_DU_getSlice info print
+  copy:
+    dest: "{{ filename }}"
+    content: |
+              __________________________________________________________________________
+              
+              ##### retrieve Slice for DU cease_DU_getSlice
+              
+              URL:
+              {{ cease_DU_getSlice.url }}
+              
+              order_send:
+              {{lookup('template', 'get_slice_du.xml')}}
+              
+              result_return:
+              {{ cease_DU_getSlice.content }}
+              __________________________________________________________________________
+
+- name: cease_DU_getSlice content print for xml parse
+  copy:
+    dest: "{{ xmlfilename }}"
+    content: |
+              {{ cease_DU_getSlice.content }}
+
+- name: Log API request through Log module
+  ibm_cp4na_log_message:
+    message_direction: sent
+    external_request_id: "{{ extOrderId }}"
+    content_type: application/json
+    message_data: |
+     ***********************************
+     ##### retrieve Slice for DU cease_DU_getSlice
+     
+     URL:  
+     {{ cease_DU_getSlice.url }}
+     
+     order_send:
+     {{lookup('template', 'get_slice_du.xml')}}
+     ____________________________________________________
+
+     result_return:
+      {{ cease_DU_getSlice.content }}
+    message_type: sample
+    protocol: http
+
+
+- name: Remove rpc-reply tag
+  lineinfile:
+    dest: "{{ xmlfilename }}"
+    regexp: 'rpc-reply*'
+    backup: no
+    state: absent
+
+########------->DU- Retrieve the slice-Index value from the above GET slice and pass the Slice-ID in delete slice.
+- name: Cease- Read xml data to calculate the slice-index for DU- Cease and pass the ID in delete slice.
+  xml:
+    xmlstring: "{{ lookup('file', '{{ xmlfilename }}') }}"
+    namespaces:
+      ns: http://www.samsung.com/global/business/5GvRAN/ns/gnbducnf
+    xpath: /data/ns:managed-element/ns:gnb-du-function/ns:gnb-du-slice-info/ns:slice-index
+    content: 'text'
+  register: xml_result
+
+- name: Print slice-index matches
+  debug:
+    var: xml_result.matches
+
+##find length of Arrray of dict(json)
+- name: Print the length of SliceIndex
+  set_fact:
+    sliceIndex: "{{ xml_result.matches | length }}"
+
+##Extract last entry from array in dict(json) format
+- name: Print last SliceIndex entry from array in json(dict) format (key:value pair)
+  set_fact:
+    SliceIdlast: "{{ xml_result.matches[sliceIndex | int -1] }}"
+
+## Extract only key from last SliceIndex entry of array
+- name: Print only key from last SliceIndex entry
+  set_fact:
+    SliceIdlastKeyonly: "{{ SliceIdlast.keys() }}"
+
+## Extract First key from dict of keys
+- name: Print first key from last SliceIndex entry if found multiple
+  set_fact:
+    SliceIdFirstKey: "{{ SliceIdlastKeyonly[0] }}"
+
+- debug:
+    msg: "{{ SliceIdFirstKey }}"
+
+- name: Print slice-Index value of the last entry in list
+  set_fact:
+    DU_delete_sliceIndexvalue: "{{ SliceIdlast[SliceIdFirstKey] }}"
+
+- name: Print DU_delete_sliceIndexvalue
+  debug:
+    msg: "{{ DU_delete_sliceIndexvalue }}"
+
+
+- name: Call for DUcell configuration- Delete DUCell 
+  include: cease_DUCell_config.yaml
+  vars:
+    xmlfile: "{{ xmlfilename }}"
+    logsfile: "{{ filename }}"
+    DUCellIdentity_Item_delete: "{{ item }}"
+    DU_delete_Slice_Index: "{{ DU_delete_sliceIndexvalue }}"
+  register: cease_DUCell_config
+  loop: "{{ cell_id }}"
+  
+  
+#----------------> DU delete slice  <--------------
+- name: Call RestAPI to delete DU Slice ID
+  uri:
+    url: "{{ deployment_location.properties.samsung_usm_host }}/oss/netconf/{{ du_id }}"
+    # user: ossuser
+    # password: osspasswd
+    method: POST
+    body: "{{lookup('template', 'delete_slice_du.xml')}}"
+    # body_format: json
+    headers:
+      Authorization: Basic b3NzdXNlcjpvc3NwYXNzd2Q=
+      content-type: "application/xml"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: DU_deleteSlice
+  # ignore_errors: yes
+
+- name: Display response
+  debug:
+    var: DU_deleteSlice
+
+- name: DU_getSlice info print
+  lineinfile:
+    path: "{{ filename }}"
+    line: |
+           __________________________________________________________________________
+           
+           ##### Delete Slice for DU
+           
+           URL:
+           {{ DU_deleteSlice.url }}
+           
+           order_send:
+           {{lookup('template', 'delete_slice_du.xml')}}
+           
+           result_return:
+           {{ DU_deleteSlice.content }}
+           __________________________________________________________________________
+
+- name: Log API request through Log module
+  ibm_cp4na_log_message:
+    message_direction: sent
+    external_request_id: "{{ extOrderId }}"
+    content_type: application/json
+    message_data: |
+     ***********************************
+     #####  Delete Slice for DU
+     
+     URL:  
+     {{ DU_deleteSlice.url }}
+     
+     order_send:
+     {{lookup('template', 'delete_slice_du.xml')}}
+     ____________________________________________________
+
+     result_return:
+      {{ DU_deleteSlice.content }}
+    message_type: sample
+    protocol: http
+
+- fail:
+    msg: "Slice creation failed with error {{ DU_deleteSlice.content }}"
+  when: '"<rpc-error>" in DU_deleteSlice.content'    

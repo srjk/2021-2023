@@ -1,0 +1,29 @@
+{
+	"serviceType": "Bundle RFS",
+	"serviceName": "{{ serviceName }}",
+	"id": "{{ kami_response.json.extOrderId }}",
+	"imsi": "{{ SUPI }}",
+		"hotspotRFS": {
+			"hlr": {
+				"multipleValueObjects": [{
+					"path": "{{ hlr_path6 }}",
+					"operation": "{{ operation4 }}"
+				}]
+			},
+			"udm": {
+				"multipleValueObjects": [{
+						"path": "udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo[@dnnId='{{ dnn6 }}']",
+						"operation": "{{ operation4 }}"
+					},
+					{
+						"path": "udm5gData/servingPlmnId/provisionedData/sessionManagementSubscriptionData/dnnConfiguration[@dnnId='{{ dnn6 }}']",
+						"operation": "{{ operation4 }}"
+					}
+				]
+			},
+			"pcf": [{
+				"path": "pcf/smPolicyData/smPolicySnssaiData/smPolicyDnnData[@dnn='{{ dnn6 }}']",
+				"operation": "{{ operation4 }}"
+			}]
+		}
+}

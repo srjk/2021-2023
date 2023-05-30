@@ -1,0 +1,16 @@
+{
+        "alm_instance_name": "{{ instance_name }}",
+        "assembly_name": "rfs_voicebundle_ansible",
+        "external_order_id": "{{ kami_response.json.extOrderId }}",
+        "target_system": "Nokia ENUM",
+        "target_system_url": "{{ enum_cease_url }}",
+        "execution_start_time": "{{ stime.start }}",
+        "execution_end_time": "{{ etime.end }}",
+        "request": "{{ lookup('template', 'nokia_enum_cease.xml.j2')| replace('\n','') | replace('\"','\\"') }}",
+        "response": "{{ result.content | replace(' ','') | replace('\r\n','') | replace('\"','\\"')}}",
+		{% if target=="error" %}
+           "status": "Failure"
+		{% else %}
+		   "status": "Success"
+		{% endif %}
+}

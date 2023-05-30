@@ -1,0 +1,86 @@
+- name: Configure NSI auth                                                                                                                                                                                  
+  shell: "curl --location --request GET '{{ NSSF_HOST }}/nnssf-configuration/v1/configuredsnssais/{{ mcc }}:{{ mnc }}' --http2-prior-knowledge"
+  register: result_csn
+
+- debug: var=result_csn
+    
+- block:
+    - name: Configure NSI auth
+      shell: "curl --location --request POST '{{ NSSF_HOST }}/nnssf-configuration/v1/configuredsnssais' --http2-prior-knowledge --header 'Accept: application/json' --header 'Content-Type: application/json' -d@/tmp/{{ myvar }}_configuredsnssais_request.json.j2 "
+      register: result_profile
+    - name : failed                       
+      fail:                                    
+        msg: "{{ result_profile.stdout }}"     
+      when: "'status' in result_profile.stdout"
+  when: "'status' in result_csn.stdout"
+
+- block:
+    - name: covert to json
+      set_fact:
+        csn_pre: "{{ result_csn.stdout | from_json }}"
+    
+    - name: adding value
+      set_fact:
+        csn_post: "{{ csn_pre.nssai | length }}"
+        csn_nssai: "{{ csn_pre.nssai }}"
+        jmsquarydata: "[?sd=='{{ sd }}']"   
+    - debug: var=csn_post
+    
+    - name: taski
+      set_fact:
+        jmsquary: "[?sd!='{{ sd }}']"
+      when: "csn_post | int  > 1"
+    
+    - name : chnagedata
+      set_fact:
+         dataup: "{{ csn_pre.nssai | json_query(jmsquary) }}"
+      when: "csn_post | int  > 1"
+
+
+    - name:  create nssaiauth_request
+      copy: 
+        dest: "/tmp/{{ myvar }}_configuredsnssais_request.json.j2"
+        content: |
+          {    "plmn":{
+               "mcc":"{{ mcc }}",
+                "mnc":"{{ mnc }}"
+              },
+              "nssai": {{ dataup }}
+             }
+      when: "csn_post | int  > 1"   
+
+  
+    - replace:
+        path: "/tmp/{{ myvar }}_configuredsnssais_request.json.j2"
+        regexp: ''''
+        replace: '"'  
+
+    - name: Configure NSI auth
+      shell: "curl --location --request PUT '{{ NSSF_HOST }}/nnssf-configuration/v1/configuredsnssais/{{ mcc }}:{{ mnc }}' --http2-prior-knowledge --header 'Accept: application/json' --header 'Content-Type: application/json' -d@/tmp/{{ myvar }}_configuredsnssais_request.json.j2 " 
+      register: result_test
+      when: "csn_post | int  > 1"
+
+    - name : chnagedata                               
+      set_fact:                                    
+         legth: "{{ csn_pre.nssai | json_query(jmsquarydata)  | length }}"
+      #when: "csn_post | int == 1"
+
+    - name: Configure NSI auth
+      shell: "curl --location --request DELETE '{{ NSSF_HOST }}/nnssf-configuration/v1/configuredsnssais/{{ mcc }}:{{ mnc }}' --http2-prior-knowledge" 
+      register: result_test
+      when: csn_post | int == 1 and legth | int > 0
+    #  ignore_errors: yes
+
+    - name: Log the request response of Cease NSS Auth
+      lineinfile:
+        path: "{{ filename }}"
+        line: |
+           ***********************************
+           Cease NSS Auth:
+           Request:
+           curl --location --request DELETE '{{ NSSF_HOST }}/nnssf-configuration/v1/configuredsnssais/{{ mcc }}:{{ mnc }}' --http2-prior-knowledge
+           
+           Response:
+           {{ result_test }}    
+
+  when: "'status' not in result_csn.stdout"

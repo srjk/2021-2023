@@ -1,0 +1,4 @@
+      - name: Validate the  SMF params
+        fail:
+          msg: 'input params not found in mandatory params {{ smfloop }}'
+        when: "'{{ smfloop }}' not in {{ keyitem }}"

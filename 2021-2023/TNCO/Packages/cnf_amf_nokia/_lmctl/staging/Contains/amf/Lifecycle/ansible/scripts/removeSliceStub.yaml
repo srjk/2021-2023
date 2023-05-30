@@ -1,0 +1,6 @@
+---
+- name: removeSliceStub
+  hosts: amf
+  gather_facts: false
+  roles:
+    - role: ../roles/removeSliceStub

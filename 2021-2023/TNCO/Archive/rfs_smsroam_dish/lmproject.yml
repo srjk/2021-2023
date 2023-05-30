@@ -1,0 +1,10 @@
+schema: '2.0'
+name: rfs_smsroam_dish
+version: '1.0'
+type: Assembly
+resource-manager: Brent
+contains:
+- name: smsroam_rfs
+  type: Resource
+  resource-manager: Brent
+  directory: smsroam_rfs

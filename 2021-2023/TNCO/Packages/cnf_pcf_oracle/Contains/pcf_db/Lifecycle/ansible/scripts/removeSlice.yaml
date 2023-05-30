@@ -1,0 +1,26 @@
+---
+# - name: removeSlice
+  # hosts: localhost
+  # connection: local
+  # gather_facts: True       
+  # roles:
+    # - role: ../roles/removeSlice
+    
+# - name: run the removeSliceProd yaml file
+#   import_playbook: removeSliceProd.yaml
+#   when: lookup('env','PCF_ENV') == 'prod'
+      
+
+# - name: run the removeSliceStub yaml file
+#   import_playbook: removeSliceStub.yaml
+#   when: lookup('env','PCF_ENV') == 'stub'
+
+- name: run the removeSliceProd yaml file
+  import_playbook: removeSliceProd.yaml
+  when:  PCF_ENV  == 'prod'
+      
+
+- name: run the removeSliceStub yaml file
+  import_playbook: removeSliceStub.yaml
+  when: PCF_ENV  == 'stub'
+    

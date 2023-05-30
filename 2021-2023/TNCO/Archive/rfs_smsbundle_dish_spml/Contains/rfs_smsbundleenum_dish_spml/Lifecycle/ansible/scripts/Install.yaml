@@ -1,0 +1,10 @@
+---
+- name: Install
+  hosts: localhost
+  connection: local
+  gather_facts: True
+  pre_tasks:
+    - set_fact:
+        listrequestedServices: "{{ requestedServices.split(',') | map('trim') |  list }}"
+  roles:
+      - { role: ../roles/provide, when: "'MMS' in listrequestedServices" }

@@ -1,0 +1,22 @@
+{
+  "serviceType":"{{ serviceType }}",
+  "serviceName": "Subscriber - Voicemail RFSS",
+  "command": "create",
+  "Version":"1",
+  "RequestId":"{{ extOrderId }}",
+  "msisdn":"{{ GPSI }}",
+  "hostreference": "IO",
+  "EntityName": "Subscriber",
+  "LanguageFlavor": "rogers-rwi",
+  "SubscriberCosName": "COS_37_UCC",
+  "GuestLanguageFlavour": "rogers-rwi",
+  "GlobalLanguageId": "en-CA",
+  "GuestLanguage": "en-CA",
+  "SubscriberDomainName": "RWI",
+  "TuiPassword": " ",
+  "Timezone": "Canada/Eastern",
+  "NotificationTextLanguage": "en-CA",
+  "VmFamilyMailboxStatus": "Main",
+  "MWIEnabled": "1",
+  "Token": "{{ Token | b64encode }}"
+}

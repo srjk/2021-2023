@@ -1,0 +1,42 @@
+#----------> DU_VENDOR Add slice servedPlmnList sliceList for each gnbCellDuVsConfig <-----------
+- name: Add new slice in sliceList for each gnbCellDuVsConfig(add new slice)
+  uri:
+    url: "{{ deployment_location.properties.mcms_host }}/cms-service/webapi/apiservice/ProvMnS/v1/gnbvs,gnbDuConfig={{ du_id }},gnbCellDuVsConfig={{ gnbCellDuVsConfigsliceListId }},servedPlmnList=1/sliceList"
+    method: PUT
+    body: "{{lookup('template', 'modifysliceListDUvendor.json.j2')}}"
+    body_format: json
+    headers:
+      apiInvokerId: "{{ deployment_location.properties.apiInvokerId }}"
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no 
+    status_code: [201]
+    return_content: yes        
+  register: updateAddslicesliceList
+  # loop: "{{ mysequencegnbCellDuVsConfigsliceList }}"
+  ignore_errors: yes
+  failed_when: "updateAddslicesliceList.status not in [201]"
+  
+- name: AddSlice sliceList print
+  copy:
+    dest: "/tmp/ansible_log/resp_proDUVenAddsliceList.json.j2"
+    content: "{{ updateAddslicesliceList }}"
+
+#-----------------> Print error message when apiInvokerId is Invalid/incorrect/expired <------------
+- name: creating variable and setting value for message error when apiInvokerId is Invalid/incorrect/expired
+  set_fact:
+    target_e: "{{ updateAddslicesliceList.content | regex_search('message') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ updateAddslicesliceList.content | replace('\"','') | replace('{','') | replace('}','') }}. Either apiInvokerId is Invalid/incorrect/expired, please verify the apiInvokerId."
+  when: "target_e=='message'"
+
+#-----------> Print updateAddslicesliceList error message if Add/Delete API calls fails <---------------
+- name: creating variable and setting value for errorInfo  
+  set_fact:
+    target_e1: "{{ updateAddslicesliceList.content | regex_search('error') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ updateAddslicesliceList.content | replace('\"','') | replace('{','') | replace('}','') | replace('error:','') }}"
+  when: "target_e1=='error'"    

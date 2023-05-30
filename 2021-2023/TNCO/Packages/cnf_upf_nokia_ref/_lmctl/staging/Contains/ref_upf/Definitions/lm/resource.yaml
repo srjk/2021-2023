@@ -1,0 +1,54 @@
+name: resource::ref_upf-cnf_upf_nokia_ref::1.0
+description: descriptor for sol_upf
+properties:
+  operation:
+    description: addSliceConfig
+    volatile: true
+    default: Configure
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: SOL003
+  resourceManager:
+    type: string
+    default: brent
+  instance_name:
+    description: name of assembly instance
+    type: string
+  vnfdId:
+#    default: Nokia-smf-1.11.0-v1
+    volatile: true
+  vnfInstanceName:
+    type: string
+    # default: or-upf001c-usw2aza001nd
+  vnfInstanceDescription:
+    type: string
+    default: Deploy Nokia UPF
+  vnfInstanceId:
+    type: string
+    volatile: true
+  flavourId:
+    type: string
+#    default: small
+  vimType:
+    type: string
+#    default: ndc
+  vim_id:
+    type: string
+#    default: orchestratortest
+  envType:
+    type: string
+#    default: dev    
+  nfType:
+    type: string
+  cnfPackageVersionFile:
+    type: string
+    volatile: true
+lifecycle:
+  Install: {}
+  Uninstall: {}
+default-driver:
+  ansible:
+    selector:
+      infrastructure-type:
+      - '*'

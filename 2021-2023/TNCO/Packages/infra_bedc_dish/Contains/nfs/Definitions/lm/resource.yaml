@@ -1,0 +1,62 @@
+name: resource::nfs-infra_bedc_dish::1.0
+description: descriptor for amf LCM
+properties:
+  operation:
+    description: Install/Configure/Uninstall
+    volatile: true
+    default: Install
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: NFLCM
+  resourceManager:
+    type: string
+    default: brent
+  instance_name:
+    description: name of assembly instance
+  cnfInstance:
+    type: cnfInstancedata
+lifecycle:
+  Uninstall: {}
+  Install: {}
+default-driver:
+  ansible:
+    selector:
+      infrastructure-type:
+      - '*'
+data_types:
+  cnfInstancedata: 
+    properties:
+      name:
+        type: string
+      cluster:
+        type: map
+        entry-schema: clusterdata
+      config_context:
+        type: map
+        entry-schema: config_contextdata
+  clusterdata:
+    properties:
+      name:
+        type: string
+      site:
+        type: map
+        entry-schema: sitedata
+  sitedata:
+    properties:
+      name: 
+        type: string
+      region:
+        type: string
+  config_contextdata:
+    properties:
+      codeCommitRepo:
+        type: string
+      deploymentType:
+        type: string
+      site_bucket_tar:
+        type: string
+      application_json:
+        type: map
+      config_json:
+        type: map

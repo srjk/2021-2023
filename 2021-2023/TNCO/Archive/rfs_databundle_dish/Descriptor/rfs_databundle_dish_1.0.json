@@ -1,0 +1,1835 @@
+{
+  "name": "rfs_databundle_dish",
+  "description": "descriptor for bundle rfs",
+  "version": "1.0",
+  "href": " ",
+  "serviceSpecCharacteristic": [
+    {
+      "name": "requestedServices",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "false",
+          "valueType": "STRING",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "name": "serviceType",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "Bundle RFS"
+        }
+      ]
+    },
+    {
+      "name": "serviceName",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "Subscriber - Data Bundle RFSS"
+        }
+      ]
+    },
+    {
+      "name": "ntype",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "single"
+        }
+      ]
+    },
+    {
+      "name": "mobileSubscriberType",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "genericSubscriber"
+        }
+      ]
+    },
+    {
+      "name": "umtsSubscriber_accTypeGSM",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "umtsSubscriber_accTypeGERAN",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "umtsSubscriber_accTypeUTRAN",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "pdpContext_1_id",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "name": "pdpContext_1_qosProfile",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "intHlr"
+        }
+      ]
+    },
+    {
+      "name": "pdpContext_1_refPdpContextName",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "intrntPdp"
+        }
+      ]
+    },
+    {
+      "name": "pdpContext_2_id",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "name": "pdpContext_2_qosProfile",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "otaHlr"
+        }
+      ]
+    },
+    {
+      "name": "pdpContext_2_refPdpContextName",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "otaPdp"
+        }
+      ]
+    },
+    {
+      "name": "roamSubscriptionInfo",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "ipv6toipv4"
+        }
+      ]
+    },
+    {
+      "name": "eps_defaultPdnContextId",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "name": "eps_maxBandwidthUp",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 2000000000
+        }
+      ]
+    },
+    {
+      "name": "eps_maxBandwidthDown",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 2000000000
+        }
+      ]
+    },
+    {
+      "name": "eps_accessAPNEnabled",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "eps_subscribedForSMSInMME",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "eps_eps5GSmsDeliveryMode",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": false
+        }
+      ]
+    },
+    {
+      "name": "dnn4_contextId",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "name": "dnn4_type",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "both"
+        }
+      ]
+    },
+    {
+      "name": "dnn4_pdnGwDynamicAllocation",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "dnn4_vplmnAddressAllowed",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": false
+        }
+      ]
+    },
+    {
+      "name": "dnn4_maxBandwidthUp",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 2000000000
+        }
+      ]
+    },
+    {
+      "name": "dnn4_maxBandwidthDown",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 2000000000
+        }
+      ]
+    },
+    {
+      "name": "dnn4_qos",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "internetQosEps"
+        }
+      ]
+    },
+    {
+      "name": "dnn4_chargingCharacteristicsProfile",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 8
+        }
+      ]
+    },
+    {
+      "name": "dnn4_chargingCharacteristicsBehavior",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "name": "dnn4_eps5gInterworkIndicator",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "name": "dnn5_contextId",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "name": "dnn5_type",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "both"
+        }
+      ]
+    },
+    {
+      "name": "dnn5_pdnGwDynamicAllocation",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "dnn5_vplmnAddressAllowed",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": false
+        }
+      ]
+    },
+    {
+      "name": "dnn5_maxBandwidthUp",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 1000000
+        }
+      ]
+    },
+    {
+      "name": "dnn5_maxBandwidthDown",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 1000000
+        }
+      ]
+    },
+    {
+      "name": "dnn5_qos",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "otaQosEps"
+        }
+      ]
+    },
+    {
+      "name": "dnn5_chargingCharacteristicsProfile",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 8
+        }
+      ]
+    },
+    {
+      "name": "dnn5_chargingCharacteristicsBehavior",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "name": "dnn5_eps5gInterworkIndicator",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "name": "epsRoamAreaName",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "home"
+        }
+      ]
+    },
+    {
+      "name": "authenticationmethod",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "5G_AKA"
+        }
+      ]
+    },
+    {
+      "name": "plmnId",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 313340
+        }
+      ]
+    },
+    {
+      "name": "homePlmnIdIndication",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "udm_rfspIndex",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "name": "udm_subsRegTimer",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 3200
+        }
+      ]
+    },
+    {
+      "name": "udm_ueUsageType",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 32000
+        }
+      ]
+    },
+    {
+      "name": "localAreaDataNtwInfo",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "dnn4"
+        }
+      ]
+    },
+    {
+      "name": "udm_mpsPriority",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": false
+        }
+      ]
+    },
+    {
+      "name": "udm_activeTime",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 3200
+        }
+      ]
+    },
+    {
+      "name": "udm_downLinkPktCount",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 1000
+        }
+      ]
+    },
+    {
+      "name": "dnn4_defaultIndication",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "dnn4_interworkingEPSIndication",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "dnn4_localBrkOutRoamingAllowed",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": false
+        }
+      ]
+    },
+    {
+      "name": "dnn5_interworkingEPSIndication",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "dnn5_localBrkOutRoamingAllowed",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": false
+        }
+      ]
+    },
+    {
+      "name": "dnn4_defaultSessionType",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "IPV4V6"
+        }
+      ]
+    },
+    {
+      "name": "dnn4_allowedSessionType",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "IPV4V6"
+        }
+      ]
+    },
+    {
+      "name": "dnn4_defaultSscMode",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "SSC_MODE_1"
+        }
+      ]
+    },
+    {
+      "name": "dnn4_allowedSscMode",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "SSC_MODE_1"
+        }
+      ]
+    },
+    {
+      "name": "interworkingEPSIndication4",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "dnn4_udm5Qi",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 9
+        }
+      ]
+    },
+    {
+      "name": "dnn4_arp",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "12|NOT_PREEMPT|PREEMPTABLE"
+        }
+      ]
+    },
+    {
+      "name": "dnn4_priorityLevel",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 12
+        }
+      ]
+    },
+    {
+      "name": "dnn5_defaultSessionType",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "IPV4V6"
+        }
+      ]
+    },
+    {
+      "name": "dnn5_allowedSessionType",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "IPV4V6"
+        }
+      ]
+    },
+    {
+      "name": "dnn5_defaultSscMode",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "SSC_MODE_1"
+        }
+      ]
+    },
+    {
+      "name": "dnn5_allowedSscMode",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "SSC_MODE_1"
+        }
+      ]
+    },
+    {
+      "name": "interworkingEPSIndication5",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "dnn5_udm5Qi",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 9
+        }
+      ]
+    },
+    {
+      "name": "dnn5_arp",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "12|NOT_PREEMPT|PREEMPTABLE"
+        }
+      ]
+    },
+    {
+      "name": "dnn5_priorityLevel",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 12
+        }
+      ]
+    },
+    {
+      "name": "pcf_policySubscriptionId",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "name": "pcf_dnn4_subscSpendingLimits",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "pcf_dnn4_online",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "pcf_dnn5_subscSpendingLimits",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "pcf_dnn5_online",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "hlr_dnn6_path",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "hlr/epsPdnContext"
+        }
+      ]
+    },
+    {
+      "name": "dnn6_contextId",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 7
+        }
+      ]
+    },
+    {
+      "name": "dnn6_type",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "both"
+        }
+      ]
+    },
+    {
+      "name": "dnn6_pdnGwDynamicAllocation",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "dnn6_vplmnAddressAllowed",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": false
+        }
+      ]
+    },
+    {
+      "name": "dnn6_maxBandwidthUp",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 2000000000
+        }
+      ]
+    },
+    {
+      "name": "dnn6_maxBandwidthDown",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 2000000000
+        }
+      ]
+    },
+    {
+      "name": "dnn6_qos",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "internetQosEps"
+        }
+      ]
+    },
+    {
+      "name": "dnn6_chargingCharacteristicsProfile",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 8
+        }
+      ]
+    },
+    {
+      "name": "dnn6_chargingCharacteristicsBehavior",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "name": "dnn6_eps5gInterworkIndicator",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "name": "udm_path",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo"
+        }
+      ]
+    },
+    {
+      "name": "udm_dnn6_defaultIndication",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": false
+        }
+      ]
+    },
+    {
+      "name": "udm_dnn6_interworkingEPSIndication",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "udm_dnn6_localBrkOutRoamingAllowed",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": false
+        }
+      ]
+    },
+    {
+      "name": "udm_dnn6_path",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "udm5gData/servingPlmnId/provisionedData/sessionManagementSubscriptionData/dnnConfiguration"
+        }
+      ]
+    },
+    {
+      "name": "udm_dnn6_interworkingEPSIndication1",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "udm_dnn6_udm5Qi",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 9
+        }
+      ]
+    },
+    {
+      "name": "udm_dnn6_arp",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "12|NOT_PREEMPT|PREEMPTABLE"
+        }
+      ]
+    },
+    {
+      "name": "udm_dnn6_priorityLevel",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 12
+        }
+      ]
+    },
+    {
+      "name": "dnn6_defaultSessionType",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "IPV4V6"
+        }
+      ]
+    },
+    {
+      "name": "dnn6_allowedSessionType",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "IPV4V6"
+        }
+      ]
+    },
+    {
+      "name": "dnn6_defaultSscMode",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "SSC_MODE_1"
+        }
+      ]
+    },
+    {
+      "name": "dnn6_allowedSscMode",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "SSC_MODE_1"
+        }
+      ]
+    },
+    {
+      "name": "pcf_path",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "pcf/smPolicyData/smPolicySnssaiData/smPolicyDnnData"
+        }
+      ]
+    },
+    {
+      "name": "dnn6_subscSpendingLimits",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "dnn6_online",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "hlr_path1",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "hlr"
+        }
+      ]
+    },
+    {
+      "name": "hlr_odbgprs",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "name": "hlr_path2",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "hlr/eps"
+        }
+      ]
+    },
+    {
+      "name": "hlr_defaultPdnContextId",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "name": "hlr_path3",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "hlr/epsPdnContext[@contextId='1']/pdnContextBlocking"
+        }
+      ]
+    },
+    {
+      "name": "hlr_flagAPNBlockedOverS6A",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "hlr_flagAPNBlockedOverSWx",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "hlr1_flagAPNBlockedOverS6A",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": false
+        }
+      ]
+    },
+    {
+      "name": "hlr1_flagAPNBlockedOverSWx",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": false
+        }
+      ]
+    },
+    {
+      "name": "dnn5_defaultIndication",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": false
+        }
+      ]
+    },
+    {
+      "name": "dnn5_defaultIndication1",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "dnn4_dnnBarred",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "hlr_path4",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "hlr/epsPdnContext[@contextId='7']/pdnContextBlocking"
+        }
+      ]
+    },
+    {
+      "name": "hlr_operation4",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "addorset"
+        }
+      ]
+    },
+    {
+      "name": "dnn6_operation",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "setoradd"
+        }
+      ]
+    },
+    {
+      "name": "dnn6_dnnBarred",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "hlr_odbgprs1",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "name": "hlr1_defaultPdnContextId",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "name": "dnn4_operation2",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "remove"
+        }
+      ]
+    },
+    {
+      "name": "dnn4_defaultIndication1",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": false
+        }
+      ]
+    },
+    {
+      "name": "hss_path",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "hss"
+        }
+      ]
+    },
+    {
+      "name": "hss_operation",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "remove"
+        }
+      ]
+    },
+    {
+      "name": "udm_path2",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "udm5gData"
+        }
+      ]
+    },
+    {
+      "name": "pcf_path2",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "pcf"
+        }
+      ]
+    },
+    {
+      "name": "hlr_epsRoamAreaName",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "home"
+        }
+      ]
+    },
+    {
+      "name": "hlr_path6",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "hlr/epsPdnContext[@contextId='7']"
+        }
+      ]
+    },
+    {
+      "name": "operation1",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "addorset"
+        }
+      ]
+    },
+    {
+      "name": "operation2",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "set"
+        }
+      ]
+    },
+    {
+      "name": "operation3",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "setoradd"
+        }
+      ]
+    },
+    {
+      "name": "operation4",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "remove"
+        }
+      ]
+    },
+    {
+      "name": "operation5",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": "add"
+        }
+      ]
+    },
+    {
+      "name": "dnn6_dnnBarred1",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "true",
+          "valueType": "STRING",
+          "value": false
+        }
+      ]
+    },
+    {
+      "name": "dnn4",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "false",
+          "valueType": "STRING",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "name": "dnn4_sessionAmbr",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "false",
+          "valueType": "STRING",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "name": "dnn5",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "false",
+          "valueType": "STRING",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "name": "dnn5_sessionAmbr",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "false",
+          "valueType": "STRING",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "name": "dnn6",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "false",
+          "valueType": "STRING",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "name": "dnn6_sessionAmbr",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "false",
+          "valueType": "STRING",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "name": "SUPI",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "false",
+          "valueType": "STRING",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "name": "GPSI",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "false",
+          "valueType": "STRING",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "name": "UEAMBRDownlink",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "false",
+          "valueType": "STRING",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "name": "UEAMBRUplink",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "false",
+          "valueType": "STRING",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "name": "subscCats1",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "false",
+          "valueType": "STRING",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "name": "subscCats2",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "false",
+          "valueType": "STRING",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "name": "slice_nssai",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "false",
+          "valueType": "STRING",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "name": "slice_sst",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "false",
+          "valueType": "STRING",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "name": "slice_sd",
+      "configurable": true,
+      "description": "",
+      "serviceSpecCharacteristicValue": [
+        {
+          "isDefault": "false",
+          "valueType": "STRING",
+          "value": ""
+        }
+      ]
+    }
+  ],
+  "serviceSpecRelationship": "null",
+  "targetServiceSchema": "DISH",
+  "bundle": false
+}

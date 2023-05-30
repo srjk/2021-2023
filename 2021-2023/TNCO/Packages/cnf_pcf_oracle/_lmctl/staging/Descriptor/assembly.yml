@@ -1,0 +1,243 @@
+name: assembly::cnf_pcf_oracle::1.0
+description: descriptor for provisioning sol_pcf
+properties:
+  operation:
+    description: addSliceConfig
+    volatile: true
+    default: Configure
+  deploymentLocation:
+    description: site specific
+    type: string
+    default: SOL003
+  resourceManager:
+    type: string
+    read-only: true
+    default: brent
+  # nameSpace:
+    # type: string
+#  pcf_host:
+#    type: string
+#    default: "dish-pcf-stub:8191"
+  pcf_chgData_meteringMethod:
+    type: string
+    default: DURATION
+  pcf_chgData_offline:
+    type: string
+    default: true
+  pcf_chgData_online:
+    type: string
+    default: true
+  pcf_chgData_ratingGroup:
+    type: string
+    default: 0
+  pcf_chgData_reportingLevel:
+    type: string
+    default: RAT_GR_LEVEL
+  pcf_chgData_sdfHand:
+    type: string
+    default: true
+  pcf_chgData_serviceId:
+    type: string
+    default: 0
+  pcf_chgData_sponsorId:
+    type: string
+    default: DISH
+  vnfdIdDB:
+    type: string
+    volatile: true
+  vnfdIdapp:
+    type: string
+    volatile: true
+  vnfInstanceNameapp:
+    type: string
+  vnfInstanceNameDB:
+    type: string
+#    value: ${vendor}-${function}${nfAppearance}${nfunType}-${region}${azId}${dataCenterType}${logicalDCNo}${env}${envId}
+    # default: or-nrf001c-usw2aza001nd
+  vnfInstanceDescriptionapp:
+    type: string
+    default: Deploy Oracle PCF
+  vnfInstanceDescriptionDB:
+    type: string
+    default: Deploy Oracle DBPCF
+  vnfInstanceIdDb:
+    value: ${pcf_db.vnfInstanceId}
+    volatile: true
+  vnfInstanceIdApp:
+    value: ${pcf.vnfInstanceId}
+    volatile: true
+  cnfPackageVersionFileapp:
+    type: string
+    volatile: true
+  cnfPackageVersionFileDB:
+    type: string
+    volatile: true
+  flavourId:
+    type: string
+#    default: small
+  vimType:
+    type: string
+    default: ndc
+  vim_id:
+    type: string
+    default: orchestratortest
+  envType:
+    type: string
+    default: dev
+  nfType:
+    type: string
+    default: CNF
+  vendor:
+    type: string
+#    default: or
+  function:
+    type: string
+#    default: pcf
+  nfAppearance:
+    type: string
+#    default: 001
+  nfunType:
+    type: string
+#    default: c
+  region:
+    type: string
+#    default: use1
+  azId:
+    type: string
+#    default: az1
+  dataCenterType:
+    type: string
+#    default: n
+  logicalDCNo:
+    type: string
+#    default: 01
+  env:
+    type: string
+#    default: p
+  envId:
+    type: string
+#    default: 1
+  PCF_HOST:
+    type: string
+    volatile: true
+  PCF_ENV:
+    type: string
+    volatile: true
+composition:
+  pcf:
+    properties:
+      operation:
+        value: ${operation}
+      instance_name:
+        value: ${instance.name}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      resourceManager:
+        value: ${resourceManager}
+      vnfInstanceId:
+        value: ${vnfInstanceIdApp}
+      dataCenterType:
+        value: ${dataCenterType}
+      vnfdId:
+        value: ${vnfdIdapp}
+      vnfInstanceName:
+        value: ${vnfInstanceNameapp}
+      cnfPackageVersionFile:
+        value: ${cnfPackageVersionFileapp}
+      vnfInstanceDescription:
+        value: ${vnfInstanceDescriptionapp}
+      flavourId:
+        value: ${pcf_db.flavourId}
+      vimType:
+        value: ${vimType}
+      vim_id:
+        value: ${vim_id}
+      envType:
+        value: ${envType}
+      nfType:
+        value: ${nfType}
+      vendor:
+        value: ${vendor}
+      function:
+        value: ${function}
+      nfAppearance:
+        value: ${nfAppearance}
+      nfunType:
+        value: ${nfunType}
+      region:
+        value: ${region}
+      azId:
+        value: ${azId}
+      logicalDCNo:
+        value: ${logicalDCNo}
+      env:
+        value: ${env}
+      envId:
+        value: ${envId}
+      PCF_HOST:
+        value: ${PCF_HOST}
+      PCF_ENV:
+        value: ${PCF_ENV}
+    type: resource::pcf-cnf_pcf_oracle::1.0
+    quantity: 1
+  pcf_db:
+    properties:
+      operation:
+        value: ${operation}
+      instance_name:
+        value: ${instance.name}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      resourceManager:
+        value: ${resourceManager}
+      vnfInstanceId:
+        value: ${vnfInstanceIdDb}
+      dataCenterType:
+        value: ${dataCenterType}
+      vnfdId:
+        value: ${vnfdIdDB}
+      vnfInstanceName:
+        value: ${vnfInstanceNameDB}
+      cnfPackageVersionFile:
+        value: ${cnfPackageVersionFileDB}
+      vnfInstanceDescription:
+        value: ${vnfInstanceDescriptionDB}
+      flavourId:
+        value: ${flavourId}
+      vimType:
+        value: ${vimType}
+      vim_id:
+        value: ${vim_id}
+      envType:
+        value: ${envType}
+      nfType:
+        value: ${nfType}
+      vendor:
+        value: ${vendor}
+      function:
+        value: ${function}
+      nfAppearance:
+        value: ${nfAppearance}
+      nfunType:
+        value: ${nfunType}
+      region:
+        value: ${region}
+      azId:
+        value: ${azId}
+      logicalDCNo:
+        value: ${logicalDCNo}
+      env:
+        value: ${env}
+      envId:
+        value: ${envId}
+      PCF_HOST:
+        value: ${PCF_HOST}
+      PCF_ENV:
+        value: ${PCF_ENV}
+    type: resource::pcf_db-cnf_pcf_oracle::1.0
+    quantity: 1
+operations:
+  addSliceConfig:
+    source-operation: pcf.addSliceConfig
+  removeSlice:
+    source-operation: pcf.removeSlice

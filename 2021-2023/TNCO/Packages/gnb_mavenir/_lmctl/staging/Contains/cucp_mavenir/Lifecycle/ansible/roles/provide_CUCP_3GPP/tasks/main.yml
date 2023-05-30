@@ -1,0 +1,450 @@
+- name: Creates directory
+  file:
+    path: /tmp/ansible_log
+    state: directory
+    mode: 0775
+
+- name: setting filename logs for Provide_CUCP_3GPP
+  set_fact:
+    filename: /tmp/ansible_log/{{ instance_name }}_Create_CUCP_3GPP_GNB_MAVENIR.log
+    # filename: /tmp/ansible_log/ansible_provide_CUCP_3GPP_{{ instance_name }}.log
+    
+# - name: Validate the client certificate and verify onboarding is successful or no and get apiInvokerId
+  # uri:
+    # url: "{{ deployment_location.properties.mcms_host }}/cms-service/webapi/apicore/apiinvokermanagement/v1/onboardedinvokers"
+    # method: POST
+    # body: "{{lookup('template', 'clientCertificate.json.j2')}}"
+    # body_format: json
+    # headers:
+      # content-type: "application/json"
+      # ReturnResultType: "FULL"
+      # return_content: yes
+    # validate_certs: no
+    # status_code: 200 
+    # return_content: yes
+  # register: clientCertificate
+  # # ignore_errors: yes
+
+# - name: clientCertificate print
+  # copy:
+    # dest: "/tmp/proCUCP3gppclientCertificate.json.j2"
+    # content: "{{ clientCertificate }}"
+
+# - name: Initiate Authentication with apiInvokerId
+  # uri:
+    # url: "{{ deployment_location.properties.mcms_host }}/cms-service/webapi/apicore/aef-security/v1/check-authentication"
+    # method: POST
+    # body: "{{lookup('template', 'CheckAuthentication.json.j2')}}"
+    # body_format: json
+    # status_code: 200
+    # headers:
+      # content-type: "application/json"
+      # ReturnResultType: "FULL"
+      # return_content: yes
+    # validate_certs: no
+    # return_content: yes
+  # register: authentication
+  # # ignore_errors: yes
+
+# - name: authentication print
+  # copy:
+    # dest: "/tmp/proCUCP3gppauthentication.json.j2"
+    # content: "{{ authentication }}"
+
+
+#-----------------------> CUCP_3GPP NRCellCU Info pLMNInfoList <----------------------------
+- name: Call RestAPI to Retrieve NRCellCU info
+  uri:
+    url: "{{ deployment_location.properties.mcms_host }}/cms-service/webapi/apiservice/ProvMnS/v1/data=1,ManagedElement=1/GNBCUCPFunction={{ cucp_id }}?attributes=rRMPolicyMemberList,NRCellCU"
+    method: GET
+    body: "{{lookup('template', 'getInfoCUCP3GPP.json.j2')}}"
+    # body: 
+      # "gnbId": {{ gnb_id  | int }}
+      # "cnfId": {{ cucp_id | int }}
+      # "version": "{{ cucp_version }}"
+      # "configType": "{{ cucp_3gpp_config }}"
+    body_format: json
+    headers:
+      apiInvokerId: "{{ deployment_location.properties.apiInvokerId }}"
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: retrieveAll_NRCellCUInfo
+  ignore_errors: yes
+  failed_when: "retrieveAll_NRCellCUInfo.status not in [200]"
+
+- name: retrieveAll NRCellCU info print
+  copy:
+    dest: "{{ filename }}"
+    content: |
+              __________________________________________________________________________
+            
+              ##### GET API call to retrieveAll NRCellCU pLMNInfoList Info
+              
+              URL:
+              {{ retrieveAll_NRCellCUInfo.url }}
+              
+              order_send:
+              {{lookup('template', 'getInfoCUCP3GPP.json.j2')}}
+              
+              result_return:
+              {{ retrieveAll_NRCellCUInfo.json | to_nice_json }}
+              __________________________________________________________________________
+
+- name: Log API request through Log module
+  ibm_cp4na_log_message:
+    message_direction: sent
+    external_request_id: "{{ extOrderId }}"
+    content_type: application/json
+    message_data: |
+     ***********************************
+     ##### GET API call to retrieveAll NRCellCU pLMNInfoList Info
+     
+     URL:
+     {{ retrieveAll_NRCellCUInfo.url }}
+     
+     order_send:  
+     {{lookup('template', 'getInfoCUCP3GPP.json.j2')}}
+     ____________________________________________________
+
+     result_return:
+      {{ retrieveAll_NRCellCUInfo.json | to_nice_json }}
+    message_type: sample
+    protocol: http
+
+- name: retrieveAllInfo content result print all
+  set_fact:
+    target: "{{ retrieveAll_NRCellCUInfo.content }}"
+
+#----------> Print error message when apiInvokerId is Invalid/incorrect/expired <------------
+- name: creating variable and setting value for message error when apiInvokerId is Invalid/incorrect/expired
+  set_fact:
+    target_e: "{{ retrieveAll_NRCellCUInfo.content | regex_search('message') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ retrieveAll_NRCellCUInfo.content | replace('\"','') | replace('{','') | replace('}','') }}. Either apiInvokerId is Invalid/incorrect/expired, please verify the apiInvokerId."
+  when: "target_e=='message'"
+
+#----> Print error message when Invalid location or input data for: <gnbId> or <cnfId> or <version> <-------
+- name: creating variable and setting value for errorInfo when wrong input data of gnbId> or <cnfId> or <version>  or any other errors
+  set_fact:
+    target_e1: "{{ retrieveAll_NRCellCUInfo.content | regex_search('error') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ retrieveAll_NRCellCUInfo.content | replace('\"','') | replace('{','') | replace('}','') | replace('error:','') }}"
+  when: "target_e1=='error'"
+    
+# - name: retrieveAllInfo NRCellCU length print
+  # copy:
+    # dest: "/tmp/ansible_log/retrieveNRCellCULen.json.j2"
+    # content: "{{ retrieveAll_NRCellCUInfo.json.data[1].NRCellCU|length|int -1 }}"
+
+- name: print NRCellCU length
+  set_fact:
+    NRCellCUlen: "{{ retrieveAll_NRCellCUInfo.json.data[1].NRCellCU|length|int -1 }}"
+
+- name: Generate sequence for NRCellCU id's
+  set_fact:
+    mysequenceNRCellCU: "{{ mysequenceNRCellCU | default([]) + [retrieveAll_NRCellCUInfo.json.data[1].NRCellCU[item|int].id|int] }}"
+  with_sequence: start=0 end={{ NRCellCUlen }}
+
+- name: print number of NRCellCU IDs
+  debug:
+    msg: "{{ mysequenceNRCellCU }}"
+    
+
+- name: Call to include update pLMNInfoList for EACH NRCellCU with new S-NSSAI  (add new slice)
+  include: updatepLMNInfoList.yaml
+  vars:
+    data:
+        -  "{{ mysequenceNRCellCU }}"
+    filen: "{{ filename }}"
+    NRCellCUid: "{{ item }}"
+  loop: "{{ mysequenceNRCellCU }}"
+
+
+#-----------------------> CUCP_3GPP rRMPolicyMemberList <----------------------------
+- name: Call RestAPI to Retrieve rRMPolicyMemberList info
+  uri:
+    url: "{{ deployment_location.properties.mcms_host }}/cms-service/webapi/apiservice/ProvMnS/v1/data=1,ManagedElement=1/GNBCUCPFunction={{ cucp_id }}?attributes=rRMPolicyMemberList,NRCellCU"
+    method: GET
+    body: "{{lookup('template', 'getInfoCUCP3GPP.json.j2')}}"
+    # body: 
+      # "gnbId": {{ gnb_id  | int }}
+      # "cnfId": {{ cucp_id | int }}
+      # "version": "{{ cucp_version }}"
+      # "configType": "{{ cucp_3gpp_config }}"
+    body_format: json
+    headers:
+      apiInvokerId: "{{ deployment_location.properties.apiInvokerId }}"
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: retrieveAll_rRMPolicyMemberList
+  ignore_errors: yes
+  failed_when: "retrieveAll_rRMPolicyMemberList.status not in [200]"  
+
+# - name: retrieveAll rRMPolicyMemberList info print
+  # copy:
+    # dest: "{{ filename }}"
+    # content: "{{ retrieveAll_rRMPolicyMemberList.json | to_nice_json }}"
+
+- name: Insert a line at the end of a file retrieveAll rRMPolicyMemberList info print.
+  lineinfile:
+    path: "{{ filename }}"
+    line: |
+           __________________________________________________________________________
+           
+           ##### GET API call to retrieveAll NRCellCU rRMPolicyMemberList Info
+           
+           URL:  
+           {{ retrieveAll_rRMPolicyMemberList.url }}
+           
+           order_send:
+           {{lookup('template', 'getInfoCUCP3GPP.json.j2')}}
+           
+           result_return: 
+           {{ retrieveAll_rRMPolicyMemberList.json | to_nice_json }}
+           __________________________________________________________________________
+
+- name: Log API request through Log module
+  ibm_cp4na_log_message:
+    message_direction: sent
+    external_request_id: "{{ extOrderId }}"
+    content_type: application/json
+    message_data: |
+     ***********************************
+     ##### GET API call to retrieveAll NRCellCU rRMPolicyMemberList Info
+     
+     URL:  
+     {{ retrieveAll_rRMPolicyMemberList.url }}
+     
+     order_send:
+     {{lookup('template', 'getInfoCUCP3GPP.json.j2')}}
+     ____________________________________________________
+
+     result_return:
+      {{ retrieveAll_rRMPolicyMemberList.json | to_nice_json }}
+    message_type: sample
+    protocol: http
+
+#-----------------> Print error message when apiInvokerId is Invalid/incorrect/expired <------------
+- name: creating variable and setting value for message error when apiInvokerId is Invalid/incorrect/expired
+  set_fact:
+    target_e: "{{ retrieveAll_rRMPolicyMemberList.content | regex_search('message') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ retrieveAll_rRMPolicyMemberList.content | replace('\"','') | replace('{','') | replace('}','') }}. Either apiInvokerId is Invalid/incorrect/expired, please verify the apiInvokerId."
+  when: "target_e=='message'"
+
+#----> Print error message when Invalid location or input data for: <gnbId> or <cnfId> or <version> <-------
+- name: creating variable and setting value for errorInfo when wrong input data of gnbId> or <cnfId> or <version>  or any other errors
+  set_fact:
+    target_e1: "{{ retrieveAll_rRMPolicyMemberList.content | regex_search('error') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ retrieveAll_rRMPolicyMemberList.content | replace('\"','') | replace('{','') | replace('}','') | replace('error:','') }}"
+  when: "target_e1=='error'"
+
+- name: print rRMPolicyMemberList length
+  set_fact:
+    RRMPolicylen: "{{ retrieveAll_rRMPolicyMemberList.json.data[0].rRMPolicyMemberList|length|int -1 }}"
+
+- name: print number of rRMPolicyMemberList
+  debug:
+    msg: "{{ RRMPolicylen }}"
+
+- name: Generate sequence for rRMPolicyMemberList id's
+  set_fact:
+    mysequenceRRM: "{{ mysequenceRRM | default([]) + [retrieveAll_rRMPolicyMemberList.json.data[0].rRMPolicyMemberList[item|int].idx|int] }}"
+  with_sequence: start=0 end={{ RRMPolicylen }}
+
+- name: print number of rRMPolicyMemberList idx's
+  debug:
+    msg: "{{ mysequenceRRM }}"
+
+- name: Assign idx value of CUCP_3GPP rRMPolicyMemberList idx's and same idx is used for cease 
+  set_fact:
+    idxRRMCUCP3gpp: "{{ mysequenceRRM|max +1 }}"  
+
+# - name: Set the idx value of CUCP_3GPP rRMPolicyMemberList idx's and same idx is used for cease 
+  # set_fact:
+    # output__idxRRMCUCP3gpp: "{{ idxRRMCUCP3gpp }}"
+    
+# - name: Increment to 1 from the maximum number of rRMPolicyMemberList idx's
+  # debug:
+    # msg: "{{ mysequenceRRM|max +1 }}"
+  
+#-------------------> update rRMPolicyMemberList with new slice <----------------
+- name: update rRMPolicyMemberList (add new slice)
+  uri:
+    url: "{{ deployment_location.properties.mcms_host }}/cms-service/webapi/apiservice/ProvMnS/v1/data=1,ManagedElement=1,GNBCUCPFunction={{ cucp_id }},attributes/rRMPolicyMemberList"
+    method: PUT
+    body: "{{lookup('template', 'modifyInfoCUCP3GPP_rRMPolicy.json.j2')}}"
+    body_format: json
+    headers:
+      apiInvokerId: "{{ deployment_location.properties.apiInvokerId }}"
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 201
+    return_content: yes
+  register: updaterRMPolicyMemberList
+  ignore_errors: yes
+  failed_when: "updaterRMPolicyMemberList.status not in [201]"  
+
+- name: Insert a line at the end of a file to print rRMPolicyMemberList.
+  lineinfile:
+    path: "{{ filename }}"
+    line: |
+           __________________________________________________________________________
+           
+           ##### PUT API call to update rRMPolicyMemberList (add new slice)
+           
+           URL:  
+           {{ updaterRMPolicyMemberList.url }}
+           
+           order_send:
+           {{lookup('template', 'modifyInfoCUCP3GPP_rRMPolicy.json.j2')}}
+           
+           result_return: 
+           {{ updaterRMPolicyMemberList.json | to_nice_json }}
+           __________________________________________________________________________
+
+- name: Log API request through Log module
+  ibm_cp4na_log_message:
+    message_direction: sent
+    external_request_id: "{{ extOrderId }}"
+    content_type: application/json
+    message_data: |
+     ***********************************
+     ##### PUT API call to update rRMPolicyMemberList (add new slice)
+     
+     URL:  
+     {{ updaterRMPolicyMemberList.url }}
+     
+     order_send:
+     {{lookup('template', 'modifyInfoCUCP3GPP_rRMPolicy.json.j2')}}         
+     ____________________________________________________
+
+     result_return:
+      {{ updaterRMPolicyMemberList.json | to_nice_json }}
+    message_type: sample
+    protocol: http
+
+- name: updaterRMPolicyMemberList content result print all
+  set_fact:
+    target: "{{ updaterRMPolicyMemberList.content }}"
+
+#---------> Print error message when apiInvokerId is Invalid/incorrect/expired <------------
+- name: creating variable and setting value for message error when apiInvokerId is Invalid/incorrect/expired
+  set_fact:
+    target_e: "{{ updaterRMPolicyMemberList.content | regex_search('message') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ updaterRMPolicyMemberList.content | replace('\"','') | replace('{','') | replace('}','') }}. Either apiInvokerId is Invalid/incorrect/expired, please verify the apiInvokerId."
+  when: "target_e=='message'"
+
+#---------> Print updaterRMPolicyMemberList error message if Add/Delete API calls fails <---------
+- name: creating variable and setting value for errorInfo if Add/Delete API calls fails
+  set_fact:
+    target_e1: "{{ updaterRMPolicyMemberList.content | regex_search('error') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ updaterRMPolicyMemberList.content | replace('\"','') | replace('{','') | replace('}','') | replace('error:','') }}"
+  when: "target_e1=='error'"
+
+
+
+#-----------------------> CUCP_3GPP RRMPolicyRatio <----------------------------
+- name: Retrieve RRMPolicyRatio
+  uri:
+    url: "{{ deployment_location.properties.mcms_host }}/cms-service/webapi/apiservice/ProvMnS/v1/data=1/RRMPolicyRatio"
+    method: GET
+    body: "{{lookup('template', 'getInfoCUCP3GPP.json.j2')}}"
+    # body: 
+      # "gnbId": {{ gnb_id  | int }}
+      # "cnfId": {{ cucp_id | int }}
+      # "version": "{{ cucp_version }}"
+      # "configType": "{{ cucp_3gpp_config }}"
+    body_format: json
+    headers:
+      apiInvokerId: "{{ deployment_location.properties.apiInvokerId }}"
+      content-type: "application/json"
+      ReturnResultType: "FULL"
+      return_content: yes
+    validate_certs: no
+    status_code: 200
+    return_content: yes
+  register: getRRMPolicyRatio
+  ignore_errors: yes
+  failed_when: "getRRMPolicyRatio.status not in [200]"
+  
+# - name: RRMPolicyRatio print
+  # copy:
+    # dest: "/tmp/ansible_log/resp_proCUCP3gppgetRRMPolicyRatio.json.j2"
+    # content: "{{ getRRMPolicyRatio }}"
+
+- name: Insert a line at the end of a file to print RRMPolicyRatio.
+  lineinfile:
+    path: "{{ filename }}"
+    line: |
+           __________________________________________________________________________
+           
+           ##### GET API call to Retrieve RRMPolicyRatio
+           
+           URL:  
+           {{ getRRMPolicyRatio.url }}
+           
+           order_send:
+           {{lookup('template', 'getInfoCUCP3GPP.json.j2')}}
+           
+           result_return: 
+           {{ getRRMPolicyRatio.json | to_nice_json }}
+           __________________________________________________________________________
+
+- name: Log API request through Log module
+  ibm_cp4na_log_message:
+    message_direction: sent
+    external_request_id: "{{ extOrderId }}"
+    content_type: application/json
+    message_data: |
+     ***********************************
+     ##### GET API call to Retrieve RRMPolicyRatio
+     
+     URL:  
+     {{ getRRMPolicyRatio.url }}
+     
+     order_send:
+     {{lookup('template', 'getInfoCUCP3GPP.json.j2')}}
+     ____________________________________________________
+
+     result_return:
+      {{ getRRMPolicyRatio.json | to_nice_json }}
+    message_type: sample
+    protocol: http
+
+#---------> Print error message when apiInvokerId is Invalid/incorrect/expired <------------
+- name: creating variable and setting value for message error when apiInvokerId is Invalid/incorrect/expired
+  set_fact:
+    target_e: "{{ getRRMPolicyRatio.content | regex_search('message') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ getRRMPolicyRatio.content | replace('\"','') | replace('{','') | replace('}','') }}. Either apiInvokerId is Invalid/incorrect/expired, please verify the apiInvokerId."
+  when: "target_e=='message'"
+  
+#----> Print error message when Invalid location or input data for: <gnbId> or <cnfId> or <version> <-------
+- name: creating variable and setting value for errorInfo when wrong input data of gnbId> or <cnfId> or <version>  or any other errors
+  set_fact:
+    target_e1: "{{ getRRMPolicyRatio.content | regex_search('error') }}"
+
+- fail:
+    msg: "Instance creation failed with error {{ getRRMPolicyRatio.content | replace('\"','') | replace('{','') | replace('}','') | replace('error:','') }}"
+  when: "target_e1=='error'"

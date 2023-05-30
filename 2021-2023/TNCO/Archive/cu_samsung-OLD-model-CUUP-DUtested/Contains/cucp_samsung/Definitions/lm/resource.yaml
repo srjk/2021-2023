@@ -1,0 +1,39 @@
+name: resource::cucp_samsung-cu_samsung::1.0
+description: descriptor for CUCP RAN slicing
+properties:
+  operation:
+    description: CUCP_RAN
+    volatile: true
+    default: Configure
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: DFW
+  resourceManager:
+    type: string
+    default: brent
+  gnb_id:
+    type: string
+    # default: 88
+  cucp_sst:
+    type: string
+  cucp_sd:
+    type: string
+  cucp_id:
+    type: string
+  cucp_samsung_usm_host:
+    type: string
+
+lifecycle:         
+  Install: {}
+  Uninstall: {}        
+default-driver:
+  ansible:
+    selector:
+      infrastructure-type:
+      - '*'
+# default-driver:
+  # sol003:
+    # selector:
+      # infrastructure-type:
+      # - '*'

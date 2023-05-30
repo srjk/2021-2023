@@ -1,0 +1,333 @@
+{
+    "serviceType": "{{ serviceType }}",
+	"serviceName": "Subscriber - Voice RFSS",
+    "id": "{{ extOrderId }}",
+    "imsi": "{{ SUPI }}",
+    "hlr": {
+        "multipleValueObjects": [
+            {
+                "path": "hlr/epsPdnContext",
+                "operation": "add",
+                "valueObject": {
+                    "apn": "ims",
+                    "contextId": "4",
+                    "type": "both",
+                    "pdnGwDynamicAllocation": "true",
+                    "vplmnAddressAllowed": "false",
+                    "maxBandwidthUp": "16000000",
+                    "maxBandwidthDown": "16000000",
+                    "qos": "IMSSIGNAL",
+                    "pdnChargingCharacteristics": {
+                        "chargingCharacteristicsProfile": "8",
+                        "chargingCharacteristicsBehavior": "0"
+                    },
+                    "eps5gInterworkIndicator": "1"
+                }
+            },
+            {
+                "path": "hlr/epsPdnContext",
+                "operation": "add",
+                "valueObject": {
+                    "apn": "sos",
+                    "contextId": "5",
+                    "type": "both",
+                    "pdnGwDynamicAllocation": "true",
+                    "vplmnAddressAllowed": "false",
+                    "maxBandwidthUp": "3000000",
+                    "maxBandwidthDown": "3000000",
+                    "qos": "SOSSIGNAL",
+                    "pdnChargingCharacteristics": {
+                        "chargingCharacteristicsProfile": "8",
+                        "chargingCharacteristicsBehavior": "0"
+                    },
+                    "eps5gInterworkIndicator": "1"
+                }
+            },
+            {
+                "path": "hlr/epsPdnContext",
+                "operation": "add",
+                "valueObject": {
+                    "apn": "xcap",
+                    "contextId": "6",
+                    "type": "both",
+                    "pdnGwDynamicAllocation": "true",
+                    "vplmnAddressAllowed": "false",
+                    "maxBandwidthUp": "10000000",
+                    "maxBandwidthDown": "10000000",
+                    "qos": "xcapQosEps",
+                    "pdnChargingCharacteristics": {
+                        "chargingCharacteristicsProfile": "8",
+                        "chargingCharacteristicsBehavior": "0"
+                    },
+                    "eps5gInterworkIndicator": "1"
+                }
+            }
+        ]
+    },
+    "hss": {
+        "operation":"add",
+        "subscriptionId": "1",
+        "profileType": "normal",
+        "adminBlocked": "false",
+        "defaultScscfRequired": "true",
+        "maximumPublicIds": "15",
+        "privateUserId": [
+            {
+                "privateUserId": "{{ SUPI }}@ims.mnc340.mcc313.3gppnetwork.org",
+                "provisionedImsi": [{
+                  "provisionedImsi":"{{ SUPI }}"
+				}
+                ],
+                "msisdn": "{{ GPSI }}",
+                "preferredAuthenticationScheme": "tlsDigestAkaV2",
+                "preferredDomain": "ims",
+                "refGussDataId": "1",
+                "looseRoutingIndicationRequired": "false",
+                "digestRealm": "ims.mnc340.mcc313.3gppnetwork.org"
+            },
+            {
+                "privateUserId": "+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+                "provisionedImsi": [{
+                   "provisionedImsi":"{{ SUPI }}"
+				}  
+                ],
+                "msisdn": "{{ GPSI }}",
+                "preferredAuthenticationScheme": "tlsDigestAkaV2",
+                "preferredDomain": "ims",
+                "refGussDataId": "1",
+                "looseRoutingIndicationRequired": "false",
+                "digestRealm": "ims.mnc340.mcc313.3gppnetwork.org"
+            }
+        ],
+        "implicitRegisteredSet": [
+            {
+                "irsId": "IRS1"
+            }
+        ],
+        "publicUserId": [
+            {
+                "originalPublicUserId": "sip:+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org",
+                "barringIndication": "false",
+                "defaultIndication": "true",
+                "serviceProfileName": "SP1",
+                "irsId": "IRS1"
+            },
+            {
+                "originalPublicUserId": "sip:{{ SUPI }}@ims.mnc340.mcc313.3gppnetwork.org",
+                "barringIndication": "true",
+                "defaultIndication": "false",
+                "serviceProfileName": "SP1",
+                "irsId": "IRS1"
+            },
+            {
+                "originalPublicUserId": "tel:+{{ GPSI }}",
+                "barringIndication": "false",
+                "defaultIndication": "false",
+                "serviceProfileName": "SP1",
+                "irsId": "IRS1"
+            }
+        ],
+        "serviceProfile": [
+            {
+                "profileName": "SP1",
+                "mandatoryCapability": [{
+				    "mandatoryCapability":"1"
+                }
+                ],
+                "globalFilterId": [{
+				  "globalFilterId": "REG-TAS"
+				},
+                 {				
+                   "globalFilterId": "INV-ORIG-TAS"
+             },
+             {
+                "globalFilterId": "INV-TERM-TAS"
+             },
+			 {
+                "globalFilterId": "REG-SCCAS"
+             },
+			 {
+                "globalFilterId": "INV-TERM-SCCAS"
+             },
+			 {
+                "globalFilterId": "INV-CONF-SCCAS"
+             }
+            ],
+                "subscribedMediaProfileID": {
+                    "sessionReleasePolicy": "deregisterNoForcedSessionRelease",
+                    "forkingPolicy": "parallelForking"
+                }
+            }
+        ],
+        "gussData": [
+            {
+                "gussDataId": "1",
+                "uiccSecurityType": "gba",
+                "keyLifetime": "3600",
+                "ussData": [
+                    {
+                        "ussDataId": "1",
+                        "gsId": "2",
+                        "activeIndication": "true",
+                        "ussType": "2",
+                        "refNafGroupId": "NAFG1",
+                        "keySelectionId": "ME-based",
+                        "upiListItem": [
+                            {
+                                "upi": "sip:+{{ GPSI }}@ims.mnc340.mcc313.3gppnetwork.org"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "udm": {
+        "multipleValueObjects": [
+            {
+                "operation": "add",
+                "path": "udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo",
+                "valueObject": {
+                    "dnnId": "ims",
+                    "defaultIndication": "false",
+                    "interworkingEPSIndication": "true",
+                    "localBrkOutRoamingAllowed": "false"
+                }
+            },
+            {
+                "operation": "add",
+                "path": "udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo",
+                "valueObject": {
+                    "dnnId": "sos",
+                    "defaultIndication": "false",
+                    "interworkingEPSIndication": "true",
+                    "localBrkOutRoamingAllowed": "false"
+                }
+            },
+            {
+                "operation": "add",
+                "path": "udm5gData/servingPlmnId/provisionedData/smfSelectionSubscriptionData/sNssaiInfo/dnnInfo",
+                "valueObject": {
+                    "dnnId": "xcap",
+                    "defaultIndication": "false",
+                    "interworkingEPSIndication": "true",
+                    "localBrkOutRoamingAllowed": "false"
+                }
+            },
+            {
+                "operation": "add",
+                "path": "udm5gData/servingPlmnId/provisionedData/sessionManagementSubscriptionData/dnnConfiguration",
+                "valueObject": {
+                    "dnnId": "ims",
+                    "interworkingEPSIndication": true,
+                    "sessionAmbr": "16000000 bps|16000000 bps",
+                    "udm5gQosProfile": {
+                        "udm5Qi": "5",
+                        "arp": "11|NOT_PREEMPT|PREEMPTABLE",
+                        "priorityLevel": "11"
+                    },
+                    "pduSessionTypes": {
+                        "defaultSessionType": "IPV4V6",
+                        "allowedSessionType": ["IPV4V6"]
+                    },
+                    "sscModes": {
+                        "defaultSscMode": "SSC_MODE_1",
+                        "allowedSscMode": ["SSC_MODE_1"]
+                    }
+                }
+            },
+            {
+                "operation": "add",
+                "path": "udm5gData/servingPlmnId/provisionedData/sessionManagementSubscriptionData/dnnConfiguration",
+                "valueObject": {
+                    "dnnId": "sos",
+                    "interworkingEPSIndication": "true",
+                    "sessionAmbr": "3000000 bps|3000000 bps",
+                    "udm5gQosProfile": {
+                        "udm5Qi": "5",
+                        "arp": "7|NOT_PREEMPT|PREEMPTABLE",
+                        "priorityLevel": "7"
+                    },
+                    "pduSessionTypes": {
+                        "defaultSessionType": "IPV4V6",
+                        "allowedSessionType": ["IPV4V6"]
+                    },
+                    "sscModes": {
+                        "defaultSscMode": "SSC_MODE_1",
+                        "allowedSscMode": ["SSC_MODE_1"]
+                    }
+                }
+            },
+            {
+                "operation": "add",
+                "path": "udm5gData/servingPlmnId/provisionedData/sessionManagementSubscriptionData/dnnConfiguration",
+                "valueObject": {
+                    "dnnId": "xcap",
+                    "interworkingEPSIndication": "true",
+                    "sessionAmbr": "10000000 bps|10000000 bps",
+                    "udm5gQosProfile": {
+                        "udm5Qi": "9",
+                        "arp": "12|NOT_PREEMPT|PREEMPTABLE",
+                        "priorityLevel": "12"
+                    },
+                    "pduSessionTypes": {
+                        "defaultSessionType": "IPV4V6",
+                        "allowedSessionType": ["IPV4V6"]
+                    },
+                    "sscModes": {
+                        "defaultSscMode": "SSC_MODE_1",
+                        "allowedSscMode": ["SSC_MODE_1"]
+                    }
+                }
+            }
+        ]
+    },
+    "pcf": [
+        {
+            "multipleValueObjects": [
+                {
+                    "operation": "add",
+                    "path": "pcf/smPolicyData/smPolicySnssaiData/smPolicyDnnData",
+                    "valueObject": {
+                        "dnn": "ims",
+                        "allowedServices": [
+                            "videocalling"
+                        ],
+                        "subscCats": [
+                            "Platinum",
+                            "Plan1"
+                        ],
+                        "subscSpendingLimits": "true",
+                        "online": "true"
+                    }
+                },
+                {
+                    "operation": "add",
+                    "path": "pcf/smPolicyData/smPolicySnssaiData/smPolicyDnnData",
+                    "valueObject": {
+                        "dnn": "sos",
+                        "subscCats": [
+                            "Platinum",
+                            "Plan1"
+                        ],
+                        "subscSpendingLimits": "true",
+                        "online": "true"
+                    }
+                },
+                {
+                    "operation": "add",
+                    "path": "pcf/smPolicyData/smPolicySnssaiData/smPolicyDnnData",
+                    "valueObject": {
+                        "dnn": "xcap",
+                        "subscCats": [
+                            "Platinum",
+                            "Plan1"
+                        ],
+                        "subscSpendingLimits": "true",
+                        "online": "true"
+                    }
+                }
+            ]
+        }
+    ]
+}

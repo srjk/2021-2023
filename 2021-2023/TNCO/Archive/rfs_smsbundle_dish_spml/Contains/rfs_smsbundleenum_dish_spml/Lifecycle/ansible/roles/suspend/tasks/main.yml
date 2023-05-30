@@ -1,0 +1,69 @@
+#convert ALM properties to json suspend request for South Bound endpoint - Nokia Provisioning GW 
+
+
+- name: Creates directory
+  file:
+    path: /tmp/ansible_log
+    state: directory
+    mode: 0775
+
+- name: setting filename
+  set_fact:
+    filename: /tmp/ansible_log/ansible_{{ extOrderId }}_{{ ansible_date_time.iso8601 }}.log
+- shell: "python3 test.py"
+  register: start_time
+  no_log: True 
+
+
+    
+- name: Call RestAPI of SPML/TAS/ENUM Adapter
+  uri:
+    url:  "http://dish-prov-ada-svc.dish-roks-poc-f5ae0bb7881b3b49feaa20ca32bad577-0000.us-south.containers.appdomain.cloud:30168/enum/suspendRequest"
+    method: POST
+    body: "{{lookup('template', 'nokia_provisioning_gw_enum_suspend_request.json.j2')}}"
+    status_code: 200
+    body_format: json
+    headers:
+      content-type: "application/json"
+      Returnresult_EnumSMSSuspendType: "FULL"
+    return_content: yes
+  register: result_EnumSMSSuspend
+  ignore_errors: yes
+  
+- name: Check that url result_EnumSMSSuspend a status_code 200 and fail if status_code 200 is not result_EnumSMSSuspend
+  fail:
+    msg: Instance creation failed with error code {{ result_EnumSMSSuspend.status }} and error message {{ result_EnumSMSSuspend.json.error.error_message }}
+  when:  result_EnumSMSSuspend.status!=200 and result_EnumSMSSuspend.json is defined
+
+- name: Check that url result_EnumSMSSuspend a status_code 200 and fail if status_code 200 is not result_EnumSMSSuspend
+  fail:
+    msg: Instance creation failed with error code {{ result_EnumSMSSuspend.status }} and error message {{ result_EnumSMSSuspend.msg }}
+  when: result_EnumSMSSuspend.status != 200
+  
+  
+- shell: "python3 test.py"
+  register: end_time
+  no_log: True
+
+- shell: "python3 diff.py '{{ end_time.stdout }}' '{{ start_time.stdout }}'"
+  register: time_diff
+  no_log: True
+
+- name: generate SB json and copy       
+  copy:
+    dest: "{{ filename }}"
+    content: |
+       ***********************************
+       start_time:  {{ start_time.stdout }}
+       end_time:  {{ end_time.stdout }}
+       time_taken:  {{ time_diff.stdout }}
+       ***********************************
+       order_send:  {{lookup('template', 'nokia_provisioning_gw_enum_suspend_request.json.j2')}}
+       ____________________________________________________
+       result_EnumSMSSuspend_return: {{ result_EnumSMSSuspend.json }}
+  
+
+- name: fail instance if there is a failure from SBI
+  fail:
+    msg: Instance creation failed with error code {{ result_EnumSMSSuspend.json.output.errorCode }} and error message {{ result_EnumSMSSuspend.json.output.message }}
+  when: result_EnumSMSSuspend.json.output.result == "Failure"

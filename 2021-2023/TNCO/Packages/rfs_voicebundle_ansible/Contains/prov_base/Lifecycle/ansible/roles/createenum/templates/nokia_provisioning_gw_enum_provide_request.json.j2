@@ -1,0 +1,8 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:typ="http://www.netnumber.com/titan/view/soap/types">
+	<soapenv:Header/>
+	<soapenv:Body>
+		<typ:ChangeRequest view="{{ ENUM_ChangeRequest_view }}">
+			<typ:entry>number='{{ GPSI }}' subscriber-id="{{ GPSI }}" rrid=0 NAPTR {ttl=900 order=50 preference=50 flags="u" service="E2U+sip" regexp="!^(.*)$!sip:+{{ GPSI }};npdi@ims.mnc340.mcc313.3gppnetwork.org;user=phone!" replacement=[]}</typ:entry>
+		</typ:ChangeRequest>
+	</soapenv:Body>
+</soapenv:Envelope>

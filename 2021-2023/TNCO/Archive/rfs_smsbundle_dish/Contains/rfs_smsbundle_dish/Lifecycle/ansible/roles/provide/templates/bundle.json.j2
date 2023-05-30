@@ -1,0 +1,218 @@
+{
+    "id": "{{ extOrderId }}",
+    "imsi": "{{ SUPI }}",
+    "serviceType": "Bundle RFS",
+    "serviceName": "Subscriber - Messaging Bundle RFSS"
+	{% if "SMS" in  listrequestedServices  %}
+		,
+		"smsRFS": {
+			"hlr": {
+				"multipleValueObjects": [
+					{
+						"path": "{{ path1 }}",
+						"operation": "{{ operation5 }}",
+						"valueObject": {
+							"msisdn": "{{ GPSI }}"
+						}
+					},
+					{
+						"path": "{{ path2 }}",
+						"operation": "{{ operation5 }}",
+						"valueObject": {
+							"msisdn": "{{ GPSI }}"
+						}
+					},
+					{
+						"path": "{{ path3 }}",
+						"operation": "{{ operation5 }}",
+						"valueObject": {
+							"basicServiceGroup": "{{ basicServiceGroup }}",
+							"status": "{{ status }}"
+						}
+					},
+					{
+						"path": "{{ path15 }}",
+						"operation": "{{ operation3 }}",
+						"valueObject": {
+							"osb1": "{{ osb1 }}"
+						}
+					},
+					{
+						"path": "{{ path4 }}",
+						"operation": "{{ operation3 }}",
+						"valueObject": {
+							"refPriorityListName": "{{ refPriorityListName }}"
+						}
+					}
+				]
+			},
+			"hss": {
+				"multipleValueObjects": [
+					{
+						"path": "{{ path5 }}",
+						"operation": "{{ operation5 }}",
+						"valueObject": {
+							"globalFilterId": "{{ globalFilterId }}"
+						}
+					},
+					{
+						"path": "{{ path5 }}",
+						"operation": "{{ operation5 }}",
+						"valueObject": {
+							"globalFilterId": "{{ globalFilterId1 }}"
+						}
+					}
+				]
+			},
+			"udm": {
+				"multipleValueObjects": [
+					{
+						"path": "{{ path16 }}",
+						"operation": "{{ operation5 }}",
+						"valueObject": {
+							"smsSubscribed": "{{ smsSubscribed }}"
+						}
+					},
+					{
+						"path": "{{ path6 }}",
+						"operation": "{{ operation5 }}",
+						"valueObject": {
+							"mtSmsSubscribed": "{{ smsSubscribed }}",
+							"mtSmsBarringAll": "{{ mtSmsBarringAll }}",
+							"mtSmsBarringRoaming": "{{ mtSmsBarringRoaming }}",
+							"moSmsSubscribed": "{{ moSmsSubscribed }}",
+							"moSmsBarringAll": "{{ moSmsBarringAll }}",
+							"moSmsbarringRoaming": "{{ moSmsbarringRoaming }}"
+						}
+					}
+				]
+			}
+		}
+	 {% endif %}
+	 {% if "SMS_ROAM" in  listrequestedServices  %}
+	    ,
+		"smsRoamingRFS": {
+			"hlr": {
+				"multipleValueObjects": [
+					{
+						"path": "hlr/bicroam",
+						"operation": "addorset",
+						"valueObject": {
+							"basicServiceGroup": "TS20-shortMessage",
+							"status": "4"
+						}
+					},
+					{
+						"path": "hlr",
+						"operation": "addorset",
+						"valueObject": {
+							"osb1": "false"
+						}
+					}
+				]
+			},
+			"udm": {
+				"multipleValueObjects": [
+					{
+						"path": "udm5gData/servingPlmnId/provisionedData/smsManagementSubscriptionData/mtSmsBarringRoaming='false'",
+						"operation": "set",
+						"valueObject": {
+							"mtSmsBarringRoaming": "false"
+						}
+					},
+					{
+						"path": "udm5gData/servingPlmnId/provisionedData/smsManagementSubscriptionData/moSmsbarringRoaming='false'",
+						"operation": "set",
+						"valueObject": {
+							"moSmsbarringRoaming": "false"
+						}
+					}
+				]
+			}
+		}
+	{% endif %}
+	{% if "MMS" in  listrequestedServices  %}
+	   ,
+		"mmsRFS": {
+			"hlr": {
+				"multipleValueObjects": [
+					{
+						"operation": "{{ operation5 }}",
+						"path": "{{ path7 }}",
+						"valueObject": {
+							"apn": "{{ dnn7 }}",
+							"contextId": "3",
+							"type": "both",
+							"pdnGwDynamicAllocation": "{{ pdnGwDynamicAllocation }}",
+							"vplmnAddressAllowed": "{{ vplmnAddressAllowed }}",
+							"maxBandwidthUp": "{{ dnn7_sessionAmbr.split("|")[0].split(" ")[0]  }}",
+                            "maxBandwidthDown": "{{ dnn7_sessionAmbr.split("|")[1].split(" ")[0] }}",
+							"qos": "{{ qos }}",
+							"pdnChargingCharacteristics": {
+								"chargingCharacteristicsProfile": "{{ chargingCharacteristicsProfile }}",
+								"chargingCharacteristicsBehavior": "{{ chargingCharacteristicsBehavior }}"
+							},
+							"eps5gInterworkIndicator": "{{ eps5gInterworkIndicator }}"  
+						}
+					
+					}
+				]
+			},
+			"udm": {
+				"multipleValueObjects": [
+					{
+						"operation": "{{ operation5 }}",
+						"path": "{{ path8 }}",
+						"valueObject": {
+							"dnnId": "{{ dnn7 }}",
+							"defaultIndication": "{{ defaultIndication }}",
+							"interworkingEPSIndication": "{{ interworkingEPSIndication }}",
+							"localBrkOutRoamingAllowed": "{{ localBrkOutRoamingAllowed }}"
+						}
+					},
+					{
+						"operation": "{{ operation5 }}",
+						"path": "{{ path9 }}",
+						"valueObject": {
+							"dnnId": "{{ dnn7 }}",
+							"interworkingEPSIndication": "{{ interworkingEPSIndication }}",
+							"sessionAmbr": "{{ dnn7_sessionAmbr }}",
+							"udm5gQosProfile": {
+								"udm5Qi": "9",
+								"arp": "{{ arp }}",
+								"priorityLevel": "12"
+							},
+							"pduSessionTypes": {
+								"defaultSessionType": "{{ defaultSessionType }}",
+								"allowedSessionType": [
+									"{{ allowedSessionType }}"
+								]
+							},
+							"sscModes": {
+								"defaultSscMode": "{{ defaultSscMode }}",
+								"allowedSscMode": [
+									"{{ allowedSscMode }}"
+								]
+							}
+						}
+					}
+				]
+			},
+			"pcf": [
+				{
+					"operation": "{{ operation5 }}",
+					"path": "{{ path10 }}",
+					"valueObject": {
+						"dnn": "{{ dnn7 }}",
+						"subscCats": [
+							"{{ subscCats1 }}",
+							"{{ subscCats2 }}"
+						],
+						"subscSpendingLimits": "{{ subscSpendingLimits }}",
+						"online": "{{ online }}"
+					}
+				}
+			]
+		}
+	{% endif %}
+}

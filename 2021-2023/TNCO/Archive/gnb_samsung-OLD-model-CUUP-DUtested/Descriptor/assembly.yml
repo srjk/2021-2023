@@ -1,0 +1,109 @@
+name: assembly::gnb_samsung::1.0
+description: descriptor for Samsung RAN slicing
+properties:
+#SolSpecific
+  operation:
+    description: Samsung_USM_RAN_Slicing
+    volatile: true
+    default: Configure
+  instance_name:
+    description: name of assembly instance
+    type: string
+  deploymentLocation:
+    type: string
+    description: site_specific
+    default: SUBPROV
+  resourceManager:
+    type: string
+    default: brent
+  gnb_id:
+    type: string
+  slice_sst:
+    type: string
+  slice_sd:
+    type: string
+  plmn_index:
+    type: string
+    default: 0
+  cucp_id:
+    type: string
+  cuup_id:
+    type: list
+    entry-schema:
+      type: string
+#  du_id:
+#    type: list
+#    entry-schema:
+#      type: string
+  du_id:
+    type: list
+    entry-schema:
+      type: nftype
+  extOrderId:
+    volatile: true
+  samsung_usm_host:
+    type: string
+    # default: https://172.24.59.21:7443
+    default: https://internal-k8s-use2az1n-iborcna4-8117d3b43e-1665733297.us-east-2.elb.amazonaws.com/samsungstub
+
+composition:
+  cu_samsung:
+    type: assembly::cu_samsung::1.0
+    quantity: 1
+    properties:
+      operation:
+        value: ${operation}
+      instance_name:
+        value: ${instance.name}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      resourceManager:
+        value: ${resourceManager}
+      extOrderId:
+        value: ${extOrderId}
+      cu_sst:
+        value: ${slice_sst}
+      cu_sd:
+        value: ${slice_sd}
+      cuup_id:
+        value: ${cuup_id}
+      cucp_id:
+        value: ${cucp_id}
+      plmn_index:
+        value: ${plmn_index}
+      cu_samsung_usm_host:
+        value: ${samsung_usm_host}
+  du_samsung:
+    type: assembly::du_samsung::1.0
+    items: ${du_id}
+    properties:
+      operation:
+        value: ${operation}
+      instance_name:
+        value: ${instance.name}
+      deploymentLocation:
+        value: ${deploymentLocation}
+      resourceManager:
+        value: ${resourceManager}
+      extOrderId:
+        value: ${extOrderId}
+      plmn_index:
+        value: ${plmn_index}
+      du_id:
+        value: ${item.du_id}
+      du_sst:
+        value: ${slice_sst}
+      du_sd:
+        value: ${slice_sd}
+      ducell_id:
+        value: ${item.ducell_id}
+      du_samsung_usm_host:
+        value: ${samsung_usm_host}
+
+data-types:
+  nftype:
+    properties:
+      du_id:
+        type: string
+      ducell_id:
+        type: list
